@@ -33,8 +33,8 @@ import { Card } from "../ui/card";
 export function DataTable({
   data,
   columns,
-  searchPlaceholder = "Search...",
-  showSearch = true,
+  // searchPlaceholder = "Search...",
+  // showSearch = true,
   filters = [],
   className,
   onSearch,
@@ -107,10 +107,10 @@ export function DataTable({
 
   return (
     <div className="w-full">
-      {showSearch || filters.length !== 0 ? (
+      {filters.length !== 0 ? (
         <div className="flex flex-wrap justify-between items-center gap-2 pb-4">
           <div className="flex items-center gap-2 flex-wrap flex-1">
-            {showSearch && (
+            {/* {showSearch && (
               <Input
                 placeholder={searchPlaceholder}
                 value={searchTerm}
@@ -118,7 +118,7 @@ export function DataTable({
                 onChange={(e) => handleSearch(e.target.value)}
                 className="max-w-sm"
               />
-            )}
+            )} */}
             {filters.map(({ key, label, options }) => (
               <Select
                 key={key}

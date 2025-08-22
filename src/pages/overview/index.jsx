@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import PageLayout from "@/components/page-layout";
 import FilterActions from "./_component/filter-actions/filter-actions";
 import { AdminStatusCards, StoreStatusCards, VerificationStatusCards } from "./_component/status-cards";
-import InvoicesDataTable from "./_component/invoices-data-table/invoices-data-table";
+import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
 
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);

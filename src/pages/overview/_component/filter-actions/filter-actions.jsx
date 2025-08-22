@@ -4,7 +4,6 @@ import { DateRangeDropdown } from "@/components/ui/date-range-dropdown";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-
 const FilterActions = () => {
   const [startDate, setStartDate] = useState("20/08/2025");
   const [endDate, setEndDate] = useState("20/08/2025");
@@ -15,50 +14,38 @@ const FilterActions = () => {
   };
 
   return (
-    <Card className="shadow-sm">
-      <CardHeader>
-        <CardTitle className="text-lg font-medium text-foreground">
-          Filter Actions
-        </CardTitle>
-      </CardHeader>
-
-      <CardContent>
-        <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-          {/* Tracking Period Info */}
-          <section>
-            <Label>Tracking Period</Label>
-            <p className="text-sm text-muted-foreground">
-              Current Date Range
-            </p>
-          </section>
-
+    <Card className="shadow-sm border mb-4">
+      <CardContent className="p-3">
+        <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-3">
           {/* Start Date Input */}
           <section>
-            <Label htmlFor="start-date">Start Date</Label>
+            <Label htmlFor="start-date" className="text-xs">Start Date</Label>
             <Input
               id="start-date"
               type="text"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               placeholder="DD/MM/YYYY"
+              className="h-8 text-sm"
             />
           </section>
 
           {/* End Date Input */}
           <section>
-            <Label htmlFor="end-date">End Date</Label>
+            <Label htmlFor="end-date" className="text-xs">End Date</Label>
             <Input
               id="end-date"
               type="text"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               placeholder="DD/MM/YYYY"
+              className="h-8 text-sm"
             />
           </section>
 
           {/* Date Range Dropdown */}
           <section>
-            <Label>Date Range</Label>
+            <Label className="text-xs">Date Range</Label>
             <DateRangeDropdown value={dateRange} onChange={setDateRange} />
           </section>
 
@@ -74,7 +61,7 @@ const FilterActions = () => {
         </section>
 
         {/* Filter Summary */}
-        <footer className="text-sm text-muted-foreground border-t border-border pt-4">
+        <footer className="text-xs text-muted-foreground border-t border-border pt-2">
           Filtered From:{" "}
           <span className="font-medium text-foreground">{startDate}</span> to{" "}
           <span className="font-medium text-foreground">{endDate}</span>
