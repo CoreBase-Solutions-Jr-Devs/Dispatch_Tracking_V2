@@ -8,6 +8,7 @@ const InvoicesDataTable = () => {
   const dispatchData = [
     {
       docNumber: 'W1_20022693',
+      docType: "INVOICE",
       account: 'ALFA CHEMIST INVOICE ACCT',
       postingDate: '20/08/2025',
       postingTime: '09:15',
@@ -15,6 +16,7 @@ const InvoicesDataTable = () => {
     },
     {
       docNumber: 'W1_20010003',
+      docType: "TRANSFER",
       account: 'VASCO PHARMACY',
       postingDate: '20/08/2025',
       postingTime: '09:18',
@@ -22,6 +24,7 @@ const InvoicesDataTable = () => {
     },
     {
       docNumber: 'W1_20010005',
+      docType: "INVOICE",
       account: 'VASCO PHARMACY',
       postingDate: '20/08/2025',
       postingTime: '09:23',
@@ -29,6 +32,7 @@ const InvoicesDataTable = () => {
     },
     {
       docNumber: 'W1_20010008',
+      docType: "INVOICE",
       account: 'MALIBU LTD',
       postingDate: '20/08/2025',
       postingTime: '09:30',
@@ -36,6 +40,7 @@ const InvoicesDataTable = () => {
     },
     {
       docNumber: 'W1_20024569',
+      docType: "TRANSFER",
       account: 'PHARMAPLUS LTD',
       postingDate: '20/08/2025',
       postingTime: '09:45',
@@ -43,6 +48,7 @@ const InvoicesDataTable = () => {
     },
     {
       docNumber: 'W1_20457693',
+      docType: "INVOICE",
       account: 'ALFA CHEMIST INVOICE ACCT',
       postingDate: '20/08/2025',
       postingTime: '10:08',
@@ -50,6 +56,7 @@ const InvoicesDataTable = () => {
     },
     {
       docNumber: 'W1_20022469',
+      docType: "INVOICE",
       account: 'ZETA MEDICAL AGENCIES',
       postingDate: '20/08/2025',
       postingTime: '10:10',
@@ -57,6 +64,7 @@ const InvoicesDataTable = () => {
     },
     {
       docNumber: 'W1_21456934',
+      docType: "TRANSFER",
       account: 'ALFA CHEMIST INVOICE ACCT',
       postingDate: '20/08/2025',
       postingTime: '11:00',
@@ -64,6 +72,7 @@ const InvoicesDataTable = () => {
     },
     {
       docNumber: 'W1_20022269',
+      docType: "INVOICE",
       account: 'OMEGA PHARMA DISTRIBUTORS',
       postingDate: '20/08/2025',
       postingTime: '11:30',
@@ -163,6 +172,7 @@ const InvoicesDataTable = () => {
           <thead>
             <tr className="bg-gray-50 border-b">
               <th className="text-left py-3 px-4 font-medium text-gray-700">DocNumber</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">DocType</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Account</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Posting Date</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Posting Time</th>
@@ -175,6 +185,9 @@ const InvoicesDataTable = () => {
                 <tr key={index} className="border-b hover:bg-gray-50 transition-colors">
                   <td className="py-3 px-4 text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer">
                     {item.docNumber}
+                  </td>
+                  <td className="py-3 px-4 text-sm text-gray-800">
+                    {item.docType}
                   </td>
                   <td className="py-3 px-4 text-sm text-gray-800">
                     {item.account}
