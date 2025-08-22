@@ -40,6 +40,7 @@ const Navbar = () => {
   const { theme, setTheme } = useTheme();
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   const routes = useMemo(
     () => [
@@ -51,6 +52,11 @@ const Navbar = () => {
     ],
     []
   );
+
+  const setupOptions = [
+    "User Management",
+    "System Settings"
+  ];
 
   const handleLogout = useCallback(() => {
     dispatch(logout());
@@ -98,14 +104,13 @@ const Navbar = () => {
 
         {/* Center: Company Name */}
         <div className="flex-1 text-center">
-          <h1 className="text-lg font-semibold text-orange-600">
+          <h1 className="text-lg font-semibold text-primary">
             COREBASE SOLUTIONS LTD
           </h1>
         </div>
 
         {/* Right: Setups dropdown + actions */}
         <div className="flex items-center gap-6">
-          {/* “Setups” as a proper dropdown (matches screenshot’s select) */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -113,44 +118,37 @@ const Navbar = () => {
                 className="inline-flex items-center gap-2"
                 aria-label="Open Setups"
               >
-                <span className="text-sm">Setups</span>
-                <ChevronDown className="h-4 w-4" />
+                <span className="text-sm">{selected || "Setups"}</span>
+                <ChevronDown className="h-4 w-4 opacity-70" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Setups</DropdownMenuLabel>
+
+            <DropdownMenuContent
+              align="end"
+              className="w-56 bg-white dark:bg-neutral-900 shadow-lg rounded-lg border"
+            >
+              <DropdownMenuLabel className="text-xs font-semibold tracking-wide text-muted-foreground">
+                Setups
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {/* Keeping anchors from original (no route changes) but using menu items for better a11y */}
-              <DropdownMenuItem asChild>
-                <a href="#" className="flex items-center">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>User Management</span>
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <a href="#" className="flex items-center">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>System Settings</span>
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <a href="#" className="flex items-center">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Invoice Settings</span>
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <a href="#" className="flex items-center">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Dispatch Settings</span>
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <a href="#" className="flex items-center">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Reports Config</span>
-                </a>
-              </DropdownMenuItem>
+
+              {setupOptions.map((option) => (
+                <DropdownMenuItem
+                  key={option}
+                  asChild
+                  onClick={() => setSelected(option)}
+                  className={`flex items-center w-full px-2 py-1.5 rounded-md cursor-pointer
+                ${selected === option
+                      ? "bg-primary text-white"
+                      : "hover:bg-muted"
+                    }`}
+                >
+                  <a href="#" className="flex items-center w-full">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>{option}</span>
+                  </a>
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
 

@@ -1,26 +1,35 @@
+import { Card, CardContent } from "@/components/ui/card";
 import React from "react";
 
-const getStatusCardColor = (status) => {
+const getStatusCardStyle = (status) => {
     switch (status) {
         case "Store":
-            return "bg-orange-100 border-orange-300";
+            return "status-store border-2 hover:opacity-80 transition-opacity";
         case "Verification":
-            return "bg-yellow-100 border-yellow-300";
+            return "status-verification border-2 hover:opacity-80 transition-opacity";
         case "Dispatch":
-            return "bg-blue-100 border-blue-300";
+            return "status-dispatch border-2 hover:opacity-80 transition-opacity";
         case "Delivered":
-            return "bg-green-100 border-green-300";
+            return "status-delivered border-2 hover:opacity-80 transition-opacity";
         default:
-            return "bg-gray-100 border-gray-300";
+            return "bg-muted text-muted-foreground border-2 border-border hover:opacity-80 transition-opacity";
     }
 };
 
 const SharedStatusCard = ({ status, label, count }) => {
     return (
-        <div className={`p-6 rounded-lg border-2 ${getStatusCardColor(status)}`}>
-            <h3 className="text-sm font-medium text-gray-600">{label}</h3>
-            <p className="text-3xl font-bold text-gray-800 mt-2">{count}</p>
-        </div>
+        <Card className={`transition-all duration-200 ${getStatusCardStyle(status)}`}>
+            <CardContent className="p-6">
+                <div className="space-y-2">
+                    <h3 className="text-sm text-accent-foreground font-medium opacity-80">
+                        {label}
+                    </h3>
+                    <p className="text-3xl text-accent-foreground font-bold">
+                        {count}
+                    </p>
+                </div>
+            </CardContent>
+        </Card>
     );
 };
 

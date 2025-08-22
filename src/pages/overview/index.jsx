@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import PageLayout from "@/components/page-layout";
-import FilterActions from "./_component/filter-actions";
+import FilterActions from "./_component/filter-actions/filter-actions";
 import { AdminStatusCards, StoreStatusCards, VerificationStatusCards } from "./_component/status-cards";
 import InvoicesDataTable from "./_component/invoices-data-table/invoices-data-table";
 
@@ -39,8 +39,8 @@ const Overview = () => {
       subtitle="These are all of the invoices that have been created or assigned."
       rightAction={
         <div className="flex items-center gap-2 text-sm text-gray-600">
-          <span className="font-medium">Logged in Users:</span>
-          <span className="font-semibold text-gray-900">{user?.name}</span>
+          <span className="font-medium">Logged in User:</span>
+          <span className="font-semibold text-gray-900">{user?.userName}</span>
         </div>
       }
     >
