@@ -1,55 +1,46 @@
-# 🌟 Advanced MERN FileStorage Platform - UploadNest
-
-> This code, whether in parts or whole, is licensed for commercial use **only with a license**. It is **free for personal use**.
-> 👉 [DM to obtain license](https://x.com/techwithemma) and 👉 [here to learn more](https://github.com/TechWithEmmaYT/Advanced-MERN-AI-Financial-SaaS-Platform/blob/main/TECHWITHEMMA-LICENSE.md)
-
-## ❤️ Support the Channel
-
-Love this project? Here’s how you can support:
-
-- ☕ [Buy Me a Coffee](https://buymeacoffee.com/techwithemmaofficial)
-- 🌟 Star this repo
-- 🎥 [Subscribe on YouTube](https://tinyurl.com/subcribe-to-techwithEmma)
-
+# 🌟 Advanced Dispatch Tracking System
 ---
 
 ### 💻 Quickly Setup the Project
+### 1. Clone the repository and navigate to the folder with the project.
+  ```sql
+    git clone https://github.com/jaywes222/Dispatch_Tracking_V2.git
+    cd dispatch_tracking_v2
+  ```
 
-> Want to setup this project? We've got you covered:
-> 👉 [Click here](https://techwithemma.gumroad.com/l/nphhyz)
+### 2. Install the required packages/libraries:
+  ```sql
+    npm install
+  ```
 
-### 📺 OR: Watch the Complete Full Course on YouTube
+### 3. Set Up Environment Variables
+  - Copy .env.example and rename it to .env.
+  - Open .env and fill in the required values, especially VITE_CLIENT_ACCESS_KEY, VITE_API_URL, and VITE_REDUX_PERSIST_KEY.
 
-> Learn how it all works, including the Analytics & Chart, API Keys, Zip Download and more.
-> 👉 [Watch the Course](https://www.youtube.com/watch?v=2S7Y2wewF6I)
+### 4. Start the Development Server    
+  ```sql
+    npm run dev
+  ```
+  - The documentation is on [20.164.20.36:93](http://20.164.20.36:93/swagger/index.html)
+
+### 🤝 Contributing
+ ```sql
+    git checkout -b feature/your_name
+    git add .
+    git commit -m " Add <feature/your-name> - short description"
+    git pull origin dev --rebase
+    git push origin feature/<your-branch-name>
+  ```
+- Push your branch and open a Pull Request (PR).
+- Use git rebase to resolve conflicts and maintain a clean commit history.
 
 ## 🗝️ Key Features: 👇
 
-- 🔐 Authentication (Email + Password with JWT)
-- 📊 Analytics & Chart
-- 📤 Multiple File Uploads
-- ☁️ AWS S3 Integration for Secure & Scalable Storage
-- 💾 Storage Tracking for Each User
-- 📚 Bulk File Download as Zip
-- 📦 TypeScript SDK Published to npm
+- 🔐 Secure Authentication (Username + Password with JWT)
+- 📊 Analytics & Reporting
+- 📤 Role-Based Access
 - 🔑 API Key Authentication for Secure Access
-- 📅 Pagination & File Search
-- 📝 Logging
-- 🚀 Deployment
-- 🌐 Built with MERN Stack (Node.js, MongoDB, React 19)
+- 📅 Pagination & Invoices Search
+- 📝 Logging & Auditing
+- 🌐 Built with MSSQL / .NET / React Stack
 - 🎨 Styled with Tailwind v4 & Shadcn/ui
-
-## 📜 License Information
-
-A paid license is required for commercial use. To obtain a commercial license, please visit 👉 [Here](https://techwithemma.gumroad.com/l/huytmd)
-
-For more details about license, please refer to the [TECHWITHEMMA-LICENSE.md](https://github.com/TechWithEmmaYT/Advanced-MERN-AI-Financial-SaaS-Platform/blob/main/TECHWITHEMMA-LICENSE.md).
-
----
-
-# 📺 Subscribe for More Projects
-
-If you find this helpful, support by subscribing and sharing:
-
-🔗 [https://tinyurl.com/subcribe-to-techwithEmma](https://tinyurl.com/subcribe-to-techwithEmma)
-# Dispatch_Tracking_V2
