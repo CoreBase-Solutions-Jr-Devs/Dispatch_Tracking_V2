@@ -21,38 +21,19 @@ export function getInvoiceFilters(view) {
 		],
 	};
 
-	const accountFilter = {
-		key: 'account',
-		label: 'Filter by Account',
-		options: [
-			{
-				label: 'ALFA CHEMIST INVOICE ACCT',
-				value: 'ALFA CHEMIST INVOICE ACCT',
-			},
-			{ label: 'VASCO PHARMACY', value: 'VASCO PHARMACY' },
-			{ label: 'MALIBU LTD', value: 'MALIBU LTD' },
-			{ label: 'PHARMAPLUS LTD', value: 'PHARMAPLUS LTD' },
-			{ label: 'ZETA MEDICAL AGENCIES', value: 'ZETA MEDICAL AGENCIES' },
-			{
-				label: 'OMEGA PHARMA DISTRIBUTORS',
-				value: 'OMEGA PHARMA DISTRIBUTORS',
-			},
-		],
-	};
-
 	// Different filters per role/view
 	switch (view) {
 		case 'admin':
-			return [statusFilter, docTypeFilter, accountFilter];
+			return [statusFilter, docTypeFilter];
 
 		case 'store':
 			return [statusFilter, docTypeFilter];
 
 		case 'verification':
-			return [statusFilter, accountFilter];
+			return [statusFilter];
 
 		case 'dispatch':
-			return [statusFilter, accountFilter];
+			return [statusFilter];
 
 		default:
 			return [statusFilter];
