@@ -57,9 +57,10 @@
   /* Row hover */
   --row-hover: 65.2% 0.004 240.1; /* Gray #a2a2a2 at 40% opacity effect */
   
-  /* Dropdown colors */
-  --dropdown-background: 65.2% 0.004 240.1; /* Gray #a2a2a2 at 40% opacity effect */
-  --dropdown-foreground: 0% 0 0; /* Black text */
+  /* Dropdown/Select colors */
+  --select-background: 98.7%_0.004_264.0; /* Light gray */
+  --dropdown-background:100% 0 0; /* White background */
+  --dropdown-foreground: 0% 0 0;  /* Black text */
   
   /* Chart colors */
   --chart-1: 64.8% 0.089 68.4; /* Orange - primary #c58c4f */
@@ -187,6 +188,7 @@
   --color-status-delivered: oklch(var(--status-delivered));
   --color-status-delivered-foreground: oklch(var(--status-delivered-foreground));
   --color-row-hover: oklch(var(--row-hover));
+  --color-select-background: oklch(var(--select-background));
   --color-dropdown-background: oklch(var(--dropdown-background));
   --color-dropdown-foreground: oklch(var(--dropdown-foreground));
   --color-chart-1: oklch(var(--chart-1));

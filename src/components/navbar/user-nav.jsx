@@ -26,16 +26,29 @@ export function UserNav({ userName, profilePicture, onLogout }) {
               {userName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <ChevronDown className="!w-3 !h-3 ml-1 text-white" />
+          <ChevronDown className="!w-3 !h-3 ml-1 text-foreground" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent
+        className="w-56 rounded-md shadow-lg"
+        align="end"
+        forceMount
+        style={{
+          backgroundColor: "oklch(var(--dropdown-background))",
+          color: "oklch(var(--dropdown-foreground))",
+        }}
+      >
         <DropdownMenuLabel className="flex flex-col items-start gap-1">
           <span className="font-semibold">{userName}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={onLogout}>
+          <DropdownMenuItem
+            onClick={onLogout}
+            style={{
+              color: "oklch(var(--muted-foreground))",
+            }}
+          >
             <LogOut className="w-4 h-4 mr-2" />
             Log out
           </DropdownMenuItem>

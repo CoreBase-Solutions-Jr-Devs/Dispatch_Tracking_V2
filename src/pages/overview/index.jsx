@@ -43,9 +43,9 @@ const Overview = () => {
       title="Dispatch Overview"
       subtitle="These are all of the invoices that have been created or assigned."
       rightAction={
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <span className="font-medium">Logged in User:</span>
-          <span className="font-semibold text-gray-900">{user?.userName}</span>
+        <div className="flex items-center gap-2 text-sm ">
+          <span className="font-medium">Logged in Users:</span>
+          <span className="font-semibold text-muted-foreground">2</span>
         </div>
       }
     >

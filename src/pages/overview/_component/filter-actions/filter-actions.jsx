@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getInvoiceFilters } from "@/components/invoice-data-table/invoice-filters";
 import BaseFilters from "./base-filters";
 import RoleBasedFilters from "./role-based-filters";
+import { Button } from "@/components/ui/button";
 
 const FilterActions = ({ view = "default" }) => {
   const [startDate, setStartDate] = useState("20/08/2025");
@@ -61,19 +62,23 @@ const FilterActions = ({ view = "default" }) => {
 
         {/* Row 3: Buttons */}
         <section className="flex justify-end gap-2">
-          <button
+          <Button
+            variant="apply"
+            size="sm"
             onClick={handleApplyFilter}
-            className="px-4 bg-primary text-white py-1.5 rounded-md focus:outline-none focus:ring-2 focus:ring-ring transition-colors font-medium text-sm"
           >
             Apply
-          </button>
-          <button
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handleClearFilters}
-            className="px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 rounded-md focus:outline-none focus:ring-2 focus:ring-ring transition-colors font-medium text-sm"
           >
             Clear
-          </button>
+          </Button>
         </section>
+
 
         {/* Row 4: Filter summary */}
         <footer className="text-xs text-muted-foreground border-t border-border pt-1">

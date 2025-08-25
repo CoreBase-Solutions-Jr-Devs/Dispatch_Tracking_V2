@@ -15,9 +15,7 @@ export function getInvoiceFilters(view) {
 		label: 'Filter by Doc Type',
 		options: [
 			{ label: 'INVOICE', value: 'INVOICE' },
-			{ label: 'TRANSFER', value: 'TRANSFER' },
-			{ label: 'CREDIT NOTE', value: 'CREDIT_NOTE' },
-			{ label: 'DEBIT NOTE', value: 'DEBIT_NOTE' },
+			{ label: 'TRANSFER', value: 'TRANSFER' }
 		],
 	};
 
