@@ -1,3 +1,4 @@
+import { ROLES } from '@/constant';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -6,17 +7,30 @@ export function cn(...inputs) {
 }
 
 export function roleToView(role) {
-	switch (role.toLowerCase()) {
-		case 'admin':
+	if (!role) return 'user';
+
+	switch (role) {
+		case ROLES.SUPER_ADMIN:
+		case ROLES.ADMIN:
 			return 'admin';
-		case 'store':
+
+		case ROLES.STORE_CONTROLLER:
+		case ROLES.STORE_PERSON:
 			return 'store';
-		case 'verification':
+
+		case ROLES.VERIFICATION_CONTROLLER:
+		case ROLES.VERIFICATION_PERSON:
 			return 'verification';
-		case 'dispatcher':
+
+		case ROLES.DISPATCH_CONTROLLER:
+		case ROLES.DISPATCH_PERSON:
 			return 'dispatch';
+
+		case ROLES.DRIVER:
+			return 'delivery';
+
 		default:
-			return 'user'; 
+			return 'user';
 	}
 }
 
