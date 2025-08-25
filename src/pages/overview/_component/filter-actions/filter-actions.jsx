@@ -6,8 +6,8 @@ import RoleBasedFilters from "./role-based-filters";
 import { Button } from "@/components/ui/button";
 
 const FilterActions = ({ view = "default" }) => {
-  const [startDate, setStartDate] = useState("20/08/2025");
-  const [endDate, setEndDate] = useState("20/08/2025");
+  const [startDate, setStartDate] = useState("26/08/2025");
+  const [endDate, setEndDate] = useState("26/08/2025");
   const [dateRange, setDateRange] = useState("Current Date");
   const [search, setSearch] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({});
@@ -29,16 +29,16 @@ const FilterActions = ({ view = "default" }) => {
   };
 
   const handleClearFilters = () => {
-    setStartDate("20/08/2025");
-    setEndDate("20/08/2025");
+    setStartDate("26/08/2025");
+    setEndDate("26/08/2025");
     setDateRange("Current Date");
     setSearch("");
     setSelectedFilters({});
   };
 
   return (
-    <Card className="shadow-sm border mb-2">
-      <CardContent className="p-2 space-y-3">
+    <Card className="shadow-sm border mb-1">
+      <CardContent className="p-1 space-y-1">
         {/* Row 1: Dates + Search in one line */}
         <section className="flex flex-wrap gap-2 items-center">
           <BaseFilters
