@@ -2,7 +2,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import PageLayout from "@/components/page-layout";
 import FilterActions from "./_component/filter-actions/filter-actions";
-import { AdminStatusCards, StoreStatusCards, VerificationStatusCards } from "./_component/status-cards";
+import {
+  AdminStatusCards,
+  StoreStatusCards,
+  VerificationStatusCards,
+} from "./_component/status-cards";
 import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
 
 const Overview = () => {
@@ -24,9 +28,9 @@ const Overview = () => {
       case "Admin":
       case "Client":
         return <AdminStatusCards data={mockData} />;
-      case "Store":
+      case "StorePerson":
         return <StoreStatusCards data={mockData} />;
-      case "Verification":
+      case "VerificationPerson":
         return <VerificationStatusCards data={mockData} />;
       default:
         return null;
