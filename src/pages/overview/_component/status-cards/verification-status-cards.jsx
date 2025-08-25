@@ -22,17 +22,17 @@ const StoreStatusCards = ({ data }) => {
       />
       <SharedStatusCard
         status="Verification"
-        label="Pending Invoices"
+        label="Pending Verification"
         count={statusCounts.pending}
       />
       <SharedStatusCard
         status="Dispatch"
-        label="Processed Invoices"
+        label="Verified Invoices"
         count={statusCounts.processed}
       />
       <SharedStatusCard
         status="Delivered"
-        label="Avg. Processing Time"
+        label="Avg. Verification Time"
         count={statusCounts.avgProcessingTime}
       />
     </div>
