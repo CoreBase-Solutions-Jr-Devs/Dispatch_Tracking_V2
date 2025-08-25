@@ -24,7 +24,7 @@ const Overview = () => {
       case "Admin":
       case "Client":
         return <AdminStatusCards data={mockData} />;
-      case "Store":
+      case "StorePerson":
         return <StoreStatusCards data={mockData} />;
       case "Verification":
         return <VerificationStatusCards data={mockData} />;
