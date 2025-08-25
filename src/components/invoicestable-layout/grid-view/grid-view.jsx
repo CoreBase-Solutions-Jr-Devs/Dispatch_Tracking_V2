@@ -1,7 +1,7 @@
 import { FolderOpen } from "lucide-react";
 import { EmptyState } from "@/components/empty-state";
-import { InvoiceCardSkeleton } from "@/components/invoice-card/skeleton";
 import InvoiceCard from "../../invoice-card";
+import { InvoiceCardSkeleton } from "@/components/invoice-card/skeleton";
 
 const GridView = ({ data = [], isLoading = false, selectedInvoices = [], onToggleSelect }) => {
     const handleInvoiceSelection = (invoice) => {
@@ -11,7 +11,7 @@ const GridView = ({ data = [], isLoading = false, selectedInvoices = [], onToggl
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {isLoading ? (
-                Array.from({ length: 10 }).map((_, i) => <FileCardSkeleton key={i} />)
+                Array.from({ length: 10 }).map((_, i) => <InvoiceCardSkeleton key={i} />)
             ) : data.length > 0 ? (
                 data.map((invoice) => {
                     const isSelected = selectedInvoices.some(
