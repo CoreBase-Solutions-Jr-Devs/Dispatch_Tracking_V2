@@ -1,7 +1,7 @@
 import React from 'react';
 import SharedStatusCard from './shared-status-cards';
 
-const DispatchStatusCards = () => {
+const DispatchStatusCards = ({ data }) => {
     const today = new Date().toDateString();
 
     const statusCounts = {
