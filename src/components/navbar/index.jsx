@@ -14,7 +14,7 @@ import {
 import { NavLink, useLocation } from "react-router-dom";
 
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
-import { cn } from "@/lib/utils";
+import { cn, roleToView } from "@/lib/utils";
 import Logo from "../logo/logo";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetHeader } from "../ui/sheet";
@@ -33,6 +33,8 @@ const Navbar = () => {
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  const view = roleToView(user?.userRole);
 
   const routes = useMemo(
     () => [
@@ -103,11 +105,13 @@ const Navbar = () => {
 
         {/* Right: Setups dropdown + actions */}
         <div className="flex items-center gap-6">
-          <SetupsDropdown
-            setupOptions={setupOptions}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          {view === "admin" && (
+            <SetupsDropdown
+              setupOptions={setupOptions}
+              selected={selected}
+              setSelected={setSelected}
+            />
+          )}
 
           {/* Notifications */}
           <button
