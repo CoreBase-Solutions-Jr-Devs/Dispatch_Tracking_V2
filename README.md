@@ -4,7 +4,7 @@
 ### 💻 Quickly Setup the Project
 ### 1. Clone the repository and navigate to the folder with the project.
   ```sql
-    git clone https://github.com/jaywes222/Dispatch_Tracking_V2.git
+    git clone [https://github.com/jaywes222/Dispatch_Tracking_V2.git](https://github.com/CoreBase-Solutions-Jr-Devs/Dispatch_Tracking_V2.git)
     cd dispatch_tracking_v2
   ```
 
