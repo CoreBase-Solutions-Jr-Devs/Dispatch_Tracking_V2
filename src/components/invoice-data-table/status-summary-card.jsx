@@ -35,3 +35,11 @@ export const StoreSummaryCards = () => (
 export const VerificationSummaryCards = () => (
   <StatusSummaryCard statuses={["Verification", "Dispatch", "Delivered"]} />
 );
+
+export const DispatchSummaryCards = () => (
+	<StatusSummaryCard statuses={['Pending', 'In-Dispatch', 'Dispatched', 'Returned']} />
+);
+
+export const DeliverySummaryCards = () => (
+	<StatusSummaryCard statuses={['Pending Collection', 'In-Progress', 'Delivered']} />
+);

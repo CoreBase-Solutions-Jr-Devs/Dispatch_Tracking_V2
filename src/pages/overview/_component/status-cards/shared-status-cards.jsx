@@ -19,7 +19,7 @@ const getStatusCardStyle = (status) => {
 const SharedStatusCard = ({ status, label, count }) => {
     return (
         <Card className={`transition-all duration-200 ${getStatusCardStyle(status)}`}>
-            <CardContent className="p-3 sm:p-4">
+            <CardContent className="p-2 sm:p-4">
                 <div className="space-y-1">
                     <h3 className="text-xs text-accent-foreground font-medium opacity-75">
                         {label}

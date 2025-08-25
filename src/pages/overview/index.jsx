@@ -2,15 +2,14 @@ import React from "react";
 import { useSelector } from "react-redux";
 import PageLayout from "@/components/page-layout";
 import FilterActions from "./_component/filter-actions/filter-actions";
-import {
-  AdminStatusCards,
-  StoreStatusCards,
-  VerificationStatusCards,
-} from "./_component/status-cards";
+import { AdminStatusCards, StoreStatusCards } from "./_component/status-cards";
 import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
+import { roleToView } from "@/lib/utils";
 
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
+
+  console.log("Role:", user?.userRole, "→ View:", roleToView(user?.userRole));
 
   const mockData = [
     { status: "Store", createdAt: new Date() },
@@ -30,8 +29,8 @@ const Overview = () => {
         return <AdminStatusCards data={mockData} />;
       case "StorePerson":
         return <StoreStatusCards data={mockData} />;
-      case "VerificationPerson":
-        return <VerificationStatusCards data={mockData} />;
+      // case "Verification":
+      //   return <VerificationStatusCards data={mockData} />;
       default:
         return null;
     }
@@ -42,15 +41,15 @@ const Overview = () => {
       title="Dispatch Overview"
       subtitle="These are all of the invoices that have been created or assigned."
       rightAction={
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <span className="font-medium">Logged in User:</span>
-          <span className="font-semibold text-gray-900">{user?.userName}</span>
+        <div className="flex items-center gap-2 text-sm ">
+          <span className="font-medium">Logged in Users:</span>
+          <span className="font-semibold text-muted-foreground">2</span>
         </div>
       }
     >
       <div className="w-full space-y-4">
         {renderStatusCards()}
-        <FilterActions />
+        <FilterActions view={roleToView(user?.userRole)} />
         <InvoicesDataTable />
       </div>
     </PageLayout>

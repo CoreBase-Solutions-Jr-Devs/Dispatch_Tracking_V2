@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, Printer } from "lucide-react";
+import { Eye, Edit2 } from "lucide-react";
 import React from "react";
 
 // --- Helpers ---
@@ -78,10 +78,10 @@ function renderActions(row) {
 				className="h-8 w-8 p-0 hover:bg-accent"
 				onClick={function (e) {
 					e.stopPropagation();
-					console.log("Print:", row.docNumber);
+					console.log("Edit:", row.docNumber);
 				}}
 			>
-				<Printer className="h-4 w-4 text-muted-foreground" />
+				<Edit2 className="h-4 w-4 text-muted-foreground" />
 			</Button>
 		</div>
 	);
@@ -209,7 +209,8 @@ export function getInvoiceColumns(view) {
 				base.assignedDate,
 				base.processedDate,
 				base.duration,
-				base.status
+				base.status,
+				base.actions
 			];
 		case "verification":
 			return [
