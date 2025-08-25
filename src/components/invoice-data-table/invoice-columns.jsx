@@ -134,7 +134,10 @@ export function getInvoiceColumns(view) {
 			enableSorting: false,
 			enableHiding: false
 		},
-		customerCode: { accessorKey: "customerCode", header: "Customer Code" },
+		customerCode: {
+			accessorKey: "customerCode",
+			header: "Customer Code"
+		},
 		items: {
 			accessorKey: "items",
 			header: "Items",
@@ -222,11 +225,13 @@ export function getInvoiceColumns(view) {
 		case "dispatch":
 			return [
 				base.docNumber,
-				base.account,
+				base.customerCode,
 				base.deliveryGuy,
 				base.dispatchDate,
 				base.deliveryDate,
-				base.status
+				base.status,
+				base.duration,
+				base.actions
 			];
 		case "delivery":
 			return [
