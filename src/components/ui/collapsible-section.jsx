@@ -1,4 +1,3 @@
-// components/ui/collapsible-section.jsx
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleCollapsible, setCollapsible } from "@/features/ui/uiSlice";
@@ -8,9 +7,7 @@ import { ChevronDown } from "lucide-react";
 const CollapsibleSection = ({ id, icon: Icon, title, children, defaultOpen = false }) => {
     const dispatch = useDispatch();
 
-    const isOpen = useSelector(
-        (state) => state.ui.collapsibles?.[id]
-    );
+    const isOpen = useSelector((state) => state.ui.collapsibles?.[id]);
 
     useEffect(() => {
         if (isOpen === undefined) {
@@ -23,13 +20,13 @@ const CollapsibleSection = ({ id, icon: Icon, title, children, defaultOpen = fal
     };
 
     return (
-        <div className="border rounded-lg shadow-sm">
+        <div className="border-b border-border">
             <button
                 onClick={handleToggle}
-                className="flex w-full items-center justify-between p-3 font-medium hover:bg-muted/50"
+                className="flex w-full items-center justify-between py-2 px-1 font-semibold text-sm uppercase tracking-wide hover:bg-muted/30"
             >
                 <div className="flex items-center gap-2">
-                    {Icon && <Icon className="w-5 h-5" />}
+                    {Icon && <Icon className="w-4 h-4" />}
                     <span>{title}</span>
                 </div>
                 <ChevronDown
@@ -39,7 +36,7 @@ const CollapsibleSection = ({ id, icon: Icon, title, children, defaultOpen = fal
                     )}
                 />
             </button>
-            {isOpen && <div className="p-3">{children}</div>}
+            {isOpen && <div className="pt-2 pb-3 px-1">{children}</div>}
         </div>
     );
 };

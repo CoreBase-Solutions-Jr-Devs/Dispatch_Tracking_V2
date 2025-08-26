@@ -41,9 +41,9 @@ const FilterActions = ({ view = "default" }) => {
   return (
     <CollapsibleSection id="filters" icon={Filter} defaultOpen={true}>
       <Card className="shadow-sm border mb-1">
-        <CardContent className="p-1 space-y-1">
-          {/* Row 1: Dates + Search in one line */}
-          <section className="flex flex-wrap gap-2 items-center">
+        <CardContent className="p-2 space-y-2">
+          {/* Row 1: All filters in one line */}
+          <section className="flex gap-2 items-end overflow-x-auto">
             <BaseFilters
               {...{
                 startDate,
@@ -56,39 +56,30 @@ const FilterActions = ({ view = "default" }) => {
                 setSearch,
               }}
             />
+            <RoleBasedFilters
+              {...{ filters, selectedFilters, handleFilterChange }}
+            />
           </section>
 
-          {/* Row 2: Role-based filters */}
-          <RoleBasedFilters
-            {...{ filters, selectedFilters, handleFilterChange }}
-          />
+          {/* Row 2: Filter summary (left) and buttons (right) */}
+          <section className="flex justify-between items-center border-t border-border pt-2">
+            {/* Filter summary - Left side */}
+            <div className="text-xs text-muted-foreground">
+              Filtered From:{" "}
+              <span className="font-medium text-foreground">{startDate}</span> to{" "}
+              <span className="font-medium text-foreground">{endDate}</span>
+            </div>
 
-          {/* Row 3: Buttons */}
-          <section className="flex justify-end gap-2">
-            <Button
-              variant="apply"
-              size="sm"
-              onClick={handleApplyFilter}
-            >
-              Apply
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleClearFilters}
-            >
-              Clear
-            </Button>
+            {/* Buttons - Right side */}
+            <div className="flex gap-2">
+              <Button variant="apply" size="sm" onClick={handleApplyFilter}>
+                Apply
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleClearFilters}>
+                Clear
+              </Button>
+            </div>
           </section>
-
-
-          {/* Row 4: Filter summary */}
-          <footer className="text-xs text-muted-foreground border-t border-border pt-0.5">
-            Filtered From:{" "}
-            <span className="font-medium text-foreground">{startDate}</span> to{" "}
-            <span className="font-medium text-foreground">{endDate}</span>
-          </footer>
         </CardContent>
       </Card>
     </CollapsibleSection>
