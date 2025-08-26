@@ -10,7 +10,7 @@ const AppLayout = () => {
     <>
       <div className="w-full min-h-screen pb-10">
         <Navbar />
-        <main className="mx-auto flex min-w-0 max-w-7xl grow flex-col sm:flex-row sm:py-6">
+        <main className="mx-auto flex min-w-0 max-w-7xl grow flex-col sm:flex-row">
           {/* Sidebar */}
           <SideBar />
 
