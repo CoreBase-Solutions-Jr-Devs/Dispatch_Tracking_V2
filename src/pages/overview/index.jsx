@@ -4,12 +4,13 @@ import PageLayout from "@/components/page-layout";
 import FilterActions from "./_component/filter-actions/filter-actions";
 import { AdminStatusCards, DeliveryStatusCards, DispatchStatusCards, StoreStatusCards} from "./_component/status-cards";
 import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
-import { roleToView } from "@/lib/utils";
+import { roleToView, viewMeta } from "@/lib/utils";
 
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
 
-  console.log("Role:", user?.userRole, "→ View:", roleToView(user?.userRole));
+  const view = roleToView(user?.userRole);
+  const pageMeta = viewMeta[view];
 
   const mockData = [
     { status: "Store", createdAt: new Date() },
@@ -40,8 +41,8 @@ const Overview = () => {
 
   return (
     <PageLayout
-      title="Dispatch Overview"
-      subtitle="These are all of the invoices that have been created or assigned."
+      title={pageMeta?.title}
+      subtitle={pageMeta.subtitle}
       rightAction={
         <div className="flex items-center gap-2 text-sm ">
           <span className="font-medium">Logged in Users:</span>
