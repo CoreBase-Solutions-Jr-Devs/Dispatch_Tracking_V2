@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AdminSummaryCards, StoreSummaryCards, VerificationSummaryCards } from "./status-summary-card";
+import { AdminSummaryCards, StoreSummaryCards, VerificationSummaryCards, DispatchSummaryCards } from "./status-summary-card";
 
 export default function InvoiceToolbar({ filters, role = "admin" }) {
     const [search, setSearch] = useState("");
@@ -12,6 +12,8 @@ export default function InvoiceToolbar({ filters, role = "admin" }) {
                 return <StoreSummaryCards />;
             case "verification":
                 return <VerificationSummaryCards />;
+            case "dispatch":
+                return <DispatchSummaryCards />;
             default:
                 return null;
         }

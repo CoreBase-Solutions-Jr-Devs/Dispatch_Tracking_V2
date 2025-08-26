@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, Printer } from "lucide-react";
+import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog";
+import { Eye, Edit2 } from "lucide-react";
 import React from "react";
 
 // --- Helpers ---
@@ -58,7 +59,9 @@ function renderDuration(durationMinutes, avgMinutes) {
 	);
 }
 
-function renderActions(row) {
+function renderActions(row, handlers = {}) {
+	const { onView} = handlers;
+
 	return (
 		<div className="flex items-center gap-1">
 			<Button
@@ -67,22 +70,28 @@ function renderActions(row) {
 				className="h-8 w-8 p-0 hover:bg-accent"
 				onClick={function (e) {
 					e.stopPropagation();
-					console.log("View:", row.docNumber);
+					if (onView) onView(row.original);
 				}}
 			>
 				<Eye className="h-4 w-4 text-muted-foreground" />
 			</Button>
-			<Button
-				variant="outline"
-				size="sm"
-				className="h-8 w-8 p-0 hover:bg-accent"
-				onClick={function (e) {
-					e.stopPropagation();
-					console.log("Print:", row.docNumber);
+
+			<EditStatusDialog
+				rowData={row.original}
+				onSubmit={(updatedData) => {
+					console.log("Edited row data:", updatedData);
+					// Add your API call or state update here
 				}}
 			>
-				<Printer className="h-4 w-4 text-muted-foreground" />
-			</Button>
+				<Button
+					variant="outline"
+					size="sm"
+					className="h-8 w-8 p-0 hover:bg-accent"
+					onClick={(e) => e.stopPropagation()}
+				>
+					<Edit2 className="h-4 w-4 text-muted-foreground" />
+				</Button>
+			</EditStatusDialog>
 		</div>
 	);
 }
@@ -209,7 +218,8 @@ export function getInvoiceColumns(view) {
 				base.assignedDate,
 				base.processedDate,
 				base.duration,
-				base.status
+				base.status,
+				base.actions
 			];
 		case "verification":
 			return [

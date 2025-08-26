@@ -37,9 +37,9 @@ export const VerificationSummaryCards = () => (
 );
 
 export const DispatchSummaryCards = () => (
-	<StatusSummaryCard statuses={['Pending', 'In Dispatch', 'Dispatched', 'Returned']} />
-)
+	<StatusSummaryCard statuses={['Pending', 'In-Dispatch', 'Dispatched', 'Returned']} />
+);
 
 export const DeliverySummaryCards = () => (
-	<StatusSummaryCard statuses={['Pending Collection', 'In Progress', 'Delivered']} />
-)
+	<StatusSummaryCard statuses={['Pending Collection', 'In-Progress', 'Delivered']} />
+);

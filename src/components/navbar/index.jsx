@@ -1,7 +1,6 @@
 import React, { useMemo, useState, useCallback } from "react";
 import {
   Bell,
-  ChevronDown,
   Folder,
   HelpCircle,
   Home,
@@ -15,22 +14,15 @@ import {
 import { NavLink, useLocation } from "react-router-dom";
 
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
-import { cn } from "@/lib/utils";
+import { cn, roleToView } from "@/lib/utils";
 import Logo from "../logo/logo";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetHeader } from "../ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { UserNav } from "./user-nav";
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import { logout } from "@/features/auth/authSlice";
 import { useTheme } from "@/context/theme-provider";
+import { SetupsDropdown } from "./setups-dropdown";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -41,6 +33,8 @@ const Navbar = () => {
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  const view = roleToView(user?.userRole);
 
   const routes = useMemo(
     () => [
@@ -73,7 +67,7 @@ const Navbar = () => {
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between gap-x-6 px-6 lg:px-8">
         {/* Left: Logo + Mobile trigger + User chip */}
         <NavLogoAndUser
-          username={user?.name}
+          username={user?.userName}
           onOpenMobile={() => setIsSheetOpen(true)}
         />
 
@@ -111,46 +105,13 @@ const Navbar = () => {
 
         {/* Right: Setups dropdown + actions */}
         <div className="flex items-center gap-6">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="inline-flex items-center gap-2"
-                aria-label="Open Setups"
-              >
-                <span className="text-sm">{selected || "Setups"}</span>
-                <ChevronDown className="h-4 w-4 opacity-70" />
-              </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent
-              align="end"
-              className="w-56 bg-white dark:bg-neutral-900 shadow-lg rounded-lg border"
-            >
-              <DropdownMenuLabel className="text-xs font-semibold tracking-wide text-muted-foreground">
-                Setups
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-
-              {setupOptions.map((option) => (
-                <DropdownMenuItem
-                  key={option}
-                  asChild
-                  onClick={() => setSelected(option)}
-                  className={`flex items-center w-full px-2 py-1.5 rounded-md cursor-pointer
-                ${selected === option
-                      ? "bg-primary text-white"
-                      : "hover:bg-muted"
-                    }`}
-                >
-                  <a href="#" className="flex items-center w-full">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>{option}</span>
-                  </a>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {view === "admin" && (
+            <SetupsDropdown
+              setupOptions={setupOptions}
+              selected={selected}
+              setSelected={setSelected}
+            />
+          )}
 
           {/* Notifications */}
           <button
@@ -176,7 +137,7 @@ const Navbar = () => {
 
           {/* User Menu */}
           <UserNav
-            userName={user?.name || ""}
+            userName={user?.userName || ""}
             profilePicture={user?.profilePicture || ""}
             onLogout={handleLogout}
           />

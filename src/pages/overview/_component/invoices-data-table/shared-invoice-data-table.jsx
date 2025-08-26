@@ -19,6 +19,7 @@ const mockInvoices = [
             { name: "Item B", qty: 5 }
         ],
         postingDate: "2025-08-20T08:00:00Z",
+        assignedDate: "2025-08-20T08:30:00Z",
         processedDate: "2025-08-20T09:15:00Z",
         verificationDate: null,
         dispatchDate: null,
@@ -39,6 +40,7 @@ const mockInvoices = [
             { name: "Item D", qty: 7 }
         ],
         postingDate: "2025-08-20T09:00:00Z",
+        assignedDate: "2025-08-20T08:30:00Z",
         processedDate: null,
         verificationDate: "2025-08-20T11:00:00Z",
         dispatchDate: null,
@@ -58,6 +60,7 @@ const mockInvoices = [
             { name: "Item E", qty: 2 }
         ],
         postingDate: "2025-08-20T09:30:00Z",
+        assignedDate: "2025-08-20T08:30:00Z",
         processedDate: "2025-08-20T10:00:00Z",
         verificationDate: "2025-08-20T11:30:00Z",
         dispatchDate: "2025-08-20T12:30:00Z",
@@ -78,6 +81,7 @@ const mockInvoices = [
         ],
         postingDate: "2025-08-20T10:00:00Z",
         processedDate: "2025-08-20T11:00:00Z",
+        assignedDate: "2025-08-20T08:30:00Z",
         verificationDate: "2025-08-20T12:00:00Z",
         dispatchDate: "2025-08-20T13:30:00Z",
         deliveryDate: "2025-08-20T16:00:00Z",
@@ -91,8 +95,8 @@ const mockInvoices = [
 export default function SharedInvoiceDataTable() {
     const { user } = useSelector((state) => state.auth);
 
-    const columns = getInvoiceColumns(user?.userRole || "User");
     const view = roleToView(user?.userRole || "User");
+    const columns = getInvoiceColumns(view);
     const filters = getInvoiceFilters(view);
 
     return (

@@ -15,16 +15,24 @@ export function getInvoiceFilters(view) {
 		label: 'Filter by Doc Type',
 		options: [
 			{ label: 'INVOICE', value: 'INVOICE' },
-			{ label: 'TRANSFER', value: 'TRANSFER' },
-			{ label: 'CREDIT NOTE', value: 'CREDIT_NOTE' },
-			{ label: 'DEBIT NOTE', value: 'DEBIT_NOTE' },
+			{ label: 'TRANSFER', value: 'TRANSFER' }
+		],
+	};
+
+	const deliveryGuyFilter = {
+		key: 'deliveryGuy',
+		label: 'Filter by Delivery Guy',
+		options: [
+			{ label: 'John Doe', value: 'john_doe' },
+			{ label: 'Jane Smith', value: 'jane_smith' },
+			{ label: 'Mike Adams', value: 'mike_adams' },
 		],
 	};
 
 	// Different filters per role/view
 	switch (view) {
 		case 'admin':
-			return [statusFilter, docTypeFilter];
+			return [statusFilter, docTypeFilter, deliveryGuyFilter];
 
 		case 'store':
 			return [statusFilter, docTypeFilter];
@@ -33,7 +41,7 @@ export function getInvoiceFilters(view) {
 			return [statusFilter];
 
 		case 'dispatch':
-			return [statusFilter];
+			return [statusFilter, deliveryGuyFilter];
 
 		default:
 			return [statusFilter];
