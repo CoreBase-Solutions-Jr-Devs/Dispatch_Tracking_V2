@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { AdminSummaryCards, StoreSummaryCards, VerificationSummaryCards, DispatchSummaryCards } from "./status-summary-card";
 
-export default function InvoiceToolbar({ filters, role = "admin" }) {
-    const [search, setSearch] = useState("");
-
+export default function InvoiceToolbar({ role = "admin" }) {
     const renderSummaryCards = () => {
         switch (role.toLowerCase() ) {
             case "admin":

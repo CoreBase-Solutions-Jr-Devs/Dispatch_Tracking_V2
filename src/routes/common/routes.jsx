@@ -2,11 +2,10 @@ import { AUTH_ROUTES, PROTECTED_ROUTES } from "./routePath";
 import SignIn from "@/pages/auth/sign-in";
 import Overview from "@/pages/overview";
 import Settings from "@/pages/settings";
-import Docs from "@/pages/docs";
 import Invoices from "@/pages/invoices";
 import Reports from "@/pages/reports";
 import { ROLES } from "@/constant";
-import { Home, Folder, HelpCircle, Key, Settings as SettingsIcon } from "lucide-react";
+import { Home, Folder, FileStackIcon, Settings as SettingsIcon } from "lucide-react";
 
 export const authenticationRoutePaths = [
   { path: AUTH_ROUTES.SIGN_IN, element: <SignIn /> },
@@ -32,14 +31,7 @@ export const protectedRoutePaths = [
     element: <Reports />,
     roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.SALES_PERSON],
     menuLabel: "Reports",
-    icon: Key,
-  },
-  {
-    path: PROTECTED_ROUTES.DOCS,
-    element: <Docs />,
-    roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.USER],
-    menuLabel: "Docs",
-    icon: HelpCircle,
+    icon: FileStackIcon,
   },
   {
     path: PROTECTED_ROUTES.SETTINGS,

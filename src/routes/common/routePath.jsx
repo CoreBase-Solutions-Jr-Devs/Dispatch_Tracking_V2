@@ -6,7 +6,6 @@ export const PROTECTED_ROUTES = {
   OVERVIEW: "/overview",
   REPORTS: "/reports",
   INVOICES: "/invoices",
-  DOCS: "/docs",
   SETTINGS: "/settings",
 };
 
