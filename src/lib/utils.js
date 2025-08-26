@@ -34,3 +34,32 @@ export function roleToView(role) {
 	}
 }
 
+/**
+ * View metadata (title + subtitle) per role/view
+ */
+export const viewMeta = {
+	admin: {
+		title: 'Admin Overview',
+		subtitle: 'All invoices across the system.',
+	},
+	store: {
+		title: 'Store Overview',
+		subtitle: 'Invoices that are in the store pipeline.',
+	},
+	verification: {
+		title: 'Verifier Overview',
+		subtitle: 'Invoices pending or completed verification.',
+	},
+	dispatch: {
+		title: 'Dispatcher Overview',
+		subtitle: 'Invoices ready or assigned for dispatch.',
+	},
+	delivery: {
+		title: 'Driver Overview',
+		subtitle: 'Invoices you are responsible for delivering.',
+	},
+	user: {
+		title: 'Overview',
+		subtitle: 'System invoices overview.',
+	},
+};

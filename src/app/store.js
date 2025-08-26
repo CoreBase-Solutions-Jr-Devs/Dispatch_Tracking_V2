@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
+import uiReducer from '../features/ui/uiSlice';
 import storage from 'redux-persist/lib/storage';
 import {
 	persistReducer,
@@ -31,6 +32,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
 	[apiClient.reducerPath]: apiClient.reducer,
 	auth: authReducer,
+	ui: uiReducer,
 });
 
 // Persisted reducer
