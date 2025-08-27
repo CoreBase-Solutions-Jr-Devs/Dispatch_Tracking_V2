@@ -34,20 +34,20 @@ const SideBar = () => {
   return (
     <div
       className={cn(
-        "hidden lg:flex sticky shrink-0 top-20 flex-col h-[calc(100vh-5rem)] border-r bg-background transition-all duration-300",
-        sidebarCollapsed ? "w-16" : "w-56"
+        "hidden lg:flex sticky top-16 flex-col h-[calc(100vh-4rem)] border-r bg-background transition-all duration-300",
+        sidebarCollapsed ? "w-16" : "w-52"
       )}
     >
       {/* Collapse/Expand Toggle */}
       <button
         onClick={() => dispatch(toggleSidebar())}
-        className="absolute -right-3 top-4 z-10 flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow hover:bg-muted"
-        title="Toggle sidebar (Ctrl+B)"
+        className="absolute -right-3 top-3 z-10 flex h-5 w-5 items-center justify-center rounded-full border bg-background shadow hover:bg-muted"
+        title="Toggle sidebar (Ctrl+C)"
       >
         {sidebarCollapsed ? (
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight className="h-3.5 w-3.5" />
         ) : (
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className="h-3.5 w-3.5" />
         )}
       </button>
 
@@ -60,15 +60,14 @@ const SideBar = () => {
               <li key={i}>
                 <NavLink
                   className={cn(
-                    "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
-                    pathname === route.path &&
-                    "bg-secondary text-secondary-foreground"
+                    "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
+                    pathname === route.path && "bg-secondary text-secondary-foreground"
                   )}
                   to={route.path}
                 >
-                  {Icon && <Icon className="h-5 w-5 shrink-0" />}
+                  {Icon && <Icon className="h-4 w-4 shrink-0" />}
                   {!sidebarCollapsed && (
-                    <span className="whitespace-nowrap">
+                    <span className="whitespace-nowrap text-sm">
                       {route.menuLabel || route.label}
                     </span>
                   )}
