@@ -15,7 +15,7 @@ export const mockInvoices = Array.from({ length: 25 }, (_, i) => {
 		'NAKURU BRANCH',
 	];
 	const deliveryGuys = ['John Doe', 'Jane Smith', 'Mike Wilson', 'Sarah Johnson'];
-	const paymentTermsList = ['COD', 'COA', 'CASH'];
+	const paymentTermsList = ['ON DELIVERY', 'ON ACC', 'CASH', 'ON ORDER'];
 
 	const randomStatus = statusOptions[Math.floor(Math.random() * statusOptions.length)];
 	const randomDocType = docTypes[Math.floor(Math.random() * docTypes.length)];

@@ -1,8 +1,8 @@
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog";
 import { Edit2, Eye } from "lucide-react";
-import React from "react";
+import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog.jsx";
 
 // --- Helpers ---
 const STATUS_STYLES = {
@@ -39,7 +39,7 @@ const formatUKDateTime = (date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-const renderDateTime = (value) => {
+const renderDateTime = (value, position = 1) => {
   const formattedDate = formatUKDateTime(value);
   if (formattedDate === "—") {
     return (
@@ -49,23 +49,15 @@ const renderDateTime = (value) => {
     );
   }
 
-  // Calculate age of the date
+  let baseColor = position === 1 ? "text-foreground" : "text-muted";
+
+  // Ageing overrides
   const now = new Date();
   const date = new Date(value);
   const hoursDiff = (now - date) / (1000 * 60 * 60);
 
-  let colorClass = "text-muted-foreground";
-
-  if (hoursDiff <= 24) {
-    colorClass = "text-primary";
-  } else {
-    colorClass = "text-destructive";
-  }
-
   return (
-    <span className={`${colorClass} font-mono text-sm font-medium`}>
-      {formattedDate}
-    </span>
+    <span className={`${baseColor} font-mono text-sm`}>{formattedDate}</span>
   );
 };
 
@@ -93,7 +85,7 @@ const renderDuration = (durationMinutes, avgMinutes = 30) => {
   );
 };
 
-const renderActions = (row, handlers = {}) => {
+const renderActions = (row, handlers = {}, view) => {
   const { onView } = handlers;
   return (
     <div className="flex items-center gap-1">
@@ -111,6 +103,7 @@ const renderActions = (row, handlers = {}) => {
 
       <EditStatusDialog
         rowData={row.original}
+        view={view}
         onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
       >
         <Button
@@ -250,7 +243,7 @@ export function getInvoiceColumns(view) {
       accessorKey: "actions",
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => renderActions(row),
+      cell: ({ row }) => renderActions(row, {}, view),
       enableSorting: false,
       enableHiding: false,
     },
@@ -275,8 +268,14 @@ export function getInvoiceColumns(view) {
         base.customerName,
         base.items,
         base.paymentTerms,
-        base.docDate,
-        base.processedDate,
+        {
+          ...base.docDate,
+          cell: ({ row }) => renderDateTime(row.original.docDate, 1),
+        },
+        {
+          ...base.processedDate,
+          cell: ({ row }) => renderDateTime(row.original.processedDate, 2),
+        },
         base.duration,
         base.status,
         base.actions,
@@ -288,10 +287,17 @@ export function getInvoiceColumns(view) {
         base.customerName,
         base.items,
         base.paymentTerms,
-        base.docDate,
-        base.verificationDate,
+        {
+          ...base.docDate,
+          cell: ({ row }) => renderDateTime(row.original.docDate, 1),
+        },
+        {
+          ...base.verificationDate,
+          cell: ({ row }) => renderDateTime(row.original.verificationDate, 2),
+        },
         base.duration,
         base.status,
+        base.actions,
       ];
     case "dispatch":
       return [
@@ -300,8 +306,14 @@ export function getInvoiceColumns(view) {
         base.items,
         base.deliveryGuy,
         base.paymentTerms,
-        base.dispatchDate,
-        base.deliveryDate,
+        {
+          ...base.dispatchDate,
+          cell: ({ row }) => renderDateTime(row.original.dispatchDate, 1),
+        },
+        {
+          ...base.deliveryDate,
+          cell: ({ row }) => renderDateTime(row.original.deliveryDate, 2),
+        },
         base.status,
         base.duration,
         base.actions,
