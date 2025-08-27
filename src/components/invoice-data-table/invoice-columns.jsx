@@ -1,8 +1,8 @@
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog";
 import { Edit2, Eye } from "lucide-react";
-import React from "react";
+import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog.jsx"
 
 // --- Helpers ---
 const STATUS_STYLES = {
@@ -77,7 +77,7 @@ const renderDuration = (durationMinutes, avgMinutes = 30) => {
 	);
 };
 
-const renderActions = (row, handlers = {}) => {
+const renderActions = (row, handlers = {}, view) => {
 	const { onView } = handlers;
 	return (
 		<div className="flex items-center gap-1">
@@ -95,6 +95,7 @@ const renderActions = (row, handlers = {}) => {
 
 			<EditStatusDialog
 				rowData={row.original}
+				view={view} 
 				onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
 			>
 				<Button
@@ -230,7 +231,7 @@ export function getInvoiceColumns(view) {
 			accessorKey: "actions",
 			id: "actions",
 			header: "Actions",
-			cell: ({ row }) => renderActions(row),
+			cell: ({ row }) => renderActions(row, {}, view),
 			enableSorting: false,
 			enableHiding: false
 		},
@@ -283,7 +284,8 @@ export function getInvoiceColumns(view) {
 		        	cell: ({ row }) => renderDateTime(row.original.verificationDate, 2), 
 		        },
 				base.duration,
-				base.status
+				base.status,
+				base.actions
 			];
 		case "dispatch":
 			return [

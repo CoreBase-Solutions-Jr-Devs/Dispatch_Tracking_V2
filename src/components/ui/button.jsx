@@ -4,7 +4,11 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all " +
+    "disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed " +
+    "[&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 " +
+    "outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] " +
+    "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
@@ -21,7 +25,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         // Pharmacy-specific variants
         apply: "bg-status-delivered-foreground text-white shadow-lg hover:bg-status-delivered-foreground/90 focus:ring-2 focus:ring-status-delivered-foreground/30",
-        verification: "bg-status-verification text-status-verification-foreground shadow-xs hover:bg-status-verification/90",
+        verification: "bg-status-verification-foreground text-white shadow-xs hover:bg-status-verification-foreground/90",
         dispatch: "bg-status-dispatch text-status-dispatch-foreground shadow-xs hover:bg-status-dispatch/90",
         store: "bg-status-store text-status-store-foreground shadow-xs hover:bg-status-store/90",
       },
