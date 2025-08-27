@@ -9,10 +9,10 @@ const PageLayout = ({
   subtitle,
   rightAction,
   showHeader = true,
-  addMarginTop = false,
+  noPadding = false, // 🚀 instead of addMarginTop
 }) => {
   return (
-    <div>
+    <div className="w-full max-w-[var(--max-width)] mx-auto flex flex-col flex-1">
       {showHeader && (
         <PageHeader
           title={title}
@@ -22,8 +22,8 @@ const PageLayout = ({
       )}
       <div
         className={cn(
-          "w-full max-w-[var(--max-width)] mx-auto pt-8",
-          addMarginTop && "-mt-20",
+          "flex-1 flex flex-col", // make children grow
+          !noPadding && "pt-6",  // padding only if you want it
           className
         )}
       >

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/select";
 
 const RoleBasedFilters = ({ filters, selectedFilters, handleFilterChange }) => (
-    <section className="grid grid-cols-1 md:grid-cols-3 gap-2">
+    <section className="flex flex-wrap gap-2 items-center">
         {filters.map((filter) => (
             <section key={filter.key}>
                 <Select
@@ -15,7 +15,7 @@ const RoleBasedFilters = ({ filters, selectedFilters, handleFilterChange }) => (
                     onValueChange={(val) => handleFilterChange(filter.key, val)}
                 >
                     <SelectTrigger
-                        className="h-8 text-sm bg-[var(--input)] border border-[var(--border)] text-[var(--foreground)] rounded-md"
+                        className="h-8 text-sm bg-[var(--input)] border border-[var(--border)] text-[var(--foreground)] rounded-md min-w-[120px]"
                     >
                         <SelectValue placeholder={filter.label} />
                     </SelectTrigger>

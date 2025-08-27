@@ -35,7 +35,7 @@ export function getInvoiceFilters(view) {
 			return [statusFilter, docTypeFilter, deliveryGuyFilter];
 
 		case 'store':
-			return [statusFilter, docTypeFilter];
+			return [statusFilter];
 
 		case 'verification':
 			return [statusFilter];

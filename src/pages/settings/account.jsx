@@ -5,6 +5,7 @@ import { useTypedSelector } from "@/app/hook";
 
 const Account = () => {
   const { user } = useTypedSelector((store) => store.auth);
+
   return (
     <div className="space-y-6 pb-7 first:pt-0">
       <div>
@@ -20,14 +21,14 @@ const Account = () => {
           <Label htmlFor="firstName">First name</Label>
           <div className="flex gap-2">
             <UserIcon className="h-4 w-4 mt-3 text-muted-foreground" />
-            <Input defaultValue={user?.name || "Unknow"} readOnly />
+            <Input defaultValue={user?.firstName || "Unknown"} readOnly />
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email Address</Label>
           <div className="flex gap-2">
             <Mail className="h-4 w-4 mt-3 text-muted-foreground" />
-            <Input defaultValue={user?.email || "Unknow"} readOnly />
+            <Input defaultValue={user?.email || "Unknown"} readOnly />
           </div>
         </div>
       </div>
