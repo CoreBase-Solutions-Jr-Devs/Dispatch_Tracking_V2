@@ -8,8 +8,8 @@ import CollapsibleSection from "@/components/ui/collapsible-section";
 import { Filter } from "lucide-react";
 
 const FilterActions = ({ view = "default" }) => {
-  const [startDate, setStartDate] = useState("26/08/2025");
-  const [endDate, setEndDate] = useState("26/08/2025");
+  const [startDate, setStartDate] = useState("08/26/2025");
+  const [endDate, setEndDate] = useState("08/26/2025");
   const [dateRange, setDateRange] = useState("Current Date");
   const [search, setSearch] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({});
@@ -31,8 +31,8 @@ const FilterActions = ({ view = "default" }) => {
   };
 
   const handleClearFilters = () => {
-    setStartDate("26/08/2025");
-    setEndDate("26/08/2025");
+    setStartDate("08/26/2025");
+    setEndDate("08/26/2025");
     setDateRange("Current Date");
     setSearch("");
     setSelectedFilters({});
@@ -66,8 +66,8 @@ const FilterActions = ({ view = "default" }) => {
             {/* Filter summary - Left side */}
             <div className="text-xs text-muted-foreground">
               Filtered From:{" "}
-              <span className="font-medium text-foreground">{startDate}</span> to{" "}
-              <span className="font-medium text-foreground">{endDate}</span>
+              <span className="font-medium text-foreground">{startDate}</span>{" "}
+              to <span className="font-medium text-foreground">{endDate}</span>
             </div>
 
             {/* Buttons - Right side */}
