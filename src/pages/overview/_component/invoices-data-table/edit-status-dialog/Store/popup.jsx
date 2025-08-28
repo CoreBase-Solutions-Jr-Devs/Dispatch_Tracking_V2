@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import VerificationHeader from "./header";
-import VerificationDetails from "./details";
-import VerificationSummary from "./summary";
-import VerificationRemarks from "./remarks";
-import VerificationMeta from "./meta";
-import VerificationFooter from "./footer";
+import StoreHeader from "./header";
+import StoreDetails from "./details";
+import StoreSummary from "./summary";
+import StoreRemarks from "./remarks";
+import StoreMeta from "./meta";
+import StoreFooter from "./footer";
 
-export default function VerificationPopup({ rowData, onSubmit }) {
+export default function StorePopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDialogClose = () => setIsOpen(false);
@@ -16,23 +16,23 @@ export default function VerificationPopup({ rowData, onSubmit }) {
   return (
     <>
       <DialogHeader>
-        <VerificationHeader />
+        <StoreHeader />
       </DialogHeader>
 
       <Separator className="mb-4" />
 
-      <VerificationDetails data={rowData} />
+      <StoreDetails data={rowData} />
 
       <Separator className="my-2" />
 
-      <VerificationSummary data={rowData} />
+      <StoreSummary data={rowData} />
 
-      <VerificationRemarks />
+      <StoreRemarks />
 
-      <VerificationMeta />
+      <StoreMeta />
 
       <DialogFooter>
-        <VerificationFooter
+        <StoreFooter
           rowData={rowData}
           onSubmit={onSubmit}
           onClose={handleDialogClose}
