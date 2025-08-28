@@ -25,14 +25,14 @@ export default function DeliveryPopup({ rowData, onSubmit }) {
                 <Separator className="my-3" />
 
                 {/* Details Section */}
-                <DeliveryDetails data ={rowData} />
+                <DeliveryDetails data={rowData} />
                 {/* Item Reception Section */}
                 <DeliveryReception />
 
                 <Separator className="my-2" />
                 {/* Delivery Inventory Section */}
                 <DeliveryInventory />
-                
+
                 {/* Delivery Summary Section */}
                 <DeliverySummary />
 
