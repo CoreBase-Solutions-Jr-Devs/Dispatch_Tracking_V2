@@ -1,10 +1,9 @@
-/* eslint-disable react-refresh/only-export-components */
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 
-// import StoreForm from "./StoreForm";
-import VerificationPopup from "./Verification/popup.jsx"
-// import DispatchForm from "./DispatchForm";
+import StorePopup from "./Store/popup.jsx";
+import VerificationPopup from "./Verification/popup.jsx";
+import DispatchPopup from "./Dispatch/popup.jsx";
 // import DeliveryForm from "./DeliveryForm";
 
 const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
@@ -15,14 +14,14 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
 
   const getForm = () => {
     switch (view?.toLowerCase()) {
-    //   case "store":
-    //     return StoreForm;
+      case "store":
+        return StorePopup;
       case "verification":
         return VerificationPopup;
-    //   case "dispatch":
-    //     return DispatchForm;
-    //   case "delivery":
-    //     return DeliveryForm;
+      case "dispatch":
+        return DispatchPopup;
+      //   case "delivery":
+      //     return DeliveryForm;
       default:
         return () => (
           <div className="p-4 text-muted-foreground">
