@@ -7,6 +7,7 @@ import {
   DeliveryStatusCards,
   DispatchStatusCards,
   StoreStatusCards,
+  VerificationStatusCards,
 } from "./_component/status-cards";
 import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
 import { roleToView, viewMeta } from "@/lib/utils";
@@ -37,8 +38,10 @@ const Overview = () => {
         return <AdminStatusCards data={mockData} />;
       case "StorePerson":
         return <StoreStatusCards data={mockData} />;
-      // case "Verification":
-      //   return <VerificationStatusCards data={mockData} />;
+      case "VerificationPerson":
+        return <VerificationStatusCards data={mockData} />;
+      case "DispatchPerson":
+        return <DispatchStatusCards data={mockData} />;
       default:
         return null;
     }
