@@ -22,7 +22,8 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
     //   case "dispatch":
     //     return DispatchForm;
     //   case "delivery":
-    //     return DeliveryForm;
+    //     return DeliveryPopup;
+    //     return CollectionPopup;
       default:
         return () => (
           <div className="p-4 text-muted-foreground">
