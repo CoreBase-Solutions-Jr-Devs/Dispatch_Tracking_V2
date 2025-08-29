@@ -18,10 +18,11 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
         return StorePopup;
       case "verification":
         return VerificationPopup;
-      case "dispatch":
-        return DispatchPopup;
-      //   case "delivery":
-      //     return DeliveryForm;
+    //   case "dispatch":
+    //     return DispatchForm;
+    //   case "delivery":
+    //     return DeliveryPopup;
+    //     return CollectionPopup;
       default:
         return () => (
           <div className="p-4 text-muted-foreground">
