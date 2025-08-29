@@ -18,8 +18,8 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
         return StorePopup;
       case "verification":
         return VerificationPopup;
-    //   case "dispatch":
-    //     return DispatchForm;
+      case "dispatch":
+        return DispatchPopup;
     //   case "delivery":
     //     return DeliveryPopup;
     //     return CollectionPopup;

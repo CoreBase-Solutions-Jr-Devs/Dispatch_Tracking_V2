@@ -325,8 +325,16 @@ export function getInvoiceColumns(view) {
         base.items,
         base.address,
         base.paymentTerms,
-        base.deliveryDate,
+        {
+          ...base.dispatchDate,
+          cell: ({ row }) => renderDateTime(row.original.docDate, 1),
+        },
+        {
+          ...base.deliveryDate,
+          cell: ({ row }) => renderDateTime(row.original.verificationDate, 2),
+        },
         base.status,
+        base.actions
       ];
     default:
       return [
