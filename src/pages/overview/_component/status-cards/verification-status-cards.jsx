@@ -1,16 +1,36 @@
 import React from "react";
 import SharedStatusCard from "./shared-status-cards";
+import {Skeleton} from "@/components/ui/skeleton"
+import { useGetOverviewQuery } from "@/features/overview/overviewApi";
 
-const StoreStatusCards = ({ data }) => {
+const VerificationStatusCards = () => {
+  const {data, isLoading, isError} = useGetOverviewQuery();
+
+    if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center text-red-500 col-span-full">
+        Failed to load overview data.
+      </div>
+    );
+  }
   const today = new Date().toDateString();
 
   const statusCounts = {
-    todayInvoices: data.filter(
-      (i) => new Date(i.createdAt).toDateString() === today
-    ).length,
-    pending: data.filter((i) => i.status === "Pending").length,
-    processed: data.filter((i) => i.status === "Processed").length,
-    avgProcessingTime: "2h 15m",
+    todayInvoices: data.todayCount || 0,
+    pending: data.pending || 0,
+    verified: data.verified || 0,
+    avgVerificationTime: data.avgVerifiactionTime || "N/A",
   };
 
   return (
@@ -28,15 +48,15 @@ const StoreStatusCards = ({ data }) => {
       <SharedStatusCard
         status="Dispatch"
         label="Verified Invoices"
-        count={statusCounts.processed}
+        count={statusCounts.verified}
       />
       <SharedStatusCard
         status="Delivered"
         label="Avg. Verification Time"
-        count={statusCounts.avgProcessingTime}
+        count={statusCounts.avgVerificationTime}
       />
     </div>
   );
 };
 
-export default StoreStatusCards;
+export default VerificationStatusCards;

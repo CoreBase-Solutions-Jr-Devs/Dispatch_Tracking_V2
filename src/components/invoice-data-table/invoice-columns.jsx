@@ -288,7 +288,7 @@ export function getInvoiceColumns(view) {
         base.items,
         base.paymentTerms,
         {
-          ...base.docDate,
+          ...base.processedDate,
           cell: ({ row }) => renderDateTime(row.original.docDate, 1),
         },
         {
