@@ -49,7 +49,11 @@ const SignInForm = () => {
   });
 
   const onSubmit = (values) => {
-    login(values)
+    const payload = {
+        UserName: values.username,
+        Password: values.password,
+    };
+    login(payload)
       .unwrap()
       .then((data) => {
         dispatch(setCredentials(data));
@@ -62,11 +66,20 @@ const SignInForm = () => {
         }, 1000);
       })
       .catch((error) => {
-        toast.error("Login Failed", {
-          description:
-            error?.data?.message || "Please check your credentials and try again",
-          duration: 4000,
-        });
+      let description = "Please check your credentials and try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) {
+          description = errorMessages.join(" ");
+        }
+      } else if (error?.data?.message) {
+        description = error.data.message;
+      }
+
+      toast.error("Login Failed", {
+        description: description,
+        duration: 4000,
+      });
       });
   };
 
@@ -79,15 +92,15 @@ const SignInForm = () => {
       <div className="w-full max-w-md space-y-6">
         <Card className="shadow-md">
           <CardHeader className="text-center pb-2">
-          <Link
-            to="/"
-            className="flex items-center gap-2 justify-center font-medium text-base"
-          >
-            <Logo />
-          </Link>
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Login to Dispatch Tracking System</CardDescription>
-          </CardHeader> 
+            <Link
+              to="/"
+              className="flex items-center gap-2 justify-center font-medium text-base"
+            >
+              <Logo />
+            </Link>
+            <CardTitle className="text-xl">Welcome back</CardTitle>
+            <CardDescription>Login to Dispatch Tracking System</CardDescription>
+          </CardHeader>
           <CardContent className="pt-0">
             {/* Form */}
             <Form {...form}>
@@ -166,9 +179,15 @@ const SignInForm = () => {
                               onClick={togglePasswordVisibility}
                               tabIndex={-1}
                             >
-                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                              {showPassword ? (
+                                <EyeOff className="w-4 h-4" />
+                              ) : (
+                                <Eye className="w-4 h-4" />
+                              )}
                               <span className="sr-only">
-                                {showPassword ? "Hide password" : "Show password"}
+                                {showPassword
+                                  ? "Hide password"
+                                  : "Show password"}
                               </span>
                             </Button>
                           </div>
@@ -208,11 +227,17 @@ const SignInForm = () => {
         {/* Legal + Branding */}
         <div className="text-center text-xs text-muted-foreground mt-2">
           By clicking login, you agree to our{" "}
-          <a href="#" className="underline underline-offset-2 hover:text-primary">
+          <a
+            href="#"
+            className="underline underline-offset-2 hover:text-primary"
+          >
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="#" className="underline underline-offset-2 hover:text-primary">
+          <a
+            href="#"
+            className="underline underline-offset-2 hover:text-primary"
+          >
             Privacy Policy
           </a>
           .
@@ -232,7 +257,10 @@ const SignInForm = () => {
               className="h-4 w-auto object-contain"
             />
           </a>
-          <div>&copy; {new Date().getFullYear()} CoreBase Solutions. All rights reserved.</div>
+          <div>
+            &copy; {new Date().getFullYear()} CoreBase Solutions. All rights
+            reserved.
+          </div>
         </div>
       </div>
     </div>

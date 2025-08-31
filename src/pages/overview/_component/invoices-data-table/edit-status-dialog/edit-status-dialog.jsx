@@ -1,11 +1,10 @@
-/* eslint-disable react-refresh/only-export-components */
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 
-// import StoreForm from "./StoreForm";
-import VerificationPopup from "./Verification/popup.jsx"
-// import DispatchForm from "./DispatchForm";
-// import DeliveryForm from "./DeliveryForm";
+import StorePopup from "./Store/popup.jsx";
+import VerificationPopup from "./Verification/popup.jsx";
+import DispatchPopup from "./Dispatch/popup.jsx";
+import DeliveryPopup from "./Delivery/popup.jsx";
 
 const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,15 +14,15 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
 
   const getForm = () => {
     switch (view?.toLowerCase()) {
-    //   case "store":
-    //     return StoreForm;
+      case "store":
+        return StorePopup;
       case "verification":
         return VerificationPopup;
-    //   case "dispatch":
-    //     return DispatchForm;
-    //   case "delivery":
-    //     return DeliveryPopup;
-    //     return CollectionPopup;
+      case "dispatch":
+        return DispatchPopup;
+      case "delivery":
+        return DeliveryPopup;
+        return CollectionPopup;
       default:
         return () => (
           <div className="p-4 text-muted-foreground">
