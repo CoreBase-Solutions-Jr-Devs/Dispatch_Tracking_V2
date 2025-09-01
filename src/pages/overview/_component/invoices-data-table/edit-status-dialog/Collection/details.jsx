@@ -7,50 +7,50 @@ export default function CollectionDetails() {
 
             <section className='flex gap-x-12'>
                 <Label className="text-xs font-medium">Customer Name:</Label>
-                <Label className="text-xs font-medium text-muted"> BADAR PHARMACY JOMO KENYARRA AVE.</Label>
+                <Label className="text-xs font-medium text-muted dark:text-white"> BADAR PHARMACY JOMO KENYARRA AVE.</Label>
             </section>
 
             <section className="flex justify-between gap-x-4">
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Invoice No:</Label>
-                    <Label className="text-xs font-medium text-muted"> W1-000123</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white"> W1-000123</Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Inv. Date-Time:</Label>
-                    <Label className="text-xs font-medium text-muted"> 26-08-2025 08:59 AM</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white"> 26-08-2025 08:59 AM</Label>
                 </div>
             </section>
 
             <section className="flex justify-between gap-x-4">
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Salesman:</Label>
-                    <Label className="text-xs font-medium text-muted">Samir</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">Samir</Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Start Date-Time:</Label>
-                    <Label className="text-xs font-medium text-muted">27-08-2025 09:15 AM</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">27-08-2025 09:15 AM</Label>
                 </div>
             </section>
 
             <section className="flex justify-between gap-x-4">
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Delivered By:</Label>
-                    <Label className="text-xs font-medium text-muted">PAUL NETIA</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">PAUL NETIA</Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">End Date-Time:</Label>
-                    <Label className="text-xs font-medium text-muted">27-08-2025 11:15 AM</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">27-08-2025 11:15 AM</Label>
                 </div>
             </section>
 
             <section className="flex justify-between gap-x-4">
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Dispatch Ref:</Label>
-                    <Label className="text-xs font-medium text-muted">DPT000001</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">DPT000001</Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Disp Date-Time:</Label>
-                    <Label className="text-xs font-medium text-muted">27-08-2025 11:45 AM</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">27-08-2025 11:45 AM</Label>
                 </div>
             </section>
 
@@ -72,18 +72,18 @@ export default function CollectionDetails() {
             <section className="flex justify-between gap-x-4">
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Car Reg No:</Label>
-                    <Label className="text-xs font-medium text-muted">KCX 420B</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">KCX 420B</Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Make:</Label>
-                    <Label className="text-xs font-medium text-muted">Probox - Saloon</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">Probox - Saloon</Label>
                 </div>
             </section>
 
             <section className='flex justify-between gap-x-4'>
                 <div className="flex justify-start items-center gap-12 my-1">
                     <Label className="text-xs font-medium">Driver's Contact:</Label>
-                    <Label className="text-xs font-medium text-muted">+254723349483</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white">+254723349483</Label>
                 </div>
             </section>
         
