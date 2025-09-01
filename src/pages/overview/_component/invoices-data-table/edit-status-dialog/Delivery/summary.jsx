@@ -14,7 +14,7 @@ export default function DeliverySummary() {
                 <div className="flex justify-between w-1/2">
                 <Label className="text-xs font-medium">Delivery Status:</Label>
                 <Select value={status} onValueChange={setStatus}>
-                    <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-2">
+                    <SelectTrigger className="w-28 border border-gray-300 rounded-md px-2">
                         <SelectValue placeholder="Status" />
                     </SelectTrigger>
 
@@ -37,7 +37,7 @@ export default function DeliverySummary() {
                     <Label className="text-xs font-medium">Delivery Mode:</Label>
                     <Select value={mode} onValueChange={setMode}>
 
-                        <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-2 h-6">
+                        <SelectTrigger className="w-28 border border-gray-300 rounded-md px-2 h-6">
                             <SelectValue placeholder="Mode" />
                         </SelectTrigger>
 
