@@ -1,5 +1,5 @@
 import { DialogFooter, DialogHeader } from '@/components/ui/dialog'
-import React, { useState } from 'react'
+import React from 'react'
 import DeliveryHeader from './header'
 import { Separator } from '@/components/ui/separator'
 import DeliveryDetails from './details'
@@ -12,12 +12,10 @@ import DeliveryInventory from './inventory'
 
 export default function DeliveryPopup({ rowData, onSubmit }) {
 
-    const [isOpen, setIsOpen] = useState(false)
-    const handleDialogClose = () => setIsOpen(false)
 
     return (
         <>
-            <div className='my-2 overflow-y-auto'>
+            <div className='my-2 overflow-auto max-h-[90vh] px-2'>
                 <DialogHeader className='flex flex-row justify-between items-center mt-3'>
                     <DeliveryHeader />
                 </DialogHeader>

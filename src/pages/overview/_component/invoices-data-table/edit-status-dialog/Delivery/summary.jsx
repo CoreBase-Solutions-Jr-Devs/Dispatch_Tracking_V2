@@ -14,8 +14,8 @@ export default function DeliverySummary() {
                 <div className="flex justify-between w-1/2">
                 <Label className="text-xs font-medium">Delivery Status:</Label>
                 <Select value={status} onValueChange={setStatus}>
-                    <SelectTrigger className="w-full border border-gray-300 rounded-md px-2">
-                        <SelectValue placeholder="Select Mode" />
+                    <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-2">
+                        <SelectValue placeholder="Status" />
                     </SelectTrigger>
 
                     <SelectContent className="w-40 bg-gray-200">
@@ -37,8 +37,8 @@ export default function DeliverySummary() {
                     <Label className="text-xs font-medium">Delivery Mode:</Label>
                     <Select value={mode} onValueChange={setMode}>
 
-                        <SelectTrigger className="w-full border border-gray-300 rounded-md px-2">
-                            <SelectValue placeholder="Select Mode" />
+                        <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-2 h-6">
+                            <SelectValue placeholder="Mode" />
                         </SelectTrigger>
 
                         <SelectContent className="w-40 bg-gray-200">
@@ -51,7 +51,7 @@ export default function DeliverySummary() {
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Cash Collected:</Label>
-                    <Input type="number" value="0.00" className="w-32 ml-2 h-8" readOnly />
+                    <Input type="number" value="0.00" className="w-28 ml-2 h-6" readOnly />
                 </div>
             </section>
         </div>
