@@ -19,30 +19,30 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   };
 
   return (
-    <div className="flex flex-row justify-end w-full">
-      <Button
-        variant="apply"
-        onClick={handleStart}
-        disabled={startDisabled}
-        className="mt-2 mr-2 uppercase"
-      >
-        Dispatch
-      </Button>
+    <div className="flex flex-row justify-between w-full">
       <Button
         variant="verification"
         onClick={handleStart}
         disabled={startDisabled}
-        className="mt-2 mr-2 uppercase"
+        className="mt-1 mr-2 uppercase text-xs font-medium"
       >
         Print
       </Button>
       <Button
-        variant="secondary"
-        onClick={handleDelivery}
-        disabled={deliveryDisabled}
-        className="mt-2 uppercase "
+        variant="destructive"
+        onClick={handleStart}
+        disabled={startDisabled}
+        className="mt-1 mr-2 uppercase text-xs font-medium"
       >
         Remove
+      </Button>
+      <Button
+        variant="apply"
+        onClick={handleDelivery}
+        disabled={deliveryDisabled}
+        className="mt-1 uppercase text-xs font-medium "
+      >
+        Dispatch
       </Button>
     </div>
   );

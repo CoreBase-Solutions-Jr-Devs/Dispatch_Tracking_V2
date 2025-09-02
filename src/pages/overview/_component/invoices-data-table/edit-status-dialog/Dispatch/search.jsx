@@ -16,7 +16,7 @@ export default function DispatchSearch({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="pl-9 pr-3 py-2"
+          className="w-50 pl-9 pr-3 py-2 bg-gray-100"
         />
       </div>
 
