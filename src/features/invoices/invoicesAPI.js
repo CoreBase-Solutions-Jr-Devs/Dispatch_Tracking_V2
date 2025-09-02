@@ -69,7 +69,7 @@ export const invoicesApi = apiClient.injectEndpoints({
       }),
       providesTags: ["date_ranges"],
     }),
-
+    // STORE TRACKING
     getStoreTrackingDetails: builder.query({
       query: ({ docNum } = {}) => ({
         url: `/invoices/${docNum}/store-tracking`,
@@ -77,7 +77,6 @@ export const invoicesApi = apiClient.injectEndpoints({
       }),
       providesTags: ["store_details"],
     }),
-
     storeStart: builder.mutation({
       query: (docNum) => ({
         url: `/invoices/${docNum}/store/start`,
@@ -95,18 +94,43 @@ export const invoicesApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["invoices"],
     }),
+    // VERIFICATION TRACKING
+    getVerificationTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/verification-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["verification_details"],
+    }),
+    verificationStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/verification/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+    verificationPush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/verification/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
   }),
 });
 
 export const {
-  //   useUploadInvoiceMutation,
-  //   useDeleteInvoicesMutation,
-  //   useDownloadInvoicesMutation,
-  //
   useFilterInvoicesMutation,
   useGetAllInvoicesQuery,
   useFilterRangeQuery,
+  // STORE TRACKING
   useGetStoreTrackingDetailsQuery,
   useStoreStartMutation,
   useStorePushMutation,
+  // VERIFICATION TRACKING
+  useGetVerificationTrackingDetailsQuery,
+  useVerificationStartMutation,
+  useVerificationPushMutation,
 } = invoicesApi;
