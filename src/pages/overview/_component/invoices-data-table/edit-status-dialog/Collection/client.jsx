@@ -2,7 +2,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React from 'react'
 
-export default function CollectionClient() {
+export default function CollectionClient({ data }) {
     return (
         <section className='flex flex-col mb-2'>
             <section className='flex justify-between gap-x-2'>
