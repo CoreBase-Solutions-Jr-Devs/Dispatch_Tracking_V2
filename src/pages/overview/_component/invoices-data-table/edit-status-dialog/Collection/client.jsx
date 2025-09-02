@@ -8,11 +8,11 @@ export default function CollectionClient() {
             <section className='flex justify-between gap-x-2'>
                 <div className="flex flex-row items-center w-1/2 gap-x-2">
                     <Label className="text-xs font-medium">Collected By:</Label>
-                    <Input type="text" placeholder="Enter Name" className="h-8"/>
+                    <Input type="text" placeholder="Enter Name" className="h-6 w-28"/>
                 </div>
                 <div className="flex flex-row items-center w-1/2 gap-x-2">
                     <Label className="text-xs font-medium">Collection Ref(ID):</Label>
-                    <Input type="text" placeholder="Enter Ref(ID)" className="h-8" />
+                    <Input type="text" placeholder="Enter Ref(ID)" className="h-6 w-28" />
                 </div>
             </section>
         </section>

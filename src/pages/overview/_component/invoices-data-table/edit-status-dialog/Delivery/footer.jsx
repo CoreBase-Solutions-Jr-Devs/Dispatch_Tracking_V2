@@ -20,12 +20,12 @@ export default function DeliveryFooter() {
 
 
     return (
-        <div className='flex flex-row justify-between items-center mt-3 w-full'>
+        <div className='flex flex-row justify-between items-center mt-3 w-full gap-x-2'>
             <Button
                 variant="verification"
                 // onClick={handleStart}
                 // disabled={startDisabled}
-                className="mt-2 uppercase"
+                className="mt-2 h-8 uppercase w-22"
             >
                 Deliv. Note
             </Button>
@@ -33,7 +33,7 @@ export default function DeliveryFooter() {
                 variant="apply"
                 // onClick={handleDispatch}
                 // disabled={dispatchDisabled}
-                className="mt-2 uppercase"
+                className="mt-2 h-8 uppercase w-24"
             >
                 Re-Dispatch
             </Button>
@@ -41,7 +41,7 @@ export default function DeliveryFooter() {
                 variant="verification"
                 // onClick={handleStart}
                 // disabled={startDisabled}
-                className="mt-2 uppercase"
+                className="mt-2 h-8 uppercase w-20"
             >
                 Start
             </Button>
@@ -49,7 +49,7 @@ export default function DeliveryFooter() {
                 variant="apply"
                 onClick={handleStart}
                 disabled={startDisabled}
-                className="mt-2 uppercase"
+                className="mt-2 h-8 uppercase w-20"
             >
                 Complete
             </Button>
