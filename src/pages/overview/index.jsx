@@ -42,6 +42,8 @@ const Overview = () => {
         return <VerificationStatusCards data={mockData} />;
       case "DispatchPerson":
         return <DispatchStatusCards data={mockData} />;
+        case "Driver":
+        return <DeliveryStatusCards data={mockData} />;
       default:
         return null;
     }

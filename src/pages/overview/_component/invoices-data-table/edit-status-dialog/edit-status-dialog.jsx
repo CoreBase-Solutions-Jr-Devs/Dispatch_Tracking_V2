@@ -4,7 +4,7 @@ import { useState } from "react";
 import StorePopup from "./Store/popup.jsx";
 import VerificationPopup from "./Verification/popup.jsx";
 import DispatchPopup from "./Dispatch/popup.jsx";
-// import DeliveryForm from "./DeliveryForm";
+import DeliveryPopup from "./Delivery/popup.jsx";
 
 const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,8 +20,9 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
         return VerificationPopup;
       case "dispatch":
         return DispatchPopup;
-      //   case "delivery":
-      //     return DeliveryForm;
+      case "delivery":
+        return DeliveryPopup;
+        return CollectionPopup;
       default:
         return () => (
           <div className="p-4 text-muted-foreground">

@@ -2,7 +2,7 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit2, Eye } from "lucide-react";
-import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog.jsx";
+import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog.jsx";;
 
 // --- Helpers ---
 const STATUS_STYLES = {
@@ -288,7 +288,7 @@ export function getInvoiceColumns(view) {
         base.items,
         base.paymentTerms,
         {
-          ...base.docDate,
+          ...base.processedDate,
           cell: ({ row }) => renderDateTime(row.original.docDate, 1),
         },
         {
@@ -325,8 +325,16 @@ export function getInvoiceColumns(view) {
         base.items,
         base.address,
         base.paymentTerms,
-        base.deliveryDate,
+        {
+          ...base.dispatchDate,
+          cell: ({ row }) => renderDateTime(row.original.docDate, 1),
+        },
+        {
+          ...base.deliveryDate,
+          cell: ({ row }) => renderDateTime(row.original.verificationDate, 2),
+        },
         base.status,
+        base.actions
       ];
     default:
       return [

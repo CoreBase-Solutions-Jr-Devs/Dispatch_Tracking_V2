@@ -49,7 +49,11 @@ const SignInForm = () => {
   });
 
   const onSubmit = (values) => {
-    login(values)
+    const payload = {
+        UserName: values.username,
+        Password: values.password,
+    };
+    login(payload)
       .unwrap()
       .then((data) => {
         dispatch(setCredentials(data));
@@ -64,8 +68,7 @@ const SignInForm = () => {
       .catch((error) => {
         toast.error("Login Failed", {
           description:
-            error?.data?.message ||
-            "Please check your credentials and try again",
+            error?.data?.message || "Please check your credentials and try again",
           duration: 4000,
         });
       });

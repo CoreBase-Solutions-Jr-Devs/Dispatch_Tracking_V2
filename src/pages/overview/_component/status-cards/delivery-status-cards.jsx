@@ -1,14 +1,37 @@
 import React from 'react';
 import SharedStatusCard from './shared-status-cards';
+import {Skeleton} from "@/components/ui/skeleton"
+import { useGetOverviewQuery } from "@/features/overview/overviewApi";
 
-const DeliveryStatusCards = ({ data }) => {
+const DeliveryStatusCards = () => {
+    const {data, isLoading, isError} = useGetOverviewQuery();
+
+    if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
+    }
+
+    if (isError) {
+      return (
+        <div className="text-center text-red-500 col-span-full">
+          Failed to load overview data.
+        </div>
+      );
+    }
+
     const today = new Date().toDateString();
     
     const statusCounts = {
-        todaysInvoices: data.filter((i) => new Date(i.createdAt).toDateString() === today).length,
-        pending: data.filter((i) => i.status === "In Progress").length,
-        delivered: data.filter((i) => i.status === "Delivered").length,
-        avgDeliveryTime: "3hr 33min",
+        todaysInvoices: data.todayCount || 0,
+        pending: data.pending || 0,
+        delivered: data.delivered || 0,
+        avgDeliveryTime: data.avgDeliveryTime || "N/A",
     }
 
     return (
