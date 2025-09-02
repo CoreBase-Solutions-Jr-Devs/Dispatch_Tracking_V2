@@ -154,6 +154,7 @@ export const invoicesApi = apiClient.injectEndpoints({
     viewInvoicePDF: builder.query({
       query: ({ docNum } = {}) => ({
         url: `/invoices/${docNum}/delivery/pdf`,
+        method: "GET",
       }),
       providesTags: ["invoices"],
     })
