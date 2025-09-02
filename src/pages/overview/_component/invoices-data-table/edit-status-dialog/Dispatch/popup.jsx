@@ -42,37 +42,46 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
   return (
     <>
-      <DialogHeader>
-        <DispatchHeader />
-      </DialogHeader>
+      <div className="my-1 overflow-y-auto max-h-[90vh] px-2">
+        <DialogHeader>
+          <DispatchHeader />
+        </DialogHeader>
 
-      <Separator />
+        <Separator className="my-2" />
 
-      <DispatchSearch
-        value={query}
-        onChange={setQuery}
-        data={rowData}
-        placeholder="invoice No..."
-      />
-      <Separator />
-      <DispatchTable data={rowData} />
-      <DispatchSummary data={rowData} />
-
-      <Separator className="my-1" />
-      <DispatchSelect values={selectValues} onChange={handleSelectChange} />
-      <DispatchDetails data={rowData} />
-
-      <DispatchRemarks />
-      <DispatchMeta />
-
-      <DialogFooter>
-        <DispatchFooter
-          rowData={rowData}
-          selectValues={selectValues}
-          onSubmit={onSubmit}
-          onClose={handleDialogClose}
+        <DispatchSearch
+          value={query}
+          onChange={setQuery}
+          data={rowData}
+          placeholder="invoice No..."
         />
-      </DialogFooter>
+        <Separator />
+        <div className="space-y-4">
+          <DispatchTable data={rowData} />
+          <DispatchSummary data={rowData} />
+        </div>
+
+        <Separator className="my-2" />
+        <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 mb-1">
+          <DispatchSelect values={selectValues} onChange={handleSelectChange} />
+
+          <div className="flex flex-col gap-3">
+            <DispatchDetails data={rowData} />
+            <DispatchMeta />
+          </div>
+        </div>
+
+        <DispatchRemarks />
+
+        <DialogFooter>
+          <DispatchFooter
+            rowData={rowData}
+            selectValues={selectValues}
+            onSubmit={onSubmit}
+            onClose={handleDialogClose}
+          />
+        </DialogFooter>
+      </div>
     </>
   );
 }
