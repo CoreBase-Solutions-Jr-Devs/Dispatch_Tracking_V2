@@ -118,6 +118,45 @@ export const invoicesApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["invoices"],
     }),
+    // COLLECTION TRACKING 
+    getCollectionTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/collection-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["collection_details"],
+    }),
+    collectionStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/collection/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+    collectionPush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/collection/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+    collectionRecall: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/collection/recall`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+    // DELIVERY TRACKING 
+    viewInvoicePDF: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/delivery/pdf`,
+      }),
+      providesTags: ["invoices"],
+    })
   }),
 });
 
@@ -133,4 +172,11 @@ export const {
   useGetVerificationTrackingDetailsQuery,
   useVerificationStartMutation,
   useVerificationPushMutation,
+  // COLLECTION TRACKING 
+  useGetCollectionTrackingDetailsQuery,
+  useCollectionStartMutation,
+  useCollectionRecallMutation,
+  useCollectionPushMutation,
+  // DELIVERY TRACKING
+  useViewInvoicePDFQuery,
 } = invoicesApi;
