@@ -7,11 +7,18 @@ import VerificationSummary from "./summary";
 import VerificationRemarks from "./remarks";
 import VerificationMeta from "./meta";
 import VerificationFooter from "./footer";
+import { useGetVerificationTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function VerificationPopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDialogClose = () => setIsOpen(false);
+
+  const { data } = useGetVerificationTrackingDetailsQuery({
+    docNum: Number(rowData.docNumber),
+  });
+
+  console.log(data);
 
   return (
     <>
@@ -21,19 +28,22 @@ export default function VerificationPopup({ rowData, onSubmit }) {
 
       <Separator className="mb-4" />
 
-      <VerificationDetails data={rowData} />
+      {/* <VerificationDetails data={rowData} /> */}
+      <VerificationDetails data={data} />
 
       <Separator className="my-2" />
 
-      <VerificationSummary data={rowData} />
+      {/* <VerificationSummary data={rowData} /> */}
+      <VerificationSummary data={data} />
 
-      <VerificationRemarks />
+      <VerificationRemarks data={data} />
 
-      <VerificationMeta />
+      <VerificationMeta data={data} />
 
       <DialogFooter>
         <VerificationFooter
-          rowData={rowData}
+          // rowData={rowData}
+          rowData={data}
           onSubmit={onSubmit}
           onClose={handleDialogClose}
         />

@@ -8,6 +8,8 @@ import { store } from "./app/store.js";
 import { persistor } from "./app/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 
+import "react-datepicker/dist/react-datepicker.css";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
