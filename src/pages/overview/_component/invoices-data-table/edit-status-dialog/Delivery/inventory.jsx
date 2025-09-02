@@ -12,12 +12,16 @@ export default function DeliveryInventory() {
             {/* <div className='border-l border-gray-800 h-6 self-center'></div> */}
             <div className="flex items-center">
                 <Label className="text-xs">Total Weight(kg):</Label>
-                <Input type="number" className="w-20 ml-2 h-6"/>
+                <Input
+                    type="number" 
+                    className="w-20 ml-2 h-6" 
+                    defaultValue = {data?.totalWeightKg}
+                />
             </div>
             {/* <div className='border-l border-gray-800 h-6 self-center'></div> */}
             <div className="flex items-center">
                 <Label className="text-xs">No of Packages:</Label>
-                <Input type="number"  className="w-18 ml-2 h-6"/>
+                <Input type="number" className="w-18 ml-2 h-6" value={data?.totalPackages}/>
             </div>
         </section>
     )

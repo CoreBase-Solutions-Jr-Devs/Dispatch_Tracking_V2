@@ -11,7 +11,9 @@ import DeliveryFooter from './footer'
 import DeliveryInventory from './inventory'
 
 export default function DeliveryPopup({ rowData, onSubmit }) {
-
+    const [isOpen, setIsOpen] = useState(false);
+    
+    const handleDialogClose = () => setIsOpen(false);
 
     return (
         <>
@@ -23,7 +25,7 @@ export default function DeliveryPopup({ rowData, onSubmit }) {
                 <Separator className="my-3" />
 
                 {/* Details Section */}
-                <DeliveryDetails data={rowData} />
+                <DeliveryDetails data={data} />
                 {/* Item Reception Section */}
                 <DeliveryReception />
 
@@ -42,7 +44,9 @@ export default function DeliveryPopup({ rowData, onSubmit }) {
 
                 {/* Delivery Footer */}
                 <DialogFooter>
-                    <DeliveryFooter />
+                    <DeliveryFooter
+                        onClose={handleDialogClose}
+                    />
                 </DialogFooter>
             </div>
         </>
