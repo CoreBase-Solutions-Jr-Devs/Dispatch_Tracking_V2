@@ -8,29 +8,30 @@ import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
 import { mockInvoices } from "@/constant/mockInvoices";
 
 export default function SharedInvoiceDataTable() {
-    const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const { invoices } = useSelector((state) => state.invoice);
 
-    const view = roleToView(user?.userRole || "User");
-    const columns = getInvoiceColumns(view);
+  const view = roleToView(user?.userRole || "User");
+  const columns = getInvoiceColumns(view);
 
-    return (
-        <div className="space-y-4">
-            <InvoiceToolbar role={view} />
+  return (
+    <div className="space-y-4">
+      <InvoiceToolbar role={view} />
 
-            <DataTable
-                data={mockInvoices}
-                columns={columns}
-                selection={false}
-                isLoading={false}
-                emptyTitle="No invoices found"
-                isShowPagination={true}
-                pagination={{
-                    pageNumber: 1,
-                    pageSize: 10,
-                    totalItems: mockInvoices.length,
-                    totalPages: Math.ceil(mockInvoices.length / 10),
-                }}
-            />
-        </div>
-    );
+      <DataTable
+        data={invoices}
+        columns={columns}
+        selection={false}
+        isLoading={false}
+        emptyTitle="No invoices found"
+        isShowPagination={true}
+        pagination={{
+          pageNumber: 1,
+          pageSize: 10,
+          totalItems: invoices.length,
+          totalPages: Math.ceil(invoices.length / 10),
+        }}
+      />
+    </div>
+  );
 }

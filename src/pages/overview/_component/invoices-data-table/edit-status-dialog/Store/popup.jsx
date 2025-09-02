@@ -7,11 +7,18 @@ import StoreSummary from "./summary";
 import StoreRemarks from "./remarks";
 import StoreMeta from "./meta";
 import StoreFooter from "./footer";
+import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function StorePopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDialogClose = () => setIsOpen(false);
+
+  const { data } = useGetStoreTrackingDetailsQuery({
+    docNum: Number(rowData.docNumber),
+  });
+
+  console.log("storeDetails", data);
 
   return (
     <>
@@ -21,19 +28,22 @@ export default function StorePopup({ rowData, onSubmit }) {
 
       <Separator className="mb-4" />
 
-      <StoreDetails data={rowData} />
+      {/* <StoreDetails data={rowData} /> */}
+      <StoreDetails data={data} />
 
       <Separator className="my-2" />
 
-      <StoreSummary data={rowData} />
+      {/* <StoreSummary data={rowData} /> */}
+      <StoreSummary data={data} />
 
-      <StoreRemarks />
+      <StoreRemarks data={data} />
 
-      <StoreMeta />
+      <StoreMeta data={data} />
 
       <DialogFooter>
         <StoreFooter
-          rowData={rowData}
+          // rowData={rowData}
+          rowData={data}
           onSubmit={onSubmit}
           onClose={handleDialogClose}
         />

@@ -6,7 +6,7 @@ export default function StoreDetails({ data }) {
       <section className="flex gap-x-12">
         <Label className="text-xs font-medium">Customer Name:</Label>
         <Label className="text-xs font-medium text-muted">
-          {data.customerName}
+          {data?.customerName}
         </Label>
       </section>
 
@@ -14,13 +14,14 @@ export default function StoreDetails({ data }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Invoice No:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.invoiceNo}
+            {data?.invoiceNo}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Invoice Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.invoiceDate}
+            {/* {data.invoiceDate} */}
+            {new Date(data?.invoiceDateTime).toLocaleString()}
           </Label>
         </div>
       </section>
@@ -29,13 +30,13 @@ export default function StoreDetails({ data }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Salesman:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.salesman}
+            {data?.salesman}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Start Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.startDate}
+            {data?.startDate}
           </Label>
         </div>
       </section>
@@ -44,13 +45,13 @@ export default function StoreDetails({ data }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Goods Removed By:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.goodsRemovedBy}
+            {data?.goodsRemovedBy}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">End Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.endDate}
+            {data?.endDate}
           </Label>
         </div>
       </section>
