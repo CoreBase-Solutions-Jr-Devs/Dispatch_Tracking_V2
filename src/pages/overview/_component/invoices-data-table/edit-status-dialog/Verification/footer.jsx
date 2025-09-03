@@ -48,7 +48,7 @@ export default function VerificationFooter({ rowData, onSubmit, onClose }) {
     const payload = {
       docNum: Number(rowData.invoiceNo),
       totalWeightKg: 0,
-      storeRemarks: "",
+      verificationRemarks: "asdasdasd",
     };
 
     verificationPush(payload)
