@@ -48,7 +48,7 @@ export default function StoreDetails({ row }) {
       <section className="flex gap-x-12">
         <Label className="text-xs font-medium">Customer Name:</Label>
         <Label className="text-xs font-medium text-muted">
-          {storeData.customerName || "N/A"}
+          {data?.customerName}
         </Label>
       </section>
 
@@ -56,13 +56,14 @@ export default function StoreDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Invoice No:</Label>
           <Label className="text-xs font-medium text-muted">
-            {storeData.invoiceNo || "N/A"}
+            {data?.invoiceNo}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Invoice Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {formatDateTime(storeData.invoiceDateTime)}
+            {/* {data.invoiceDate} */}
+            {new Date(data?.invoiceDateTime).toLocaleString()}
           </Label>
         </div>
       </section>
@@ -71,13 +72,13 @@ export default function StoreDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Salesman:</Label>
           <Label className="text-xs font-medium text-muted">
-            {storeData.salesman || "N/A"}
+            {data?.salesman}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Start Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {formatDateTime(storeData.storeStartDateTime)}
+            {data?.startDate}
           </Label>
         </div>
       </section>
@@ -86,28 +87,13 @@ export default function StoreDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Goods Removed By:</Label>
           <Label className="text-xs font-medium text-muted">
-            {storeData.goodsRemovedBy || "N/A"}
+            {data?.goodsRemovedBy}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">End Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {formatDateTime(storeData.storeEndDateTime)}
-          </Label>
-        </div>
-      </section>
-
-      <section className="flex justify-between">
-        <div className="flex justify-between w-1/2">
-          <Label className="text-xs font-medium">Store Control:</Label>
-          <Label className="text-xs font-medium text-muted">
-            {storeData.storeControl || "N/A"}
-          </Label>
-        </div>
-        <div className="flex justify-between w-1/2">
-          <Label className="text-xs font-medium">Total Weight (Kg):</Label>
-          <Label className="text-xs font-medium text-muted">
-            {storeData.totalWeightKg || "N/A"}
+            {data?.endDate}
           </Label>
         </div>
       </section>

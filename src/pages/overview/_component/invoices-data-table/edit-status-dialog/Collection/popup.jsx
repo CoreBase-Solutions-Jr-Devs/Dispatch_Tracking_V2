@@ -17,7 +17,7 @@ export default function CollectionPopup({ rowData, onSubmit }) {
 
     return (
         <>
-            <div className='my-2 overflow-auto'>
+            <div className='my-2 overflow-auto max-h-[90vh]'>
                 {/* Collection Header */}
                 <DialogHeader className="flex flex-row justify-between items-center mt-3">
                     <CollectionHeader />

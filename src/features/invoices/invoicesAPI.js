@@ -1,47 +1,136 @@
-import { apiClient } from '@/app/api-client';
+import { apiClient } from "@/app/api-client";
 
 export const invoicesApi = apiClient.injectEndpoints({
-	endpoints: (builder) => ({
-		uploadInvoice: builder.mutation({
-			query: (formData) => ({
-				url: '/invoices/upload',
-				method: 'POST',
-				body: formData,
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+  endpoints: (builder) => ({
+    // uploadInvoice: builder.mutation({
+    //   query: (formData) => ({
+    //     url: "/invoices/upload",
+    //     method: "POST",
+    //     body: formData,
+    //   }),
+    //   invalidatesTags: ["invoices"],
+    // }),
 
-		getAllInvoices: builder.query({
-			query: ({ keyword, pageNumber = 1, pageSize = 10 } = {}) => ({
-				url: '/invoices/all',
-				method: 'GET',
-				params: { keyword, pageNumber, pageSize },
-			}),
-			providesTags: ['invoices'],
-		}),
+    // deleteInvoices: builder.mutation({
+    //   query: (invoiceIds) => ({
+    //     url: "/invoices/bulk-delete",
+    //     method: "DELETE",
+    //     body: { invoiceIds },
+    //   }),
+    //   invalidatesTags: ["invoices"],
+    // }),
 
-		deleteInvoices: builder.mutation({
-			query: (invoiceIds) => ({
-				url: '/invoices/bulk-delete',
-				method: 'DELETE',
-				body: { invoiceIds },
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+    // downloadInvoices: builder.mutation({
+    //   query: (invoiceIds) => ({
+    //     url: "/invoices/download",
+    //     method: "POST",
+    //     body: { invoiceIds },
+    //   }),
+    // }),
 
-		downloadInvoices: builder.mutation({
-			query: (invoiceIds) => ({
-				url: '/invoices/download',
-				method: 'POST',
-				body: { invoiceIds },
-			}),
-		}),
-	}),
+    // NEW MUTATIONS/QUERIES
+
+    filterInvoices: builder.mutation({
+      query: (formData) => ({
+        url: "/invoices/filter",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+
+    getAllInvoices: builder.query({
+      query: ({
+        StartDate,
+        EndDate,
+        docNumber,
+        cuscode,
+        PageNumber = 1,
+        PageSize = 10,
+      } = {}) => ({
+        url: "/invoices",
+        method: "GET",
+        params: {
+          StartDate,
+          EndDate,
+          docNumber,
+          cuscode,
+          PageNumber,
+          PageSize,
+        },
+      }),
+      providesTags: ["invoices"],
+    }),
+
+    filterRange: builder.query({
+      query: () => ({
+        url: "/invoices/filter-options",
+        method: "GET",
+      }),
+      providesTags: ["date_ranges"],
+    }),
+    // STORE TRACKING
+    getStoreTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/store-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["store_details"],
+    }),
+    storeStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/store/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+
+    storePush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/store/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+    // VERIFICATION TRACKING
+    getVerificationTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/verification-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["verification_details"],
+    }),
+    verificationStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/verification/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+    verificationPush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/verification/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+  }),
 });
 
 export const {
-	useUploadInvoiceMutation,
-	useGetAllInvoicesQuery,
-	useDeleteInvoicesMutation,
-	useDownloadInvoicesMutation,
+  useFilterInvoicesMutation,
+  useGetAllInvoicesQuery,
+  useFilterRangeQuery,
+  // STORE TRACKING
+  useGetStoreTrackingDetailsQuery,
+  useStoreStartMutation,
+  useStorePushMutation,
+  // VERIFICATION TRACKING
+  useGetVerificationTrackingDetailsQuery,
+  useVerificationStartMutation,
+  useVerificationPushMutation,
 } = invoicesApi;

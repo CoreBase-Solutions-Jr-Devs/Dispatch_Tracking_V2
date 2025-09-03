@@ -1,39 +1,38 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
   /* Background colors */
   --background: 100% 0 0; /* Pure white #ffffff */
   --foreground: 0% 0 0; /* Pure black #000000 */
-  
+
   /* Muted colors */
   --muted: 65.2% 0.004 240.1; /* Light gray #a2a2a2 at 40% opacity effect */
   --muted-foreground: 40.8% 0.008 258.3; /* Medium gray for muted text */
-  
+
   /* Accent colors */
   --accent: 65.2% 0.004 240.1; /* Light gray accent */
   --accent-foreground: 0% 0 0; /* Black text on accent */
-  
+
   /* Primary colors - Orange theme */
   --primary: 64.8% 0.089 68.4; /* Orange primary color #c58c4f */
   --primary-foreground: 100% 0 0; /* White text on primary */
-  
+
   /* Secondary colors - Pharmacy blue theme */
   --secondary: 91.8% 0.028 220.3; /* Light mint blue for pharmacy feel */
   --secondary-foreground: 0% 0 0; /* Black text on secondary */
-  
+
   /* Destructive colors */
   --destructive: 62.8% 0.228 29.2; /* Red for destructive actions */
   --destructive-foreground: 100% 0 0; /* White text on destructive */
-  
+
   /* Border and input colors */
   --border: 65.2% 0.004 240.1; /* Gray border #a2a2a2 */
   --input: 100% 0 0; /* White input background */
   --ring: 64.8% 0.089 68.4; /* Focus ring color - matches primary */
-  
+
   /* Sidebar colors */
   --sidebar-background: 100% 0 0; /* White sidebar background #ffffff */
   --sidebar-foreground: 0% 0 0; /* Black sidebar text */
@@ -43,7 +42,7 @@
   --sidebar-accent-foreground: 0% 0 0; /* Black text on sidebar accent */
   --sidebar-border: 65.2% 0.004 240.1; /* Gray sidebar border */
   --sidebar-ring: 64.8% 0.089 68.4; /* Sidebar focus ring */
-  
+
   /* Status colors - Exact values at 40% opacity effect */
   --status-store: 91.2% 0.015 29.2; /* Store #893232 at 40% opacity effect */
   --status-store-foreground: 38.6% 0.061 29.2; /* Darker red for text */
@@ -53,69 +52,73 @@
   --status-dispatch-foreground: 54.2% 0.131 258.3; /* Blue for text */
   --status-delivered: 92.1% 0.044 142.5; /* Delivered #28a745 at 40% opacity effect */
   --status-delivered-foreground: 56.8% 0.109 142.5; /* Green for text */
-  
+
   /* Row hover */
   --row-hover: 65.2% 0.004 240.1; /* Gray #a2a2a2 at 40% opacity effect */
-  
+
   /* Dropdown/Select colors */
   --select-background: 98.7%_0.004_264.0; /* Light gray */
-  --dropdown-background:100% 0 0; /* White background */
-  --dropdown-foreground: 0% 0 0;  /* Black text */
-  
+  --dropdown-background: 100% 0 0; /* White background */
+  --dropdown-foreground: 0% 0 0; /* Black text */
+
   /* Chart colors */
   --chart-1: 64.8% 0.089 68.4; /* Orange - primary #c58c4f */
   --chart-2: 54.2% 0.131 258.3; /* Blue - dispatch #3258e0 */
   --chart-3: 56.8% 0.109 142.5; /* Green - delivered #28a745 */
   --chart-4: 38.6% 0.061 29.2; /* Red - store #893232 */
   --chart-5: 78.4% 0.064 195.6; /* Soft teal - pharmacy complement */
-  
+
   /* Pharmacy-inspired additional colors */
   --pharmacy-mint: 91.8% 0.028 166.2; /* Soft mint green for medical feel */
   --pharmacy-cream: 96.5% 0.012 85.4; /* Warm cream for comfort */
   --pharmacy-steel: 68.7% 0.008 258.3; /* Steel blue for trust */
-  
+
   /* Font settings */
-  --font-sans: "Poppins", "Inter", "Nunito Sans", "Open Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
-  
+  --font-sans: "Poppins", "Inter", "Nunito Sans", "Open Sans", ui-sans-serif,
+    system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular,
+    "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+
   /* Radius settings */
   --radius: 0.5rem;
-  
+
   /* Shadow settings */
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 .dark {
   /* Background colors */
   --background: 12.9% 0.008 258.3; /* Dark blue-gray background */
   --foreground: 100% 0 0; /* White text */
-  
+
   /* Muted colors */
   --muted: 22.4% 0.012 258.3; /* Dark muted background */
   --muted-foreground: 65.2% 0.008 240.1; /* Light gray muted text */
-  
+
   /* Accent colors */
   --accent: 22.4% 0.012 258.3; /* Dark accent background */
   --accent-foreground: 100% 0 0; /* White accent text */
-  
+
   /* Primary colors - Orange theme */
   --primary: 64.8% 0.089 68.4; /* Orange primary color #c58c4f */
   --primary-foreground: 12.9% 0.008 68.4; /* Dark text on primary */
-  
+
   /* Secondary colors - Pharmacy blue theme */
   --secondary: 32.8% 0.048 220.3; /* Darker mint blue */
   --secondary-foreground: 100% 0 0; /* White text on secondary */
-  
+
   /* Destructive colors */
   --destructive: 62.8% 0.228 29.2; /* Red (same as light) */
   --destructive-foreground: 100% 0 0; /* White text on destructive */
-  
+
   /* Border and input colors */
   --border: 32.8% 0.012 258.3; /* Dark border color */
   --input: 22.4% 0.012 258.3; /* Dark input background */
   --ring: 64.8% 0.089 68.4; /* Focus ring - matches primary */
-  
+
   /* Sidebar colors */
   --sidebar-background: 12.9% 0.008 258.3; /* Dark sidebar background */
   --sidebar-foreground: 100% 0 0; /* White sidebar text */
@@ -125,7 +128,7 @@
   --sidebar-accent-foreground: 100% 0 0; /* White text on sidebar accent */
   --sidebar-border: 32.8% 0.012 258.3; /* Dark sidebar border */
   --sidebar-ring: 64.8% 0.089 68.4; /* Sidebar focus ring */
-  
+
   /* Status colors - Adjusted for dark mode */
   --status-store: 28.6% 0.041 29.2; /* Darker store background */
   --status-store-foreground: 71.2% 0.081 29.2; /* Lighter red for text */
@@ -135,14 +138,14 @@
   --status-dispatch-foreground: 74.2% 0.111 258.3; /* Lighter blue for text */
   --status-delivered: 35.8% 0.074 142.5; /* Darker delivered background */
   --status-delivered-foreground: 76.8% 0.089 142.5; /* Lighter green for text */
-  
+
   /* Row hover */
   --row-hover: 22.4% 0.012 258.3; /* Dark row hover */
-  
+
   /* Dropdown colors */
   --dropdown-background: 22.4% 0.012 258.3; /* Dark dropdown background */
   --dropdown-foreground: 100% 0 0; /* White text */
-  
+
   /* Chart colors - Same as light mode for consistency */
   --chart-1: 64.8% 0.089 68.4; /* Orange - primary */
   --chart-2: 74.2% 0.111 258.3; /* Lighter blue for dark mode */
@@ -155,7 +158,7 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --radius: var(--radius);
-  
+
   --color-background: oklch(var(--background));
   --color-foreground: oklch(var(--foreground));
   --color-muted: oklch(var(--muted));
@@ -182,11 +185,15 @@
   --color-status-store: oklch(var(--status-store));
   --color-status-store-foreground: oklch(var(--status-store-foreground));
   --color-status-verification: oklch(var(--status-verification));
-  --color-status-verification-foreground: oklch(var(--status-verification-foreground));
+  --color-status-verification-foreground: oklch(
+    var(--status-verification-foreground)
+  );
   --color-status-dispatch: oklch(var(--status-dispatch));
   --color-status-dispatch-foreground: oklch(var(--status-dispatch-foreground));
   --color-status-delivered: oklch(var(--status-delivered));
-  --color-status-delivered-foreground: oklch(var(--status-delivered-foreground));
+  --color-status-delivered-foreground: oklch(
+    var(--status-delivered-foreground)
+  );
   --color-row-hover: oklch(var(--row-hover));
   --color-select-background: oklch(var(--select-background));
   --color-dropdown-background: oklch(var(--dropdown-background));
@@ -199,7 +206,7 @@
   --color-pharmacy-mint: oklch(var(--pharmacy-mint));
   --color-pharmacy-cream: oklch(var(--pharmacy-cream));
   --color-pharmacy-steel: oklch(var(--pharmacy-steel));
-  
+
   --shadow: var(--shadow);
   --shadow-lg: var(--shadow-lg);
 }
@@ -208,80 +215,97 @@
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-semibold tracking-tight;
   }
-  
-  input, textarea, select {
+
+  input,
+  textarea,
+  select {
     @apply bg-input border border-border rounded-md px-3 py-2 text-sm;
   }
-  
+
   button {
     @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors;
   }
-  
+
   .btn-primary {
     @apply bg-primary text-primary-foreground hover:bg-primary/90;
   }
-  
+
   .btn-secondary {
     @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
   }
-  
+
   .btn-destructive {
     @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
   }
-  
+
   /* Status badge styles with exact colors */
   .status-store {
     background-color: oklch(var(--status-store));
     color: oklch(var(--status-store-foreground));
   }
-  
+
   .status-verification {
     background-color: oklch(var(--status-verification));
     color: oklch(var(--status-verification-foreground));
   }
-  
+
   .status-dispatch {
     background-color: oklch(var(--status-dispatch));
     color: oklch(var(--status-dispatch-foreground));
   }
-  
+
   .status-delivered {
     background-color: oklch(var(--status-delivered));
     color: oklch(var(--status-delivered-foreground));
   }
-  
+
   /* Row hover effect */
   .table-row:hover {
     background-color: oklch(var(--row-hover));
   }
-  
+
   /* Sidebar hover effect */
   .sidebar-item:hover {
     background-color: oklch(64.8% 0.089 68.4 / 0.4); /* Orange at 40% opacity */
   }
-  
+
   /* Dropdown styling */
   .dropdown-menu {
     background-color: oklch(var(--dropdown-background));
     color: oklch(var(--dropdown-foreground));
   }
-  
+
   /* Apply button - using delivered green */
   .btn-apply {
     background-color: oklch(56.8% 0.109 142.5); /* Green #28a745 */
     color: oklch(100% 0 0); /* White text */
   }
-  
+
   .btn-apply:hover {
     background-color: oklch(46.8% 0.129 142.5); /* Darker green on hover */
   }
+}
+
+.react-datepicker-popper {
+  z-index: 60 !important;
+}
+
+.react-datepicker {
+  background-color: #fff;
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

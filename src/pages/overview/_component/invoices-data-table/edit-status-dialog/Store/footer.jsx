@@ -1,63 +1,51 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  useStartStoreProcessMutation,
-  usePushToVerificationMutation,
-} from "@/features/invoices/storeAPI";
+  useStorePushMutation,
+  useStoreStartMutation,
+} from "@/features/invoices/invoicesAPI";
+import { toast } from "sonner";
 
 export default function StoreFooter({ rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
-  const [verificationDisabled, setVerificationDisabled] = useState(true);
+  const [VerificationDisabled, setVerificationDisabled] = useState(true);
 
-  const [startStoreProcess, { isLoading }] = useStartStoreProcessMutation(); // RTK mutation hook
-  const [pushToVerification, { isLoading: isPushing }] =
-    usePushToVerificationMutation(); // new push mutation
+  const [storeStart, { data, isLoading, isError }] = useStoreStartMutation();
+  const [storePush] = useStorePushMutation();
 
-  const handleStart = async () => {
-    if (!rowData?.docNum) {
-      alert("docNum is missing for this invoice.");
-      return;
-    }
+  const handleStart = () => {
+    setStartDisabled(true);
+    setVerificationDisabled(false);
 
-    try {
-      setStartDisabled(true); // disable Start button immediately
-      const response = await startStoreProcess(rowData.docNum).unwrap();
-      console.log("Store process started:", response);
+    storeStart(Number(rowData.invoiceNo))
+      .unwrap()
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) {
+            description = errorMessages.join(" ");
+          }
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
+        toast.error("store start Failed", {
+          description: description,
+          duration: 4000,
+        });
+      });
 
-      setVerificationDisabled(false); // enable Verification button after success
-      if (onClose) onClose();
-    } catch (err) {
-      console.error("Failed to start store process:", err);
-      setStartDisabled(false); // re-enable Start button on error
-      alert("Failed to start store process. Please try again.");
-    }
+    if (onClose) onClose();
   };
 
-  const handleVerification = async () => {
-    if (!rowData?.docNum) {
-      alert("docNum is missing for this invoice.");
-      return;
-    }
-
-    try {
-      setStartDisabled(true);
-      setVerificationDisabled(true);
-
-      const response = await pushToVerification({
-        docNum: rowData.docNum,
-        totalWeightKg: rowData.totalWeightKg || 0,
-        storeRemarks: rowData.storeRemarks || "",
-      }).unwrap();
-
-      console.log("Pushed to verification:", response);
-
-      if (onSubmit) onSubmit(rowData);
-      if (onClose) onClose();
-    } catch (err) {
-      console.error("Failed to push to verification:", err);
-      alert("Failed to push to verification. Please try again.");
-      setVerificationDisabled(false); // re-enable button on error
-    }
+  const handleVerification = () => {
+    setStartDisabled(true);
+    setVerificationDisabled(true);
+    if (onSubmit) onSubmit(rowData);
+    if (onClose) onClose();
   };
 
   return (
