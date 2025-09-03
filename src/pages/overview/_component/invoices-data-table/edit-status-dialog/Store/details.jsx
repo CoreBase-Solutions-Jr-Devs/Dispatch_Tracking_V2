@@ -1,6 +1,6 @@
 import React from "react";
 import { Label } from "@/components/ui/label";
-import { useGetStoreTrackingQuery } from "@/features/invoices/storeAPI";
+import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function StoreDetails({ row }) {
@@ -8,9 +8,8 @@ export default function StoreDetails({ row }) {
 
   console.log("docNum received in StoreDetails:", docNum);
 
-  const skipQuery = !docNum;
-  const { data, isLoading, isError } = useGetStoreTrackingQuery(docNum, {
-    skip: skipQuery,
+  const { data, isLoading, isError } = useGetStoreTrackingDetailsQuery(docNum, {
+    skip: !docNum,
   });
 
   if (!docNum) {
@@ -48,7 +47,7 @@ export default function StoreDetails({ row }) {
       <section className="flex gap-x-12">
         <Label className="text-xs font-medium">Customer Name:</Label>
         <Label className="text-xs font-medium text-muted">
-          {data?.customerName}
+          {storeData.customerName}
         </Label>
       </section>
 
@@ -56,14 +55,13 @@ export default function StoreDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Invoice No:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data?.invoiceNo}
+            {storeData.invoiceNo}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Invoice Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {/* {data.invoiceDate} */}
-            {new Date(data?.invoiceDateTime).toLocaleString()}
+            {formatDateTime(storeData.invoiceDateTime)}
           </Label>
         </div>
       </section>
@@ -72,13 +70,13 @@ export default function StoreDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Salesman:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data?.salesman}
+            {storeData.salesman}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Start Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data?.startDate}
+            {formatDateTime(storeData.storeStartDateTime)}
           </Label>
         </div>
       </section>
@@ -87,35 +85,49 @@ export default function StoreDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Goods Removed By:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data?.goodsRemovedBy}
+            {storeData.goodsRemovedBy}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">End Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data?.endDate}
+            {formatDateTime(storeData.storeEndDateTime)}
           </Label>
         </div>
       </section>
 
       <section>
+        <Label className="text-xs font-medium">Store Control:</Label>
+        <Label className="text-xs font-medium text-muted">
+          {storeData.storeControl}
+        </Label>
+      </section>
+
+      <section>
+        <Label className="text-xs font-medium">Total Weight (Kg):</Label>
+        <Label className="text-xs font-medium text-muted">
+          {storeData.totalWeightKg}
+        </Label>
+      </section>
+
+      <section>
         <Label className="text-xs font-medium">Store Remarks:</Label>
         <Label className="text-xs font-medium text-muted">
-          {storeData.storeRemarks || "N/A"}
+          {storeData.storeRemarks}
         </Label>
       </section>
 
       <section>
         <Label className="text-xs font-medium">Turnaround Time:</Label>
         <Label className="text-xs font-medium text-muted">
-          {storeData.turnaroundTime || "N/A"}
+          {storeData.turnaroundTime}
         </Label>
       </section>
 
       <section>
         <Label className="text-xs font-medium">Workflow Status:</Label>
         <Label className="text-xs font-medium text-muted">
-          {storeData.workflowStatus || "N/A"}
+          {storeData.workflowStatus}
         </Label>
       </section>
     </div>
