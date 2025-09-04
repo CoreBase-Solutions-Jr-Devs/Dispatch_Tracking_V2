@@ -157,7 +157,30 @@ export const invoicesApi = apiClient.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["invoices"],
-    })
+    }),
+    getDeliveryTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/delivery-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["invoices"],
+    }),
+    deliveryStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/delivery/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+    deliveryComplete: builder.mutation({
+      query: (docNum, payload) => ({
+        url: `/invoices/${docNum}/delivery/complete`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
   }),
 });
 
