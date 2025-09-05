@@ -19,7 +19,7 @@ export default function VerificationSummary({ data }) {
         <Label>Total Weight (kg):</Label>
         <Input
           type="number"
-          defaultValue={data.totalWeight}
+          defaultValue={data?.totalWeight}
           value={totalWeight}
           className="w-20 ml-2 h-8"
           onChange={handleChange}

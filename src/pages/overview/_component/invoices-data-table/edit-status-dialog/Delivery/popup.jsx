@@ -1,5 +1,5 @@
 import { DialogFooter, DialogHeader } from '@/components/ui/dialog'
-import React from 'react'
+import React, { useState } from 'react'
 import DeliveryHeader from './header'
 import { Separator } from '@/components/ui/separator'
 import DeliveryDetails from './details'
@@ -9,11 +9,16 @@ import DeliveryRemarks from './remarks'
 import DeliveryMeta from './meta'
 import DeliveryFooter from './footer'
 import DeliveryInventory from './inventory'
+import { useGetDeliveryTrackingDetailsQuery } from '@/features/invoices/invoicesAPI'
 
 export default function DeliveryPopup({ rowData, onSubmit }) {
     const [isOpen, setIsOpen] = useState(false);
-    
+
     const handleDialogClose = () => setIsOpen(false);
+    const { data } = useGetDeliveryTrackingDetailsQuery({
+        docNum: Number(rowData.invoiceNo),
+        // docNum: Number(rowData._id),
+    });
 
     return (
         <>
@@ -27,24 +32,26 @@ export default function DeliveryPopup({ rowData, onSubmit }) {
                 {/* Details Section */}
                 <DeliveryDetails data={data} />
                 {/* Item Reception Section */}
-                <DeliveryReception />
+                <DeliveryReception data={data} />
 
                 <Separator className="my-2" />
                 {/* Delivery Inventory Section */}
-                <DeliveryInventory />
+                <DeliveryInventory data={data} />
 
                 {/* Delivery Summary Section */}
-                <DeliverySummary />
+                <DeliverySummary data={data} />
 
                 {/* Delivery Remarks Section*/}
-                <DeliveryRemarks />
+                <DeliveryRemarks data={data} />
 
                 {/* Meta Content */}
-                <DeliveryMeta />
+                <DeliveryMeta data={data} />
 
                 {/* Delivery Footer */}
                 <DialogFooter>
                     <DeliveryFooter
+                        rowData={data}
+                        onSubmit={onSubmit}
                         onClose={handleDialogClose}
                     />
                 </DialogFooter>
