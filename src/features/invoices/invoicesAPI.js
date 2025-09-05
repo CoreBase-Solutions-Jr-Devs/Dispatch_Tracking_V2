@@ -163,7 +163,7 @@ export const invoicesApi = apiClient.injectEndpoints({
         url: `/invoices/${docNum}/delivery-tracking`,
         method: "GET",
       }),
-      providesTags: ["invoices"],
+      providesTags: ["delivery_details"],
     }),
     deliveryStart: builder.mutation({
       query: (docNum) => ({
@@ -203,4 +203,7 @@ export const {
   useCollectionPushMutation,
   // DELIVERY TRACKING
   useViewInvoicePDFQuery,
+  useGetDeliveryTrackingDetailsQuery,
+  useDeliveryCompleteMutation,
+  useDeliveryStartMutation,
 } = invoicesApi;
