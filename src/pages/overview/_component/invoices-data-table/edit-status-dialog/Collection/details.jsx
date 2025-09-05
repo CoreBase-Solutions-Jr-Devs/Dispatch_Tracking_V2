@@ -2,13 +2,15 @@ import { Label } from '@/components/ui/label'
 import React from 'react'
 
 export default function CollectionDetails({ data }) {
+    const invoice = data || mockInvoices[0];
+
     return (
         <section className='flex flex-col gap-2'>
 
             <section className='flex gap-x-12'>
                 <Label className="text-xs font-medium">Customer Name:</Label>
                 <Label className="text-xs font-medium text-muted dark:text-white">
-                    {data?.customerName}
+                    {invoice?.customerName}
                 </Label>
             </section>
 
@@ -16,13 +18,13 @@ export default function CollectionDetails({ data }) {
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Invoice No:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.invoiceNo}
+                        {invoice?.invoiceNo}
                     </Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Inv. Date-Time:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.invoiceDateTime}
+                        {invoice?.invoiceDateTime}
                     </Label>
                 </div>
             </section>
@@ -31,13 +33,13 @@ export default function CollectionDetails({ data }) {
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Salesman:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.salesman}
+                        {invoice?.salesman}
                     </Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Start Date-Time:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.collectStartDateTime}
+                        {invoice?.collectStartDateTime}
                     </Label>
                 </div>
             </section>
@@ -46,13 +48,13 @@ export default function CollectionDetails({ data }) {
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Delivered By:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.driverName}
+                        {invoice?.driverName}
                     </Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">End Date-Time:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.collectEndDateTime}
+                        {invoice?.collectEndDateTime}
                     </Label>
                 </div>
             </section>
@@ -61,13 +63,13 @@ export default function CollectionDetails({ data }) {
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Dispatch Ref:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.dispatchRef}
+                        {invoice?.dispatchRef}
                     </Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Disp Date-Time:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.dispatchDateTime}
+                        {invoice?.dispatchDateTime}
                     </Label>
                 </div>
             </section>
@@ -75,11 +77,11 @@ export default function CollectionDetails({ data }) {
             <section className="flex justify-between items-center">
                 <div className="flex justify-between gap-x-2">
                     <Label className="text-xs font-medium">Driver Name:</Label>
-                    <Label className="text-xs font-medium uppercase">{data?.driverName}</Label>
+                    <Label className="text-xs font-medium uppercase">{invoice?.driverName}</Label>
                 </div>
                 <div className="flex justify-between gap-x-2">
                     <Label className="text-xs font-medium">Dr ID:</Label>
-                    <Label className="text-xs font-medium">{data?.driverID}</Label>
+                    <Label className="text-xs font-medium">{invoice?.driverID}</Label>
                 </div>
                 <div className="flex justify-between gap-x-2">
                     <Label className="text-xs font-medium">Dr DL:</Label>
@@ -91,13 +93,13 @@ export default function CollectionDetails({ data }) {
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Car Reg No:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.carPlate}
+                        {invoice?.carPlate}
                     </Label>
                 </div>
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Make:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
-                        {data?.carMake}
+                        {invoice?.carMake}
                     </Label>
                 </div>
             </section>
