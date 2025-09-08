@@ -24,7 +24,6 @@ const VerificationStatusCards = () => {
       </div>
     );
   }
-  const today = new Date().toDateString();
 
   const statusCounts = {
     todayInvoices: data?.todayCount || 0,

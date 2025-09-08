@@ -42,6 +42,7 @@ const BaseFilters = ({
         </Label>
         <DatePicker
           selected={startDate}
+          dateFormat="dd/MM/yyyy"
           onChange={(date) => handleStartDate(date)}
         />
 
@@ -61,6 +62,7 @@ const BaseFilters = ({
 
         <DatePicker
           selected={endDate}
+          dateFormat="dd/MM/yyyy"
           onChange={(date) => handleEndDate(date)}
         />
         {/* <Input
