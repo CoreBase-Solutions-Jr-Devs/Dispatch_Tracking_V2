@@ -4,10 +4,8 @@ const initialState = {
   invoices: [],
   startDate: new Date().toISOString(),
   endDate: new Date().toISOString(),
-  storeDetails: {
-    totalWeight: 0,
-    storeRemarks: "",
-  },
+  totalWeight: 0,
+  storeRemarks: "",
   // dateRange: "",
   // search: "",
 };
@@ -29,10 +27,10 @@ const invoiceSlice = createSlice({
       // if (!state.storeDetails) {
       //   state.storeDetails = { totalWeight: 0, storeRemarks: "" };
       // }
-      state.storeDetails.totalWeight = action.payload;
+      state.totalWeight = action.payload;
     },
     setStoreRemarks: (state, action) => {
-      state.storeDetails.storeRemarks = action.payload;
+      state.storeRemarks = action.payload;
     },
   },
 });
