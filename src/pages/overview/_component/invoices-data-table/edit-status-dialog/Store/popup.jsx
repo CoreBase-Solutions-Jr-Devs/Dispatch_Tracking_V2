@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
-
 import StoreHeader from "./header";
 import StoreDetails from "./details";
 import StoreSummary from "./summary";
@@ -10,38 +8,35 @@ import StoreRemarks from "./remarks";
 import StoreMeta from "./meta";
 import StoreFooter from "./footer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function StorePopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
-  const docNum = rowData?.original?.docNumber;
-
-  const { data, isLoading, isError } = useGetStoreTrackingDetailsQuery(docNum, {
-    skip: !docNum,
-  });
-
   const handleDialogClose = () => setIsOpen(false);
 
-  if (!docNum) {
-    return (
-      <div className="text-sm text-muted">No document number selected</div>
-    );
-  }
+  const { data, isLoading, isError } = useGetStoreTrackingDetailsQuery({
+    docNum: Number(rowData.invoiceNo),
+  });
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-2 p-4">
-        <Skeleton className="h-5 w-1/2" />
-        <Skeleton className="h-5 w-1/2" />
-        <Skeleton className="h-5 w-1/2" />
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-1/3" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-12 w-full" />
       </div>
     );
   }
 
   if (isError) {
-    return <div className="text-red-500 text-sm p-4">Failed to load data.</div>;
+    return (
+      <div className="text-center text-red-500">
+        Failed to load store tracking details.
+      </div>
+    );
   }
-
-  const storeData = data?.value || {};
+  const readOnly = rowData?.status === "Processed";
 
   return (
     <>
@@ -51,16 +46,15 @@ export default function StorePopup({ rowData, onSubmit }) {
 
       <Separator className="mb-4" />
 
-      
-      <StoreDetails data={storeData} />
+      <StoreDetails data={data} />
 
       <Separator className="my-2" />
 
-      <StoreSummary data={storeData} />
+      <StoreSummary data={data} readOnly={readOnly} />
 
-      <StoreRemarks data={storeData} />
+      <StoreRemarks data={data} readOnly={readOnly} />
 
-      <StoreMeta data={storeData} />
+      <StoreMeta data={data} readOnly={readOnly} />
 
       <DialogFooter>
         <StoreFooter
