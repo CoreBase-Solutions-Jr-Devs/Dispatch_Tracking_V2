@@ -9,6 +9,7 @@ import { useAppDispatch } from '@/app/hook'
 import DatePicker from 'react-datepicker'
 import { getInvoiceFilters } from '@/components/invoice-data-table/invoice-filters'
 import RoleBasedFilters from '../filter-actions/role-based-filters'
+import { setEndDate, setStartDate } from "@/features/invoices/invoiceSlice"
 import { useFilterInvoicesMutation, useFilterRangeQuery } from '@/features/invoices/invoicesAPI'
 
     export default function FilterSheet({ view = 'default' }) {
@@ -28,6 +29,14 @@ import { useFilterInvoicesMutation, useFilterRangeQuery } from '@/features/invoi
     
         const handleFilterChange = (key, value) => {
             setSelectedFilters((prev) => ({ ...prev, [key]: value }));
+        };
+
+        const handleStartDate = (date) => {
+            dispatch(setStartDate(new Date(date).toISOString()));
+        };
+
+        const handleEndDate = (date) => {
+            dispatch(setEndDate(new Date(date).toISOString()));
         };
     
         const handleApplyFilter = () => {
