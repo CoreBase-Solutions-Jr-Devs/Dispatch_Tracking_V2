@@ -5,13 +5,23 @@ import {
   useStoreStartMutation,
 } from "@/features/invoices/invoicesAPI";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { useTypedSelector } from "@/app/hook";
 
 export default function StoreFooter({ rowData, onSubmit, onClose }) {
-  const [startDisabled, setStartDisabled] = useState(false);
-  const [VerificationDisabled, setVerificationDisabled] = useState(true);
+  const [startDisabled, setStartDisabled] = useState(
+    rowData?.status === "Processed" || false
+  );
+  const [VerificationDisabled, setVerificationDisabled] = useState(
+    rowData?.status === "Processed" || true
+  );
 
   const [storeStart, { data, isLoading, isError }] = useStoreStartMutation();
   const [storePush] = useStorePushMutation();
+
+  const { totalWeight, storeRemarks } = useTypedSelector(
+    (state) => state.invoice
+  );
 
   const handleStart = () => {
     setStartDisabled(true);
@@ -47,10 +57,9 @@ export default function StoreFooter({ rowData, onSubmit, onClose }) {
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      totalWeightKg: 0,
-      storeRemarks: "",
+      totalWeightKg: totalWeight || 0,
+      storeRemarks: storeRemarks || "",
     };
-
     storePush(payload)
       .unwrap()
       .then((data) => {
