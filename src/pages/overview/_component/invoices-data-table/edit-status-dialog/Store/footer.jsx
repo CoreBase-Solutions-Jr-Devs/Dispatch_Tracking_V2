@@ -48,7 +48,7 @@ export default function StoreFooter({ rowData, onSubmit, onClose }) {
     const payload = {
       docNum: Number(rowData.invoiceNo),
       totalWeightKg: 0,
-      storeRemarks: "sldfksldf",
+      storeRemarks: "",
     };
 
     storePush(payload)
