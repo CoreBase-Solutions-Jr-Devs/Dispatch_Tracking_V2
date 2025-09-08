@@ -10,17 +10,20 @@ import VerificationFooter from "./footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetVerificationTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
-export default function VerificationPopup({ rowData, onSubmit }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleDialogClose = () => setIsOpen(false);
+export default function VerificationPopup({ rowData, onSubmit, onClose }) {
+  const [remarks, setRemarks] = useState("");
+  const [weight, setWeight] = useState(0);
+  const [errors, setErrors] = useState({ weight: "", remarks: "" });
 
-  const { data, isLoading, isError } = useGetVerificationTrackingDetailsQuery({
-    docNum: Number(rowData.docNumber),
-  });
+  const handleRemarksChange = (newRemarks) => setRemarks(newRemarks);
+  const handleWeightChange = (newWeight) => setWeight(newWeight);
 
-  const readOnly = rowData?.status === "Processed";
+  const { data, isLoading, isError, refetch } =
+    useGetVerificationTrackingDetailsQuery({
+      docNum: Number(rowData.invoiceNo),
+    });
 
-  if (isLoading) {
+  if (isLoading)
     return (
       <div className="space-y-4">
         <Skeleton className="h-8 w-1/3" />
@@ -29,39 +32,56 @@ export default function VerificationPopup({ rowData, onSubmit }) {
         <Skeleton className="h-12 w-full" />
       </div>
     );
-  }
 
-  if (isError) {
+  if (isError)
     return (
       <div className="text-center text-red-500">
         Failed to load verification tracking details.
       </div>
     );
-  }
+
+  const readOnly = rowData?.status === "Verified";
 
   return (
     <>
       <DialogHeader>
-        <VerificationHeader />
+        <VerificationHeader data={data} />
       </DialogHeader>
 
       <Separator className="mb-4" />
 
-      <VerificationDetails data={data} readOnly={readOnly} />
+      <VerificationDetails data={data} />
 
       <Separator className="my-2" />
 
-      <VerificationSummary data={data} readOnly={readOnly} />
+      <VerificationSummary
+        data={data}
+        readOnly={readOnly}
+        handleWeightChange={handleWeightChange}
+        error={errors.remarks}
+      />
 
-      <VerificationRemarks data={data} readOnly={readOnly} />
+      <VerificationRemarks
+        data={data}
+        readOnly={readOnly}
+        handleRemarksChange={handleRemarksChange}
+        error={errors.remarks}
+      />
 
       <VerificationMeta data={data} readOnly={readOnly} />
 
       <DialogFooter>
         <VerificationFooter
-          rowData={data}
+          remarks={remarks}
+          weight={weight}
+          rowData={data} // pass fetched data
           onSubmit={onSubmit}
-          onClose={handleDialogClose}
+          onClose={onClose}
+          errors={errors}
+          setWeight={setWeight}
+          setRemarks={setRemarks}
+          setErrors={setErrors}
+          refetchData={refetch}
         />
       </DialogFooter>
     </>

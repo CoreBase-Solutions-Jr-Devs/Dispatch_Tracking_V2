@@ -10,13 +10,27 @@ import StoreFooter from "./footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
-export default function StorePopup({ rowData, onSubmit }) {
+export default function StorePopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
-  const handleDialogClose = () => setIsOpen(false);
-
-  const { data, isLoading, isError } = useGetStoreTrackingDetailsQuery({
-    docNum: Number(rowData.invoiceNo),
+  const [remarks, setRemarks] = useState();
+  const [weight, setWeight] = useState(0);
+  const [errors, setErrors] = useState({
+    weight: "",
+    remarks: "",
   });
+
+  const handleRemarksChange = (newRemarks) => {
+    setRemarks(newRemarks);
+  };
+  const handleWeightChange = (newWeight) => {
+    setWeight(newWeight);
+  };
+
+  const { data, isLoading, isError, refetch } = useGetStoreTrackingDetailsQuery(
+    {
+      docNum: Number(rowData.invoiceNo),
+    }
+  );
 
   if (isLoading) {
     return (
@@ -36,12 +50,12 @@ export default function StorePopup({ rowData, onSubmit }) {
       </div>
     );
   }
-  const readOnly = rowData?.status === "Processed";
+  const readOnly = rowData?.workflowStatus === "Processed";
 
   return (
     <>
       <DialogHeader>
-        <StoreHeader />
+        <StoreHeader data={data} />
       </DialogHeader>
 
       <Separator className="mb-4" />
@@ -50,17 +64,34 @@ export default function StorePopup({ rowData, onSubmit }) {
 
       <Separator className="my-2" />
 
-      <StoreSummary data={data} readOnly={readOnly} />
+      <StoreSummary
+        data={data}
+        readOnly={readOnly}
+        handleWeightChange={handleWeightChange}
+        error={errors.weight}
+      />
 
-      <StoreRemarks data={data} readOnly={readOnly} />
+      <StoreRemarks
+        data={data}
+        readOnly={readOnly}
+        handleRemarksChange={handleRemarksChange}
+        error={errors.remarks}
+      />
 
       <StoreMeta data={data} readOnly={readOnly} />
 
       <DialogFooter>
         <StoreFooter
-          rowData={rowData}
+          remarks={remarks}
+          weight={weight}
+          setWeight={setWeight} // add this
+          setRemarks={setRemarks} // add this
+          rowData={data}
           onSubmit={onSubmit}
-          onClose={handleDialogClose}
+          onClose={onClose}
+          errors={errors}
+          setErrors={setErrors}
+          refetchData={refetch}
         />
       </DialogFooter>
     </>
