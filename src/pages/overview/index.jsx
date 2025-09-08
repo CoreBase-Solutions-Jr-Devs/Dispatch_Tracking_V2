@@ -13,6 +13,7 @@ import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-d
 import { roleToView, viewMeta } from "@/lib/utils";
 import { BarChart } from "lucide-react";
 import CollapsibleSection from "@/components/ui/collapsible-section";
+import FilterSheet from "./_component/filter-sheet/filterSheet";
 
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
@@ -55,8 +56,9 @@ const Overview = () => {
       subtitle={pageMeta?.subtitle}
       rightAction={
         <div className="flex items-center gap-2 text-sm">
-          <span className="font-medium">Logged in Users:</span>
-          <span className="font-semibold text-muted-foreground">2</span>
+          {/* <span className="font-medium">Logged in Users:</span>
+          <span className="font-semibold text-muted-foreground">2</span> */}
+          <FilterSheet />
         </div>
       }
       noPadding // 🚀 remove default padding to free space
