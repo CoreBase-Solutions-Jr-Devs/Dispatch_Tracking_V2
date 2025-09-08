@@ -9,9 +9,15 @@ export default function DeliveryDetails({ data }) {
     return (
         <section className='flex flex-col gap-2'>
 
-            <section className='flex'>
-                <Label className="text-xs font-medium">Customer Name:</Label>
-                <Label className="text-xs font-medium text-muted dark:text-white ml-4">{invoice?.customerName}</Label>
+            <section className='flex justify-between gap-x-4'>
+                <div className='flex justify-between w-1/2'>
+                    <Label className="text-xs font-medium">Customer Name:</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white ml-4">{invoice?.customerName}</Label>
+                </div>
+                <div className='flex justify-between w-1/2'>
+                    <Label className="text-xs font-medium">Customer Address:</Label>
+                    <Label className="text-xs font-medium text-muted dark:text-white ml-4">{invoice?.customerAddress}</Label>
+                </div>
             </section>
 
             <section className="flex justify-between gap-x-4">
@@ -29,7 +35,7 @@ export default function DeliveryDetails({ data }) {
                 </div>
             </section>
 
-            <section className="flex justify-between gap-x-4">
+            {/* <section className="flex justify-between gap-x-4">
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Delivered By:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
@@ -42,7 +48,7 @@ export default function DeliveryDetails({ data }) {
                         {invoice?.collectEndDateTime}
                     </Label>
                 </div>
-            </section>
+            </section> */}
 
             <section className="flex justify-between gap-x-4">
                 <div className="flex justify-between w-1/2">
@@ -59,25 +65,26 @@ export default function DeliveryDetails({ data }) {
                 </div>
             </section>
 
-            <section className="flex justify-between gap-x-2">
+            <section className="flex justify-between gap-x-4">
                 <div className="flex items-center justify-between w-1/2">
                     <Label className="text-xs font-medium">Driver Name:</Label>
                     <Label className="text-xs font-medium uppercase">{invoice?.driverName}</Label>
                 </div>
+                
+                <section className="flex items-center justify-between w-1/2">
 
-                <div className="flex items-center justify-between w-1/4">
-                    <Label className="text-xs font-medium">Dr ID:</Label>
-                    <Label className="text-xs font-medium">{invoice?.driverID}</Label>
-                </div>
+                    <div className="flex justify-start items-center gap-x-6">
+                        <Label className="text-xs font-medium">Driver's Contact:</Label>
+                        <Label className="text-xs font-medium text-muted dark:text-white">
+                            +254723349483
+                        </Label>
+                    </div>
+                </section>
 
-                <div className="flex items-center justify-between w-1/4">
-                    <Label className="text-xs font-medium">Dr DL:</Label>
-                    <Label className="text-xs font-medium">{invoice?.driverDL}</Label>
-                </div>
             </section>
 
 
-            <section className="flex justify-between gap-x-4">
+            <section className="flex justify-between gap-x-4 mb-2">
                 <div className="flex justify-between w-1/2">
                     <Label className="text-xs font-medium">Car Reg No:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
@@ -88,15 +95,6 @@ export default function DeliveryDetails({ data }) {
                     <Label className="text-xs font-medium">Make:</Label>
                     <Label className="text-xs font-medium text-muted dark:text-white">
                         {invoice?.carMake}
-                    </Label>
-                </div>
-            </section>
-
-            <section className='flex justify-between gap-x-4'>
-                <div className="flex justify-start items-center gap-12 mb-2">
-                    <Label className="text-xs font-medium">Driver's Contact:</Label>
-                    <Label className="text-xs font-medium text-muted dark:text-white">
-                        +254723349483
                     </Label>
                 </div>
             </section>
