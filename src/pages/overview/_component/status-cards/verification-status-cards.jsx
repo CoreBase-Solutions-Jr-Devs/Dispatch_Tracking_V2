@@ -26,10 +26,10 @@ const VerificationStatusCards = () => {
   }
 
   const statusCounts = {
-    todayInvoices: data.todayCount || 0,
-    pending: data.pending || 0,
-    verified: data.verified || 0,
-    avgVerificationTime: data.avgVerifiactionTime || "N/A",
+    todayInvoices: data?.todayCount || 0,
+    pending: data?.pending || 0,
+    verified: data?.verified || 0,
+    avgVerificationTime: data?.avgVerifiactionTime || "N/A",
   };
 
   return (
