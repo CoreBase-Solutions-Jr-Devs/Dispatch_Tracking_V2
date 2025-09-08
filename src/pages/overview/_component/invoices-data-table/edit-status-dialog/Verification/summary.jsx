@@ -1,29 +1,42 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function VerificationSummary({ data }) {
-  const [totalWeight, setTotalWeight] = useState(data?.totalWeightKg);
+export default function VerificationSummary({
+  data,
+  readOnly,
+  handleWeightChange,
+  error,
+}) {
+  const [weight, setWeight] = useState(data?.totalWeightKg || "");
+
+  useEffect(() => {
+    setWeight(data?.totalWeightKg || "");
+  }, [data?.totalWeightKg]);
 
   const handleChange = (e) => {
-    setTotalWeight(e.target.value);
-    //   dispatch(setStoreTotalWeight(e.target.value));
+    setWeight(e.target.value);
+    handleWeightChange(e.target.value);
   };
+
+  if (!data) return null;
+
   return (
-    <section className="flex flex-row justify-between items-center mb-2">
-      <div className="flex items-center">
-        <Label>Items:</Label>
-        <Label className="ml-2">{data?.items}</Label>
+    <section className="flex flex-row justify-start items-center mb-2 gap-x-20">
+      <div className="flex items-center gap-x-2">
+        <Label className="text-xs font-medium">Items:</Label>
+        <Label className="text-xs font-medium text-muted">{data?.items}</Label>
       </div>
-      <div className="flex items-center">
-        <Label>Total Weight (kg):</Label>
+      <div className="flex items-center gap-x-2">
+        <Label className="text-xs font-medium">Total Weight (kg):</Label>
         <Input
           type="number"
-          defaultValue={data.totalWeight}
-          value={totalWeight}
-          className="w-20 ml-2 h-8"
+          value={weight}
+          className="w-20 h-8 text-xs font-medium text-muted"
           onChange={handleChange}
+          readOnly={data?.workflowStatus === "Verified"}
         />
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>
     </section>
   );
