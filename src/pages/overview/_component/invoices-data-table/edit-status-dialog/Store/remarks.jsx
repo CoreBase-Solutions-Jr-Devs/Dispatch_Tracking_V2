@@ -1,22 +1,31 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function StoreRemarks({ data }) {
-  const [remarks, setReamrks] = useState(data?.storeRemarks);
+export default function StoreRemarks({ data, readOnly }) {
+  const [remarks, setRemarks] = useState(data?.storeRemarks || "");
+
+  useEffect(() => {
+    setRemarks(data?.storeRemarks || "");
+  }, [data?.storeRemarks]);
 
   const handleChange = (e) => {
-    setReamrks(e.target.value);
+    setRemarks(e.target.value);
   };
 
+  if (!data) return null;
+
   return (
-    <div className="flex flex-col mb-2">
-      <Label>Store Remarks:</Label>
+    <section className="flex flex-col mb-2 gap-y-2">
+      <div className="flex items-center gap-x-1">
+        <Label className="text-xs font-medium">Store Remarks:</Label>
+      </div>
       <Textarea
-        className="min-w-[80px] bg-gray-300"
+        className="min-w-[80px] bg-gray-300 h-20"
         value={remarks}
         onChange={handleChange}
+        readOnly={readOnly}
       />
-    </div>
+    </section>
   );
 }
