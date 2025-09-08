@@ -5,23 +5,27 @@ export default function StoreDetails({ data }) {
   const formatDateTime = (date) =>
     date ? new Date(date).toLocaleString() : "N/A";
 
+  if (!data) return null;
+
   return (
     <div className="flex flex-col gap-2">
-      <section className="flex gap-x-12">
+      {/* Customer Name */}
+      <section className="flex gap-2 items-center">
         <Label className="text-xs font-medium">Customer Name:</Label>
         <Label className="text-xs font-medium text-muted">
-          {data.customerName}
+          {data.customerName || "—"}
         </Label>
       </section>
 
-      <section className="flex justify-between">
-        <div className="flex justify-between w-1/2">
+      {/* Invoice No & Invoice Date & Time */}
+      <section className="flex justify-between gap-4">
+        <div className="flex w-1/2 gap-2 items-center">
           <Label className="text-xs font-medium">Invoice No:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.invoiceNo}
+            {data.invoiceNo || "—"}
           </Label>
         </div>
-        <div className="flex justify-between w-1/2">
+        <div className="flex w-1/2 gap-2 items-center">
           <Label className="text-xs font-medium">Invoice Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
             {formatDateTime(data.invoiceDateTime)}
@@ -29,14 +33,15 @@ export default function StoreDetails({ data }) {
         </div>
       </section>
 
-      <section className="flex justify-between">
-        <div className="flex justify-between w-1/2">
+      {/* Salesman & Start Date & Time */}
+      <section className="flex justify-between gap-4">
+        <div className="flex w-1/2 gap-2 items-center">
           <Label className="text-xs font-medium">Salesman:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.salesman}
+            {data.salesman || "—"}
           </Label>
         </div>
-        <div className="flex justify-between w-1/2">
+        <div className="flex w-1/2 gap-2 items-center">
           <Label className="text-xs font-medium">Start Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
             {formatDateTime(data.storeStartDateTime)}
@@ -44,54 +49,19 @@ export default function StoreDetails({ data }) {
         </div>
       </section>
 
-      <section className="flex justify-between">
-        <div className="flex justify-between w-1/2">
+      <section className="flex justify-between gap-4">
+        <div className="flex w-1/2 gap-2 items-center">
           <Label className="text-xs font-medium">Goods Removed By:</Label>
           <Label className="text-xs font-medium text-muted">
-            {data.goodsRemovedBy}
+            {data.goodsRemovedBy || "—"}
           </Label>
         </div>
-        <div className="flex justify-between w-1/2">
+        <div className="flex w-1/2 gap-2 items-center">
           <Label className="text-xs font-medium">End Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
             {formatDateTime(data.storeEndDateTime)}
           </Label>
         </div>
-      </section>
-
-      <section>
-        <Label className="text-xs font-medium">Store Control:</Label>
-        <Label className="text-xs font-medium text-muted">
-          {data.storeControl}
-        </Label>
-      </section>
-
-      <section>
-        <Label className="text-xs font-medium">Total Weight (Kg):</Label>
-        <Label className="text-xs font-medium text-muted">
-          {data.totalWeightKg}
-        </Label>
-      </section>
-
-      <section>
-        <Label className="text-xs font-medium">Store Remarks:</Label>
-        <Label className="text-xs font-medium text-muted">
-          {data.storeRemarks}
-        </Label>
-      </section>
-
-      <section>
-        <Label className="text-xs font-medium">Turnaround Time:</Label>
-        <Label className="text-xs font-medium text-muted">
-          {data.turnaroundTime}
-        </Label>
-      </section>
-
-      <section>
-        <Label className="text-xs font-medium">Workflow Status:</Label>
-        <Label className="text-xs font-medium text-muted">
-          {data.workflowStatus}
-        </Label>
       </section>
     </div>
   );
