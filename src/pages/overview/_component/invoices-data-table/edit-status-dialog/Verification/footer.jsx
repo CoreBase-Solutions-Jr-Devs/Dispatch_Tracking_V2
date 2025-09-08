@@ -5,87 +5,151 @@ import {
   useVerificationPushMutation,
 } from "@/features/invoices/invoicesAPI";
 import { toast } from "sonner";
+import VerificationStartPopup from "./startpopup.jsx";
 
-export default function VerificationFooter({ rowData, onSubmit, onClose }) {
-  const [startDisabled, setStartDisabled] = useState(false);
-  const [dispatchDisabled, setDispatchDisabled] = useState(true);
+export default function VerificationFooter({
+  rowData,
+  onSubmit,
+  onClose,
+  weight,
+  remarks,
+  errors,
+  setErrors,
+  refetchData,
+  setWeight, // <-- add this
+  setRemarks,
+}) {
+  const [startDisabled, setStartDisabled] = useState(
+    rowData?.workflowStatus === "Verified" ||
+      rowData?.verifyStartDateTime ||
+      false
+  );
 
-  const [verificationStart, { data, isLoading, isError }] =
-    useVerificationStartMutation();
+  const [dispatchDisabled, setDispatchDisabled] = useState(
+    rowData?.workflowStatus !== "In Verification" ||
+      !rowData?.verifyStartDateTime
+  );
+
+  const [verificationStart] = useVerificationStartMutation();
   const [verificationPush] = useVerificationPushMutation();
 
-  const handleStart = () => {
+  const handleStartApi = () => {
     setStartDisabled(true);
-    setDispatchDisabled(false);
+    setDispatchDisabled(true);
 
     verificationStart(Number(rowData.invoiceNo))
       .unwrap()
-      .then((data) => {
-        console.log(data);
+      .then((response) => {
+        toast.success("Verification started successfully");
+
+        // Enable Send to Dispatch after start succeeds
+        setDispatchDisabled(false);
+
+        if (refetchData) refetchData();
       })
       .catch((error) => {
+        setStartDisabled(false);
+        setDispatchDisabled(true);
+
         let description = "Please check your credentials and try again.";
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) {
-            description = errorMessages.join(" ");
-          }
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
         } else if (error?.data?.message) {
           description = error.data.message;
         }
-        toast.error("store start Failed", {
-          description: description,
+        toast.error("Verification start Failed", {
+          description,
           duration: 4000,
         });
       });
-    if (onClose) onClose();
   };
 
   const handleDispatch = () => {
+    const isWeightEmpty = !weight || weight <= 0;
+    const isRemarksEmpty = !remarks || remarks.trim() === "";
+
+    // Set field errors
+    const fieldErrors = {};
+    if (isWeightEmpty) fieldErrors.weight = "Weight is required";
+    if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
+
+    setErrors({
+      weight: fieldErrors.weight || undefined,
+      remarks: fieldErrors.remarks || undefined,
+    });
+
+    // If both empty, reset fields
+    if (isWeightEmpty && isRemarksEmpty) {
+      setWeight(0);
+      setRemarks("");
+      return;
+    }
+
+    // Stop submission if there are any errors
+    if (Object.keys(fieldErrors).length > 0) return;
+
+    // Disable buttons during API call
     setStartDisabled(true);
     setDispatchDisabled(true);
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      totalWeightKg: 0,
-      verificationRemarks: "asdasdasd",
+      totalWeightKg: weight,
+      verificationRemarks: remarks,
     };
 
     verificationPush(payload)
       .unwrap()
-      .then((data) => {
-        console.log(data);
+      .then((response) => {
+        toast.success("Sent to Dispatch successfully");
+        setWeight(0);
+        setRemarks("");
+        setErrors({});
+        if (refetchData) refetchData();
       })
       .catch((error) => {
+        setStartDisabled(false);
+        setDispatchDisabled(false);
+
         let description = "Please check your credentials and try again.";
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) {
-            description = errorMessages.join(" ");
-          }
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
         } else if (error?.data?.message) {
           description = error.data.message;
         }
-        toast.error("store start Failed", {
-          description: description,
-          duration: 4000,
-        });
+        toast.error("Send to Dispatch Failed", { description, duration: 4000 });
       });
-
-    if (onSubmit) onSubmit(rowData);
-    if (onClose) onClose();
   };
+
+  const handleClose = () => onClose();
 
   return (
     <div className="flex flex-row justify-end w-full">
       <Button
-        variant="verification"
-        onClick={handleStart}
-        disabled={startDisabled}
+        variant="destructive"
+        onClick={handleClose}
         className="mt-2 mr-2 uppercase"
       >
-        Start
+        Cancel
       </Button>
+
+      <VerificationStartPopup
+        rowData={rowData}
+        onConfirm={(confirmed) => {
+          if (confirmed) handleStartApi();
+        }}
+      >
+        <Button
+          variant="verification"
+          disabled={startDisabled}
+          className="mt-2 mr-2 uppercase"
+        >
+          Start
+        </Button>
+      </VerificationStartPopup>
+
       <Button
         variant="apply"
         onClick={handleDispatch}
