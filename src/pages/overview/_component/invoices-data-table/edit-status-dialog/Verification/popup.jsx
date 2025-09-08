@@ -15,7 +15,8 @@ export default function VerificationPopup({ rowData, onSubmit }) {
   const handleDialogClose = () => setIsOpen(false);
 
   const { data } = useGetVerificationTrackingDetailsQuery({
-    docNum: Number(rowData.docNumber),
+    // docNum: Number(rowData.docNumber),
+    docNum: Number(rowData.invoiceNo),
   });
 
   console.log(data);

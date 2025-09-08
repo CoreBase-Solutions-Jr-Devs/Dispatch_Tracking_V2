@@ -15,7 +15,8 @@ export default function StorePopup({ rowData, onSubmit }) {
   const handleDialogClose = () => setIsOpen(false);
 
   const { data } = useGetStoreTrackingDetailsQuery({
-    docNum: Number(rowData.docNumber),
+    // docNum: Number(rowData.docNumber),
+    docNum: Number(rowData.invoiceNo),
   });
 
   console.log("storeDetails", data);
