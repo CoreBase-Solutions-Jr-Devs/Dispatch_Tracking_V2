@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { getInvoiceFilters } from "@/components/invoice-data-table/invoice-filters";
 import BaseFilters from "./base-filters";
@@ -86,6 +86,10 @@ const FilterActions = ({ view = "default" }) => {
     setSearch("");
     setSelectedFilters({});
   };
+
+  useEffect(() => {
+    handleApplyFilter();
+  }, []);
 
   return (
     <CollapsibleSection id="filters" icon={Filter} defaultOpen={true}>
