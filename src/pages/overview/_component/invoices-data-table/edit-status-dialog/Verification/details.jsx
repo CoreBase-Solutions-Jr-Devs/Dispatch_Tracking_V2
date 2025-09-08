@@ -1,54 +1,28 @@
 import React from "react";
 import { Label } from "@/components/ui/label";
-import { useGetVerificationTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
-import { Skeleton } from "@/components/ui/skeleton";
 
-export default function VerificationDetails({ row }) {
-  const docNum = row?.original?.docNumber; 
-
-  console.log("docNum received in VerificationDetails:", docNum);
-
-  const { data, isLoading, isError } = useGetVerificationTrackingDetailsQuery(
-    docNum,
-    { skip: !docNum }
+function DetailRow({ label, value }) {
+  return (
+    <section className="grid grid-cols-[130px_1fr] items-center">
+      <Label className="text-xs font-medium">{label}:</Label>
+      <Label className="text-xs font-medium text-muted ml-0.5">
+        {value || "N/A"}
+      </Label>
+    </section>
   );
-
-  if (!docNum) {
-    return (
-      <div className="text-sm text-muted">No document number selected</div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-col gap-2">
-        <Skeleton className="h-5 w-1/2" />
-        <Skeleton className="h-5 w-1/2" />
-        <Skeleton className="h-5 w-1/2" />
-        <Skeleton className="h-5 w-1/2" />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="text-red-500 text-sm">
-        Failed to load verification tracking data.
-      </div>
-    );
-  }
-
-  const verificationData = data?.value || {};
-
+}
+export default function VerificationDetails({ data, readOnly = false }) {
   const formatDateTime = (date) =>
     date ? new Date(date).toLocaleString() : "N/A";
+
+  if (!data) return null;
 
   return (
     <div className="flex flex-col gap-2">
       <section className="flex gap-x-12">
         <Label className="text-xs font-medium">Customer Name:</Label>
         <Label className="text-xs font-medium text-muted">
-          {verificationData.customerName}
+          {data.customerName || "—"}
         </Label>
       </section>
 
@@ -56,13 +30,13 @@ export default function VerificationDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Invoice No:</Label>
           <Label className="text-xs font-medium text-muted">
-            {verificationData.invoiceNo}
+            {data.invoiceNo || "—"}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Invoice Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {formatDateTime(verificationData.invoiceDateTime)}
+            {formatDateTime(data.invoiceDateTime)}
           </Label>
         </div>
       </section>
@@ -71,13 +45,13 @@ export default function VerificationDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Salesman:</Label>
           <Label className="text-xs font-medium text-muted">
-            {verificationData.salesman}
+            {data.salesman || "—"}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Start Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {formatDateTime(verificationData.verifyStartDateTime)}
+            {formatDateTime(data.verifyStartDateTime)}
           </Label>
         </div>
       </section>
@@ -86,13 +60,13 @@ export default function VerificationDetails({ row }) {
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">Verified By:</Label>
           <Label className="text-xs font-medium text-muted">
-            {verificationData.verifiedBy}
+            {data.verifiedBy || "—"}
           </Label>
         </div>
         <div className="flex justify-between w-1/2">
           <Label className="text-xs font-medium">End Date & Time:</Label>
           <Label className="text-xs font-medium text-muted">
-            {formatDateTime(verificationData.verifyEndDateTime)}
+            {formatDateTime(data.verifyEndDateTime)}
           </Label>
         </div>
       </section>
@@ -100,21 +74,21 @@ export default function VerificationDetails({ row }) {
       <section>
         <Label className="text-xs font-medium">Verification Remarks:</Label>
         <Label className="text-xs font-medium text-muted">
-          {verificationData.verificationRemarks}
+          {data.verifyRemarks || "—"}
         </Label>
       </section>
 
       <section>
         <Label className="text-xs font-medium">Turnaround Time:</Label>
         <Label className="text-xs font-medium text-muted">
-          {verificationData.turnaroundTime}
+          {data.turnaroundTime || "—"}
         </Label>
       </section>
 
       <section>
         <Label className="text-xs font-medium">Workflow Status:</Label>
         <Label className="text-xs font-medium text-muted">
-          {verificationData.workflowStatus}
+          {data.workflowStatus || "—"}
         </Label>
       </section>
     </div>

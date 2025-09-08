@@ -7,18 +7,37 @@ import VerificationSummary from "./summary";
 import VerificationRemarks from "./remarks";
 import VerificationMeta from "./meta";
 import VerificationFooter from "./footer";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGetVerificationTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function VerificationPopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
-
   const handleDialogClose = () => setIsOpen(false);
 
-  const { data } = useGetVerificationTrackingDetailsQuery({
+  const { data, isLoading, isError } = useGetVerificationTrackingDetailsQuery({
     docNum: Number(rowData.docNumber),
   });
 
-  console.log(data);
+  const readOnly = rowData?.status === "Processed";
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-1/3" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-12 w-full" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center text-red-500">
+        Failed to load verification tracking details.
+      </div>
+    );
+  }
 
   return (
     <>
@@ -28,21 +47,18 @@ export default function VerificationPopup({ rowData, onSubmit }) {
 
       <Separator className="mb-4" />
 
-      {/* <VerificationDetails data={rowData} /> */}
-      <VerificationDetails data={data} />
+      <VerificationDetails data={data} readOnly={readOnly} />
 
       <Separator className="my-2" />
 
-      {/* <VerificationSummary data={rowData} /> */}
-      <VerificationSummary data={data} />
+      <VerificationSummary data={data} readOnly={readOnly} />
 
-      <VerificationRemarks data={data} />
+      <VerificationRemarks data={data} readOnly={readOnly} />
 
-      <VerificationMeta data={data} />
+      <VerificationMeta data={data} readOnly={readOnly} />
 
       <DialogFooter>
         <VerificationFooter
-          // rowData={rowData}
           rowData={data}
           onSubmit={onSubmit}
           onClose={handleDialogClose}
