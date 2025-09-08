@@ -19,6 +19,7 @@ export default function SharedInvoiceDataTable() {
       <InvoiceToolbar role={view} />
 
       <DataTable
+        // data={mockInvoices}
         data={invoices}
         columns={columns}
         selection={false}
@@ -28,8 +29,8 @@ export default function SharedInvoiceDataTable() {
         pagination={{
           pageNumber: 1,
           pageSize: 10,
-          totalItems: invoices.length,
-          totalPages: Math.ceil(invoices.length / 10),
+          totalItems: mockInvoices.length,
+          totalPages: Math.ceil(mockInvoices.length / 10),
         }}
       />
     </div>

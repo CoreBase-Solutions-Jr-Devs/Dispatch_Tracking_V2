@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import React, { useState } from 'react'
 
-export default function DeliveryFooter() {
+export default function DeliveryFooter({ rowData, onSubmit, onClose }) {
     const [startDisabled, setStartDisabled] = useState(false)
     const [dispatchDisabled, setDispatchDisabled] = useState(true)
 
