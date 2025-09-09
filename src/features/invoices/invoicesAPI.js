@@ -2,34 +2,6 @@ import { apiClient } from "@/app/api-client";
 
 export const invoicesApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
-    // uploadInvoice: builder.mutation({
-    //   query: (formData) => ({
-    //     url: "/invoices/upload",
-    //     method: "POST",
-    //     body: formData,
-    //   }),
-    //   invalidatesTags: ["invoices"],
-    // }),
-
-    // deleteInvoices: builder.mutation({
-    //   query: (invoiceIds) => ({
-    //     url: "/invoices/bulk-delete",
-    //     method: "DELETE",
-    //     body: { invoiceIds },
-    //   }),
-    //   invalidatesTags: ["invoices"],
-    // }),
-
-    // downloadInvoices: builder.mutation({
-    //   query: (invoiceIds) => ({
-    //     url: "/invoices/download",
-    //     method: "POST",
-    //     body: { invoiceIds },
-    //   }),
-    // }),
-
-    // NEW MUTATIONS/QUERIES
-
     filterInvoices: builder.mutation({
       query: (formData) => ({
         url: "/invoices/filter",

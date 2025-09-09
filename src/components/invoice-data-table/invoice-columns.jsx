@@ -22,36 +22,24 @@ const renderStatus = (status) => {
       statusClass = STATUS_STYLES.Store;
       break;
     case "Processed":
-      statusClass = STATUS_STYLES.Verification;
-      break;
-
     case "In Verification":
       statusClass = STATUS_STYLES.Verification;
       break;
     case "Verified":
-      statusClass = STATUS_STYLES.Dispatch;
-      break;
-    case "Return":
-      statusClass = STATUS_STYLES.Delivery;
-      break;
-
     case "In Dispatch":
       statusClass = STATUS_STYLES.Dispatch;
       break;
+    case "Return":
     case "Dispatched":
+    case "In Delivery":
       statusClass = STATUS_STYLES.Delivery;
       break;
     case "Recalled":
       statusClass = STATUS_STYLES.Store;
       break;
-
-    case "In Delivery":
-      statusClass = STATUS_STYLES.Delivery;
-      break;
     case "Delivered":
       statusClass = STATUS_STYLES.Verification;
       break;
-
     default:
       statusClass = STATUS_STYLES.Muted;
       break;
@@ -87,8 +75,8 @@ const renderDateTime = (value, position = 1) => {
     formattedDate === "—"
       ? "text-muted-foreground"
       : position === 1
-      ? "text-foreground"
-      : "text-muted";
+        ? "text-foreground"
+        : "text-muted";
   return (
     <span className={`${baseColor} font-mono text-sm`}>{formattedDate}</span>
   );
@@ -100,26 +88,10 @@ const formatDuration = (minutes) => {
   const hours = Math.floor((minutes % 1440) / 60);
   const mins = minutes % 60;
 
-const renderDuration = (durationMinutes, avgMinutes = 30) => (
-  <span className={`font-medium ${durationMinutes > avgMinutes ? "text-red-500" : "text-green-500"}`}>
-  return [
-    days && `${days}D`,
-    hours && `${hours}H`,
-    (mins || (!days && !hours)) && `${mins}M`,
-  ]
-    .filter(Boolean)
-    .join(" ");
-};
-
-const renderDuration = (durationMinutes, avgMinutes = 30) => (
-  <span
-    className={`font-medium ${
-      durationMinutes > avgMinutes ? "text-red-500" : "text-green-500"
-    }`}
-  >
-    {formatDuration(durationMinutes)}
-  </span>
+const renderDuration = (durationString) => (
+  <span className="font-medium text-foreground">{durationString || "—"}</span>
 );
+
 
 const renderActions = (row, handlers = {}, view) => {
   const { onView } = handlers;
@@ -131,7 +103,9 @@ const renderActions = (row, handlers = {}, view) => {
       <EditStatusDialog
         rowData={row.original}
         view={view}
-        onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
+        onSubmit={(updatedData) =>
+          console.log("Edited row data:", updatedData)
+        }
       >
         <Button
           variant="outline"
@@ -222,7 +196,7 @@ export function getInvoiceColumns(view) {
     duration: {
       accessorKey: "duration",
       header: "Duration",
-      cell: ({ row }) => renderDuration(row.original.duration, 62),
+      cell: ({ row }) => renderDuration(row.original.duration || "—"),
     },
     paymentTerms: {
       accessorKey: "paymentTerms",
@@ -301,7 +275,8 @@ export function getInvoiceColumns(view) {
       },
       {
         ...base.verificationDateTime,
-        cell: ({ row }) => renderDateTime(row.original.verificationDateTime, 2),
+        cell: ({ row }) =>
+          renderDateTime(row.original.verificationDateTime, 2),
       },
       base.duration,
       base.status,

@@ -1,18 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import PageLayout from "@/components/page-layout";
-import FilterActions from "./_component/filter-actions/filter-actions";
 import {
-  AdminStatusCards,
-  DeliveryStatusCards,
-  DispatchStatusCards,
-  StoreStatusCards,
-  VerificationStatusCards,
-} from "./_component/status-cards";
+  StoreLabelValue,
+  // AdminLabelValue,
+  VerificationLabelValue,
+  // DispatchLabelValue,
+  // DeliveryLabelValue,
+} from "./_component/label-values";
 import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
 import { roleToView, viewMeta } from "@/lib/utils";
-import { BarChart } from "lucide-react";
-import CollapsibleSection from "@/components/ui/collapsible-section";
 import FilterSheet from "./_component/filter-sheet/filterSheet";
 
 const Overview = () => {
@@ -21,30 +18,19 @@ const Overview = () => {
   const view = roleToView(user?.userRole);
   const pageMeta = viewMeta[view];
 
-  const mockData = [
-    { status: "Store", createdAt: new Date() },
-    { status: "Verification", createdAt: new Date() },
-    { status: "VerificationPending", createdAt: new Date() },
-    { status: "Dispatch", createdAt: new Date() },
-    { status: "Verified", createdAt: new Date() },
-    { status: "Delivered", createdAt: new Date() },
-    { status: "Pending", createdAt: new Date() },
-    { status: "Processed", createdAt: new Date() },
-  ];
-
-  const renderStatusCards = () => {
+  const renderLabelValues = () => {
     switch (user?.userRole) {
-      case "Admin":
-      case "Client":
-        return <AdminStatusCards data={mockData} />;
+      // case "Admin":
+      // case "Client":
+      //   return <AdminLabelValue />;
       case "StorePerson":
-        return <StoreStatusCards data={mockData} />;
+        return <StoreLabelValue />;
       case "VerificationPerson":
-        return <VerificationStatusCards data={mockData} />;
-      case "DispatchPerson":
-        return <DispatchStatusCards data={mockData} />;
-        case "Driver":
-        return <DeliveryStatusCards data={mockData} />;
+        return <VerificationLabelValue />;
+      // case "DispatchPerson":
+      //   return <DispatchLabelValue />;
+      // case "Driver":
+      //   return <DeliveryLabelValue />;
       default:
         return null;
     }
@@ -54,25 +40,19 @@ const Overview = () => {
     <PageLayout
       title={pageMeta?.title}
       subtitle={pageMeta?.subtitle}
+      middleAction={
+        <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+          {renderLabelValues()}
+        </div>
+      }
       rightAction={
         <div className="flex items-center gap-2 text-sm">
-          {/* <span className="font-medium">Logged in Users:</span>
-          <span className="font-semibold text-muted-foreground">2</span> */}
           <FilterSheet />
         </div>
       }
-      noPadding // 🚀 remove default padding to free space
+      noPadding
       className="flex flex-col flex-1"
     >
-      {/* Top Controls */}
-      <div className="flex flex-col gap-2 pb-2">
-        <CollapsibleSection id="status" icon={BarChart} defaultOpen>
-          {renderStatusCards()}
-        </CollapsibleSection>
-        <FilterActions view={view} />
-      </div>
-
-      {/* Data Table fills remaining space */}
       <div className="flex-1 min-h-0 overflow-hidden">
         <InvoicesDataTable />
       </div>
