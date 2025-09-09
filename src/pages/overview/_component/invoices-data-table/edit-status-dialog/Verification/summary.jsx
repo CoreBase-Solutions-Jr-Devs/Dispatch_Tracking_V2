@@ -8,11 +8,12 @@ export default function VerificationSummary({
   handleWeightChange,
   error,
 }) {
-  const [weight, setWeight] = useState(data?.totalWeightKg || "");
+const [weight, setWeight] = useState(data?.totalWeightKg ?? 0);
 
-  useEffect(() => {
-    setWeight(data?.totalWeightKg || "");
-  }, [data?.totalWeightKg]);
+ useEffect(() => {
+  setWeight(data?.totalWeightKg ?? 0);
+}, [data?.totalWeightKg]);
+
 
   const handleChange = (e) => {
     setWeight(e.target.value);
@@ -25,14 +26,14 @@ export default function VerificationSummary({
     <section className="flex flex-row justify-start items-center mb-2 gap-x-20">
       <div className="flex items-center gap-x-2">
         <Label className="text-xs font-medium">Items:</Label>
-        <Label className="text-xs font-medium text-muted">{data?.items}</Label>
+        <Label className="text-xs font-medium ">{data?.items}</Label>
       </div>
       <div className="flex items-center gap-x-2">
         <Label className="text-xs font-medium">Total Weight (kg):</Label>
         <Input
           type="number"
           value={weight}
-          className="w-20 h-8 text-xs font-medium text-muted"
+          className="w-20 h-8 text-xs font-medium "
           onChange={handleChange}
           readOnly={data?.workflowStatus === "Verified"}
         />

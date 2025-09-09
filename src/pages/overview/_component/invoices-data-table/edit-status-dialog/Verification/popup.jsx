@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import VerificationHeader from "./header";
@@ -15,13 +15,21 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
   const [weight, setWeight] = useState(0);
   const [errors, setErrors] = useState({ weight: "", remarks: "" });
 
-  const handleRemarksChange = (newRemarks) => setRemarks(newRemarks);
-  const handleWeightChange = (newWeight) => setWeight(newWeight);
-
   const { data, isLoading, isError, refetch } =
     useGetVerificationTrackingDetailsQuery({
       docNum: Number(rowData.invoiceNo),
     });
+
+  useEffect(() => {
+    if (data?.totalWeightKg !== undefined && data?.totalWeightKg !== null) {
+      setWeight(data.totalWeightKg);
+    } else {
+      setWeight(0);
+    }
+  }, [data?.totalWeightKg]);
+
+  const handleRemarksChange = (newRemarks) => setRemarks(newRemarks);
+  const handleWeightChange = (newWeight) => setWeight(newWeight);
 
   if (isLoading)
     return (
@@ -59,6 +67,7 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
         readOnly={readOnly}
         handleWeightChange={handleWeightChange}
         error={errors.remarks}
+        weight={weight}
       />
 
       <VerificationRemarks
@@ -74,7 +83,7 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
         <VerificationFooter
           remarks={remarks}
           weight={weight}
-          rowData={data} // pass fetched data
+          rowData={data}
           onSubmit={onSubmit}
           onClose={onClose}
           errors={errors}
