@@ -23,7 +23,7 @@ export default function StoreRemarks({ data, readOnly, handleRemarksChange, erro
         <Label className="text-xs font-medium">Store Remarks:</Label>
       </div>
       <Textarea
-        className="min-w-[80px] bg-gray-300 h-20"
+        className="min-w-[80px] bg-gray-300 h-20 text-xs font-medium "
         value={remarks}
         onChange={handleChange}
         // readOnly={readOnly}
