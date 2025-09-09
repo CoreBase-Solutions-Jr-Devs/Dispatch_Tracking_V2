@@ -1,5 +1,5 @@
 import React from "react";
-import SharedStatusCard from "./shared-status-cards";
+import SharedStatusCard from "./shared-label-value";
 
 const AdminStatusCards = ({ data }) => {
   const statusCounts = {

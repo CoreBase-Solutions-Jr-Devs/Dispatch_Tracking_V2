@@ -1,18 +1,18 @@
-import React from "react";
-import SharedStatusCard from "./shared-status-cards";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetOverviewQuery } from "@/features/overview/overviewApi";
+import React from "react";
+import LabelValue from "./shared-label-value";
 
-const VerificationStatusCards = () => {
+const VerificationLabelValue = () => {
   const { data, isLoading, isError } = useGetOverviewQuery();
 
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-20 w-full" />
       </div>
     );
   }
@@ -29,27 +29,34 @@ const VerificationStatusCards = () => {
     todayInvoices: data?.todayCount || 0,
     pending: data?.pending || 0,
     verified: data?.verified || 0,
-    avgVerificationTime: data?.avgVerifiactionTime || "N/A",
+    avgVerificationTime: data?.avgVerificationTime || "N/A",
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <SharedStatusCard
+    <div
+      className="
+        flex flex-col gap-2 
+        sm:flex-row sm:flex-wrap sm:justify-center 
+        md:gap-4
+        lg:gap-6
+      "
+    >
+      <LabelValue
         status="Store"
-        label="Today's Invoices"
+        label="Today"
         count={statusCounts.todayInvoices}
       />
-      <SharedStatusCard
+      <LabelValue
         status="Verification"
-        label="Pending Verification"
+        label="Pending"
         count={statusCounts.pending}
       />
-      <SharedStatusCard
+      <LabelValue
         status="Dispatch"
-        label="Verified Invoices"
+        label="Verified"
         count={statusCounts.verified}
       />
-      <SharedStatusCard
+      <LabelValue
         status="Delivered"
         label="Avg. Verification Time"
         count={statusCounts.avgVerificationTime}
@@ -58,4 +65,4 @@ const VerificationStatusCards = () => {
   );
 };
 
-export default VerificationStatusCards;
+export default VerificationLabelValue;

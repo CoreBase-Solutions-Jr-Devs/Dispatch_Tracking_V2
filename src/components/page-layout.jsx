@@ -7,6 +7,7 @@ const PageLayout = ({
   className,
   title,
   subtitle,
+  middleAction,
   rightAction,
   showHeader = true,
   noPadding = false, 
@@ -17,6 +18,7 @@ const PageLayout = ({
         <PageHeader
           title={title}
           subtitle={subtitle}
+          middleAction={middleAction}
           rightAction={rightAction}
         />
       )}

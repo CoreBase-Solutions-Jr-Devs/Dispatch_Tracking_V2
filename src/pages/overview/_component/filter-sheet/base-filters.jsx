@@ -7,9 +7,7 @@ import DatePicker from "react-datepicker";
 
 const BaseFilters = ({
   startDate,
-  // setStartDate,
   endDate,
-  // setEndDate,
   dateRange,
   ranges,
   setDateRange,
@@ -18,15 +16,18 @@ const BaseFilters = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const handleStartDate = (date) => {
-    dispatch(setStartDate(new Date(date).toISOString()));
-  };
-  const handleEndDate = (date) => {
-    dispatch(setEndDate(new Date(date).toISOString()));
+  const handleDateChange = (type, date) => {
+    if (!date) return;
+    // Format ISO string but keep the original date
+    const iso = new Date(date).toISOString();
+    type === "start" ? dispatch(setStartDate(iso)) : dispatch(setEndDate(iso));
   };
 
+  const formatDate = (date) => (date ? new Date(date).toLocaleDateString("en-GB") : "");
+
   return (
-    <section className="flex gap-2 items-end flex-nowrap">
+    <section className="flex flex-wrap gap-2 items-end">
+      {/* Date Range */}
       <div className="flex flex-col min-w-[120px]">
         <Label className="text-xs whitespace-nowrap">Date Range</Label>
         <DateRangeDropdown
@@ -36,44 +37,35 @@ const BaseFilters = ({
         />
       </div>
 
+      {/* Start Date */}
       <div className="flex flex-col min-w-[100px]">
         <Label htmlFor="start-date" className="text-xs whitespace-nowrap">
           Start Date
         </Label>
         <DatePicker
-          selected={startDate}
+          id="start-date"
+          selected={startDate ? new Date(startDate) : null}
           dateFormat="dd/MM/yyyy"
-          onChange={(date) => handleStartDate(date)}
+          onChange={(date) => handleDateChange("start", date)}
+          className="h-8 w-full border rounded-md px-2"
         />
-
-        {/* <Input
-                id="start-date"
-                type="text"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="h-8 text-sm"
-            /> */}
       </div>
 
+      {/* End Date */}
       <div className="flex flex-col min-w-[100px]">
         <Label htmlFor="end-date" className="text-xs whitespace-nowrap">
           End Date
         </Label>
-
         <DatePicker
-          selected={endDate}
+          id="end-date"
+          selected={endDate ? new Date(endDate) : null}
           dateFormat="dd/MM/yyyy"
-          onChange={(date) => handleEndDate(date)}
+          onChange={(date) => handleDateChange("end", date)}
+          className="h-8 w-full border rounded-md px-2"
         />
-        {/* <Input
-        id="end-date"
-        type="text"
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
-        className="h-8 text-sm"
-      /> */}
       </div>
 
+      {/* Search */}
       <div className="flex flex-col flex-1 min-w-[200px]">
         <Label htmlFor="search" className="text-xs whitespace-nowrap">
           Search

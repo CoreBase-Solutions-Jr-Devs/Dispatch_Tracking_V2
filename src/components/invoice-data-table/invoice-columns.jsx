@@ -13,7 +13,6 @@ const STATUS_STYLES = {
   Muted: "bg-muted text-muted-foreground border-border",
 };
 
-
 const renderStatus = (status) => {
   let statusClass;
 
@@ -22,36 +21,24 @@ const renderStatus = (status) => {
       statusClass = STATUS_STYLES.Store;
       break;
     case "Processed":
-      statusClass = STATUS_STYLES.Verification;
-      break;
-
     case "In Verification":
       statusClass = STATUS_STYLES.Verification;
       break;
     case "Verified":
-      statusClass = STATUS_STYLES.Dispatch;
-      break;
-    case "Return":
-      statusClass = STATUS_STYLES.Delivery;
-      break;
-
     case "In Dispatch":
       statusClass = STATUS_STYLES.Dispatch;
       break;
+    case "Return":
     case "Dispatched":
+    case "In Delivery":
       statusClass = STATUS_STYLES.Delivery;
       break;
     case "Recalled":
       statusClass = STATUS_STYLES.Store;
       break;
-
-    case "In Delivery":
-      statusClass = STATUS_STYLES.Delivery;
-      break;
     case "Delivered":
       statusClass = STATUS_STYLES.Verification;
       break;
-
     default:
       statusClass = STATUS_STYLES.Muted;
       break;
@@ -67,7 +54,9 @@ const renderStatus = (status) => {
   );
 };
 
-const renderText = (text) => <span className="text-foreground font-medium">{text || "—"}</span>;
+const renderText = (text) => (
+  <span className="text-foreground font-medium">{text || "—"}</span>
+);
 
 const formatUKDateTime = (date) => {
   if (!date) return "—";
@@ -87,8 +76,8 @@ const renderDateTime = (value, position = 1) => {
     formattedDate === "—"
       ? "text-muted-foreground"
       : position === 1
-      ? "text-foreground"
-      : "text-muted";
+        ? "text-foreground"
+        : "text-muted";
   return (
     <span className={`${baseColor} font-mono text-sm`}>{formattedDate}</span>
   );
@@ -100,8 +89,6 @@ const formatDuration = (minutes) => {
   const hours = Math.floor((minutes % 1440) / 60);
   const mins = minutes % 60;
 
-const renderDuration = (durationMinutes, avgMinutes = 30) => (
-  <span className={`font-medium ${durationMinutes > avgMinutes ? "text-red-500" : "text-green-500"}`}>
   return [
     days && `${days}D`,
     hours && `${hours}H`,
@@ -111,27 +98,32 @@ const renderDuration = (durationMinutes, avgMinutes = 30) => (
     .join(" ");
 };
 
-const renderDuration = (durationMinutes, avgMinutes = 30) => (
-  <span
-    className={`font-medium ${
-      durationMinutes > avgMinutes ? "text-red-500" : "text-green-500"
-    }`}
-  >
-    {formatDuration(durationMinutes)}
-  </span>
+const renderDuration = (durationString) => (
+  <span className="font-medium text-foreground">{durationString || "—"}</span>
 );
+
 
 const renderActions = (row, handlers = {}, view) => {
   const { onView } = handlers;
   return (
     <div className="flex items-center gap-1">
-      <Button variant="outline" size="sm" className="h-8 w-8 p-0 hover:bg-accent" onClick={(e) => { e.stopPropagation(); onView?.(row.original); }}>
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-8 w-8 p-0 hover:bg-accent"
+        onClick={(e) => {
+          e.stopPropagation();
+          onView?.(row.original);
+        }}
+      >
         <Eye className="h-4 w-4 text-muted-foreground" />
       </Button>
       <EditStatusDialog
         rowData={row.original}
         view={view}
-        onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
+        onSubmit={(updatedData) =>
+          console.log("Edited row data:", updatedData)
+        }
       >
         <Button
           variant="outline"
@@ -222,7 +214,7 @@ export function getInvoiceColumns(view) {
     duration: {
       accessorKey: "duration",
       header: "Duration",
-      cell: ({ row }) => renderDuration(row.original.duration, 62),
+      cell: ({ row }) => renderDuration(row.original.duration || "—"),
     },
     paymentTerms: {
       accessorKey: "paymentTerms",
@@ -251,16 +243,6 @@ export function getInvoiceColumns(view) {
       enableSorting: false,
       enableHiding: false,
     },
-    actions: { accessorKey: "actions", header: "Actions", cell: ({ row }) => renderActions(row, {}, view), enableSorting: false, enableHiding: false },
-  };
-
-  const views = {
-    admin: [base.docType, base.branchName, base.account, base.paymentTerms, base.printCopies, base.postingDate, base.status],
-    store: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, { ...base.docDateTime, cell: ({ row }) => renderDateTime(row.original.docDateTime, 1) }, { ...base.processedDateTime, cell: ({ row }) => renderDateTime(row.original.processedDateTime, 2) }, base.duration, base.status, base.actions],
-    verification: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, { ...base.processedDateTime, cell: ({ row }) => renderDateTime(row.original.processedDateTime, 1) }, { ...base.verificationDateTime, cell: ({ row }) => renderDateTime(row.original.verificationDateTime, 2) }, base.duration, base.status, base.actions],
-    dispatch: [base.invoiceNo, base.customerName, base.items, base.deliveryGuy, base.paymentTerms, { ...base.dispatchDateTime, cell: ({ row }) => renderDateTime(row.original.dispatchDateTime, 1) }, { ...base.deliveryDateTime, cell: ({ row }) => renderDateTime(row.original.deliveryDateTime, 2) }, base.status, base.duration, base.actions],
-    delivery: [base.account, base.items, base.address, base.paymentTerms, { ...base.dispatchDateTime, cell: ({ row }) => renderDateTime(row.original.dispatchDateTime, 1) }, { ...base.deliveryDateTime, cell: ({ row }) => renderDateTime(row.original.deliveryDateTime, 2) }, base.status, base.actions],
-    default: [base.docType, base.branchName, base.account, base.status],
   };
 
   const views = {
@@ -301,7 +283,8 @@ export function getInvoiceColumns(view) {
       },
       {
         ...base.verificationDateTime,
-        cell: ({ row }) => renderDateTime(row.original.verificationDateTime, 2),
+        cell: ({ row }) =>
+          renderDateTime(row.original.verificationDateTime, 2),
       },
       base.duration,
       base.status,
