@@ -13,7 +13,6 @@ const STATUS_STYLES = {
   Muted: "bg-muted text-muted-foreground border-border",
 };
 
-
 const renderStatus = (status) => {
   let statusClass;
 
@@ -55,7 +54,9 @@ const renderStatus = (status) => {
   );
 };
 
-const renderText = (text) => <span className="text-foreground font-medium">{text || "—"}</span>;
+const renderText = (text) => (
+  <span className="text-foreground font-medium">{text || "—"}</span>
+);
 
 const formatUKDateTime = (date) => {
   if (!date) return "—";
@@ -99,6 +100,24 @@ const formatDuration = (minutes) => {
 	.join(" ") || "0m";
 }
 
+  return [
+    days && `${days}D`,
+    hours && `${hours}H`,
+    (mins || (!days && !hours)) && `${mins}M`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+};
+
+  return [
+    days && `${days}D`,
+    hours && `${hours}H`,
+    (mins || (!days && !hours)) && `${mins}M`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+};
+
 const renderDuration = (durationString) => (
   <span className="font-medium text-foreground">{durationString || "—"}</span>
 );
@@ -108,7 +127,15 @@ const renderActions = (row, handlers = {}, view) => {
   const { onView } = handlers;
   return (
     <div className="flex items-center gap-1">
-      <Button variant="outline" size="sm" className="h-8 w-8 p-0 hover:bg-accent" onClick={(e) => { e.stopPropagation(); onView?.(row.original); }}>
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-8 w-8 p-0 hover:bg-accent"
+        onClick={(e) => {
+          e.stopPropagation();
+          onView?.(row.original);
+        }}
+      >
         <Eye className="h-4 w-4 text-muted-foreground" />
       </Button>
       <EditStatusDialog
@@ -207,7 +234,7 @@ export function getInvoiceColumns(view) {
     duration: {
       accessorKey: "duration",
       header: "Duration",
-      cell: ({ row }) => renderDuration(row.original.duration || "—"),
+      cell: ({ row }) => renderDuration(row.original.duration, 62),
     },
     paymentTerms: {
       accessorKey: "paymentTerms",
@@ -238,7 +265,6 @@ export function getInvoiceColumns(view) {
     },
     actions: { accessorKey: "actions", header: "Actions", cell: ({ row }) => renderActions(row, {}, view), enableSorting: false, enableHiding: false },
   };
-
 
   const views = {
     admin: [
