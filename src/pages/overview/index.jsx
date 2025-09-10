@@ -11,6 +11,7 @@ import {
 import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
 import { roleToView, viewMeta } from "@/lib/utils";
 import FilterSheet from "./_component/filter-sheet/filterSheet";
+import DeliveryInvoice from "./_component/driver/_component/delivery-main-page/index.";
 
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
@@ -36,6 +37,15 @@ const Overview = () => {
     }
   };
 
+  const renderMainContent = () => {
+    switch (user?.userRole) {
+      case "Driver":
+        return <DeliveryInvoice />;
+      default:
+        return <InvoicesDataTable />;
+    }
+  }
+
   return (
     <PageLayout
       title={pageMeta?.title}
@@ -54,7 +64,7 @@ const Overview = () => {
       className="flex flex-col flex-1"
     >
       <div className="flex-1 min-h-0 overflow-hidden">
-        <InvoicesDataTable />
+        {renderMainContent()}
       </div>
     </PageLayout>
   );
