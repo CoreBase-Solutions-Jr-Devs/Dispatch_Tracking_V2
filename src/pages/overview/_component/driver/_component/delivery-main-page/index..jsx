@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
-import DispatchHeader from '../../../invoices-data-table/edit-status-dialog/Dispatch/header';
-import DispatchDetails from '../../../invoices-data-table/edit-status-dialog/Dispatch/details';
-import DispatchSummary from '../../../invoices-data-table/edit-status-dialog/Dispatch/summary';
-import DispatchRemarks from '../../../invoices-data-table/edit-status-dialog/Dispatch/remarks';
-import DispatchMeta from '../../../invoices-data-table/edit-status-dialog/Dispatch/meta';
-import DispatchTable from '../../../invoices-data-table/edit-status-dialog/Dispatch/table';
-import DispatchFooter from '../../../invoices-data-table/edit-status-dialog/Dispatch/footer';
-import DispatchSelect from '../../../invoices-data-table/edit-status-dialog/Dispatch/select';
-import DispatchSearch from '../../../invoices-data-table/edit-status-dialog/Dispatch/search';
+import DeliveryHeader from "../delivery-sections/header";
+import DeliverySearch from "../delivery-sections/search";
+import DeliveryTable from "../delivery-sections/table";
+import DeliverySummary from "../delivery-sections/summary";
+import DeliverySelect from "../delivery-sections/select";
+import DeliveryDetails from "../delivery-sections/details";
+import DeliveryMeta from "../delivery-sections/meta";
+import DeliveryRemarks from "../delivery-sections/remarks";
+import DeliveryFooter from "../delivery-sections/footer";
 
 export default function DeliveryInvoice({ rowData, onSubmit }) {
     const [query, setQuery] = useState("");
@@ -38,12 +38,12 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     return (
         <div className="my-1 overflow-y-auto max-h-[90vh] px-2">
             {/* Header */}
-            <DispatchHeader />
+            <DeliveryHeader />
 
             <Separator className="my-2" />
 
             {/* Search */}
-            <DispatchSearch
+            <DeliverySearch
                 value={query}
                 onChange={setQuery}
                 data={rowData}
@@ -54,27 +54,27 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
 
             {/* Table + Summary */}
             <div className="space-y-4">
-                <DispatchTable data={rowData} />
-                <DispatchSummary data={rowData} />
+                <DeliveryTable data={rowData} />
+                <DeliverySummary data={rowData} />
             </div>
 
             <Separator className="my-2" />
 
             {/* Select + Details + Meta */}
             <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 mb-1">
-                <DispatchSelect values={selectValues} onChange={handleSelectChange} />
+                <DeliverySelect values={selectValues} onChange={handleSelectChange} />
 
                 <div className="flex flex-col gap-3">
-                    <DispatchDetails data={rowData} />
-                    <DispatchMeta />
+                    <DeliveryDetails data={rowData} />
+                    <DeliveryMeta />
                 </div>
             </div>
 
             {/* Remarks */}
-            <DispatchRemarks />
+            <DeliveryRemarks />
 
             {/* Footer */}
-            <DispatchFooter
+            <DeliveryFooter
                 rowData={rowData}
                 selectValues={selectValues}
                 onSubmit={onSubmit}
