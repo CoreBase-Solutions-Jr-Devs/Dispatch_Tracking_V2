@@ -5,7 +5,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-export default function DispatchSelect({ values, onChange }) {
+export default function DeliverySelect({ values, onChange }) {
   return (
     <div className="flex flex-col gap-2 text-xs font-medium">
       <div className="flex justify-between items-center">

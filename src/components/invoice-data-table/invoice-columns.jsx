@@ -83,20 +83,20 @@ const renderDateTime = (value, position = 1) => {
   );
 };
 
-// const formatDuration = (minutes) => {
-//   if (!minutes && minutes !== 0) return "—";
-//   const days = Math.floor(minutes / 1440);
-//   const hours = Math.floor((minutes % 1440) / 60);
-//   const mins = minutes % 60;
+const formatDuration = (minutes) => {
+  if (!minutes && minutes !== 0) return "—";
+  const days = Math.floor(minutes / 1440);
+  const hours = Math.floor((minutes % 1440) / 60);
+  const mins = minutes % 60;
 
-//   return [
-//     days && `${days}D`,
-//     hours && `${hours}H`,
-//     (mins || (!days && !hours)) && `${mins}M`,
-//   ]
-//     .filter(Boolean)
-//     .join(" ");
-// };
+  return [
+    days && `${days}D`,
+    hours && `${hours}H`,
+    (mins || (!days && !hours)) && `${mins}M`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+};
 
 const renderDuration = (durationString) => (
   <span className="font-medium text-foreground">{durationString || "—"}</span>
@@ -243,6 +243,7 @@ export function getInvoiceColumns(view) {
       enableSorting: false,
       enableHiding: false,
     },
+    actions: { accessorKey: "actions", header: "Actions", cell: ({ row }) => renderActions(row, {}, view), enableSorting: false, enableHiding: false },
   };
 
   const views = {
