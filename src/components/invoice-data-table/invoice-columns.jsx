@@ -87,6 +87,7 @@ const formatDuration = (minutes) => {
   const days = Math.floor(minutes / 1440);
   const hours = Math.floor((minutes % 1440) / 60);
   const mins = minutes % 60;
+};
 
 const renderDuration = (durationString) => (
   <span className="font-medium text-foreground">{durationString || "—"}</span>
@@ -226,15 +227,6 @@ export function getInvoiceColumns(view) {
       enableHiding: false,
     },
     actions: { accessorKey: "actions", header: "Actions", cell: ({ row }) => renderActions(row, {}, view), enableSorting: false, enableHiding: false },
-  };
-
-  const views = {
-    admin: [base.docType, base.branchName, base.account, base.paymentTerms, base.printCopies, base.postingDate, base.status],
-    store: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, { ...base.docDateTime, cell: ({ row }) => renderDateTime(row.original.docDateTime, 1) }, { ...base.processedDateTime, cell: ({ row }) => renderDateTime(row.original.processedDateTime, 2) }, base.duration, base.status, base.actions],
-    verification: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, { ...base.processedDateTime, cell: ({ row }) => renderDateTime(row.original.processedDateTime, 1) }, { ...base.verificationDateTime, cell: ({ row }) => renderDateTime(row.original.verificationDateTime, 2) }, base.duration, base.status, base.actions],
-    dispatch: [base.invoiceNo, base.customerName, base.items, base.deliveryGuy, base.paymentTerms, { ...base.dispatchDateTime, cell: ({ row }) => renderDateTime(row.original.dispatchDateTime, 1) }, { ...base.deliveryDateTime, cell: ({ row }) => renderDateTime(row.original.deliveryDateTime, 2) }, base.status, base.duration, base.actions],
-    delivery: [base.account, base.items, base.address, base.paymentTerms, { ...base.dispatchDateTime, cell: ({ row }) => renderDateTime(row.original.dispatchDateTime, 1) }, { ...base.deliveryDateTime, cell: ({ row }) => renderDateTime(row.original.deliveryDateTime, 2) }, base.status, base.actions],
-    default: [base.docType, base.branchName, base.account, base.status],
   };
 
   const views = {
