@@ -66,8 +66,8 @@ export default function DispatchSelect({ values, onChange }) {
             {values.collectionType}
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="full">Full</SelectItem>
-            <SelectItem value="partial">Partial</SelectItem>
+            <SelectItem value="self-collection">Self-Collection</SelectItem>
+            <SelectItem value="delivery">Delivery</SelectItem>
           </SelectContent>
         </Select>
       </div>
