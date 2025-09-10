@@ -13,7 +13,6 @@ const STATUS_STYLES = {
   Muted: "bg-muted text-muted-foreground border-border",
 };
 
-
 const renderStatus = (status) => {
   let statusClass;
 
@@ -55,7 +54,9 @@ const renderStatus = (status) => {
   );
 };
 
-const renderText = (text) => <span className="text-foreground font-medium">{text || "—"}</span>;
+const renderText = (text) => (
+  <span className="text-foreground font-medium">{text || "—"}</span>
+);
 
 const formatUKDateTime = (date) => {
   if (!date) return "—";
@@ -82,11 +83,20 @@ const renderDateTime = (value, position = 1) => {
   );
 };
 
-const formatDuration = (minutes) => {
-  if (!minutes && minutes !== 0) return "—";
-  const days = Math.floor(minutes / 1440);
-  const hours = Math.floor((minutes % 1440) / 60);
-  const mins = minutes % 60;
+// const formatDuration = (minutes) => {
+//   if (!minutes && minutes !== 0) return "—";
+//   const days = Math.floor(minutes / 1440);
+//   const hours = Math.floor((minutes % 1440) / 60);
+//   const mins = minutes % 60;
+
+//   return [
+//     days && `${days}D`,
+//     hours && `${hours}H`,
+//     (mins || (!days && !hours)) && `${mins}M`,
+//   ]
+//     .filter(Boolean)
+//     .join(" ");
+// };
 
 const renderDuration = (durationString) => (
   <span className="font-medium text-foreground">{durationString || "—"}</span>
@@ -97,7 +107,15 @@ const renderActions = (row, handlers = {}, view) => {
   const { onView } = handlers;
   return (
     <div className="flex items-center gap-1">
-      <Button variant="outline" size="sm" className="h-8 w-8 p-0 hover:bg-accent" onClick={(e) => { e.stopPropagation(); onView?.(row.original); }}>
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-8 w-8 p-0 hover:bg-accent"
+        onClick={(e) => {
+          e.stopPropagation();
+          onView?.(row.original);
+        }}
+      >
         <Eye className="h-4 w-4 text-muted-foreground" />
       </Button>
       <EditStatusDialog
@@ -196,7 +214,7 @@ export function getInvoiceColumns(view) {
     duration: {
       accessorKey: "duration",
       header: "Duration",
-      cell: ({ row }) => renderDuration(row.original.duration || "—"),
+      cell: ({ row }) => renderDuration(row.original.duration, 62),
     },
     paymentTerms: {
       accessorKey: "paymentTerms",
@@ -225,16 +243,6 @@ export function getInvoiceColumns(view) {
       enableSorting: false,
       enableHiding: false,
     },
-    actions: { accessorKey: "actions", header: "Actions", cell: ({ row }) => renderActions(row, {}, view), enableSorting: false, enableHiding: false },
-  };
-
-  const views = {
-    admin: [base.docType, base.branchName, base.account, base.paymentTerms, base.printCopies, base.postingDate, base.status],
-    store: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, { ...base.docDateTime, cell: ({ row }) => renderDateTime(row.original.docDateTime, 1) }, { ...base.processedDateTime, cell: ({ row }) => renderDateTime(row.original.processedDateTime, 2) }, base.duration, base.status, base.actions],
-    verification: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, { ...base.processedDateTime, cell: ({ row }) => renderDateTime(row.original.processedDateTime, 1) }, { ...base.verificationDateTime, cell: ({ row }) => renderDateTime(row.original.verificationDateTime, 2) }, base.duration, base.status, base.actions],
-    dispatch: [base.invoiceNo, base.customerName, base.items, base.deliveryGuy, base.paymentTerms, { ...base.dispatchDateTime, cell: ({ row }) => renderDateTime(row.original.dispatchDateTime, 1) }, { ...base.deliveryDateTime, cell: ({ row }) => renderDateTime(row.original.deliveryDateTime, 2) }, base.status, base.duration, base.actions],
-    delivery: [base.account, base.items, base.address, base.paymentTerms, { ...base.dispatchDateTime, cell: ({ row }) => renderDateTime(row.original.dispatchDateTime, 1) }, { ...base.deliveryDateTime, cell: ({ row }) => renderDateTime(row.original.deliveryDateTime, 2) }, base.status, base.actions],
-    default: [base.docType, base.branchName, base.account, base.status],
   };
 
   const views = {

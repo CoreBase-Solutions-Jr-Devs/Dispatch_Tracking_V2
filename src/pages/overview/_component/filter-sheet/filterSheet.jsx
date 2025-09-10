@@ -9,7 +9,9 @@ import { toast } from "sonner";
 
 import { DateRangeDropdown } from "@/components/ui/date-range-dropdown";
 import { setDateRange, setEndDate, setInvoices, setStartDate } from "@/features/invoices/invoiceSlice";
-import { useFilterInvoicesMutation, useFilterRangeQuery } from "@/features/invoices/invoicesAPI";
+import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
+import { useRoleInvoiceFilter } from "@/hooks/use-role-invoice-filter";
+import { roleToView } from "@/lib/utils";
 import RoleBasedFilters from "./role-based-filters";
 
 export default function FilterSheet() {
@@ -19,11 +21,13 @@ export default function FilterSheet() {
     const [selectedFilters, setSelectedFilters] = useState({});
     const [search, setSearch] = useState("");
 
-    const { data: filterOptions, isLoading: filtersLoading, isError: filtersError } = useFilterRangeQuery();
+    const { data: filterOptions, isLoading: filtersLoading, isError: filtersError } = useFilterOptionsQuery();
     const dateRanges = filterOptions?.find(f => f.key === "dateRange")?.options || [];
     const roleFilters = filterOptions?.filter(f => f.key !== "dateRange") || [];
 
-    const [filterInvoices] = useFilterInvoicesMutation();
+    const { user } = useSelector((state) => state.auth);
+    const role = roleToView(user?.userRole);
+    const [filterInvoices] = useRoleInvoiceFilter(role);
 
     const isCustomRange = dateRange === "CUSTOM_RANGE";
 
@@ -62,15 +66,19 @@ export default function FilterSheet() {
 
     const handleApplyFilter = async () => {
         const payload = {
-            startDate,
-            endDate,
-            dateRange,
-            search,
-            filters: selectedFilters,
-            pageNumber: 1,
-            pageSize: 50,
+            request: {
+                startDate,
+                endDate,
+                dateRange,
+                search,
+                status: selectedFilters.status || null,
+                pageNumber: 1,
+                pageSize: 50,
+            }
         };
 
+        console.log("Filter Payload:", JSON.stringify(payload, null, 2));
+        
         try {
             const data = await filterInvoices(payload).unwrap();
             dispatch(setInvoices({ invoices: data.invoices }));
@@ -87,8 +95,6 @@ export default function FilterSheet() {
 
     const handleClearFilters = () => {
         dispatch(setDateRange("TODAY"));
-        dispatch(setStartDate(null));
-        dispatch(setEndDate(null));
         setSearch("");
         setSelectedFilters({});
     };
@@ -143,7 +149,6 @@ export default function FilterSheet() {
 
                 {/* Search + Role Filters */}
                 <section className="flex gap-2 mb-4 items-end">
-                    {/* Search */}
                     <div className="flex-1 flex flex-col">
                         <Label className="text-xs text-muted-foreground">Search</Label>
                         <Input
@@ -154,7 +159,6 @@ export default function FilterSheet() {
                         />
                     </div>
 
-                    {/* Role Filters */}
                     <div className="flex-1 flex flex-col justify-end">
                         <Label className="text-xs text-muted-foreground">Filter by Status</Label>
                         <RoleBasedFilters
