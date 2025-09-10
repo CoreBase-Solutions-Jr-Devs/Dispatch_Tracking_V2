@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import DispatchHeader from "./header";
@@ -15,6 +15,25 @@ export default function DispatchPopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [query, setQuery] = useState("");
+
+  const [selectedDocs, setSelectedDocs] = useState([]);
+
+  // Handle row toggle
+  const handleToggleRow = (doc) => {
+    setSelectedDocs((prev) => 
+      prev.find((d) => d.docNo === doc.docNo)
+        ? prev.filter((d) => d.docNo !== doc.docNo)
+        : [...prev, doc]
+    );
+  }
+
+  // Filter rows based on search query
+  const filteredData = useMemo(() => {
+    if (!query) return rowData;
+    return rowData.filter((row) =>
+      row.docNo.toLowerCase().includes(query.toLowerCase())
+    );
+  }, [query, rowData]);
 
   const [selectValues, setSelectValues] = useState({
     deliveryPerson: "",
@@ -54,11 +73,14 @@ export default function DispatchPopup({ rowData, onSubmit }) {
           onChange={setQuery}
           data={rowData}
           placeholder="invoice No..."
+          selectedCount={selectedDocs.length}
         />
-        <Separator />
+
+        <Separator className="my-2" />
+
         <div className="space-y-4">
-          <DispatchTable data={rowData} />
-          <DispatchSummary data={rowData} />
+          <DispatchTable data={filteredData} selected={selectedDocs} onToggle={handleToggleRow} />
+          <DispatchSummary data={selectedDocs} />
         </div>
 
         <Separator className="my-2" />
