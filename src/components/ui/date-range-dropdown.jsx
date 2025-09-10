@@ -1,51 +1,38 @@
 import React from "react";
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 
-import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+export function DateRangeDropdown({ value, onChange, ranges = [], isLoading = false, isError = false }) {
+  const options = Array.isArray(ranges) ? ranges : [];
 
-const dateRangeOptions = [
-  "Current Date",
-  "Last 7 Days",
-  "Last 30 Days",
-  "Custom Range",
-];
-
-export function DateRangeDropdown({ ranges, value, onChange }) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full justify-between font-normal"
-        >
-          <span>{value || "Select range"}</span>
-          <ChevronDown className="h-4 w-4 ml-2 opacity-70" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className="w-[200px] bg-white dark:bg-neutral-900 shadow-lg rounded-lg border"
-      >
-        {/* {ranges[0]?.options?.map((option) => (
-          <DropdownMenuItem
-            key={option.value}
-            onClick={() => onChange(option.label)}
-            className={`cursor-pointer ${
-              value === option.label
-                ? "bg-primary text-white"
-                : "hover:bg-muted"
-            }`}
-          >
-            {option.label}
-          </DropdownMenuItem>
-        ))} */}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Select value={value || ""} onValueChange={onChange} disabled={isLoading || isError}>
+      <SelectTrigger className="h-8 w-full text-sm bg-[var(--input)] border border-[var(--border)] rounded-md">
+        <SelectValue placeholder="Select range" />
+      </SelectTrigger>
+
+      <SelectContent className="bg-gray-100 text-[var(--dropdown-foreground)] border border-[var(--border)] rounded-md shadow-lg">
+        {isError ? (
+          <SelectItem disabled className="text-red-500">
+            Failed to load options
+          </SelectItem>
+        ) : (
+          options.map(opt => (
+            <SelectItem
+              key={opt.value}
+              value={opt.value}
+              className="hover:bg-[var(--row-hover)] rounded-sm text-sm"
+            >
+              {opt.label}
+            </SelectItem>
+          ))
+        )}
+      </SelectContent>
+    </Select>
   );
 }

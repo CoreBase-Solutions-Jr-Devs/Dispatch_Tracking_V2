@@ -8,6 +8,7 @@ import VerificationRemarks from "./remarks";
 import VerificationMeta from "./meta";
 import VerificationFooter from "./footer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGetVerificationTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function VerificationPopup({ rowData, onSubmit, onClose }) {
@@ -85,6 +86,12 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
           weight={weight}
           rowData={data}
           onSubmit={onSubmit}
+          onClose={onClose}
+          errors={errors}
+          setWeight={setWeight}
+          setRemarks={setRemarks}
+          setErrors={setErrors}
+          refetchData={refetch}
           onClose={onClose}
           errors={errors}
           setWeight={setWeight}

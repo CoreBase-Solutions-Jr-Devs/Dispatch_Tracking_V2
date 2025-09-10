@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function VerificationSummary({
   data,
@@ -35,6 +36,7 @@ const [weight, setWeight] = useState(data?.totalWeightKg ?? 0);
           value={weight}
           className="w-20 h-8 text-xs font-medium "
           onChange={handleChange}
+          readOnly={data?.workflowStatus === "Verified"}
           readOnly={data?.workflowStatus === "Verified"}
         />
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}

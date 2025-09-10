@@ -8,8 +8,10 @@ import StoreRemarks from "./remarks";
 import StoreMeta from "./meta";
 import StoreFooter from "./footer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
+export default function StorePopup({ rowData, onSubmit, onClose }) {
 export default function StorePopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
   const [remarks, setRemarks] = useState();
@@ -19,46 +21,12 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
   });
   const [weight, setWeight] = useState(0);
 
-  const { data, isLoading, isError, refetch } = useGetStoreTrackingDetailsQuery(
-    {
-      docNum: Number(rowData.invoiceNo),
-    }
-  );
+  const { data } = useGetStoreTrackingDetailsQuery({
+    // docNum: Number(rowData.docNumber),
+    docNum: Number(rowData.invoiceNo),
+  });
 
-  useEffect(() => {
-    if (data?.totalWeightKg !== undefined && data?.totalWeightKg !== null) {
-      setWeight(data.totalWeightKg);
-    } else {
-      setWeight(0);
-    }
-  }, [data?.totalWeightKg]);
-
-  const handleRemarksChange = (newRemarks) => {
-    setRemarks(newRemarks);
-  };
-  const handleWeightChange = (newWeight) => {
-    setWeight(newWeight);
-  };
-
-  if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-8 w-1/3" />
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-12 w-full" />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="text-center text-red-500">
-        Failed to load store tracking details.
-      </div>
-    );
-  }
-  const readOnly = rowData?.workflowStatus === "Processed";
+  console.log("storeDetails", data);
 
   return (
     <>
@@ -72,13 +40,8 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
 
       <Separator className="my-2" />
 
-      <StoreSummary
-        data={data}
-        readOnly={readOnly}
-        handleWeightChange={handleWeightChange}
-        error={errors.weight}
-        weight={weight}
-      />
+      {/* <StoreSummary data={rowData} /> */}
+      <StoreSummary data={data} />
 
       <StoreRemarks
         data={data}
@@ -91,10 +54,7 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
 
       <DialogFooter>
         <StoreFooter
-          remarks={remarks}
-          weight={weight}
-          setWeight={setWeight}
-          setRemarks={setRemarks}
+          // rowData={rowData}
           rowData={data}
           onSubmit={onSubmit}
           onClose={onClose}

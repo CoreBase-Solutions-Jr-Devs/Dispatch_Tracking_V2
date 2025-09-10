@@ -1,7 +1,16 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
+export default function StoreRemarks({ data, readOnly, handleRemarksChange, error }) {
+  console.log("Remarks Data:", data);
+
+  const [remarks, setRemarks] = useState(data?.storeRemarks || "");
+
+  useEffect(() => {
+    setRemarks(data?.storeRemarks || "");
+  }, [data?.storeRemarks]);
 export default function StoreRemarks({ data, readOnly, handleRemarksChange, error }) {
   console.log("Remarks Data:", data);
 
@@ -23,9 +32,13 @@ export default function StoreRemarks({ data, readOnly, handleRemarksChange, erro
         <Label className="text-xs font-medium">Store Remarks:</Label>
       </div>
       <Textarea
+        className="min-w-[80px] bg-gray-300 h-20"
         className="min-w-[80px] bg-gray-300 h-20 text-xs font-medium "
         value={remarks}
         onChange={handleChange}
+        // readOnly={readOnly}
+        readOnly={data?.workflowStatus === "Processed"}
+        
         // readOnly={readOnly}
         readOnly={data?.workflowStatus === "Processed"}
         

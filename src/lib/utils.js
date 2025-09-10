@@ -47,6 +47,7 @@ export function roleToView(role) {
   }
 }
 
+
 /**
  * View metadata (title + subtitle) per role/view
  */
@@ -68,7 +69,7 @@ export const viewMeta = {
     subtitle: "Invoices ready or assigned for dispatch.",
   },
   delivery: {
-    title: "Driver Overview",
+    title: "Delivery Overview",
     subtitle: "Invoices you are responsible for delivering.",
   },
   user: {

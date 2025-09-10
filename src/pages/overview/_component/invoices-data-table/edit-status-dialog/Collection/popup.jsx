@@ -9,11 +9,16 @@ import CollectionSummary from './summary'
 import CollectionRemarks from './remarks'
 import CollectionMeta from './meta'
 import CollectionFooter from './footer'
+import { useGetCollectionTrackingDetailsQuery } from '@/features/invoices/invoicesAPI'
 
 export default function CollectionPopup({ rowData, onSubmit }) {
 
     const [isOpen, setIsOpen] = useState(false)
     const handleDialogClose = () => setIsOpen(false)
+
+    const { data } = useGetCollectionTrackingDetailsQuery({
+        docNum: Number(rowData.docNumber),
+    });
 
     return (
         <>
@@ -25,21 +30,24 @@ export default function CollectionPopup({ rowData, onSubmit }) {
 
                 <Separator className="my-3" />
                 {/* Collection Details Section */}
-                <CollectionDetails />
+                <CollectionDetails data={data} />
                 {/* Client Info */}
-                <CollectionClient />
+                <CollectionClient data={data} />
                 {/* Item Collection Inventory Section */}
-                <CollectionInventory />
+                <CollectionInventory data={data} />
                 {/* Collection Summary Section */}
-                <CollectionSummary />
+                <CollectionSummary data={data} />
                 {/* Collection Remarks */}
-                <CollectionRemarks />
+                <CollectionRemarks data={data} />
                 {/* Meta Data */}
-                <CollectionMeta />
+                <CollectionMeta data={data} />
 
                 {/* Collection Footer */}
                 <DialogFooter>
-                    <CollectionFooter />
+                    <CollectionFooter
+                        rowData={data}
+                        onSubmit={onSubmit}
+                    />
                 </DialogFooter>
 
             </div>

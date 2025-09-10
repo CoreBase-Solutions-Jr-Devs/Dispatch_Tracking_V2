@@ -6,7 +6,7 @@ const initialState = {
   endDate: new Date().toISOString(),
   totalWeight: 0,
   storeRemarks: "",
-  // dateRange: "",
+  dateRange: "TODAY",
   // search: "",
 };
 
@@ -22,6 +22,9 @@ const invoiceSlice = createSlice({
     },
     setEndDate: (state, action) => {
       state.endDate = action.payload || new Date().toISOString();
+    },
+    setDateRange: (state, action) => {
+      state.dateRange = action.payload || "TODAY";
     },
     setStoreTotalWeight: (state, action) => {
       // if (!state.storeDetails) {
@@ -39,6 +42,7 @@ export const {
   setInvoices,
   setStartDate,
   setEndDate,
+  setDateRange,
   setStoreTotalWeight,
   setStoreRemarks,
 } = invoiceSlice.actions;

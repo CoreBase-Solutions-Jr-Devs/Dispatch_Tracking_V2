@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 
 import { useState, useEffect } from "react";
 
+import { useState, useEffect } from "react";
+
 export default function StoreSummary({
   data,
   readOnly,
@@ -35,6 +37,7 @@ export default function StoreSummary({
           value={weight}
           className="w-20 h-8 text-xs font-medium "
           onChange={handleChange}
+          readOnly={data?.workflowStatus === "Processed"}
           readOnly={data?.workflowStatus === "Processed"}
         />
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
