@@ -98,24 +98,6 @@ const formatDuration = (minutes) => {
   ]
 	.filter(Boolean)
 	.join(" ") || "0m";
-}
-
-  return [
-    days && `${days}D`,
-    hours && `${hours}H`,
-    (mins || (!days && !hours)) && `${mins}M`,
-  ]
-    .filter(Boolean)
-    .join(" ");
-};
-
-  return [
-    days && `${days}D`,
-    hours && `${hours}H`,
-    (mins || (!days && !hours)) && `${mins}M`,
-  ]
-    .filter(Boolean)
-    .join(" ");
 };
 
 const renderDuration = (durationString) => (
