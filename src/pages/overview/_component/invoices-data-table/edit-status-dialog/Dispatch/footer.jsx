@@ -29,14 +29,6 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
         Print
       </Button>
       <Button
-        variant="destructive"
-        onClick={handleStart}
-        disabled={startDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
-      >
-        Remove
-      </Button>
-      <Button
         variant="apply"
         onClick={handleDelivery}
         disabled={deliveryDisabled}
