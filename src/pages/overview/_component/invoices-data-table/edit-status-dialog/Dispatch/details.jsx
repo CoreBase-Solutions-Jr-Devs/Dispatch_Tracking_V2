@@ -2,7 +2,7 @@ import { Label } from "@/components/ui/label";
 
 export default function DispatchDetails({ data }) {
   return (
-    <div className="flex flex-col gap-5 text-xs font-medium">
+    <div className="flex flex-col w-1/2 gap-5 text-xs font-medium">
       <section className="flex items-center gap-2">
         <Label className="text-xs font-medium">Dispatch Date & Time:</Label>
         <Label className="text-xs font-medium ">08/20/2025 12:31</Label>
@@ -24,10 +24,6 @@ export default function DispatchDetails({ data }) {
         <Label className="text-xs font-medium ">TVS</Label>
       </section>
 
-      <section className="flex items-center gap-2">
-        <Label className="text-xs text-muted font-medium">Dispatch Ref:</Label>
-        <Label className="text-xs text-muted font-medium ">DPT000000001</Label>
-      </section>
     </div>
   );
 }
