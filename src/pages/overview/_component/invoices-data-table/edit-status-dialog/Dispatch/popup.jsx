@@ -61,7 +61,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
   return (
     <>
-      <div className="my-1 overflow-y-auto max-h-[90vh] px-2">
+      <div className="my-1 overflow-y-auto max-h-[80vh] px-2">
         <DialogHeader>
           <DispatchHeader />
         </DialogHeader>
@@ -84,17 +84,15 @@ export default function DispatchPopup({ rowData, onSubmit }) {
         </div>
 
         <Separator className="my-2" />
-        <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 mb-1">          
-          <div className="flex flex-col gap-3">
-            <DispatchDetails data={rowData} />
-            <DispatchMeta />
-          </div>
-          
+        
+        <div className="flex flex-col w-full md:flex-row md:gap-x-8 gap-y-4 mb-4">
+          <DispatchDetails data={rowData} />
           <DispatchSelect values={selectValues} onChange={handleSelectChange} />
         </div>
 
         <DispatchRemarks />
-
+        <DispatchMeta />
+        
         <DialogFooter>
           <DispatchFooter
             rowData={rowData}
