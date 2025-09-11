@@ -1,11 +1,16 @@
-import React from "react";
-import { useGetOverviewQuery } from "@/features/overview/overviewApi";
+import React, { useEffect } from "react";
+import { useFilterStoreInvoicesMutation } from "@/features/invoices/invoicesAPI";
 import { Skeleton } from "@/components/ui/skeleton";
 import LabelValue from "./shared-label-value";
 
 const StoreLabelValue = () => {
-  const { data, isLoading, isError } = useGetOverviewQuery();
+  const [filterStoreInvoices, { data, isLoading, isError }] =
+    useFilterStoreInvoicesMutation()
 
+    useEffect(() => {
+      filterStoreInvoices({});
+    }, [filterStoreInvoices]);
+  
   if (isLoading) {
     return (
       <div className="flex flex-wrap justify-center gap-4">
@@ -25,12 +30,7 @@ const StoreLabelValue = () => {
     );
   }
 
-  const statusCounts = {
-    todayInvoices: data.todayCount || 0,
-    pending: data.pending || 0,
-    processed: data.processed || 0,
-    avgProcessingTime: data.avgProcessingTime || "N/A",
-  };
+  const stats = data?.stats || {};
 
   return (
     <div
@@ -44,22 +44,26 @@ const StoreLabelValue = () => {
       <LabelValue
         status="Store"
         label="Today"
-        value={statusCounts.todayInvoices}
+        value={data?.invoices?.length || 0}
       />
       <LabelValue
         status="Verification"
         label="Pending"
-        value={statusCounts.pending}
+        value={stats.pendingCount || 0}
       />
       <LabelValue
         status="Dispatch"
         label="Processed"
-        value={statusCounts.processed}
+        value={stats.processedCount || 0}
       />
       <LabelValue
         status="Delivered"
         label="Avg. Processing Time"
-        value={statusCounts.avgProcessingTime}
+        value={
+          stats.avgDurationSeconds !== undefined
+            ? `${stats.avgDurationSeconds} sec`
+            : "N/A"
+        }
       />
     </div>
   );

@@ -1,10 +1,15 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetOverviewQuery } from "@/features/overview/overviewApi";
-import React from "react";
+import { useFilterStoreInvoicesMutation } from "@/features/invoices/invoicesAPI";
+import React, { useEffect } from "react";
 import LabelValue from "./shared-label-value";
 
 const VerificationLabelValue = () => {
-  const { data, isLoading, isError } = useGetOverviewQuery();
+  const [filterStoreInvoices, { data, isLoading, isError }] =
+      useFilterStoreInvoicesMutation()
+  
+      useEffect(() => {
+        filterStoreInvoices({});
+      }, [filterStoreInvoices]);
 
   if (isLoading) {
     return (
@@ -25,12 +30,7 @@ const VerificationLabelValue = () => {
     );
   }
 
-  const statusCounts = {
-    todayInvoices: data?.todayCount || 0,
-    pending: data?.pending || 0,
-    verified: data?.verified || 0,
-    avgVerificationTime: data?.avgVerificationTime || "N/A",
-  };
+  const stats = data?.stats || {};
 
   return (
     <div
@@ -44,22 +44,26 @@ const VerificationLabelValue = () => {
       <LabelValue
         status="Store"
         label="Today"
-        count={statusCounts.todayInvoices}
+        value={data?.invoices?.length || 0}
       />
       <LabelValue
         status="Verification"
         label="Pending"
-        count={statusCounts.pending}
+        value={stats.pendingCount || 0}
       />
       <LabelValue
         status="Dispatch"
         label="Verified"
-        count={statusCounts.verified}
+        value={stats.verifiedCount || 0}
       />
       <LabelValue
         status="Delivered"
         label="Avg. Verification Time"
-        count={statusCounts.avgVerificationTime}
+        value={
+          stats.avgDurationSeconds !== undefined
+            ? `${stats.avgDurationSeconds} sec`
+            : "N/A"
+        }
       />
     </div>
   );

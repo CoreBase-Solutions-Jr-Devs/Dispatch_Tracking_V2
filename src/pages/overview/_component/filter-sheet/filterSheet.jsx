@@ -54,8 +54,8 @@ export default function FilterSheet() {
                 return;
         }
 
-        dispatch(setStartDate(formatDDMMYYYY(start)));
-        dispatch(setEndDate(formatDDMMYYYY(end)));
+        dispatch(setStartDate(start.toISOString()));
+        dispatch(setEndDate(end.toISOString()));
     }, [dateRange, dispatch]);
 
     const handleDateChange = (type, date) => {
@@ -66,15 +66,13 @@ export default function FilterSheet() {
 
     const handleApplyFilter = async () => {
         const payload = {
-            request: {
-                startDate,
-                endDate,
-                dateRange,
-                search,
-                status: selectedFilters.status || null,
-                pageNumber: 1,
-                pageSize: 50,
-            }
+            startDate: new Date(startDate).toISOString(),
+            endDate: new Date(endDate).toISOString(),
+            dateRange,
+            search,
+            status: selectedFilters,
+            pageNumber: 1,
+            pageSize: 50,
         };
 
         console.log("Filter Payload:", JSON.stringify(payload, null, 2));
@@ -98,6 +96,10 @@ export default function FilterSheet() {
         setSearch("");
         setSelectedFilters({});
     };
+
+    useEffect(() => {
+        handleApplyFilter();
+    }, []);
 
     return (
         <Sheet>
@@ -128,7 +130,7 @@ export default function FilterSheet() {
                         <Label className="text-xs text-muted-foreground">Start Date</Label>
                         <DatePicker
                             className="w-full border rounded-md px-2 h-8"
-                            selected={startDate ? new Date(startDate.split("/").reverse().join("-")) : null}
+                            selected={startDate ? new Date(startDate) : null}
                             onChange={date => handleDateChange("start", date)}
                             dateFormat="dd/MM/yyyy"
                             disabled={!isCustomRange}
@@ -139,7 +141,7 @@ export default function FilterSheet() {
                         <Label className="text-xs text-muted-foreground">End Date</Label>
                         <DatePicker
                             className="w-full border rounded-md px-2 h-8"
-                            selected={endDate ? new Date(endDate.split("/").reverse().join("-")) : null}
+                            selected={endDate ? new Date(endDate) : null}
                             onChange={date => handleDateChange("end", date)}
                             dateFormat="dd/MM/yyyy"
                             disabled={!isCustomRange}

@@ -15,35 +15,26 @@ const STATUS_STYLES = {
 
 const renderStatus = (status) => {
   let statusClass;
-
   switch (status) {
     case "Pending":
-      statusClass = STATUS_STYLES.Store;
-      break;
+      statusClass = STATUS_STYLES.Store; break;
     case "Processed":
     case "In Verification":
-      statusClass = STATUS_STYLES.Verification;
-      break;
+      statusClass = STATUS_STYLES.Verification; break;
     case "Verified":
     case "In Dispatch":
-      statusClass = STATUS_STYLES.Dispatch;
-      break;
+      statusClass = STATUS_STYLES.Dispatch; break;
     case "Return":
     case "Dispatched":
     case "In Delivery":
-      statusClass = STATUS_STYLES.Delivery;
-      break;
+      statusClass = STATUS_STYLES.Delivery; break;
     case "Recalled":
-      statusClass = STATUS_STYLES.Store;
-      break;
+      statusClass = STATUS_STYLES.Store; break;
     case "Delivered":
-      statusClass = STATUS_STYLES.Verification;
-      break;
+      statusClass = STATUS_STYLES.Verification; break;
     default:
-      statusClass = STATUS_STYLES.Muted;
-      break;
+      statusClass = STATUS_STYLES.Muted; break;
   }
-
   return (
     <Badge
       variant="outline"
@@ -83,27 +74,32 @@ const renderDateTime = (value, position = 1) => {
   );
 };
 
-const formatDuration = (minutes) => {
-  if (!minutes && minutes !== 0) return "—";
-  const days = Math.floor(minutes / 1440);
-  const hours = Math.floor((minutes % 1440) / 60);
-  const mins = minutes % 60;
-  const secs = Math.floor((minutes - Math.floor(minutes)) * 60);
+const formatDuration = (seconds) => {
+  if (!seconds && seconds !== 0) return "—";
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
 
   return [
-	days > 0 ? `${days}d` : null,
-	hours > 0 ? `${hours}h` : null,
-	mins > 0 ? `${mins}m` : null,
-	secs > 0 ? `${secs}s` : null,
+    days && `${days}D`,
+    hours && `${hours}H`,
+    mins && `${mins}M`,
+    secs && `${secs}S`,
   ]
 	.filter(Boolean)
 	.join(" ") || "0m";
 };
 
-const renderDuration = (durationString) => (
-  <span className="font-medium text-foreground">{durationString || "—"}</span>
-);
-
+const renderDuration = (durationSeconds, avgDuration) => {
+  if (durationSeconds == null) return <span className="text-muted-foreground font-medium">—</span>;
+  const colorClass = durationSeconds > avgDuration ? "text-red-600" : "text-green-600";
+  return (
+    <span className={`font-medium ${colorClass}`}>
+      {formatDuration(durationSeconds)}
+    </span>
+  );
+};
 
 const renderActions = (row, handlers = {}, view) => {
   const { onView } = handlers;
@@ -141,192 +137,39 @@ const renderActions = (row, handlers = {}, view) => {
 };
 
 // --- Column Factory ---
-export function getInvoiceColumns(view) {
+export function getInvoiceColumns(view, avgDurationSeconds = 0) {
   const base = {
-    invoiceNo: {
-      accessorKey: "invoiceNo",
-      header: "Invoice No",
-      cell: ({ row }) => renderText(row.original.invoiceNo),
-    },
-    docType: {
-      accessorKey: "docType",
-      header: "Doc Type",
-      cell: ({ row }) => renderText(row.original.docType),
-    },
-    account: {
-      accessorKey: "account",
-      header: "Account",
-      cell: ({ row }) => renderText(row.original.account),
-    },
-    customerName: {
-      accessorKey: "customerName",
-      header: "Customer Name",
-      cell: ({ row }) => renderText(row.original.customerName),
-    },
-    status: {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => renderStatus(row.original.status),
-    },
-    items: {
-      accessorKey: "items",
-      header: "Items",
-      cell: ({ row }) => renderText((row.original.items || 0).toString()),
-    },
-    postingDate: {
-      accessorKey: "postingDate",
-      header: "Posting Date & Time",
-      cell: ({ row }) => renderDateTime(row.original.postingDate),
-    },
-    docDateTime: {
-      accessorKey: "docDateTime",
-      header: "Doc Date & Time",
-      cell: ({ row }) => renderDateTime(row.original.docDateTime),
-    },
-    processedDateTime: {
-      accessorKey: "processedDateTime",
-      header: "Processed Date & Time",
-      cell: ({ row }) => renderDateTime(row.original.processedDateTime),
-    },
-    verificationDateTime: {
-      accessorKey: "verificationDateTime",
-      header: "Verification Date & Time",
-      cell: ({ row }) => renderDateTime(row.original.verificationDateTime),
-    },
-    dispatchDateTime: {
-      accessorKey: "dispatchDateTime",
-      header: "Dispatch Date & Time",
-      cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
-    },
-    deliveryDateTime: {
-      accessorKey: "deliveryDateTime",
-      header: "Delivery Date & Time",
-      cell: ({ row }) => renderDateTime(row.original.deliveryDateTime),
-    },
-    deliveryGuy: {
-      accessorKey: "deliveryGuy",
-      header: "Delivery Guy",
-      cell: ({ row }) => renderText(row.original.deliveryGuy),
-    },
-    address: {
-      accessorKey: "address",
-      header: "Address",
-      cell: ({ row }) => renderText(row.original.address),
-    },
-    duration: {
-      accessorKey: "duration",
+    invoiceNo: { accessorKey: "invoiceNo", header: "Invoice No", cell: ({ row }) => renderText(row.original.invoiceNo) },
+    docType: { accessorKey: "docType", header: "Doc Type", cell: ({ row }) => renderText(row.original.docType) },
+    account: { accessorKey: "account", header: "Account", cell: ({ row }) => renderText(row.original.account) },
+    customerName: { accessorKey: "customerName", header: "Customer Name", cell: ({ row }) => renderText(row.original.customerName) },
+    status: { accessorKey: "status", header: "Status", cell: ({ row }) => renderStatus(row.original.status) },
+    items: { accessorKey: "items", header: "Items", cell: ({ row }) => renderText((row.original.items || 0).toString()) },
+    docDateTime: { accessorKey: "docDateTime", header: "Doc Date & Time", cell: ({ row }) => renderDateTime(row.original.docDateTime) },
+    processedDateTime: { accessorKey: "processedDateTime", header: "Processed Date & Time", cell: ({ row }) => renderDateTime(row.original.processedDateTime) },
+    verificationDateTime: { accessorKey: "verificationDateTime", header: "Verification Date & Time", cell: ({ row }) => renderDateTime(row.original.verificationDateTime) },
+    dispatchDateTime: { accessorKey: "dispatchDateTime", header: "Dispatch Date & Time", cell: ({ row }) => renderDateTime(row.original.dispatchDateTime) },
+    deliveryDateTime: { accessorKey: "deliveryDateTime", header: "Delivery Date & Time", cell: ({ row }) => renderDateTime(row.original.deliveryDateTime) },
+    deliveryGuy: { accessorKey: "deliveryGuy", header: "Delivery Guy", cell: ({ row }) => renderText(row.original.deliveryGuy) },
+    address: { accessorKey: "address", header: "Address", cell: ({ row }) => renderText(row.original.address) },
+    durationSeconds: {
+      accessorKey: "durationSeconds",
+      id: "durationSeconds",
       header: "Duration",
-      cell: ({ row }) => renderDuration(row.original.duration, 62),
+      cell: ({ row }) => renderDuration(row.original.durationSeconds, avgDurationSeconds),
     },
-    paymentTerms: {
-      accessorKey: "paymentTerms",
-      header: "Payment Terms",
-      cell: ({ row }) => renderText(row.original.paymentTerms || "N/A"),
-    },
-    printCopies: {
-      accessorKey: "printCopies",
-      header: "Print Copies",
-      cell: ({ row }) => renderText(row.original.printCopies ?? 0),
-    },
-    branchName: {
-      accessorKey: "branchName",
-      header: "Branch Name",
-      cell: ({ row }) =>
-        row.original.docType === "TRANSFER" ? (
-          renderText(row.original.branchName)
-        ) : (
-          <span className="text-muted-foreground italic">—</span>
-        ),
-    },
-    actions: {
-      accessorKey: "actions",
-      header: "Actions",
-      cell: ({ row }) => renderActions(row, {}, view),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    actions: { accessorKey: "actions", header: "Actions", cell: ({ row }) => renderActions(row, {}, view), enableSorting: false, enableHiding: false },
+    paymentTerms: { accessorKey: "paymentTerms", header: "Payment Terms", cell: ({ row }) => renderText(row.original.paymentTerms || "N/A") },
+    printCopies: { accessorKey: "printCopies", header: "Print Copies", cell: ({ row }) => renderText(row.original.printCopies ?? 0) },
+    branchName: { accessorKey: "branchName", header: "Branch Name", cell: ({ row }) => row.original.docType === "TRANSFER" ? renderText(row.original.branchName) : <span className="text-muted-foreground italic">—</span> },
+    actions: { accessorKey: "actions", id: "actions", header: "Actions", cell: ({ row }) => renderActions(row, {}, view), enableSorting: false, enableHiding: false },
   };
 
   const views = {
-    admin: [
-      base.docType,
-      base.branchName,
-      base.account,
-      base.paymentTerms,
-      base.printCopies,
-      base.postingDate,
-      base.status,
-    ],
-    store: [
-      base.invoiceNo,
-      base.customerName,
-      base.items,
-      base.paymentTerms,
-      {
-        ...base.docDateTime,
-        cell: ({ row }) => renderDateTime(row.original.docDateTime, 1),
-      },
-      {
-        ...base.processedDateTime,
-        cell: ({ row }) => renderDateTime(row.original.processedDateTime, 2),
-      },
-      base.duration,
-      base.status,
-      base.actions,
-    ],
-    verification: [
-      base.invoiceNo,
-      base.customerName,
-      base.items,
-      base.paymentTerms,
-      {
-        ...base.processedDateTime,
-        cell: ({ row }) => renderDateTime(row.original.processedDateTime, 1),
-      },
-      {
-        ...base.verificationDateTime,
-        cell: ({ row }) =>
-          renderDateTime(row.original.verificationDateTime, 2),
-      },
-      base.duration,
-      base.status,
-      base.actions,
-    ],
-    dispatch: [
-      base.invoiceNo,
-      base.customerName,
-      base.items,
-      base.deliveryGuy,
-      base.paymentTerms,
-      {
-        ...base.dispatchDateTime,
-        cell: ({ row }) => renderDateTime(row.original.dispatchDateTime, 1),
-      },
-      {
-        ...base.deliveryDateTime,
-        cell: ({ row }) => renderDateTime(row.original.deliveryDateTime, 2),
-      },
-      base.status,
-      base.duration,
-      base.actions,
-    ],
-    delivery: [
-      base.account,
-      base.items,
-      base.address,
-      base.paymentTerms,
-      {
-        ...base.dispatchDateTime,
-        cell: ({ row }) => renderDateTime(row.original.dispatchDateTime, 1),
-      },
-      {
-        ...base.deliveryDateTime,
-        cell: ({ row }) => renderDateTime(row.original.deliveryDateTime, 2),
-      },
-      base.status,
-      base.actions,
-    ],
+    admin: [base.docType, base.branchName, base.account, base.paymentTerms, base.printCopies, base.docDateTime, base.status],
+    store: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, base.docDateTime, base.processedDateTime, base.durationSeconds, base.status, base.actions],
+    verification: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, base.processedDateTime, base.verificationDateTime, base.durationSeconds, base.status, base.actions],
+    dispatch: [base.invoiceNo, base.customerName, base.items, base.deliveryGuy, base.paymentTerms, base.dispatchDateTime, base.deliveryDateTime, base.status, base.durationSeconds, base.actions],
+    delivery: [base.account, base.items, base.address, base.paymentTerms, base.dispatchDateTime, base.deliveryDateTime, base.status, base.durationSeconds, base.actions],
     default: [base.docType, base.branchName, base.account, base.status],
   };
 
