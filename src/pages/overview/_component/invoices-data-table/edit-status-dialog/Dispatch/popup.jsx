@@ -21,8 +21,8 @@ export default function DispatchPopup({ rowData, onSubmit }) {
   // Handle row toggle
   const handleToggleRow = (doc) => {
     setSelectedDocs((prev) => 
-      prev.find((d) => d.docNo === doc.docNo)
-        ? prev.filter((d) => d.docNo !== doc.docNo)
+      prev.find((d) => d.invNo === doc.invNo)
+        ? prev.filter((d) => d.invNo !== doc.invNo)
         : [...prev, doc]
     );
   }
@@ -31,7 +31,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
   const filteredData = useMemo(() => {
     if (!query) return rowData;
     return rowData.filter((row) =>
-      row.docNo.toLowerCase().includes(query.toLowerCase())
+      row.invNo.toLowerCase().includes(query.toLowerCase())
     );
   }, [query, rowData]);
 
