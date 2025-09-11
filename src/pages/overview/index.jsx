@@ -5,7 +5,7 @@ import {
   StoreLabelValue,
   // AdminLabelValue,
   VerificationLabelValue,
-  // DispatchLabelValue,
+  DispatchLabelValue,
   // DeliveryLabelValue,
 } from "./_component/label-values";
 import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
@@ -28,8 +28,8 @@ const Overview = () => {
         return <StoreLabelValue />;
       case "VerificationPerson":
         return <VerificationLabelValue />;
-      // case "DispatchPerson":
-      //   return <DispatchLabelValue />;
+      case "DispatchPerson":
+        return <DispatchLabelValue />;
       // case "Driver":
       //   return <DeliveryLabelValue />;
       default:
