@@ -37,7 +37,7 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
         <FormComponent
           rowData={rowData}
           onSubmit={onSubmit}
