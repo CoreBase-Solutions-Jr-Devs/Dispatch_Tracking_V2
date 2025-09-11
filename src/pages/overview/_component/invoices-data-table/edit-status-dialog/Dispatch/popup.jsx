@@ -84,13 +84,13 @@ export default function DispatchPopup({ rowData, onSubmit }) {
         </div>
 
         <Separator className="my-2" />
-        <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 mb-1">
-          <DispatchSelect values={selectValues} onChange={handleSelectChange} />
-
+        <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 mb-1">          
           <div className="flex flex-col gap-3">
             <DispatchDetails data={rowData} />
             <DispatchMeta />
           </div>
+          
+          <DispatchSelect values={selectValues} onChange={handleSelectChange} />
         </div>
 
         <DispatchRemarks />
