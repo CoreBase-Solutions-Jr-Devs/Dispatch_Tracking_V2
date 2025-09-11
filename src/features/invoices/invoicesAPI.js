@@ -76,7 +76,17 @@ export const invoicesApi = apiClient.injectEndpoints({
 			}),
 			invalidatesTags: ['invoices'],
 		}),
+
 		// VERIFICATION TRACKING
+		filterVerificationInvoices: builder.mutation({
+			query: (formData) => ({
+				url: '/invoices/verification-filter',
+				method: 'POST',
+				body: formData,
+			}),
+			invalidatesTags: ['verification_invoices'],
+		}),
+
 		getVerificationTrackingDetails: builder.query({
 			query: ({ docNum } = {}) => ({
 				url: `/invoices/${docNum}/verification-tracking`,
@@ -183,6 +193,7 @@ export const {
 	useStoreStartMutation,
 	useStorePushMutation,
 	// VERIFICATION TRACKING
+	useFilterVerificationInvoicesMutation,
 	useGetVerificationTrackingDetailsQuery,
 	useVerificationStartMutation,
 	useVerificationPushMutation,
