@@ -4,12 +4,18 @@ import { Button } from "@/components/ui/button";
 export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
+  const [recallDisabled, setRecallDisabled] = useState(true);
 
   const handleStart = () => {
     setStartDisabled(true);
     setDeliveryDisabled(false);
     if (onClose) onClose();
   };
+
+  const handleRecall =() => {
+    setStartDisabled(false);
+    setRecallDisabled(true);
+  }
 
   const handleDelivery = () => {
     setStartDisabled(true);
@@ -27,6 +33,14 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
         Print
+      </Button>
+      <Button
+        variant="destructive"
+        onClick={handleStart}
+        disabled={recallDisabled}
+        className="mt-1 mr-2 uppercase text-xs font-medium"
+      >
+        Recall
       </Button>
       <Button
         variant="apply"
