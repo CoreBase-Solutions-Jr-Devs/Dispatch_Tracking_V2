@@ -32,7 +32,7 @@ export default function StoreFooter({
   const [storeStart] = useStoreStartMutation();
   const [storePush] = useStorePushMutation();
 
-  const handleStart = () => {
+  const handleStartApi = () => {
     setStartDisabled(true);
     setVerificationDisabled(true);
 
@@ -40,6 +40,11 @@ export default function StoreFooter({
       .unwrap()
       .then((data) => {
         console.log(data);
+        toast.success("Store process started successfully");
+
+        setVerificationDisabled(false);
+
+        if (refetchData) refetchData();
       })
       .catch((error) => {
         setStartDisabled(false);
@@ -57,19 +62,43 @@ export default function StoreFooter({
   };
 
   const handleVerification = () => {
+    const isWeightEmpty = weight === "" || weight === null;
+    const isRemarksEmpty = !remarks || remarks.trim() === "";
+
+    const fieldErrors = {};
+    if (isWeightEmpty) fieldErrors.weight = "Weight is required";
+    if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
+
+    setErrors({
+      weight: fieldErrors.weight || undefined,
+      remarks: fieldErrors.remarks || undefined,
+    });
+
+    if (isWeightEmpty && isRemarksEmpty) {
+      setWeight(0);
+      setRemarks("");
+      return;
+    }
+
+    if (Object.keys(fieldErrors).length > 0) return;
+
     setStartDisabled(true);
     setVerificationDisabled(true);
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      totalWeightKg: 0,
-      storeRemarks: "",
+      totalWeightKg: Number(weight),
+      storeRemarks: remarks,
     };
 
     storePush(payload)
       .unwrap()
       .then((data) => {
-        console.log(data);
+        toast.success("Sent to Verification successfully");
+        setWeight(undefined);
+        if (refetchData) refetchData();
+        setRemarks("");
+        setErrors({});
       })
       .catch((error) => {
         setStartDisabled(false);

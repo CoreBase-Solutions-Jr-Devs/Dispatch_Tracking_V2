@@ -5,7 +5,7 @@ import { Search as SearchIcon } from "lucide-react";
 export default function DeliverySearch({
     value,
     onChange,
-    placeholder = "Invoice No",
+    placeholder = "Invoice No/Cuscode",
     }) {
     return (
         <section className="flex justify-between items-center w-full">

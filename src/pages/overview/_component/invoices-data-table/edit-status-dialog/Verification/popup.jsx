@@ -7,7 +7,7 @@ import VerificationSummary from "./summary";
 import VerificationRemarks from "./remarks";
 import VerificationMeta from "./meta";
 import VerificationFooter from "./footer";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetVerificationTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
