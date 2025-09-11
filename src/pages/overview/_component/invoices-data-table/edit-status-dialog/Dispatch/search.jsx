@@ -20,7 +20,7 @@ export default function DispatchSearch({
 
   return (
     <section className="flex justify-between items-center space-x-2 w-full">
-      <div className="relative w-1/3 max-w-sm">
+      <div className="relative w-1/2 max-w-sm">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
         <Input
           type="text"
@@ -31,18 +31,7 @@ export default function DispatchSearch({
         />
       </div>
 
-      <div className="flex justify-center items-center gap-2 w-1/3 pl-4">
-        <Button
-          variant="apply"
-          onClick={handleStart}
-          disabled={startDisabled}
-          className="uppercase text-xs font-medium"
-        >
-          Add
-        </Button>
-      </div>
-
-      <div className="flex justify-end items-center gap-2 w-1/3 pl-4">
+      <div className="flex justify-end items-center gap-2 w-1/2 pl-4">
         <Label className="text-xs font-medium">Dispatch No:</Label>
         <Label className="text-xs font-medium text-muted-foreground">2</Label>
       </div>
