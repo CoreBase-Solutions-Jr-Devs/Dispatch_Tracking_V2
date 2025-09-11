@@ -1,10 +1,15 @@
 import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function DispatchTable({ data, selected, onToggle }) {
+  
+  const isSelected = (docNo) => selected.some((d) => d.docNo === docNo);
+
   return (
     <div className="overflow-x-auto">
       <Table>
         <TableBody>
+
           <TableRow className="bg-gray-100 text-xs font-medium">
             <TableCell className="py-1 px-2">Selected</TableCell>
             <TableCell className="py-1 px-2">Doc No</TableCell>
@@ -15,7 +20,21 @@ export default function DispatchTable({ data, selected, onToggle }) {
           </TableRow>
 
           <TableRow className="text-xs font-medium">
-            <TableCell className="py-1 px-2">{selected}</TableCell>
+            <TableCell className="py-1 px-2">
+              <Checkbox
+                className="bg-gray-300"
+                checked={isSelected("W1_20022693")}
+                onCheckedChange={() =>
+                  onToggle({
+                    docNo: "W1_20022693",
+                    account: "A ONE SUPERMARKET",
+                    docDateTime: "08/20/2025 23:22",
+                    items: 2,
+                    amount: "1,470.00",
+                  })
+                }
+              />
+            </TableCell>
             <TableCell className="py-1 px-2">W1_20022693</TableCell>
             <TableCell className="py-1 px-2">A ONE SUPERMARKET</TableCell>
             <TableCell className="py-1 px-2">08/20/2025 23:22</TableCell>
@@ -24,7 +43,21 @@ export default function DispatchTable({ data, selected, onToggle }) {
           </TableRow>
 
           <TableRow className="text-xs font-medium">
-            <TableCell className="py-1 px-2">{selected}</TableCell>
+            <TableCell className="py-1 px-2">
+              <Checkbox
+                className="bg-gray-300"
+                checked={isSelected("W1_20022674")}
+                onCheckedChange={() =>
+                  onToggle({
+                    docNo: "W1_20022674",
+                    account: "ALFA CHEMIST LTD",
+                    docDateTime: "08/20/2025 08:12",
+                    items: 2,
+                    amount: "2,230.00",
+                  })
+                }
+              />
+            </TableCell>
             <TableCell className="py-1 px-2">W1_20022674</TableCell>
             <TableCell className="py-1 px-2">ALFA CHEMIST LTD</TableCell>
             <TableCell className="py-1 px-2">08/20/2025 08:12</TableCell>
