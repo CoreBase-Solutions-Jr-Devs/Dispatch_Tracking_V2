@@ -6,7 +6,7 @@ export default function DispatchTable({ data, selected, onToggle }) {
   const isSelected = (invNo) => selected.some((d) => d.invNo === invNo);
 
   return (
-    <div className="max-h-40 overflow-y-auto">
+    <div className="max-h-56 overflow-y-auto">
       <Table>
         <TableBody>
 
