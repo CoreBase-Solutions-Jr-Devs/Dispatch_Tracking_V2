@@ -80,9 +80,9 @@ export default function FilterSheet() {
         return;
     }
 
-    dispatch(setStartDate(formatDDMMYYYY(start)));
-    dispatch(setEndDate(formatDDMMYYYY(end)));
-  }, [dateRange, dispatch]);
+        dispatch(setStartDate(start.toISOString()));
+        dispatch(setEndDate(end.toISOString()));
+    }, [dateRange, dispatch]);
 
   const handleDateChange = (type, date) => {
     if (!date) return;
@@ -92,16 +92,16 @@ export default function FilterSheet() {
       : dispatch(setEndDate(formatted));
   };
 
-  const handleApplyFilter = async () => {
-    const payload = {
-      startDate,
-      endDate,
-      dateRange,
-      search,
-      status: selectedFilters.status || null,
-      pageNumber: 3,
-      pageSize: 50,
-    };
+    const handleApplyFilter = async () => {
+        const payload = {
+            startDate: new Date(startDate).toISOString(),
+            endDate: new Date(endDate).toISOString(),
+            dateRange,
+            search,
+            status: selectedFilters,
+            pageNumber: 1,
+            pageSize: 50,
+        };
 
     console.log("Filter Payload:", JSON.stringify(payload, null, 2));
 
@@ -119,15 +119,15 @@ export default function FilterSheet() {
     }
   };
 
-  const handleClearFilters = () => {
-    dispatch(setDateRange("TODAY"));
-    setSearch("");
-    setSelectedFilters({});
-  };
+    const handleClearFilters = () => {
+        dispatch(setDateRange("TODAY"));
+        setSearch("");
+        setSelectedFilters({});
+    };
 
-  if (role === "delivery") return;
-
-  //   console.log(role);
+    useEffect(() => {
+        handleApplyFilter();
+    }, []);
 
   return (
     <Sheet>
@@ -154,46 +154,30 @@ export default function FilterSheet() {
           />
         </section>
 
-        {/* Start/End Date Pickers */}
-        <section className="flex gap-4 mb-4">
-          <div
-            className={`flex-1 flex flex-col ${
-              isCustomRange ? "border border-primary rounded-md p-1" : ""
-            }`}
-          >
-            <Label className="text-xs text-muted-foreground">Start Date</Label>
-            <DatePicker
-              className="w-full border rounded-md px-2 h-8"
-              selected={
-                startDate
-                  ? new Date(startDate.split("/").reverse().join("-"))
-                  : null
-              }
-              onChange={(date) => handleDateChange("start", date)}
-              dateFormat="dd/MM/yyyy"
-              disabled={!isCustomRange}
-            />
-          </div>
+                {/* Start/End Date Pickers */}
+                <section className="flex gap-4 mb-4">
+                    <div className={`flex-1 flex flex-col ${isCustomRange ? 'border border-primary rounded-md p-1' : ''}`}>
+                        <Label className="text-xs text-muted-foreground">Start Date</Label>
+                        <DatePicker
+                            className="w-full border rounded-md px-2 h-8"
+                            selected={startDate ? new Date(startDate) : null}
+                            onChange={date => handleDateChange("start", date)}
+                            dateFormat="dd/MM/yyyy"
+                            disabled={!isCustomRange}
+                        />
+                    </div>
 
-          <div
-            className={`flex-1 flex flex-col ${
-              isCustomRange ? "border border-primary rounded-md p-1" : ""
-            }`}
-          >
-            <Label className="text-xs text-muted-foreground">End Date</Label>
-            <DatePicker
-              className="w-full border rounded-md px-2 h-8"
-              selected={
-                endDate
-                  ? new Date(endDate.split("/").reverse().join("-"))
-                  : null
-              }
-              onChange={(date) => handleDateChange("end", date)}
-              dateFormat="dd/MM/yyyy"
-              disabled={!isCustomRange}
-            />
-          </div>
-        </section>
+                    <div className={`flex-1 flex flex-col ${isCustomRange ? 'border border-primary rounded-md p-1' : ''}`}>
+                        <Label className="text-xs text-muted-foreground">End Date</Label>
+                        <DatePicker
+                            className="w-full border rounded-md px-2 h-8"
+                            selected={endDate ? new Date(endDate) : null}
+                            onChange={date => handleDateChange("end", date)}
+                            dateFormat="dd/MM/yyyy"
+                            disabled={!isCustomRange}
+                        />
+                    </div>
+                </section>
 
         {/* Search + Role Filters */}
         <section className="flex gap-2 mb-4 items-end">
