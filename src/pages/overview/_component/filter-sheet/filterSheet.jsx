@@ -129,6 +129,8 @@ export default function FilterSheet() {
         handleApplyFilter();
     }, []);
 
+    if(role === "delivery") return null;
+
   return (
     <Sheet>
       <SheetTrigger asChild>

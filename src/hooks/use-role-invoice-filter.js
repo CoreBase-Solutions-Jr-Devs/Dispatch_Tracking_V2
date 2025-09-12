@@ -11,6 +11,8 @@ export function useRoleInvoiceFilter(role) {
 			return useFilterStoreInvoicesMutation();
 		case 'verification':
 			return useFilterVerificationInvoicesMutation();
+		case 'delivery':
+			return useFilterVerificationInvoicesMutation();
 		// case 'dispatch':
 		// 	return useFilterDispatchInvoicesMutation();
 		// case 'delivery':
