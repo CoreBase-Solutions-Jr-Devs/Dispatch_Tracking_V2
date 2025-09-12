@@ -20,7 +20,14 @@ const Overview = () => {
   const pageMeta = viewMeta[view];
 
   const renderFilterSheet = () => {
-    user?.userRole === "Driver" ? null : <FilterSheet />;
+    switch (user?.userRole) {
+      case "StorePerson":
+      case "VerificationPerson":
+      case "DispatchPerson":
+        return <FilterSheet />;
+      default:
+        return null;
+    }
   }
 
   const renderLabelValues = () => {
