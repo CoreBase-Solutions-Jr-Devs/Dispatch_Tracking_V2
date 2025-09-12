@@ -19,6 +19,10 @@ const Overview = () => {
   const view = roleToView(user?.userRole);
   const pageMeta = viewMeta[view];
 
+  const renderFilterSheet = () => {
+    user?.userRole === "Driver" ? null : <FilterSheet />;
+  }
+
   const renderLabelValues = () => {
     switch (user?.userRole) {
       // case "Admin":
@@ -57,7 +61,7 @@ const Overview = () => {
       }
       rightAction={
         <div className="flex items-center gap-2 text-sm">
-          <FilterSheet />
+          {renderFilterSheet()}
         </div>
       }
       noPadding
