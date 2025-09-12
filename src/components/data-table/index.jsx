@@ -156,13 +156,13 @@ export function DataTable({
               table.getRowModel().rows.length === 0 ? "h-[200px]" : ""
             )}
           >
-            <TableHeader className="sticky top-0 bg-muted z-10 ">
+            <TableHeader className="sticky top-0  z-10 ">
               {table.getHeaderGroups().map((group) => (
                 <TableRow key={group.id}>
                   {group.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="!font-medium !text-[13px]"
+                      className="!font-medium !text-[13px] "
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -182,7 +182,7 @@ export function DataTable({
                     onClick={() => row.toggleSelected()}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="!text-[13.3px]">
+                      <TableCell key={cell.id} className="!text-[13.3px] ">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
