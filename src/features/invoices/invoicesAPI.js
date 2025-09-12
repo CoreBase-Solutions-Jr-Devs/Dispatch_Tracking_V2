@@ -140,14 +140,7 @@ export const invoicesApi = apiClient.injectEndpoints({
 		}),
 
 		// DELIVERY TRACKING
-		filterDeliveryInvoices: builder.mutation({
-  query: (formData) => ({
-    url: '/invoices/delivery-filter', // 👈 make sure this endpoint exists in your backend
-    method: 'POST',
-    body: formData,
-  }),
-  invalidatesTags: ['delivery_invoices'],
-}),
+
 		viewInvoicePDF: builder.query({
 			query: ({ docNum } = {}) => ({
 				url: `/invoices/${docNum}/delivery/pdf`,
@@ -200,8 +193,8 @@ export const {
 	useCollectionRecallMutation,
 	useCollectionPushMutation,
 	// DELIVERY TRACKING
-	  useFilterDeliveryInvoicesMutation,  
-	useViewInvoicePDFQuery,
+	
+	useViewInvoicePDFQuery,  
 	useGetDeliveryTrackingDetailsQuery,
 	useDeliveryCompleteMutation,
 	useDeliveryStartMutation,
