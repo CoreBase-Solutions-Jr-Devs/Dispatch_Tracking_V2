@@ -28,3 +28,9 @@ export const dispatchApi = apiClient.injectEndpoints({
         }),
     }),
 })
+
+export const {
+    useDispatchSearchMutation,
+    useSelectDispatchInvoiceMutation,
+    useGetDeliveryDriverQuery,
+} = dispatchApi;
