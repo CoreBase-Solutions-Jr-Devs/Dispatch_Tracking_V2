@@ -1,62 +1,51 @@
 import { Label } from "@/components/ui/label";
 
 export default function VerificationDetails({ data }) {
+  const formatDateTime = (date) => {
+    if (!date) return "—";
+    try {
+      return new Date(date).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return "—";
+    }
+  };
+
+  const Row = ({ label, value }) => (
+    <div className="flex gap-2 min-w-0">
+      <Label className="text-xs font-medium min-w-[130px]">{label}</Label>
+      <Label className="text-xs font-medium text-muted truncate">
+        {value || "—"}
+      </Label>
+    </div>
+  );
+
+  if (!data) return null;
+
   return (
-    <div className="flex flex-col gap-2">
-      <section className="flex gap-x-12">
-        <Label className="text-xs font-medium">Customer Name:</Label>
-        <Label className="text-xs font-medium text-muted">
-          {data?.customerName}
-        </Label>
-      </section>
-
-      <section className="flex justify-between">
-        <div className="flex justify-between w-1/2">
-          <Label className="text-xs font-medium">Invoice No:</Label>
-          <Label className="text-xs font-medium text-muted">
-            {data?.invoiceNo}
-          </Label>
-        </div>
-        <div className="flex justify-between w-1/2">
-          <Label className="text-xs font-medium">Invoice Date & Time:</Label>
-          <Label className="text-xs font-medium text-muted">
-            {/* {data.invoiceDate} */}
-            {new Date(data?.invoiceDateTime).toLocaleString()}
-          </Label>
-        </div>
-      </section>
-
-      <section className="flex justify-between">
-        <div className="flex justify-between w-1/2">
-          <Label className="text-xs font-medium">Salesman:</Label>
-          <Label className="text-xs font-medium text-muted">
-            {data?.salesman}
-          </Label>
-        </div>
-        <div className="flex justify-between w-1/2">
-          <Label className="text-xs font-medium">Start Date & Time:</Label>
-          <Label className="text-xs font-medium text-muted">
-            {/* {data.startDate} */}
-            {new Date(data?.verifyStartDateTime).toLocaleString()}
-          </Label>
-        </div>
-      </section>
-
-      <section className="flex justify-between">
-        <div className="flex justify-between w-1/2">
-          <Label className="text-xs font-medium">Verified By:</Label>
-          <Label className="text-xs font-medium text-muted">
-            {data?.verifiedBy}
-          </Label>
-        </div>
-        <div className="flex justify-between w-1/2">
-          <Label className="text-xs font-medium">End Date & Time:</Label>
-          <Label className="text-xs font-medium text-muted">
-            {/* {data.endDate} */}
-            {new Date(data?.verifyEndDateTime).toLocaleString()}
-          </Label>
-        </div>
-      </section>
+    <div className="grid grid-cols-2 gap-x-6 gap-y-2 p-2">
+      <Row label="Customer Name:" value={data.customerName} />
+         <div />
+      <Row label="Invoice No:" value={data.invoiceNo} />
+      <Row
+        label="Invoice Date & Time:"
+        value={formatDateTime(data.invoiceDateTime)}
+      />
+      <Row label="Salesman:" value={data.salesman} />
+      <Row
+        label="Start Date & Time:"
+        value={formatDateTime(data.verifyStartDateTime)}
+      />
+      <Row label="Verified By:" value={data.verifiedBy} />
+      <Row
+        label="End Date & Time:"
+        value={formatDateTime(data.verifyEndDateTime)}
+      />
     </div>
   );
 }
