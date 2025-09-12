@@ -9,7 +9,7 @@ import DeliveryRemarks from './remarks'
 import DeliveryMeta from './meta'
 import DeliveryFooter from './footer'
 import DeliveryInventory from './inventory'
-import { useGetDeliveryTrackingDetailsQuery } from '@/features/invoices/invoicesAPI'
+import { useGetDeliveryTrackingDetailsQuery } from '@/features/delivery/deliveryAPI'
 
 export default function DeliveryPopup({ rowData, onSubmit }) {
     const [isOpen, setIsOpen] = useState(false);

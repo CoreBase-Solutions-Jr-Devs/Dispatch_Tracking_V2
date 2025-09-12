@@ -11,8 +11,8 @@ import DispatchFooter from "./footer";
 import DispatchSelect from "./select";
 import DispatchSearch from "./search";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetDeliveryTrackingDetailsQuery } from "@/features/delivery/deliveryAPI";
 
-import { useGetDeliveryTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 export default function DispatchPopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,11 +41,9 @@ export default function DispatchPopup({ rowData, onSubmit }) {
   };
 
   const handleDialogClose = () => setIsOpen(false);
-const { data, isLoading, isError} = useGetDeliveryTrackingDetailsQuery(
-    {
-      docNum: Number(rowData.invoiceNo),
-    }
-  );
+  const { data, isLoading, isError } = useGetDeliveryTrackingDetailsQuery({
+    docNum: Number(rowData.invoiceNo),
+  });
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -76,7 +74,7 @@ const { data, isLoading, isError} = useGetDeliveryTrackingDetailsQuery(
         <DispatchSearch
           value={query}
           onChange={setQuery}
-         data={data}
+          data={data}
           placeholder="invoice No..."
         />
         <Separator />
@@ -91,15 +89,15 @@ const { data, isLoading, isError} = useGetDeliveryTrackingDetailsQuery(
 
           <div className="flex flex-col gap-3">
             <DispatchDetails data={data} />
-            <DispatchMeta data={data}/>
+            <DispatchMeta data={data} />
           </div>
         </div>
 
-        <DispatchRemarks data={data}/>
+        <DispatchRemarks data={data} />
 
         <DialogFooter>
           <DispatchFooter
-           data={data}
+            data={data}
             selectValues={selectValues}
             onSubmit={onSubmit}
             onClose={handleDialogClose}
