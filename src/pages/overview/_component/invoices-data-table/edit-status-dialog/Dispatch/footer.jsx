@@ -13,8 +13,8 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   };
 
   const handleRecall =() => {
-    setStartDisabled(false);
-    setRecallDisabled(true);
+    setStartDisabled(true);
+    setRecallDisabled(false);
   }
 
   const handleDelivery = () => {
@@ -36,7 +36,7 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
       </Button>
       <Button
         variant="destructive"
-        onClick={handleStart}
+        onClick={handleRecall}
         disabled={recallDisabled}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
