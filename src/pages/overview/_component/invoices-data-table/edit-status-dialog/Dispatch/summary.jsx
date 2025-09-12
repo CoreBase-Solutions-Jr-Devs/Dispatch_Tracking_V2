@@ -9,7 +9,24 @@ export default function DispatchSummary({ data = [] }) {
 
   return (
     <section className="flex flex-row  justify-end items-center mb-2">
-      <div className="flex items-center  text-xs text-medium mr-4">
+      <span className="text-xs font-medium">Showing 1-10 of invoices</span>
+      <div className="flex items-center space-x-2 ml-2">
+        <button className="px-3 py-1 border rounded-md hover:bg-gray-100 text-xs font-medium">
+          Previous
+        </button>
+        <button className="px-3 py-1 border rounded-md bg-gray-200 text-xs font-medium">1</button>
+        <button className="px-3 py-1 border rounded-md hover:bg-gray-100 text-xs font-medium">
+          2
+        </button>
+        <button className="px-3 py-1 border rounded-md hover:bg-gray-100 text-xs font-medium">
+          3
+        </button>
+        <button className="px-3 py-1 border rounded-md hover:bg-gray-100 text-xs font-medium">
+          Next
+        </button>
+      </div>
+
+      <div className="flex items-center  text-xs text-medium ml-2 mr-4">
         <Label>Total Count:</Label>
         <Label className="ml-2">{totalCount}</Label>
       </div>
