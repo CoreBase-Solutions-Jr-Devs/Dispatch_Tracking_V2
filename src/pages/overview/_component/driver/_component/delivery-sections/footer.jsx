@@ -19,9 +19,9 @@ export default function DeliveryFooter({ rowData, onSubmit, onClose }) {
   };
 
   return (
-    <div className="flex flex-row justify-start  gap-24">
+    <div className="flex flex-row justify-between max-w-3xl gap-16">
       <Button
-        variant="verification"
+        variant="default"
         onClick={handleStart}
         className="mt-1 uppercase text-xs font-medium"
       >
@@ -30,14 +30,14 @@ export default function DeliveryFooter({ rowData, onSubmit, onClose }) {
       <Button
         variant="dispatch"
         onClick={handleStart}
-        className="mt-1 uppercase text-xs font-medium"
+        className="mt-1  uppercase text-xs font-medium"
       >
         Delivery Note
       </Button>
       <Button
         variant="apply"
         onClick={handleDelivery}
-        className="mt-1 uppercase text-xs font-medium"
+        className="mt-1  uppercase text-xs font-medium"
       >
         Complete
       </Button>
