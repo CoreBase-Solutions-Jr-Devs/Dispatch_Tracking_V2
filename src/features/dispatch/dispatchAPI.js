@@ -4,12 +4,11 @@ import { apiClient } from "@/app/api-client";
 export const dispatchApi = apiClient.injectEndpoints({
     endpoints: (builder) => ({
         dispatchSearch: builder.mutation({
-            query: (formData) => ({
-                url: '/dispatch/dispatch-search',
-                method: 'POST',
-                body: formData,
+            query: (userId) => ({
+                url: `/dispatch/dispatch-search?userId=${userId}`,
+                method: 'GET',
             }),
-            invalidatesTags: ['dispatch_invoices'],
+            providesTags: ['dispatch_invoices'],
         }),
         selectDispatchInvoice: builder.mutation({
             query: (formData) => ({
