@@ -10,7 +10,7 @@ export default function DispatchTable({ data, selected, onToggle }) {
       <Table>
         <TableBody>
 
-          <TableRow className="bg-gray-100 text-xs font-medium">
+          <TableRow className="bg-gray-400 text-xs font-medium">
             <TableCell className="py-1 px-2"></TableCell>
             <TableCell className="py-1 px-2 text-center">Disp. No</TableCell>
             <TableCell className="py-1 px-2">Inv. No</TableCell>
@@ -21,7 +21,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">Amount</TableCell>
           </TableRow>
 
-           {/* Row 1 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -49,7 +48,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">12,450.00</TableCell>
           </TableRow>
 
-          {/* Row 2 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -77,7 +75,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">7,800.00</TableCell>
           </TableRow>
 
-          {/* Row 3 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -105,7 +102,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">5,600.00</TableCell>
           </TableRow>
 
-          {/* Row 4 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -133,7 +129,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">15,300.00</TableCell>
           </TableRow>
 
-          {/* Row 5 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -161,7 +156,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">4,250.00</TableCell>
           </TableRow>
 
-          {/* Row 6 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -189,7 +183,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">18,900.00</TableCell>
           </TableRow>
 
-          {/* Row 7 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -217,7 +210,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">35,750.00</TableCell>
           </TableRow>
 
-          {/* Row 8 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -245,7 +237,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">6,200.00</TableCell>
           </TableRow>
 
-          {/* Row 9 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
@@ -273,7 +264,6 @@ export default function DispatchTable({ data, selected, onToggle }) {
             <TableCell className="py-1 px-2">14,350.00</TableCell>
           </TableRow>
 
-          {/* Row 10 */}
           <TableRow className="text-xs font-medium">
             <TableCell className="py-1 px-2">
               <Checkbox
