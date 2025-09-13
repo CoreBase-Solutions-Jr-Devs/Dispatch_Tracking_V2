@@ -25,16 +25,12 @@ export default function DispatchSummary({ data = [] }) {
 
       {/* Invoice list - 7 per page*/}
       <div className="text-xs border rounded p-2">
-        {paginatedData.length > 0 ? (
-          paginatedData.map((inv, idx) => (
+          {paginatedData.map((inv, idx) => (
             <div key={idx} className="flex justify-between py-1 border-b last:border-0">
               <span>{inv.invNo}</span>
               <span>{inv.amount}</span>
             </div>
-          ))
-        ) : (
-          <p className="text-center text-muted-foreground">No records</p>
-        )}
+          ))}
       </div>
 
       {/* Pagination controls */}
