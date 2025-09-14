@@ -122,14 +122,6 @@ export const invoicesApi = apiClient.injectEndpoints({
             }),
             invalidatesTags: ['dispatch_invoices'],
         }),
-		getDeliveryDriver: builder.query({
-			query: (userId) => ({
-				url: `/dispatch/delivery-driver`,
-				method: 'GET',
-				params: { UserId: userId },
-			}),
-			providesTags: ['delivery_driver'],
-		}),
 
 		// COLLECTION TRACKING
 		getCollectionTrackingDetails: builder.query({
@@ -217,7 +209,6 @@ export const {
 	useVerificationPushMutation,
 	// DISPATCH TRACKING
 	useFilterDispatchInvoicesMutation,
-	useGetDeliveryDriverQuery,
 	// COLLECTION TRACKING
 	useGetCollectionTrackingDetailsQuery,
 	useCollectionStartMutation,
