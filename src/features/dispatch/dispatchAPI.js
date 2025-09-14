@@ -3,7 +3,7 @@ import { apiClient } from "@/app/api-client";
 
 export const dispatchApi = apiClient.injectEndpoints({
     endpoints: (builder) => ({
-        dispatchSearch: builder.mutation({
+        dispatchSearch: builder.query({
             query: (userId) => ({
                 url: `/dispatch/dispatch-search?userId=${userId}`,
                 method: 'GET',
@@ -25,11 +25,19 @@ export const dispatchApi = apiClient.injectEndpoints({
             }),
             providesTags: ['dispatch_driver'],
         }),
+        pushDispatchProcess: builder.mutation({
+            query: (formData) => ({
+                url: '/dispatch/push-process',
+                method: 'POST',
+                body: formData,
+            }),
+            invalidatesTags: ['dispatch_invoices', 'dispatch_driver'],
+        }),
     }),
 })
 
 export const {
-    useDispatchSearchMutation,
+    useDispatchSearchQuery,
     useSelectDispatchInvoiceMutation,
     useGetDeliveryDriverQuery,
 } = dispatchApi;
