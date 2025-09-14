@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useFilterOptionsQuery, useGetDeliveryDriverQuery } from "@/features/invoices/invoicesAPI";
+import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
+import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
 
 export default function DispatchDetails({ collectionType }) {
 
