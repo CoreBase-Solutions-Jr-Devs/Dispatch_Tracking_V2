@@ -34,7 +34,7 @@ export const dispatchApi = apiClient.injectEndpoints({
             invalidatesTags: ['dispatch_invoices', 'dispatch_driver'],
         }),
         getDispatchInvoices: builder.query({
-            query: (page = 1, pageSize = 50) => ({
+            query: ({ page = 1, pageSize = 50 }) => ({
                 url: `/dispatch/invoices?page=${page}&pageSize=${pageSize}`,
                 method: 'GET',
             }),
