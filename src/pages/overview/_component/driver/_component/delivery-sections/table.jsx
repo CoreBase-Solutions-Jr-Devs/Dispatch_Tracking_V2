@@ -1,8 +1,9 @@
 import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useSelectDeliveryInvoicesMutation } from "@/features/delivery/deliveryAPI";
+import { toast } from "sonner";
 
 export default function DeliveryTable({ data }) {
- 
   const rows = data || [
     {
       invoiceNo: "W1_20022693",
@@ -86,6 +87,44 @@ export default function DeliveryTable({ data }) {
     },
   ];
 
+  const [selectDeliveryInvoices, { data: selecteResData, isLoading, isError }] =
+    useSelectDeliveryInvoicesMutation();
+
+  const handleRowSelection = (value, row) => {
+    const payload = {
+      // deliveryId: row.,
+      invoices: [
+        {
+          invoiceNo: row?.invoiceNo,
+          isSelected: value,
+        },
+      ],
+    };
+    console.log(value, row);
+    // setChecked(!checked);
+    handleSelectionApi(payload);
+  };
+
+  const handleSelectionApi = (data) => {
+    selectDeliveryInvoices(data)
+      .unwrap()
+      .then((data) => {
+        console.log(data);
+        toast.success("selection successfully");
+        // if (refetchData) refetchData();
+      })
+      .catch((error) => {
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
+        toast.error("Store start Failed", { description, duration: 4000 });
+      });
+  };
+
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -105,14 +144,30 @@ export default function DeliveryTable({ data }) {
           {rows.map((row, index) => (
             <TableRow key={index} className="text-xs font-medium">
               <TableCell className="py-1 px-2">
-                <Checkbox className="border border-gray-400" />
+                <Checkbox
+                  className="border border-gray-400"
+                  // checked={checked}
+                  onCheckedChange={(value) => handleRowSelection(value, row)}
+                />
               </TableCell>
-              <TableCell className="py-1 px-2">{row.invoiceNo}</TableCell>
+              {/* <TableCell className="py-1 px-2">{row.invoiceNo}</TableCell>
               <TableCell className="py-1 px-2">{row.cusName}</TableCell>
               <TableCell className="py-1 px-2">{row.cusCode}</TableCell>
               <TableCell className="py-1 px-2">{row.date}</TableCell>
               <TableCell className="py-1 px-2">{row.items}</TableCell>
-              <TableCell className="py-1 px-2">{row.amount}</TableCell>
+              <TableCell className="py-1 px-2">{row.amount}</TableCell> */}
+              <TableCell className="py-1 px-2">{row?.invoiceNo}</TableCell>
+              <TableCell className="py-1 px-2">{row?.customerName}</TableCell>
+              <TableCell className="py-1 px-2">{row?.customerCode}</TableCell>
+              {/* <TableCell className="py-1 px-2">
+                {new Intl.DateTimeFormat("en-GB").format(
+                  new Date(row?.invoiceDate)
+                )}{" "}
+                {row?.invoiceTime}
+              </TableCell> */}
+              <TableCell className="py-1 px-2">{row?.invoiceDate}</TableCell>
+              <TableCell className="py-1 px-2">{row?.items}</TableCell>
+              <TableCell className="py-1 px-2">{row?.amount}</TableCell>
             </TableRow>
           ))}
         </TableBody>

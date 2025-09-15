@@ -7,11 +7,11 @@ export const deliveryApi = apiClient.injectEndpoints({
       query: ({ customerCode }) => ({
         url: "/delivery/delivery-search",
         method: "GET",
-          params: {
-           customerCode,
+        params: {
+          customerCode,
         },
       }),
-      providesTags: ["customerCode"],
+      providesTags: ["searched_invoices"],
     }),
     getCustomerCodeSuggestions: builder.query({
       query: ({ input, maxResults = 10 }) => ({
@@ -24,6 +24,26 @@ export const deliveryApi = apiClient.injectEndpoints({
       }),
       providesTags: ["customer_codes"],
     }),
+    getDeliveryInvoices: builder.query({
+      query: ({ pageNumber = 1, pageSize = 20 }) => ({
+        url: "/delivery/invoices",
+        method: "GET",
+        params: {
+          pageNumber,
+          pageSize,
+        },
+      }),
+      providesTags: ["delivery_invoices"],
+    }),
+    selectDeliveryInvoices: builder.mutation({
+      query: (formData) => ({
+        url: "/delivery/select-invoice",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["selected_deliveries"],
+    }),
+    //
     viewInvoicePDF: builder.query({
       query: ({ docNum } = {}) => ({
         url: `/invoices/${docNum}/delivery/pdf`,
@@ -61,6 +81,9 @@ export const {
   // DELIVERY TRACKING
   useGetSearchDeliveryInvoicesQuery,
   useGetCustomerCodeSuggestionsQuery,
+  useGetDeliveryInvoicesQuery,
+  useSelectDeliveryInvoicesMutation,
+  //
   useViewInvoicePDFQuery,
   useGetDeliveryTrackingDetailsQuery,
   useDeliveryCompleteMutation,

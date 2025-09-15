@@ -1,28 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search as SearchIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetCustomerCodeSuggestionsQuery } from "@/features/delivery/deliveryAPI";
-import { useGetSearchDeliveryInvoicesQuery } from "@/features/delivery/deliveryAPI";
+import {
+  useGetSearchDeliveryInvoicesQuery,
+  useGetCustomerCodeSuggestionsQuery,
+} from "@/features/delivery/deliveryAPI";
 
 export default function DeliverySearch() {
   const [customerCode, setCustomerCode] = useState("");
+  const [debouncedCode, setDebouncedCode] = useState(customerCode);
 
- 
-  const { data, isLoading, isError } = useGetCustomerCodeSuggestionsQuery({
-    input: "W",
+  const {
+    data: customerSuggestions = [],
+    isLoading,
+    isError,
+  } = useGetCustomerCodeSuggestionsQuery({
+    input: debouncedCode,
     maxResults: 5,
   });
 
- 
-  const { data: searchData, isLoading: searchLoading, isError: searchError } =
-    useGetSearchDeliveryInvoicesQuery({
-      customerCode: customerCode || "CUS001", 
-    })
+  const {
+    data: searchedInvoice,
+    isLoading: searchLoading,
+    isError: searchError,
+  } = useGetSearchDeliveryInvoicesQuery({
+    customerCode: debouncedCode || "CUS",
+  });
 
-  console.log("Suggestions data:", data);
-  console.log("Invoice search data:", searchData);
+  // if (isError || searchError) {
+  //   return (
+  //     <div className="text-center text-red-500">
+  //       Failed to load store tracking details.
+  //     </div>
+  //   );
+  // }
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedCode(customerCode);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [customerCode]);
 
   if (isLoading || searchLoading) {
     return (
@@ -31,14 +54,6 @@ export default function DeliverySearch() {
         <Skeleton className="h-24 w-full" />
         <Skeleton className="h-24 w-full" />
         <Skeleton className="h-12 w-full" />
-      </div>
-    );
-  }
-
-  if (isError || searchError) {
-    return (
-      <div className="text-center text-red-500">
-        Failed to load store tracking details.
       </div>
     );
   }
@@ -55,30 +70,42 @@ export default function DeliverySearch() {
           className="w-full pl-9 pr-3 py-2 bg-gray-100"
         />
 
-       
         {customerCode && (
-  <ul className="absolute z-10 mt-1 border rounded-md bg-white shadow-lg w-full">
-    <li
-      className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
-      onClick={() => setCustomerCode("CUS001")}
-    >
-      CUS001
-    </li>
-    <li
-      className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
-      onClick={() => setCustomerCode("CUS002")}
-    >
-      CUS002
-    </li>
-    <li
-      className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
-      onClick={() => setCustomerCode("CUS003")}
-    >
-      CUS003
-    </li>
-  </ul>
-)}
+          <ul className="absolute z-10 mt-1 border rounded-md bg-white shadow-lg w-full">
+            {customerSuggestions.map((suggestion, index) => (
+              <li
+                className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
+                onClick={() => setCustomerCode(suggestion)}
+                key={index}
+              >
+                {suggestion}
+              </li>
+            ))}
+          </ul>
+        )}
 
+        {/* {customerSuggestions && (
+          <ul className="absolute z-10 mt-1 border rounded-md bg-white shadow-lg w-full">
+            <li
+              className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
+              onClick={() => setCustomerCode("CUS001")}
+            >
+              CUS001
+            </li>
+            <li
+              className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
+              onClick={() => setCustomerCode("CUS002")}
+            >
+              CUS002
+            </li>
+            <li
+              className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
+              onClick={() => setCustomerCode("CUS003")}
+            >
+              CUS003
+            </li>
+          </ul>
+        )} */}
       </div>
 
       <div className="flex items-center gap-2 w-1/2 pl-4">
