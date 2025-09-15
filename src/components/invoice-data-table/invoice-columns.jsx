@@ -139,10 +139,30 @@ const renderActions = (row, handlers = {}, view) => {
 // --- Column Factory ---
 export function getInvoiceColumns(view, avgDurationSeconds = 0) {
   const base = {
-    invoiceNo: { accessorKey: "invoiceNo", header: "Invoice No", cell: ({ row }) => renderText(row.original.invoiceNo) },
+    invoiceNo: { 
+      accessorKey: "invoiceNo", 
+      header: "Invoice No", 
+      cell: ({ row }) => renderText(row.original.invoiceNo) 
+    },
+    dispatchNo: { 
+      accessorKey: "dispatchNo", 
+      header: "DispNo", 
+      cell: ({ row }) => renderText(row.original.dispatchNo) 
+    },
     docType: { accessorKey: "docType", header: "Doc Type", cell: ({ row }) => renderText(row.original.docType) },
     account: { accessorKey: "account", header: "Account", cell: ({ row }) => renderText(row.original.account) },
-    customerName: { accessorKey: "customerName", header: "Customer Name", cell: ({ row }) => renderText(row.original.customerName) },
+    customerName: 
+    { 
+      accessorKey: "customerName", 
+      header: "Customer Name", 
+      cell: ({ row }) => renderText(row.original.customerName) 
+    },
+    customerCode: 
+    { 
+      accessorKey: "customerCode", 
+      header: "Customer Code", 
+      cell: ({ row }) => renderText(row.original.customerCode) 
+    },
     status: { accessorKey: "status", header: "Status", cell: ({ row }) => renderStatus(row.original.status) },
     items: { accessorKey: "items", header: "Items", cell: ({ row }) => renderText((row.original.items || 0).toString()) },
     docDateTime: { accessorKey: "docDateTime", header: "Doc Date & Time", cell: ({ row }) => renderDateTime(row.original.docDateTime) },
@@ -168,7 +188,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0) {
     admin: [base.docType, base.branchName, base.account, base.paymentTerms, base.printCopies, base.docDateTime, base.status],
     store: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, base.docDateTime, base.processedDateTime, base.durationSeconds, base.status, base.actions],
     verification: [base.invoiceNo, base.customerName, base.items, base.paymentTerms, base.processedDateTime, base.verificationDateTime, base.durationSeconds, base.status, base.actions],
-    dispatch: [base.invoiceNo, base.customerName, base.items, base.deliveryGuy, base.paymentTerms, base.dispatchDateTime, base.deliveryDateTime, base.status, base.durationSeconds, base.actions],
+    dispatch: [base.dispatchNo, base.invoiceNo, base.customerName, base.customerCode, base.items, base.paymentTerms, base.docDateTime, base.dispatchDateTime, base.status, base.durationSeconds],
     delivery: [base.account, base.items, base.address, base.paymentTerms, base.dispatchDateTime, base.deliveryDateTime, base.status, base.durationSeconds, base.actions],
     default: [base.docType, base.branchName, base.account, base.status],
   };
