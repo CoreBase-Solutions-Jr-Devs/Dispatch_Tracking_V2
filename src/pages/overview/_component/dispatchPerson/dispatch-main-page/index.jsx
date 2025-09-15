@@ -17,13 +17,14 @@ import { useGetDispatchInvoicesQuery } from "@/features/dispatch/dispatchAPI";
 export default function DispatchInvoice({ rowData, onSubmit }) {
     const [query, setQuery] = useState("");
     const { user } = useSelector((state) => state.auth);
-    const { invoices } = useSelector((state) => state.invoice);
+    // const { invoices } = useSelector((state) => state.invoice);
+    const { data, isLoading, isError } = useGetDispatchInvoicesQuery({ page: 1, pageSize: 50 });
+
+    let dispatchInvoices = data?.invoices || [];
 
     const view = roleToView(user?.userRole || "User");
     const columns = getInvoiceColumns(view);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-
+    
     const [selectValues, setSelectValues] = useState({
         DispatchPerson: "",
         DispatchRoute: "",
@@ -46,7 +47,6 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
         setSelectValues((prev) => ({ ...prev, [field]: value }));
     };
 
-    const { data, isLoading, isError } = useGetDispatchInvoicesQuery(page, pageSize);
 
     return (
         <div className="my-1 overflow-y-auto max-h-[90vh] px-2">
@@ -69,17 +69,17 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
             <div className="space-y-4">
                 <DataTable
                     // data={mockInvoices}
-                    data={invoices}
+                    data={dispatchInvoices}
                     columns={columns}
                     selection={true}
                     isLoading={false}
                     emptyTitle="No invoices found"
                     isShowPagination={true}
                     pagination={{
-                        pageNumber: 1,
-                        pageSize: 10,
-                        totalItems: invoices.length,
-                        totalPages: Math.ceil(invoices.length / 10),
+                        pageNumber: data?.page,
+                        pageSize: data?.pageSize,
+                        totalItems: data?.invoices?.items,
+                        totalPages: data?.totalCount,
                     }}
                 />
                 <DispatchSummary data={rowData} />
@@ -87,18 +87,15 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
 
             <Separator className="my-2" />
 
-            {/* Select + Details + Meta */}
-            <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 mb-1">
+            {/* Details + Select */}
+            <div className="flex flex-col w-full md:flex-row md:gap-x-8 gap-y-4 mb-4">
+                <DispatchDetails data={rowData} collectionType={selectValues.collectionType}/>
                 <DispatchSelect values={selectValues} onChange={handleSelectChange} />
-
-                <div className="flex flex-col gap-3">
-                    <DispatchDetails data={rowData} />
-                    <DispatchMeta />
-                </div>
             </div>
 
             {/* Remarks */}
             <DispatchRemarks />
+            <DispatchMeta />
 
             {/* Footer */}
             <DispatchFooter
