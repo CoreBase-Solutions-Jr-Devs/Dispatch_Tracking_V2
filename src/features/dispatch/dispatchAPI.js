@@ -40,4 +40,5 @@ export const {
     useDispatchSearchQuery,
     useSelectDispatchInvoiceMutation,
     useGetDeliveryDriverQuery,
+    usePushDispatchProcessMutation,
 } = dispatchApi;
