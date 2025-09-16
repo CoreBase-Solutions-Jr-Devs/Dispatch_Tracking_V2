@@ -28,8 +28,8 @@ const Overview = () => {
         return <StoreLabelValue />;
       case "VerificationPerson":
         return <VerificationLabelValue />;
-      // case "DispatchPerson":
-      //   return <DispatchLabelValue />;
+      case "DispatchPerson":
+       return <DispatchLabelValue />;
       // case "Driver":
       //   return <DeliveryLabelValue />;
       default:
@@ -43,6 +43,7 @@ const Overview = () => {
         return <DeliveryInvoice />;
       default:
         return <InvoicesDataTable />;
+        
     }
   }
 
