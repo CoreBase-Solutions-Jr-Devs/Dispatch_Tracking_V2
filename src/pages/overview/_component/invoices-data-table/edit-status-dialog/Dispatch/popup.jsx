@@ -7,6 +7,7 @@ import DispatchSummary from "./summary";
 import DispatchRemarks from "./remarks";
 import DispatchMeta from "./meta";
 import DispatchTable from "./table";
+import { useGetVerifiedOnDispatchQuery } from "@/features/dispatch/dispatchAPI";
 import DispatchFooter from "./footer";
 import DispatchSelect from "./select";
 import DispatchSearch from "./search";
@@ -27,13 +28,18 @@ export default function DispatchPopup({ rowData, onSubmit }) {
     );
   }
 
+
+  // Fetch verified dispatch data
+  const { data, isLoading } = useGetVerifiedOnDispatchQuery({ page: 1, pageSize: 20 });
+  const dispatchData = data?.items || [];
+
   // Filter rows based on search query
   const filteredData = useMemo(() => {
-    if (!query) return rowData;
-    return rowData.filter((row) =>
-      row.invNo.toLowerCase().includes(query.toLowerCase())
+    if (!query) return dispatchData;
+    return dispatchData.filter((row) =>
+      String(row.invoiceNo).toLowerCase().includes(query.toLowerCase())
     );
-  }, [query, rowData]);
+  }, [query, dispatchData]);
 
   const [selectValues, setSelectValues] = useState({
     deliveryPerson: "",
@@ -79,7 +85,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
         <Separator className="my-2" />
 
         <div className="space-y-4">
-          <DispatchTable data={filteredData} selected={selectedDocs} onToggle={handleToggleRow} />
+          <DispatchTable data={filteredData} isLoading={isLoading} selected={selectedDocs} onToggle={handleToggleRow} />
         </div>
 
         <Separator className="my-2" />
