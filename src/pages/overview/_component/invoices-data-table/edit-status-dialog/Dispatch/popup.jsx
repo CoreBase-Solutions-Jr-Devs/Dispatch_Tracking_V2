@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import DispatchHeader from "./header";
@@ -15,6 +15,25 @@ export default function DispatchPopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [query, setQuery] = useState("");
+
+  const [selectedDocs, setSelectedDocs] = useState([]);
+
+  // Handle row toggle
+  const handleToggleRow = (doc) => {
+    setSelectedDocs((prev) => 
+      prev.find((d) => d.invNo === doc.invNo)
+        ? prev.filter((d) => d.invNo !== doc.invNo)
+        : [...prev, doc]
+    );
+  }
+
+  // Filter rows based on search query
+  const filteredData = useMemo(() => {
+    if (!query) return rowData;
+    return rowData.filter((row) =>
+      row.invNo.toLowerCase().includes(query.toLowerCase())
+    );
+  }, [query, rowData]);
 
   const [selectValues, setSelectValues] = useState({
     deliveryPerson: "",
@@ -42,7 +61,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
   return (
     <>
-      <div className="my-1 overflow-y-auto max-h-[90vh] px-2">
+      <div className="my-1 overflow-y-auto max-h-[80vh] px-2">
         <DialogHeader>
           <DispatchHeader />
         </DialogHeader>
@@ -54,25 +73,18 @@ export default function DispatchPopup({ rowData, onSubmit }) {
           onChange={setQuery}
           data={rowData}
           placeholder="invoice No..."
+          selectedCount={selectedDocs.length}
         />
-        <Separator />
+
+        <Separator className="my-2" />
+
         <div className="space-y-4">
-          <DispatchTable data={rowData} />
-          <DispatchSummary data={rowData} />
+          <DispatchTable data={filteredData} selected={selectedDocs} onToggle={handleToggleRow} />
         </div>
 
         <Separator className="my-2" />
-        <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 mb-1">
-          <DispatchSelect values={selectValues} onChange={handleSelectChange} />
 
-          <div className="flex flex-col gap-3">
-            <DispatchDetails data={rowData} />
-            <DispatchMeta />
-          </div>
-        </div>
-
-        <DispatchRemarks />
-
+        
         <DialogFooter>
           <DispatchFooter
             rowData={rowData}
