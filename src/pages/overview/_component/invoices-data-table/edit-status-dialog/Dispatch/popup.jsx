@@ -14,10 +14,10 @@ import DispatchSearch from "./search";
 
 export default function DispatchPopup({ rowData, onSubmit }) {
   const [isOpen, setIsOpen] = useState(false);
-
   const [query, setQuery] = useState("");
-
   const [selectedDocs, setSelectedDocs] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   // Handle row toggle
   const handleToggleRow = (doc) => {
@@ -30,7 +30,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
 
   // Fetch verified dispatch data
-  const { data, isLoading } = useGetVerifiedOnDispatchQuery({ page: 1, pageSize: 20 });
+  const { data, isLoading } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
   const dispatchData = data?.items || [];
 
   // Filter rows based on search query
@@ -85,7 +85,20 @@ export default function DispatchPopup({ rowData, onSubmit }) {
         <Separator className="my-2" />
 
         <div className="space-y-4">
-          <DispatchTable data={filteredData} isLoading={isLoading} selected={selectedDocs} onToggle={handleToggleRow} />
+          <DispatchTable 
+            data={filteredData} 
+            isLoading={isLoading} 
+            selected={selectedDocs} 
+            onToggle={handleToggleRow} 
+            pagination={{
+              pageNumber: data?.pageNumber || pageNumber,
+              pageSize: data?.pageSize || pageSize,
+              totalItems: data?.totalCount || 0,
+              totalPages: data?.totalPages || 1,
+            }}
+            onPageChange={setPageNumber}
+            onPageSizeChange={setPageSize}
+/>
         </div>
 
         <Separator className="my-2" />
