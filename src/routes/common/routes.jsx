@@ -5,7 +5,8 @@ import Settings from "@/pages/settings";
 import Invoices from "@/pages/invoices";
 import Reports from "@/pages/reports";
 import { ROLES } from "@/constant";
-import { Home, Folder, FileStackIcon, Settings as SettingsIcon } from "lucide-react";
+import DispatchInvoice from "@/pages/overview/_component/dispatchPerson/dispatch-invoice-table/main-page";
+import { Home, Folder, FileStackIcon, Settings as SettingsIcon, Plus } from "lucide-react";
 
 export const authenticationRoutePaths = [
   { path: AUTH_ROUTES.SIGN_IN, element: <SignIn /> },
@@ -40,4 +41,12 @@ export const protectedRoutePaths = [
     menuLabel: "Settings",
     icon: SettingsIcon,
   },
+{
+  path: PROTECTED_ROUTES.NEWDISPATCH,
+  element: <DispatchInvoice />,
+  roles: [ROLES.DISPATCH_PERSON],
+  menuLabel: "New Dispatch",
+  icon: Plus,
+},
+
 ];
