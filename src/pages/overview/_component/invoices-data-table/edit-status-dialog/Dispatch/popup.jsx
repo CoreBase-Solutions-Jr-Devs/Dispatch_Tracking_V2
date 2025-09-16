@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
-// import { Separator } from "@/components/ui/separator";
-// import DispatchHeader from "./header";
-// import DispatchDetails from "./details";
-// import DispatchSummary from "./summary";
-// import DispatchRemarks from "./remarks";
-// import DispatchMeta from "./meta";
-// import DispatchTable from "./table";
-// import DispatchFooter from "./footer";
-// import DispatchSelect from "./select";
-// import DispatchSearch from "./search";
+import { Separator } from "@/components/ui/separator";
+import DispatchHeader from "./header";
+import DispatchDetails from "./details";
+import DispatchSummary from "./summary";
+import DispatchRemarks from "./remarks";
+import DispatchMeta from "./meta";
+import DispatchTable from "./table";
+import DispatchFooter from "./footer";
+import DispatchSelect from "./select";
+import DispatchSearch from "./search";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetDeliveryTrackingDetailsQuery } from "@/features/delivery/deliveryAPI";
 
@@ -115,7 +115,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
             onClose={handleDialogClose}
           />
         </DialogFooter>
-      </div> */}
+      </div> 
     </>
   );
 }
