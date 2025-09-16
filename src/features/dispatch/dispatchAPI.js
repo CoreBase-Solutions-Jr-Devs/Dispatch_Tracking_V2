@@ -34,11 +34,18 @@ export const dispatchApi = apiClient.injectEndpoints({
             invalidatesTags: ['dispatch_invoices', 'dispatch_driver'],
         }),
         getDispatchInvoices: builder.query({
-            query: ({ page = 1, pageSize = 50 }) => ({
+            query: ({ page = 1, pageSize = 20 }) => ({
                 url: `/dispatch/invoices?page=${page}&pageSize=${pageSize}`,
                 method: 'GET',
             }),
             providesTags: ['dispatch_invoices'],
+        }),
+        getVerifiedOnDispatch: builder.query({
+            query: ({ pageNumber = 1, pageSize = 20 }) => ({
+                url: `/dispatch/verified?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+                method: 'GET',
+            }),
+            providesTags: ['verified_invoices'],
         }),
     }),
 })
@@ -49,4 +56,5 @@ export const {
     useGetDeliveryDriverQuery,
     usePushDispatchProcessMutation,
     useGetDispatchInvoicesQuery,
+    useGetVerifiedOnDispatchQuery,
 } = dispatchApi;
