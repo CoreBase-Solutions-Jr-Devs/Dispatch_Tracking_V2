@@ -50,7 +50,7 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-export default function DispatchTable({ data = [], isLoading = false }) {
+export default function DispatchTable({ data = [], isLoading = false, pagination, onPageChange, onPageSizeChange, selected, onToggle }) {
   const columns = useMemo(() => {
     return [
       {
@@ -104,31 +104,31 @@ export default function DispatchTable({ data = [], isLoading = false }) {
         },
       },
       {
-        accessorKey: "durationSeconds",
+        accessorKey: "durationMinutes",
         header: "Duration",
         cell: ({ row }) => {
-          switch ("durationSeconds") {
-            case "durationSeconds": return renderText(formatDuration(row.original.durationSeconds));
+          switch ("durationMinutes") {
+            case "durationMinutes": return renderText(formatDuration(row.original.durationMinutes));
             default: return renderText("—");
           }
         },
       },
+      // {
+      //   accessorKey: "amount",
+      //   header: "Amount",
+      //   cell: ({ row }) => {
+      //     switch ("amount") {
+      //       case "amount": return renderText(`KES ${row.original.amount?.toLocaleString()}`);
+      //       default: return renderText("—");
+      //     }
+      //   },
+      // },
       {
-        accessorKey: "amount",
-        header: "Amount",
-        cell: ({ row }) => {
-          switch ("amount") {
-            case "amount": return renderText(`KES ${row.original.amount?.toLocaleString()}`);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "status",
+        accessorKey: "dispatchStatus",
         header: "Status",
         cell: ({ row }) => {
           switch ("status") {
-            case "status": return renderStatus(row.original.status);
+            case "status": return renderStatus(row.original.dispatchStatus);
             default: return renderText("—");
           }
         },
@@ -150,10 +150,13 @@ export default function DispatchTable({ data = [], isLoading = false }) {
         isLoading={isLoading}
         emptyTitle="No dispatch records found"
         isShowPagination={true}
+        pagination={pagination}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Records: {totalCount}</span>
+        <span>Total Count: {totalCount}</span>
         <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
     </div>
