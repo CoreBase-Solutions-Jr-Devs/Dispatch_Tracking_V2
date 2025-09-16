@@ -47,7 +47,7 @@ export function DataTablePagination({
             <SelectTrigger className="h-8 w-[70px]">
               <SelectValue placeholder={`${pageSize}`} />
             </SelectTrigger>
-            <SelectContent side="top">
+            <SelectContent side="top" className="bg-gray-200">
               {[10, 20, 30, 40, 50].map((size) => (
                 <SelectItem key={size} value={`${size}`}>
                   {size}
