@@ -7,7 +7,7 @@ export const PROTECTED_ROUTES = {
   REPORTS: "/reports",
   INVOICES: "/invoices",
   SETTINGS: "/settings",
-  NEWDISPATCH: "/newdispatch",
+  NEWDISPATCH: "/new-dispatch"
 };
 
 export const isAuthRoute = (pathname) => {

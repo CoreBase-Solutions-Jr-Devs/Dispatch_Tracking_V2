@@ -27,7 +27,7 @@ export default function VerificationRemarks({
         <Label className="text-xs font-medium">Verification Remarks:</Label>
       </div>
       <Textarea
-        className="min-w-[80px] bg-gray-300 h-20"
+        className="min-w-[80px] bg-gray-300 h-20 text-xs font-medium "
         value={remarks}
         onChange={handleChange}
         readOnly={data?.workflowStatus === "Verified"}

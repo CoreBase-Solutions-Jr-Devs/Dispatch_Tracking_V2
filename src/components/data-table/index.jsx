@@ -156,7 +156,7 @@ export function DataTable({
               table.getRowModel().rows.length === 0 ? "h-[200px]" : ""
             )}
           >
-            <TableHeader className="sticky top-0 bg-muted z-10 ">
+            <TableHeader className="sticky top-0  z-10 ">
               {table.getHeaderGroups().map((group) => (
                 <TableRow key={group.id}>
                   {group.headers.map((header) => (

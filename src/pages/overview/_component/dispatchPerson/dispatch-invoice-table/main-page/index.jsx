@@ -18,7 +18,7 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     const [query, setQuery] = useState("");
     const { user } = useSelector((state) => state.auth);
     // const { invoices } = useSelector((state) => state.invoice);
-    const { data, isLoading, isError } = useGetDispatchInvoicesQuery({ page: 1, pageSize: 20 });
+    const { data, isLoading, isError } = useGetDispatchInvoicesQuery({ page: 1, pageSize: 50 });
 
     let dispatchInvoices = data?.invoices || [];
 
@@ -68,6 +68,7 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
             {/* Table + Summary */}
             <div className="space-y-4">
                 <DataTable
+                    // data={mockInvoices}
                     data={dispatchInvoices}
                     columns={columns}
                     selection={true}

@@ -2,32 +2,33 @@ import { Label } from "@/components/ui/label";
 
 export default function DeliveryDetails({ data }) {
   return (
-    <div className="flex flex-col gap-5 text-xs font-medium">
-      <section className="flex items-center gap-2">
-        <Label className="text-xs font-medium">Dispatch Date & Time:</Label>
-        <Label className="text-xs font-medium ">08/20/2025 12:31</Label>
-      </section>
+    <div className="flex flex-row gap-8 text-xs font-medium">
+      <div className="flex items-center gap-3">
+        <Label className="text-xs font-medium">Collector's Name:</Label>
+        <input
+          type="text"
+          defaultValue="John"
+          className="border border-gray-300 rounded-md p-1 text-xs"
+        />
+      </div>
 
-      <section className="flex justify-between">
-        <div className="flex items-center gap-2 w-1/2">
-          <Label className="text-xs font-medium">DP ID:</Label>
-          <Label className="text-xs font-medium ">31456780</Label>
-        </div>
-        <div className="flex items-center gap-2 w-1/2">
-          <Label className="text-xs font-medium">DP DL:</Label>
-          <Label className="text-xs font-medium ">31456780</Label>
-        </div>
-      </section>
+      <div className="flex items-center gap-3">
+        <Label className="text-xs font-medium">Collector's ID:</Label>
+        <input
+          type="text"
+          defaultValue="31456780"
+          className="border border-gray-300 rounded-md p-1 text-xs"
+        />
+      </div>
 
-      <section className="flex items-center gap-2">
-        <Label className="text-xs font-medium">MAKE:</Label>
-        <Label className="text-xs font-medium ">TVS</Label>
-      </section>
-
-      <section className="flex items-center gap-2">
-        <Label className="text-xs font-medium">Dispatch Ref:</Label>
-        <Label className="text-xs font-medium ">DPT000000001</Label>
-      </section>
+      <div className="flex items-center gap-3">
+        <Label className="text-xs font-medium">Phone No:</Label>
+        <input
+          type="text"
+          defaultValue="0712345678"
+          className="border border-gray-300 rounded-md p-1 text-xs"
+        />
+      </div>
     </div>
   );
 }
