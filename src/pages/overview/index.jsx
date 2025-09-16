@@ -5,19 +5,31 @@ import {
   StoreLabelValue,
   // AdminLabelValue,
   VerificationLabelValue,
-  // DispatchLabelValue,
+  DispatchLabelValue,
   // DeliveryLabelValue,
 } from "./_component/label-values";
 import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
 import { roleToView, viewMeta } from "@/lib/utils";
 import FilterSheet from "./_component/filter-sheet/filterSheet";
 import DeliveryInvoice from "./_component/driver/_component/delivery-main-page/index.";
+import DispatchInvoice from "./_component/dispatchPerson/dispatch-invoice-table/main-page";
 
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
 
   const view = roleToView(user?.userRole);
   const pageMeta = viewMeta[view];
+
+  const renderFilterSheet = () => {
+    switch (user?.userRole) {
+      case "StorePerson":
+      case "VerificationPerson":
+      case "DispatchPerson":
+        return <FilterSheet />;
+      default:
+        return null;
+    }
+  }
 
   const renderLabelValues = () => {
     switch (user?.userRole) {
@@ -29,7 +41,7 @@ const Overview = () => {
       case "VerificationPerson":
         return <VerificationLabelValue />;
       case "DispatchPerson":
-       return <DispatchLabelValue />;
+        return <DispatchLabelValue />;
       // case "Driver":
       //   return <DeliveryLabelValue />;
       default:
@@ -41,6 +53,8 @@ const Overview = () => {
     switch (user?.userRole) {
       case "Driver":
         return <DeliveryInvoice />;
+      case "DispatchPerson":
+        return <DispatchInvoice />
       default:
         return <InvoicesDataTable />;
         
@@ -58,7 +72,7 @@ const Overview = () => {
       }
       rightAction={
         <div className="flex items-center gap-2 text-sm">
-          <FilterSheet />
+          {renderFilterSheet()}
         </div>
       }
       noPadding

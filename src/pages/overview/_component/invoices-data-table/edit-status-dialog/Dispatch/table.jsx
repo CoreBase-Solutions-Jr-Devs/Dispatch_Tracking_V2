@@ -1,51 +1,161 @@
-import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
+import React, { useMemo } from "react";
+import { DataTable } from "@/components/data-table";
+import { Badge } from "@/components/ui/badge";
 
-export default function DispatchTable({ data }) {
-    const formatDateTime = (date) => {
-    if (!date) return "—";
-    try {
-      return new Date(date).toLocaleString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    } catch {
-      return "—";
-    }
-  };
-  
-  if (!data) return null;
+// Helpers
+const renderText = (text) => (
+  <span className="text-foreground font-medium">{text || "—"}</span>
+);
+
+const renderStatus = (status) => {
+  let statusClass = "bg-muted text-muted-foreground border-border";
+  switch (status) {
+    case "Pending": statusClass = "status-store border-status-store/20"; break;
+    case "Verified": statusClass = "status-verification border-status-verification/20"; break;
+    case "In Dispatch": statusClass = "status-dispatch border-status-dispatch/20"; break;
+    case "Delivered": statusClass = "status-delivered border-status-delivered/20"; break;
+  }
   return (
-    <div className="overflow-x-auto">
-      <Table>
-        <TableBody>
-          <TableRow className="bg-gray-100 text-xs font-medium">
-            <TableCell className="py-1 px-2">Doc No</TableCell>
-            <TableCell className="py-1 px-2">Account</TableCell>
-            <TableCell className="py-1 px-2">Doc Date & Time</TableCell>
-            <TableCell className="py-1 px-2">Items</TableCell>
-            <TableCell className="py-1 px-2">Amount</TableCell>
-          </TableRow>
+    <Badge
+      variant="outline"
+      className={`${statusClass} w-28 justify-center rounded-md text-xs px-3 py-1 font-medium border`}
+    >
+      {status}
+    </Badge>
+  );
+};
 
-          <TableRow className="text-xs font-medium">
-            <TableCell className="py-1 px-2">value={data.invoiceNo}</TableCell>
-            <TableCell className="py-1 px-2">value={data.customerName}</TableCell>
-            <TableCell className="py-1 px-2">  value={formatDateTime(data.invoiceDateTime)}</TableCell>
-            <TableCell className="py-1 px-2">value={data.items}</TableCell>
-            <TableCell className="py-1 px-2">value={data.customerName}</TableCell>
-          </TableRow>
+const formatUKDateTime = (date) => {
+  if (!date) return "—";
+  const d = new Date(date);
+  if (isNaN(d)) return "—";
+  return `${String(d.getDate()).padStart(2, "0")}/${String(
+    d.getMonth() + 1
+  ).padStart(2, "0")}/${d.getFullYear()} ${String(d.getHours()).padStart(
+    2,
+    "0"
+  )}:${String(d.getMinutes()).padStart(2, "0")}`;
+};
 
-          <TableRow className="text-xs font-medium">
-            <TableCell className="py-1 px-2">value={data.customerName}</TableCell>
-            <TableCell className="py-1 px-2">value={data.customerName}</TableCell>
-            <TableCell className="py-1 px-2">value={data.customerName}</TableCell>
-            <TableCell className="py-1 px-2">value={data.customerName}</TableCell>
-            <TableCell className="py-1 px-2">value={data.customerName}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+const renderDateTime = (val) => (
+  <span className="font-mono text-sm">
+    {formatUKDateTime(val)}
+  </span>
+);
+
+const formatDuration = (seconds) => {
+  if (!seconds) return "—";
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  return `${h ? h + "h " : ""}${m}m`;
+};
+
+export default function DispatchTable({ data = [], isLoading = false }) {
+  const columns = useMemo(() => {
+    return [
+      {
+        accessorKey: "dispatchId",
+        header: "Dispatch Id",
+        cell: ({ row }) => {
+          switch ("dispatchId") {
+            case "dispatchId": return renderText(row.original.dispatchId);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "customerName",
+        header: "Customer Name",
+        cell: ({ row }) => {
+          switch ("customerName") {
+            case "customerName": return renderText(row.original.customerName);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "items",
+        header: "Items",
+        cell: ({ row }) => {
+          switch ("items") {
+            case "items": return renderText(row.original.items);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "paymentTerms",
+        header: "PayTerms",
+        cell: ({ row }) => {
+          switch ("paymentTerms") {
+            case "paymentTerms": return renderText(row.original.paymentTerms);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "verifiedDateTime",
+        header: "Verified Date & Time",
+        cell: ({ row }) => {
+          switch ("verifiedDateTime") {
+            case "verifiedDateTime": return renderDateTime(row.original.verifiedDateTime);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "durationSeconds",
+        header: "Duration",
+        cell: ({ row }) => {
+          switch ("durationSeconds") {
+            case "durationSeconds": return renderText(formatDuration(row.original.durationSeconds));
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "amount",
+        header: "Amount",
+        cell: ({ row }) => {
+          switch ("amount") {
+            case "amount": return renderText(`KES ${row.original.amount?.toLocaleString()}`);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => {
+          switch ("status") {
+            case "status": return renderStatus(row.original.status);
+            default: return renderText("—");
+          }
+        },
+      },
+    ];
+  }, []);
+
+  // Calculate Totals
+
+  const totalCount = data.length;
+  const totalValue = data.reduce((acc, cur) => acc + (cur.amount || 0), 0);
+
+  return (
+    <div className="space-y-4">
+      <DataTable
+        data={data}
+        columns={columns}
+        selection={true}
+        isLoading={isLoading}
+        emptyTitle="No dispatch records found"
+        isShowPagination={true}
+      />
+
+      <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
+        <span>Total Records: {totalCount}</span>
+        <span>Total Value: KES {totalValue.toLocaleString()}</span>
+      </div>
     </div>
   );
 }

@@ -113,14 +113,24 @@ export const invoicesApi = apiClient.injectEndpoints({
       invalidatesTags: ["invoices"],
     }),
 
-    // COLLECTION TRACKING
-    getCollectionTrackingDetails: builder.query({
-      query: ({ docNum } = {}) => ({
-        url: `/invoices/${docNum}/collection-tracking`,
-        method: "GET",
-      }),
-      providesTags: ["collection_details"],
-    }),
+		// DISPATCH TRACKING 
+		filterDispatchInvoices: builder.mutation({
+            query: (formData) => ({
+                url: '/invoices/dispatch-filter',
+                method: 'POST',
+                body: formData,
+            }),
+            invalidatesTags: ['dispatch_invoices'],
+        }),
+
+		// COLLECTION TRACKING
+		getCollectionTrackingDetails: builder.query({
+			query: ({ docNum } = {}) => ({
+				url: `/invoices/${docNum}/collection-tracking`,
+				method: 'GET',
+			}),
+			providesTags: ['collection_details'],
+		}),
 
     collectionStart: builder.mutation({
       query: (docNum) => ({
@@ -205,29 +215,29 @@ export const invoicesApi = apiClient.injectEndpoints({
 });
 
 export const {
-  useFilterInvoicesMutation,
-  useGetAllInvoicesQuery,
-  useFilterOptionsQuery,
-  // STORE TRACKING
-  useFilterStoreInvoicesMutation,
-  useGetStoreTrackingDetailsQuery,
-  useStoreStartMutation,
-  useStorePushMutation,
-  // VERIFICATION TRACKING
-  useFilterVerificationInvoicesMutation,
-  useGetVerificationTrackingDetailsQuery,
-  useVerificationStartMutation,
-  useVerificationPushMutation,
-  // COLLECTION TRACKING
-  useGetCollectionTrackingDetailsQuery,
-  useCollectionStartMutation,
-  useCollectionRecallMutation,
-  useCollectionPushMutation,
-  // DELIVERY TRACKING
-  // useFilterDeliveryInvoicesMutation,
-  //  useGetCustomerCodeSuggestionsQuery,
-  // useViewInvoicePDFQuery,
-  // useGetDeliveryTrackingDetailsQuery,
-  // useDeliveryCompleteMutation,
-  // useDeliveryStartMutation,
+	useFilterInvoicesMutation,
+	useGetAllInvoicesQuery,
+	useFilterOptionsQuery,
+	// STORE TRACKING
+	useFilterStoreInvoicesMutation,
+	useGetStoreTrackingDetailsQuery,
+	useStoreStartMutation,
+	useStorePushMutation,
+	// VERIFICATION TRACKING
+	useFilterVerificationInvoicesMutation,
+	useGetVerificationTrackingDetailsQuery,
+	useVerificationStartMutation,
+	useVerificationPushMutation,
+	// DISPATCH TRACKING
+	useFilterDispatchInvoicesMutation,
+	// COLLECTION TRACKING
+	useGetCollectionTrackingDetailsQuery,
+	useCollectionStartMutation,
+	useCollectionRecallMutation,
+	useCollectionPushMutation,
+	// DELIVERY TRACKING
+	useViewInvoicePDFQuery,
+	useGetDeliveryTrackingDetailsQuery,
+	useDeliveryCompleteMutation,
+	useDeliveryStartMutation,
 } = invoicesApi;

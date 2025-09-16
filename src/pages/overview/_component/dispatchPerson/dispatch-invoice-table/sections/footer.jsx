@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
-  const [cancelDisabled, setCancelDisabled] = useState(true);
+  const [recallDisabled, setRecallDisabled] = useState(true);
 
   const handleStart = () => {
     setStartDisabled(true);
@@ -12,28 +12,43 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
     if (onClose) onClose();
   };
 
-  const handleCancel =() => {
+  const handleRecall =() => {
     setStartDisabled(true);
-    setCancelDisabled(false);
+    setRecallDisabled(false);
   }
+
+  const handleDelivery = () => {
+    setStartDisabled(true);
+    setDeliveryDisabled(true);
+    if (onSubmit) onSubmit(rowData);
+    if (onClose) onClose();
+  };
 
   return (
     <div className="flex flex-row justify-end w-full">
       <Button
-        variant="apply"
+        variant="verification"
         onClick={handleStart}
         disabled={startDisabled}
+        className="mt-1 mr-2 uppercase text-xs font-medium"
+      >
+        Start
+      </Button>
+      <Button
+        variant="apply"
+        onClick={handleRecall}
+        disabled={recallDisabled}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
         Save
       </Button>
       <Button
-        variant="destructive"
-        onClick={handleCancel}
-        disabled={cancelDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
+        variant="apply"
+        onClick={handleDelivery}
+        disabled={deliveryDisabled}
+        className="mt-1 uppercase text-xs font-medium "
       >
-        Cancel
+        Send to Dispatch
       </Button>
     </div>
   );

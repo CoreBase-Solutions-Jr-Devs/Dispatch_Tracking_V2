@@ -1,7 +1,7 @@
 import {
 	useFilterStoreInvoicesMutation,
 	useFilterVerificationInvoicesMutation,
-	//  useFilterDispatchInvoicesMutation,
+	useFilterDispatchInvoicesMutation,
 	// useFilterDeliveryInvoicesMutation,
 } from '@/features/invoices/invoicesAPI';
 
@@ -11,10 +11,8 @@ export function useRoleInvoiceFilter(role) {
 			return useFilterStoreInvoicesMutation();
 		case 'verification':
 			return useFilterVerificationInvoicesMutation();
-		case 'delivery':
-			return useFilterVerificationInvoicesMutation();
 		case 'dispatch':
-			return useFilterStoreInvoicesMutation();
+			return useFilterDispatchInvoicesMutation();
 		// case 'delivery':
 		// 	return useFilterDeliveryInvoicesMutation();
 		default:

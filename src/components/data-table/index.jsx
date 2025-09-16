@@ -162,7 +162,7 @@ export function DataTable({
                   {group.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="!font-medium !text-[13px] "
+                      className="!font-medium !text-[10px] bg-gray-200"
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -182,7 +182,7 @@ export function DataTable({
                     onClick={() => row.toggleSelected()}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="!text-[13.3px] ">
+                      <TableCell key={cell.id} className="!text-[10px]">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
