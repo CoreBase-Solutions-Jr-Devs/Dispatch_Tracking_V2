@@ -13,7 +13,7 @@ import { roleToView, viewMeta } from "@/lib/utils";
 import FilterSheet from "./_component/filter-sheet/filterSheet";
 import DeliveryInvoice from "./_component/driver/_component/delivery-main-page/index.";
 import DispatchInvoice from "./_component/dispatchPerson/dispatch-invoice-table/main-page";
-
+import DispatchMain from "./_component/dispatchPerson/dispatch-main-page";
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
 
@@ -54,7 +54,7 @@ const Overview = () => {
       case "Driver":
         return <DeliveryInvoice />;
       case "DispatchPerson":
-        return <DispatchInvoice />
+        return <DispatchMain/>
       default:
         return <InvoicesDataTable />;
         
