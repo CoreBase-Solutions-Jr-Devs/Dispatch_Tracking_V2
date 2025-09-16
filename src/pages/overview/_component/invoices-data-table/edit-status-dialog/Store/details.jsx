@@ -21,7 +21,7 @@ export default function StoreDetails({ data }) {
   const Row = ({ label, value }) => (
     <div className="flex gap-2 min-w-0">
       <Label className="text-xs font-medium min-w-[130px]">{label}</Label>
-      <Label className="text-xs font-medium text-muted truncate">
+      <Label className="text-xs font-medium  truncate">
         {value || "—"}
       </Label>
     </div>

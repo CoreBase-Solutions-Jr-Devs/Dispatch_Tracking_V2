@@ -19,30 +19,27 @@ export default function DeliveryFooter({ rowData, onSubmit, onClose }) {
   };
 
   return (
-    <div className="flex flex-row justify-between w-full">
+    <div className="flex flex-row justify-between max-w-3xl gap-16">
       <Button
-        variant="verification"
+        variant="default"
         onClick={handleStart}
-        disabled={startDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
+        className="mt-1 uppercase text-xs font-medium"
       >
         Print
       </Button>
       <Button
-        variant="destructive"
+        variant="dispatch"
         onClick={handleStart}
-        disabled={startDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
+        className="mt-1  uppercase text-xs font-medium"
       >
-        Remove
+        Delivery Note
       </Button>
       <Button
         variant="apply"
         onClick={handleDelivery}
-        disabled={deliveryDisabled}
-        className="mt-1 uppercase text-xs font-medium "
+        className="mt-1  uppercase text-xs font-medium"
       >
-        Dispatch
+        Complete
       </Button>
     </div>
   );
