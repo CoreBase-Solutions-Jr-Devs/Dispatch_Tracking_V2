@@ -80,18 +80,10 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
         <div className="space-y-4">
           <DispatchTable data={filteredData} selected={selectedDocs} onToggle={handleToggleRow} />
-          <DispatchSummary data={selectedDocs} />
         </div>
 
         <Separator className="my-2" />
 
-        <div className="flex flex-col w-full md:flex-row md:gap-x-8 gap-y-4 mb-4">
-          <DispatchDetails data={rowData} collectionType={selectValues.collectionType}/>
-          <DispatchSelect values={selectValues} onChange={handleSelectChange} />
-        </div>
-
-        <DispatchRemarks />
-        <DispatchMeta />
         
         <DialogFooter>
           <DispatchFooter
