@@ -92,6 +92,7 @@ export function DataTable({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    enableMultiRowSelection: true,
   });
 
   const handleSearch = (value) => {
