@@ -26,9 +26,9 @@ export default function DispatchMain() {
 
   return (
     <div className="p-1">
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <InvoiceToolbar role={view} />
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-3 gap-2 items-center">
         <DispatchSearch />
