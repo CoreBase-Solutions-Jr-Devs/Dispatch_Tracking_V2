@@ -81,13 +81,13 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
         cell: ({ row }) => (
           <input
             type="checkbox"
-            aria-label={`Select row ${row.original.dispatchId}`}
-            checked={selected?.some(d => d.dispatchId === row.original.dispatchId)}
+            aria-label={`Select row ${row.original.invoiceNo}`}
+            checked={selected?.some(d => d._id === row.original._id)}
             onChange={e => {
               if (e.target.checked) {
-                onToggle([...selected, row.original]);
+                onToggle([...selected.filter(d => d._id !== row.original._id), row.original]);
               } else {
-                onToggle(selected.filter(d => d.dispatchId !== row.original.dispatchId));
+                onToggle(selected.filter(d => d._id !== row.original._id));
               }
             }}
           />
