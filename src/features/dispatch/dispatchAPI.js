@@ -4,14 +4,18 @@ import { apiClient } from "@/app/api-client";
 export const dispatchApi = apiClient.injectEndpoints({
     endpoints: (builder) => ({
         dispatchSearch: builder.query({
-            query: ({ invoiceNo, cusCode }) => {
-                let params = [];
-                if (invoiceNo) params.push(`invoiceNo=${invoiceNo}`);
-                if (cusCode) params.push(`cusCode=${cusCode}`);
-                const paramString = params.length ? `?${params.join('&')}` : '';
+            query: (query) => {
+                let params = {invoiceNo:0,cusCode:""};
+                if(isNaN(Number(query))){
+                    params.cusCode = query
+                }else{
+                    params.invoiceNo = Number(query)
+                }
+               // const paramString = params.length ? `?${params.join('&')}` : '';
                 return {
-                    url: `/dispatch/dispatch-search${paramString}`,
+                    url: `/dispatch/dispatch-search`,
                     method: 'GET',
+                    params
                 };
             },
             providesTags: ['dispatch_invoices'],
