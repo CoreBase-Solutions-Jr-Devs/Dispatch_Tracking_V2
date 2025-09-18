@@ -12,8 +12,8 @@ export default function DispatchSearch({
   placeholder = "Invoice No",
   selectedCount = 0,
 }) {
-  const [searchaValue,setSearchValue] = useState("");
-  const [debounceValue,setDebounceValue] = useState(searchaValue);
+  const [searchValue,setSearchValue] = useState("");
+  const [debounceValue,setDebounceValue] = useState(searchValue);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [startDisabled, setStartDisabled] = useState(false);
   const params = {
@@ -26,15 +26,15 @@ export default function DispatchSearch({
     setDeliveryDisabled(false);
     if (onClose) onClose();
   };
-  const { data, isLoading, isError } = useDispatchSearchQuery(searchaValue);
+  const { data, isLoading, isError } = useDispatchSearchQuery(searchValue);
 
   useEffect(() => {
    const handler = setTimeout(()=>
-    setDebounceValue(searchaValue)
+    setDebounceValue(searchValue)
     , 1000)
 
    return () => {clearTimeout(handler)}
-  }, [searchaValue])
+  }, [searchValue])
   
 
   return (
@@ -43,7 +43,7 @@ export default function DispatchSearch({
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
         <Input
           type="text"
-          value={searchaValue}
+          value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder={placeholder}
           className="w-40 pl-9 pr-3 py-2 bg-gray-100"
