@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
-  const [cancelDisabled, setCancelDisabled] = useState(true);
+  const [cancelDisabled, setCancelDisabled] = useState(false);
 
   const handleStart = () => {
     setStartDisabled(true);
@@ -15,6 +15,7 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const handleCancel =() => {
     setStartDisabled(true);
     setCancelDisabled(false);
+    if (onClose) onClose();
   }
 
   return (

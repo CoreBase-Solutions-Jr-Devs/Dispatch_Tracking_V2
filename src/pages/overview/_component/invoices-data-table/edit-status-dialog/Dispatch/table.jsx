@@ -50,12 +50,34 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-export default function DispatchTable({ data = [], isLoading = false }) {
+export default function DispatchTable({ data = [], isLoading = false, pagination, onPageChange, onPageSizeChange, selected, onToggle }) {
   const columns = useMemo(() => {
     return [
       {
+        id: "select",
+        // header: ({ table }) => (
+        //   <input
+        //     type="checkbox"
+        //     aria-label="Select all"
+        //     checked={table.getIsAllRowsSelected()}
+        //     indeterminate={table.getIsSomeRowsSelected() ? "true" : undefined}
+        //     onChange={table.getToggleAllRowsSelectedHandler()}
+        //   />
+        // ),
+        cell: ({ row }) => (
+          <input
+            type="checkbox"
+            aria-label={`Select row ${row.original.invoiceNo}`}
+            checked={row.getIsSelected()}
+            disabled={!row.getCanSelect()}
+            onChange={row.getToggleSelectedHandler()}
+          />
+        ),
+        size: 40,
+      },
+      {
         accessorKey: "dispatchId",
-        header: "Dispatch Id",
+        header: "Disp. Id",
         cell: ({ row }) => {
           switch ("dispatchId") {
             case "dispatchId": return renderText(row.original.dispatchId);
@@ -64,8 +86,28 @@ export default function DispatchTable({ data = [], isLoading = false }) {
         },
       },
       {
+        accessorKey: "invoiceNo",
+        header: "Inv. No",
+        cell: ({ row }) => {
+          switch ("invoiceNo") {
+            case "invoiceNo": return renderText(row.original.invoiceNo);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "customerCode",
+        header: "CusCode",
+        cell: ({ row }) => {
+          switch ("customerCode") {
+            case "customerCode": return renderText(row.original.customerCode);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
         accessorKey: "customerName",
-        header: "Customer Name",
+        header: "CusName",
         cell: ({ row }) => {
           switch ("customerName") {
             case "customerName": return renderText(row.original.customerName);
@@ -95,7 +137,7 @@ export default function DispatchTable({ data = [], isLoading = false }) {
       },
       {
         accessorKey: "verifiedDateTime",
-        header: "Verified Date & Time",
+        header: "Ver. DateTime",
         cell: ({ row }) => {
           switch ("verifiedDateTime") {
             case "verifiedDateTime": return renderDateTime(row.original.verifiedDateTime);
@@ -104,31 +146,31 @@ export default function DispatchTable({ data = [], isLoading = false }) {
         },
       },
       {
-        accessorKey: "durationSeconds",
+        accessorKey: "durationMinutes",
         header: "Duration",
         cell: ({ row }) => {
-          switch ("durationSeconds") {
-            case "durationSeconds": return renderText(formatDuration(row.original.durationSeconds));
+          switch ("durationMinutes") {
+            case "durationMinutes": return renderText(formatDuration(row.original.durationMinutes));
             default: return renderText("—");
           }
         },
       },
+      // {
+      //   accessorKey: "amount",
+      //   header: "Amount",
+      //   cell: ({ row }) => {
+      //     switch ("amount") {
+      //       case "amount": return renderText(`KES ${row.original.amount?.toLocaleString()}`);
+      //       default: return renderText("—");
+      //     }
+      //   },
+      // },
       {
-        accessorKey: "amount",
-        header: "Amount",
-        cell: ({ row }) => {
-          switch ("amount") {
-            case "amount": return renderText(`KES ${row.original.amount?.toLocaleString()}`);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "status",
+        accessorKey: "dispatchStatus",
         header: "Status",
         cell: ({ row }) => {
           switch ("status") {
-            case "status": return renderStatus(row.original.status);
+            case "status": return renderStatus(row.original.dispatchStatus);
             default: return renderText("—");
           }
         },
@@ -150,10 +192,13 @@ export default function DispatchTable({ data = [], isLoading = false }) {
         isLoading={isLoading}
         emptyTitle="No dispatch records found"
         isShowPagination={true}
+        pagination={pagination}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Records: {totalCount}</span>
+        <span>Total Count: {totalCount}</span>
         <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
     </div>

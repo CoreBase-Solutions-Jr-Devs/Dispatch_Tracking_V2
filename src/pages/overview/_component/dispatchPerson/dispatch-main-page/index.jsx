@@ -3,10 +3,10 @@ import { useSelector } from "react-redux";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
 import { roleToView } from "@/lib/utils";
 import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
-import DispatchSearch from "../Dispatch-Sections/search";
-import DispatchButton from "../Dispatch-Sections/button";
-import DispatchFilter from "../Dispatch-Sections/filter";
-import DispatchGrid from "../Dispatch-Sections/grid";
+import DispatchSearch from "../dispatch-sections/search";
+import DispatchButton from "../dispatch-sections/button";
+import DispatchFilter from "../dispatch-sections/filter";
+import DispatchGrid from "../dispatch-sections/grid";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 
@@ -26,9 +26,9 @@ export default function DispatchMain() {
 
   return (
     <div className="p-1">
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <InvoiceToolbar role={view} />
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-3 gap-2 items-center">
         <DispatchSearch />
