@@ -35,18 +35,18 @@ export const protectedRoutePaths = [
     icon: FileStackIcon,
   },
   {
+    path: PROTECTED_ROUTES.NEWDISPATCH,
+    element: <DispatchInvoice />,
+    roles: [ROLES.DISPATCH_PERSON],
+    menuLabel: "New Dispatch",
+    icon: Plus,
+  },
+  {
     path: PROTECTED_ROUTES.SETTINGS,
     element: <Settings />,
     roles: Object.values(ROLES),
     menuLabel: "Settings",
     icon: SettingsIcon,
   },
-{
-  path: PROTECTED_ROUTES.NEWDISPATCH,
-  element: <DispatchInvoice />,
-  roles: [ROLES.DISPATCH_PERSON],
-  menuLabel: "New Dispatch",
-  icon: Plus,
-},
 
 ];
