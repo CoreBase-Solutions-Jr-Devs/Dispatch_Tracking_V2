@@ -54,42 +54,23 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
   const columns = useMemo(() => {
     return [
       {
-        id: 'select',
-        header: () => {
-          const ref = React.useRef();
-          React.useEffect(() => {
-            if (ref.current) {
-              ref.current.indeterminate = selected?.length > 0 && selected?.length < data.length;
-            }
-          }, [selected, data]);
-          return (
-            <input
-              ref={ref}
-              type="checkbox"
-              aria-label="Select all"
-              checked={data.length > 0 && selected?.length === data.length}
-              onChange={e => {
-                if (e.target.checked) {
-                  onToggle(data);
-                } else {
-                  onToggle([]);
-                }
-              }}
-            />
-          );
-        },
+        id: "select",
+        header: ({ table }) => (
+          <input
+            type="checkbox"
+            aria-label="Select all"
+            checked={table.getIsAllRowsSelected()}
+            indeterminate={table.getIsSomeRowsSelected() ? "true" : undefined}
+            onChange={table.getToggleAllRowsSelectedHandler()}
+          />
+        ),
         cell: ({ row }) => (
           <input
             type="checkbox"
             aria-label={`Select row ${row.original.invoiceNo}`}
-            checked={selected?.some(d => d._id === row.original._id)}
-            onChange={e => {
-              if (e.target.checked) {
-                onToggle([...selected.filter(d => d._id !== row.original._id), row.original]);
-              } else {
-                onToggle(selected.filter(d => d._id !== row.original._id));
-              }
-            }}
+            checked={row.getIsSelected()}
+            disabled={!row.getCanSelect()}
+            onChange={row.getToggleSelectedHandler()}
           />
         ),
         size: 40,
