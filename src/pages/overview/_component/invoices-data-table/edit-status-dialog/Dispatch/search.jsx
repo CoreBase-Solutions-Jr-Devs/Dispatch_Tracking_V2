@@ -12,8 +12,8 @@ export default function DispatchSearch({
   placeholder = "Invoice No",
   selectedCount = 0,
 }) {
-  const [searchaValue,setSearchValue] =useState("")
-  const [debounceValue,setDebounceValue] = useState(searchaValue)
+  const [searchaValue,setSearchValue] = useState("");
+  const [debounceValue,setDebounceValue] = useState(searchaValue);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [startDisabled, setStartDisabled] = useState(false);
   const params = {
