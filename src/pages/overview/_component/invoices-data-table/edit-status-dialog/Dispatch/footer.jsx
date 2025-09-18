@@ -15,6 +15,7 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const handleCancel =() => {
     setStartDisabled(true);
     setCancelDisabled(false);
+    if (onClose) onClose();
   }
 
   return (
