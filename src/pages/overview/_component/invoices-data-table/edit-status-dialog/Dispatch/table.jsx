@@ -55,15 +55,15 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
     return [
       {
         id: "select",
-        header: ({ table }) => (
-          <input
-            type="checkbox"
-            aria-label="Select all"
-            checked={table.getIsAllRowsSelected()}
-            indeterminate={table.getIsSomeRowsSelected() ? "true" : undefined}
-            onChange={table.getToggleAllRowsSelectedHandler()}
-          />
-        ),
+        // header: ({ table }) => (
+        //   <input
+        //     type="checkbox"
+        //     aria-label="Select all"
+        //     checked={table.getIsAllRowsSelected()}
+        //     indeterminate={table.getIsSomeRowsSelected() ? "true" : undefined}
+        //     onChange={table.getToggleAllRowsSelectedHandler()}
+        //   />
+        // ),
         cell: ({ row }) => (
           <input
             type="checkbox"
