@@ -5,10 +5,10 @@ export const dispatchApi = apiClient.injectEndpoints({
     endpoints: (builder) => ({
         dispatchSearch: builder.query({
             query: (query) => {
-                let params = {invoiceNo:0,cusCode:""};
+                let params = { invoiceNo:0, cusCode:"" };
                 if(isNaN(Number(query))){
                     params.cusCode = query
-                }else{
+                } else {
                     params.invoiceNo = Number(query)
                 }
                // const paramString = params.length ? `?${params.join('&')}` : '';
