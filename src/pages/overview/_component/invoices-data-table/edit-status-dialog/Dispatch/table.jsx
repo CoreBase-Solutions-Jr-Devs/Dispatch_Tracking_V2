@@ -96,7 +96,7 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
       },
       {
         accessorKey: "dispatchId",
-        header: "Dispatch Id",
+        header: "Disp. Id",
         cell: ({ row }) => {
           switch ("dispatchId") {
             case "dispatchId": return renderText(row.original.dispatchId);
@@ -105,8 +105,28 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
         },
       },
       {
+        accessorKey: "invoiceNo",
+        header: "Inv. No",
+        cell: ({ row }) => {
+          switch ("invoiceNo") {
+            case "invoiceNo": return renderText(row.original.invoiceNo);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
+        accessorKey: "customerCode",
+        header: "CusCode",
+        cell: ({ row }) => {
+          switch ("customerCode") {
+            case "customerCode": return renderText(row.original.customerCode);
+            default: return renderText("—");
+          }
+        },
+      },
+      {
         accessorKey: "customerName",
-        header: "Customer Name",
+        header: "CusName",
         cell: ({ row }) => {
           switch ("customerName") {
             case "customerName": return renderText(row.original.customerName);
@@ -136,7 +156,7 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
       },
       {
         accessorKey: "verifiedDateTime",
-        header: "Verified Date & Time",
+        header: "Ver. DateTime",
         cell: ({ row }) => {
           switch ("verifiedDateTime") {
             case "verifiedDateTime": return renderDateTime(row.original.verifiedDateTime);
