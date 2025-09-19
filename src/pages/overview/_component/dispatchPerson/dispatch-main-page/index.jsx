@@ -3,10 +3,10 @@ import { useSelector } from "react-redux";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
 import { roleToView } from "@/lib/utils";
 import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
-import DispatchSearch from "../Dispatch-Sections/search";
-import DispatchButton from "../Dispatch-Sections/button";
 import DispatchFilter from "../Dispatch-Sections/filter";
+import DispatchSearch from "../Dispatch-Sections/search";
 import DispatchGrid from "../Dispatch-Sections/grid";
+import DispatchButton from "../Dispatch-Sections/button";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 
@@ -17,22 +17,22 @@ export default function DispatchMain() {
   const view = roleToView(user?.userRole || "User");
   const columns = getInvoiceColumns(view);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  // Navigate to the New Dispatch page
   const handleGoToDispatchPage = () => {
-    navigate(PROTECTED_ROUTES.NEWDISPATCH); 
+    navigate(PROTECTED_ROUTES.NEWDISPATCH);
   };
 
   return (
     <div className="p-1">
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <InvoiceToolbar role={view} />
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-3 gap-2 items-center">
         <DispatchSearch />
         <DispatchFilter />
+
         <div className="flex justify-end">
           <DispatchButton onClick={handleGoToDispatchPage} />
         </div>
