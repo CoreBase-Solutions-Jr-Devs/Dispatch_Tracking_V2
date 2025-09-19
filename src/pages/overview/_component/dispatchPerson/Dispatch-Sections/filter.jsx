@@ -1,25 +1,24 @@
-
-  import { useState } from "react";
+import { useState } from "react";
+import { Filter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import DispatchFilterPopup from "./filterpopup";
 
 export default function DispatchFilter() {
-  const [filterType, setFilterType] = useState("");
+  const [open, setOpen] = useState(false);
 
   return (
-<div className="flex flex-col gap-4 p-4">
-  {/* Main filter dropdown */}
-  <div className="flex flex-col w-40"> {/* 👈 sets width of the wrapper */}
+    <div className="flex items-center  p-4">
+ 
+      <button
+        className="flex items-center gap-2 px-3 py-1 border rounded-full hover:bg-gray-100"
+        onClick={() => setOpen(true)}
+      >
+        <Filter className="h-5 w-5" />
+        <span className="text-sm font-medium">Filter</span>
+      </button>
 
-    <select
-      className="border rounded-md  w-full"
-      value={filterType}
-      onChange={(e) => setFilterType(e.target.value)}
-    >
-      <option value="route">Route</option>
-      <option value="customer">Customer Name</option>
-    </select>
-  </div>
-</div>
-
+    
+      <DispatchFilterPopup open={open} onClose={() => setOpen(false)} />
+    </div>
   );
 }
-
