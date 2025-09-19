@@ -136,7 +136,7 @@ export default function StoreFooter({
         }}
       >
         <Button
-          variant="verification"
+         variant="default"
           disabled={startDisabled}
           className="mt-2 mr-2 uppercase"
         >
