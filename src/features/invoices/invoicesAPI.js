@@ -123,6 +123,16 @@ export const invoicesApi = apiClient.injectEndpoints({
             invalidatesTags: ['dispatch_invoices'],
         }),
 
+		// DISPATCH TRACKING 
+		filterDispatchInvoices: builder.mutation({
+            query: (formData) => ({
+                url: '/invoices/dispatch-filter',
+                method: 'POST',
+                body: formData,
+            }),
+            invalidatesTags: ['dispatch_invoices'],
+        }),
+
 		// COLLECTION TRACKING
 		getCollectionTrackingDetails: builder.query({
 			query: ({ docNum } = {}) => ({

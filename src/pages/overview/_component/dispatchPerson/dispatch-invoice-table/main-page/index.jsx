@@ -18,9 +18,9 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     const [query, setQuery] = useState("");
     const { user } = useSelector((state) => state.auth);
     // const { invoices } = useSelector((state) => state.invoice);
-    const { data, isLoading, isError } = useGetDispatchInvoicesQuery({ page: 1, pageSize: 50 });
+    // const { data, isLoading, isError } = useGetDispatchInvoicesQuery({ page: 1, pageSize: 20 });
 
-    let dispatchInvoices = data?.invoices || [];
+    // let dispatchInvoices = data?.invoices || [];
 
     const view = roleToView(user?.userRole || "User");
     const columns = getInvoiceColumns(view);
@@ -68,18 +68,17 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
             {/* Table + Summary */}
             <div className="space-y-4">
                 <DataTable
-                    // data={mockInvoices}
-                    data={dispatchInvoices}
+                    data={[]}
                     columns={columns}
                     selection={true}
                     isLoading={false}
                     emptyTitle="No invoices found"
                     isShowPagination={true}
                     pagination={{
-                        pageNumber: data?.page,
-                        pageSize: data?.pageSize,
-                        totalItems: data?.invoices?.items,
-                        totalPages: data?.totalCount,
+                        pageNumber: 1,
+                        pageSize: 20,
+                        totalItems: 0,
+                        totalPages: 0,
                     }}
                 />
                 <DispatchSummary data={rowData} />

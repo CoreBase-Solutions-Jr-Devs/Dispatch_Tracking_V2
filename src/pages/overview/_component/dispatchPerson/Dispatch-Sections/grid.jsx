@@ -135,10 +135,12 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         accessorKey: "actions",
         header: "Actions",
         cell: ({ row }) => (
-          <Button
-            variant="outline"
-            size="sm"
+          <span
+            className="text-orange-600 underline cursor-pointer select-none px-2 py-1"
             onClick={() => handleOpenPopup(row.original)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleOpenPopup(row.original); }}
           >
             <Eye className="h-4 w-4 text-muted-foreground mr-1" />
           </Button>
