@@ -3,9 +3,8 @@ import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import Dispatchpopup from "./popup"; // your popup component
+import Dispatchpopup from "./popup";
 
-// Helpers
 const renderText = (text) => (
   <span className="text-foreground font-medium">{text || "—"}</span>
 );
@@ -20,8 +19,6 @@ const renderStatus = (status) => {
       statusClass = "status-verification border-status-verification/20";
       break;
     case "In Dispatch":
-      statusClass = "status-dispatch border-status-dispatch/20";
-      break;
     case "Dispatched":
       statusClass = "status-dispatch border-status-dispatch/20";
       break;
@@ -52,7 +49,7 @@ const formatUKDateTime = (date) => {
 };
 
 const renderDateTime = (val) => (
-  <span className="font-mono text-sm">{formatUKDateTime(val)}</span>
+  <span className="font-mono ">{formatUKDateTime(val)}</span>
 );
 
 const formatDuration = (seconds) => {
@@ -82,29 +79,25 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
             }}
             className="text-blue-600 underline cursor-pointer"
           >
-            {row.original.invoiceNo}
+            {row.original.dispatchNo}
           </a>
         ),
       },
       {
-        accessorKey: "customerName",
-        header: "Customer Name",
-        cell: ({ row }) => renderText(row.original.customerName),
+        accessorKey: "invoiceNo",
+        header: "Invoice Number",
+        cell: ({ row }) => renderText(row.original.invoiceNo),
       },
+
       {
-        accessorKey: "items",
-        header: "Items",
+        accessorKey: "invoiceCount",
+        header: "Invoice Count",
         cell: ({ row }) => renderText(row.original.items),
       },
       {
         accessorKey: "dispatcher",
         header: "Dispatcher",
         cell: ({ row }) => renderText(row.original.dispatcher),
-      },
-      {
-        accessorKey: "paymentTerms",
-        header: "Payment Terms",
-        cell: ({ row }) => renderText(row.original.paymentTerms),
       },
       {
         accessorKey: "route",
@@ -137,6 +130,7 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
               : "—"
           ),
       },
+
       {
         accessorKey: "actions",
         header: "Actions",
@@ -146,7 +140,7 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
             size="sm"
             onClick={() => handleOpenPopup(row.original)}
           >
-            <Eye className="h-4 w-4 text-muted-foreground mr-1" /> View
+            <Eye className="h-4 w-4 text-muted-foreground mr-1" />
           </Button>
         ),
       },
@@ -165,6 +159,7 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         isLoading={isLoading}
         emptyTitle="No dispatch records found"
         isShowPagination={true}
+        
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
@@ -172,7 +167,7 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
 
-      {/* Render the popup */}
+    
       {selectedRow && (
         <Dispatchpopup data={selectedRow} onClose={handleClosePopup} />
       )}
