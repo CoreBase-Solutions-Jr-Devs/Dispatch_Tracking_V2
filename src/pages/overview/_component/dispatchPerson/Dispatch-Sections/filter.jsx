@@ -1,24 +1,32 @@
 import { useState } from "react";
-import { Filter } from "lucide-react";
+import { Filter, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import DispatchFilterPopup from "./filterpopup";
 
-export default function DispatchFilter() {
+export default function DispatchFilterDesign() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex items-center  p-4">
- 
-      <button
-        className="flex items-center gap-2 px-3 py-1 border rounded-full hover:bg-gray-100"
-        onClick={() => setOpen(true)}
+    <div className="relative inline-block p-4">
+      <Button
+        variant="outline"
+        size="sm"
+        className="flex items-center gap-2"
+        onClick={() => setOpen(!open)}
       >
-        <Filter className="h-5 w-5" />
-        <span className="text-sm font-medium">Filter</span>
-      </button>
+        Filter
+        <ChevronDown className="h-4 w-4" />
+      </Button>
 
-    
-      <DispatchFilterPopup open={open} onClose={() => setOpen(false)} />
+      {open && (
+        <div className="absolute mt-2 w-64 bg-white border rounded shadow-lg p-3 z-50">
+          <div className="flex flex-col gap-2">
+            <select className="border px-2 py-1 rounded text-sm">
+              <option>Route</option>
+              <option>Customer Name</option>
+            </select>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
