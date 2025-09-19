@@ -50,7 +50,7 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-export default function DispatchTable({ data = [], isLoading = false, pagination, onPageChange, onPageSizeChange, selected, onToggle }) {
+export default function DispatchTable({ data = [], isLoading = false, pagination, onPageChange, onPageSizeChange }) {
   const columns = useMemo(() => {
     return [
       {
@@ -180,8 +180,7 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
 
   // Calculate Totals
 
-  const totalCount = data.length;
-  const totalValue = data.reduce((acc, cur) => acc + (cur.amount || 0), 0);
+
 
   return (
     <div className="space-y-4">
@@ -198,8 +197,8 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Count: {totalCount}</span>
-        <span>Total Value: KES {totalValue.toLocaleString()}</span>
+        <span>Total Count: </span>
+        <span>Total Value: KES </span>
       </div>
     </div>
   );
