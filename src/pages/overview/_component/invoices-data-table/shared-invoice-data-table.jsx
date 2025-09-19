@@ -16,8 +16,6 @@ export default function SharedInvoiceDataTable() {
 
   return (
     <div className="space-y-4">
-      <InvoiceToolbar role={view} />
-
       <DataTable
         // data={mockInvoices}
         data={invoices}
