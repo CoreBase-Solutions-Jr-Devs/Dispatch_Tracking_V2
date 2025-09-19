@@ -76,12 +76,12 @@ const DispatchLabelValue = () => {
     >
       <LabelValue
         status="Store"
-        label="Total"
+        label="Pending"
         value={data?.invoices?.length || 0}
       />
       <LabelValue
-        status="Verification"
-        label="Pending"
+        status="destructive"
+        label="Ongoing"
         value={stats.pendingCount || 0}
       />
       <LabelValue
@@ -89,11 +89,7 @@ const DispatchLabelValue = () => {
         label="Dispatched"
         value={stats.dispatchedCount || 0}
       />
-      <LabelValue
-        status="Apply"
-        label="inDispatch"
-        value={stats.dispatchedCount || 0}
-      />
+
       <LabelValue
         status="Delivered"
         label="Avg. Dispatch Time"
