@@ -1,19 +1,31 @@
 import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table";
 
-
-const renderText = (text) => <span className="text-foreground font-medium">{text || "—"}</span>;
+const renderText = (text) => (
+  <span className="text-foreground font-medium ">{text || "—"}</span>
+);
 
 export default function Dispatchpopup({ data, onClose }) {
-
   const tableData = data ? [data] : [];
 
   const columns = [
-    { accessorKey: "dispatchNo", header: "Dispatch ID", cell: ({ row }) => renderText(row.original.dispatchNo) },
-    { accessorKey: "invoiceNo", header: "Invoice No", cell: ({ row }) => renderText(row.original.invoiceNo) },
-    { accessorKey: "items", header: "Items", cell: ({ row }) => renderText(row.original.items) },
+    {
+      accessorKey: "customerName",
+      header: "Customer Name",
+      cell: ({ row }) => renderText(row.original.customerName),
+    },
+    {
+      accessorKey: "paymentTerms",
+      header: "Payment Terms",
+      cell: ({ row }) => renderText(row.original.paymentTerms),
+    },
   ];
 
   return (
