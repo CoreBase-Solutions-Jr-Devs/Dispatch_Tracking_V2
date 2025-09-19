@@ -3,6 +3,7 @@ import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import { useSelector } from "react-redux";
 import Dispatchpopup from "./popup";
 
 const renderText = (text) => (
@@ -49,7 +50,7 @@ const formatUKDateTime = (date) => {
 };
 
 const renderDateTime = (val) => (
-  <span className="font-mono ">{formatUKDateTime(val)}</span>
+  <span className="font-mono">{formatUKDateTime(val)}</span>
 );
 
 const formatDuration = (seconds) => {
@@ -59,7 +60,42 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
+const renderDispatchNoLink = (dispatchNo, onClick) => (
+  <a
+    href="#"
+    onClick={(e) => {
+      e.preventDefault();
+      onClick();
+    }}
+    className="text-blue-600 underline cursor-pointer"
+  >
+    {dispatchNo}
+  </a>
+);
+
+const renderActionButton = (onClick) => (
+  <Button
+    variant="outline"
+    size="sm"
+    className="h-8 w-8 p-0 hover:bg-accent"
+    onClick={onClick}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" || e.key === " ") onClick();
+    }}
+  >
+    <Eye className="h-4 w-4 text-muted-foreground" />
+  </Button>
+);
+
 export default function DispatchGrid({ data = [], isLoading = false }) {
+  const { pagination } = useSelector((state) => state.invoice); // use pagination from redux if available
+  const [pages, setPages] = useState(
+    Math.ceil(data.length / (pagination?.pageSize || 10)) || 1
+  );
+  const [pageNumber, setPageNumber] = useState(pagination?.pageNumber || 1);
+
   const [selectedRow, setSelectedRow] = useState(null);
 
   const handleOpenPopup = (row) => setSelectedRow(row);
@@ -70,25 +106,16 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
       {
         accessorKey: "dispatchNo",
         header: "Dispatch No",
-        cell: ({ row }) => (
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              handleOpenPopup(row.original);
-            }}
-            className="text-blue-600 underline cursor-pointer"
-          >
-            {row.original.dispatchNo}
-          </a>
-        ),
+        cell: ({ row }) =>
+          renderDispatchNoLink(row.original.dispatchNo, () =>
+            handleOpenPopup(row.original)
+          ),
       },
       {
         accessorKey: "invoiceNo",
         header: "Invoice Number",
         cell: ({ row }) => renderText(row.original.invoiceNo),
       },
-
       {
         accessorKey: "invoiceCount",
         header: "Invoice Count",
@@ -130,27 +157,25 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
               : "—"
           ),
       },
-
       {
         accessorKey: "actions",
         header: "Actions",
-        cell: ({ row }) => (
-          <span
-            className="text-orange-600 underline cursor-pointer select-none px-2 py-1"
-            onClick={() => handleOpenPopup(row.original)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleOpenPopup(row.original); }}
-          >
-            <Eye className="h-4 w-4 text-muted-foreground mr-1" />
-          </Button>
-        ),
+        cell: ({ row }) =>
+          renderActionButton(() => handleOpenPopup(row.original)),
       },
     ];
   }, []);
 
   const totalCount = data.length;
   const totalValue = data.reduce((acc, cur) => acc + (cur.amount || 0), 0);
+
+  const handlePageSizeChange = (size) => {
+    setPages(Math.ceil(data.length / size));
+  };
+
+  const handlePageChange = (page) => {
+    setPageNumber(page);
+  };
 
   return (
     <div className="space-y-4">
@@ -161,7 +186,14 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         isLoading={isLoading}
         emptyTitle="No dispatch records found"
         isShowPagination={true}
-        
+        onPageSizeChange={handlePageSizeChange}
+        onPageChange={handlePageChange}
+        pagination={{
+          pageNumber: pageNumber,
+          pageSize: pagination?.pageSize || 10,
+          totalItems: data.length,
+          totalPages: pages,
+        }}
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
@@ -169,7 +201,6 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
 
-    
       {selectedRow && (
         <Dispatchpopup data={selectedRow} onClose={handleClosePopup} />
       )}
