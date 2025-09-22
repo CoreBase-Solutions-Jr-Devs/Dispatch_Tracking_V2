@@ -12,8 +12,8 @@ const renderStatus = (status) => {
   switch (status) {
     case "Pending": statusClass = "status-store border-status-store/20"; break;
     case "Verified": statusClass = "status-verification border-status-verification/20"; break;
-    case "In Dispatch": statusClass = "status-dispatch border-status-dispatch/20"; break;
     case "Delivered": statusClass = "status-delivered border-status-delivered/20"; break;
+    case "Ongoing": statusClass = "status-dispatch border-status-dispatch/20"; break;
   }
   return (
     <Badge
