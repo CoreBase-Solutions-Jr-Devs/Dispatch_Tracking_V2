@@ -52,9 +52,9 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     const renderStatus = (status) => {
         let statusClass = "bg-muted text-muted-foreground border-border";
         switch (status) {
-            case "Pending": statusClass = "status-store border-status-store/20"; break;
-            case "Verified": statusClass = "status-verification border-status-verification/20"; break;
-            case "In Dispatch": statusClass = "status-dispatch border-status-dispatch/20"; break;
+            case "ONGOING": statusClass = "status-store border-status-store/20"; break;
+            case "SELECTED": statusClass = "status-verification border-status-verification/20"; break;
+            case "IN DISPATCH": statusClass = "status-dispatch border-status-dispatch/20"; break;
             case "SAVED FOR DISPATCH": statusClass = "status-delivered border-status-delivered/20"; break;
         }
         return (
