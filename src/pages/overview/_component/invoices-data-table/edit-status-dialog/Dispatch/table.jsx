@@ -57,8 +57,8 @@ const formatDuration = (seconds) => {
 export default function DispatchTable({ data = [], isLoading = false, pagination, onPageChange, onPageSizeChange }) {
 
   // Select Invoices API 
-const [selectInvoice,{ data, isLoading, isError }] = useSelectDispatchInvoiceMutation();
-const dispatchSelected = data?.invoices.isSelected;
+// const [selectInvoice,{ data, isLoading, isError }] = useSelectDispatchInvoiceMutation();
+// const dispatchSelected = data?.invoices.isSelected;
 
   const columns = useMemo(() => {
     return [
