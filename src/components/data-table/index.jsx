@@ -65,6 +65,9 @@ export function DataTable({
     : internalRowSelection;
 
   const handleRowSelectionChange = (updater) => {
+
+    console.log(updater)
+
     const newSelection =
       typeof updater === "function" ? updater(resolvedRowSelection) : updater;
 
