@@ -189,16 +189,6 @@ export default function FilterSheet() {
 
         {/* Search + Role Filters */}
         <section className="flex gap-2 mb-4 items-end">
-          <div className="flex-1 flex flex-col">
-            <Label className="text-xs text-muted-foreground">Search</Label>
-            <Input
-              placeholder="Invoice No / Account"
-              className="h-8 text-sm"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-
           <div className="flex-1 flex flex-col justify-end">
             <Label className="text-xs text-muted-foreground">
               Filter by Status
