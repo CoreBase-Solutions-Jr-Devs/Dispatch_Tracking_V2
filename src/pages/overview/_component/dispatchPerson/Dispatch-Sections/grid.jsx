@@ -60,37 +60,50 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-const renderDispatchNoLink = (dispatchNo, onClick) => (
-  <a
-    href="#"
-    onClick={(e) => {
-      e.preventDefault();
-      onClick();
-    }}
-    className="text-blue-600 underline cursor-pointer"
-  >
-    {dispatchNo}
-  </a>
-);
+const renderDispatchNoLink = (row, handlers = {}) => {
+  const { onView } = handlers;
+  return (
+    <span
+      className="text-sm underline cursor-pointer text-primary hover:text-primary/80"
+      onClick={(e) => {
+        e.stopPropagation();
+        onView?.(row.original);
+      }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onView?.(row.original);
+      }}
+    >
+      {row.original.invoiceNo}
+    </span>
+  );
+};
 
-const renderActionButton = (onClick) => (
-  <Button
-    variant="outline"
-    size="sm"
-    className="h-8 w-8 p-0 hover:bg-accent"
-    onClick={onClick}
-    role="button"
-    tabIndex={0}
-    onKeyDown={(e) => {
-      if (e.key === "Enter" || e.key === " ") onClick();
-    }}
-  >
-    <Eye className="h-4 w-4 text-muted-foreground" />
-  </Button>
-);
+const renderActionsButton = (row, handlers = {}) => {
+  const { onView } = handlers;
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      className="h-8 w-8 p-0 hover:bg-accent"
+      onClick={(e) => {
+        e.stopPropagation();
+        onView?.(row.original);
+      }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onView?.(row.original);
+      }}
+    >
+      <Eye className="h-4 w-4 text-muted-foreground" />
+    </Button>
+  );
+};
 
 export default function DispatchGrid({ data = [], isLoading = false }) {
-  const { pagination } = useSelector((state) => state.invoice); // use pagination from redux if available
+  const { pagination } = useSelector((state) => state.invoice);
   const [pages, setPages] = useState(
     Math.ceil(data.length / (pagination?.pageSize || 10)) || 1
   );
@@ -107,9 +120,7 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         accessorKey: "dispatchNo",
         header: "Dispatch No",
         cell: ({ row }) =>
-          renderDispatchNoLink(row.original.dispatchNo, () =>
-            handleOpenPopup(row.original)
-          ),
+          renderDispatchNoLink(row, { onView: handleOpenPopup }),
       },
       {
         accessorKey: "invoiceNo",
@@ -161,7 +172,7 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         accessorKey: "actions",
         header: "Actions",
         cell: ({ row }) =>
-          renderActionButton(() => handleOpenPopup(row.original)),
+          renderActionsButton(row, { onView: handleOpenPopup }),
       },
     ];
   }, []);
