@@ -1,117 +1,137 @@
-import { apiClient } from '@/app/api-client';
+import { apiClient } from "@/app/api-client";
 
 export const invoicesApi = apiClient.injectEndpoints({
-	endpoints: (builder) => ({
-		filterInvoices: builder.mutation({
-			query: (formData) => ({
-				url: '/invoices/filter',
-				method: 'POST',
-				body: formData,
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+  endpoints: (builder) => ({
+    filterInvoices: builder.mutation({
+      query: (formData) => ({
+        url: "/invoices/filter",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
 
-		getAllInvoices: builder.query({
-			query: ({
-				StartDate,
-				EndDate,
-				docNumber,
-				cuscode,
-				PageNumber = 1,
-				PageSize = 10,
-			} = {}) => ({
-				url: '/invoices',
-				method: 'GET',
-				params: {
-					StartDate,
-					EndDate,
-					docNumber,
-					cuscode,
-					PageNumber,
-					PageSize,
-				},
-			}),
-			providesTags: ['invoices'],
-		}),
+    getAllInvoices: builder.query({
+      query: ({
+        StartDate,
+        EndDate,
+        docNumber,
+        cuscode,
+        PageNumber = 1,
+        PageSize = 10,
+      } = {}) => ({
+        url: "/invoices",
+        method: "GET",
+        params: {
+          StartDate,
+          EndDate,
+          docNumber,
+          cuscode,
+          PageNumber,
+          PageSize,
+        },
+      }),
+      providesTags: ["invoices"],
+    }),
 
-		filterOptions: builder.query({
-			query: () => ({
-				url: '/invoices/filter-options',
-				method: 'GET',
-			}),
-			providesTags: ['filter_options'],
-		}),
-		// STORE TRACKING
-		filterStoreInvoices: builder.mutation({
-			query: (formData) => ({
-				url: '/invoices/store-filter',
-				method: 'POST',
-				body: formData,
-			}),
-			invalidatesTags: ['store_invoices'],
-		}),
+    filterOptions: builder.query({
+      query: () => ({
+        url: "/invoices/filter-options",
+        method: "GET",
+      }),
+      providesTags: ["filter_options"],
+    }),
+    // STORE TRACKING
+    filterStoreInvoices: builder.mutation({
+      query: (formData) => ({
+        url: "/invoices/store-filter",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["store_invoices"],
+    }),
 
-		getStoreTrackingDetails: builder.query({
-			query: ({ docNum } = {}) => ({
-				url: `/invoices/${docNum}/store-tracking`,
-				method: 'GET',
-			}),
-			providesTags: ['store_details'],
-		}),
+    getStoreTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/store-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["store_details"],
+    }),
 
-		storeStart: builder.mutation({
-			query: (docNum) => ({
-				url: `/invoices/${docNum}/store/start`,
-				method: 'POST',
-				body: {},
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+    storeStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/store/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
 
-		storePush: builder.mutation({
-			query: (payload) => ({
-				url: `/invoices/${payload.docNum}/store/push`,
-				method: 'POST',
-				body: payload,
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+    storePush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/store/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
 
-		// VERIFICATION TRACKING
-		filterVerificationInvoices: builder.mutation({
-			query: (formData) => ({
-				url: '/invoices/verification-filter',
-				method: 'POST',
-				body: formData,
-			}),
-			invalidatesTags: ['verification_invoices'],
-		}),
+    // VERIFICATION TRACKING
+    filterVerificationInvoices: builder.mutation({
+      query: (formData) => ({
+        url: "/invoices/verification-filter",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["verification_invoices"],
+    }),
 
-		getVerificationTrackingDetails: builder.query({
-			query: ({ docNum } = {}) => ({
-				url: `/invoices/${docNum}/verification-tracking`,
-				method: 'GET',
-			}),
-			providesTags: ['verification_details'],
-		}),
+    getVerificationTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/verification-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["verification_details"],
+    }),
 
-		verificationStart: builder.mutation({
-			query: (docNum) => ({
-				url: `/invoices/${docNum}/verification/start`,
-				method: 'POST',
-				body: {},
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+    verificationStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/verification/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
 
-		verificationPush: builder.mutation({
-			query: (payload) => ({
-				url: `/invoices/${payload.docNum}/verification/push`,
-				method: 'POST',
-				body: payload,
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+    verificationPush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/verification/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
+
+		// DISPATCH TRACKING 
+		filterDispatchInvoices: builder.mutation({
+            query: (formData) => ({
+                url: '/invoices/dispatch-filter',
+                method: 'POST',
+                body: formData,
+            }),
+            invalidatesTags: ['dispatch_invoices'],
+        }),
+
+		// DISPATCH TRACKING 
+		filterDispatchInvoices: builder.mutation({
+            query: (formData) => ({
+                url: '/invoices/dispatch-filter',
+                method: 'POST',
+                body: formData,
+            }),
+            invalidatesTags: ['dispatch_invoices'],
+        }),
 
 		// COLLECTION TRACKING
 		getCollectionTrackingDetails: builder.query({
@@ -122,65 +142,86 @@ export const invoicesApi = apiClient.injectEndpoints({
 			providesTags: ['collection_details'],
 		}),
 
-		collectionStart: builder.mutation({
-			query: (docNum) => ({
-				url: `/invoices/${docNum}/collection/start`,
-				method: 'POST',
-				body: {},
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+    collectionStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/collection/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
 
-		collectionPush: builder.mutation({
-			query: (payload) => ({
-				url: `/invoices/${payload.docNum}/collection/push`,
-				method: 'POST',
-				body: payload,
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+    collectionPush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/collection/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["invoices"],
+    }),
 
-		collectionRecall: builder.mutation({
-			query: (docNum) => ({
-				url: `/invoices/${docNum}/collection/recall`,
-				method: 'POST',
-				body: {},
-			}),
-			invalidatesTags: ['invoices'],
-		}),
+    collectionRecall: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/collection/recall`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["invoices"],
+    }),
 
-		// DELIVERY TRACKING
-		viewInvoicePDF: builder.query({
-			query: ({ docNum } = {}) => ({
-				url: `/invoices/${docNum}/delivery/pdf`,
-				method: 'GET',
-			}),
-			providesTags: ['invoices'],
-		}),
-		getDeliveryTrackingDetails: builder.query({
-			query: ({ docNum } = {}) => ({
-				url: `/invoices/${docNum}/delivery-tracking`,
-				method: 'GET',
-			}),
-			providesTags: ['delivery_details'],
-		}),
-		deliveryStart: builder.mutation({
-			query: (docNum) => ({
-				url: `/invoices/${docNum}/delivery/start`,
-				method: 'POST',
-				body: {},
-			}),
-			invalidatesTags: ['invoices'],
-		}),
-		deliveryComplete: builder.mutation({
-			query: (docNum, payload) => ({
-				url: `/invoices/${docNum}/delivery/complete`,
-				method: 'POST',
-				body: payload,
-			}),
-			invalidatesTags: ['invoices'],
-		}),
-	}),
+    // DELIVERY TRACKING
+//     filterDeliveryInvoices: builder.mutation({
+//       query: (formData) => ({
+//         url: "/api/v2/delivery/delivery-search",
+//         method: "POST",
+//         body: formData,
+//       }),
+//       invalidatesTags: ["delivery_invoices"],
+//     }),
+
+//     getCustomerCodeSuggestions: builder.query({
+//       query: ({ input, maxResults = 10 }) => ({
+//         url: "/api/v2/delivery/customer-codes/suggestions",
+//         method: "GET",
+//         params: {
+//           input,
+//           maxResults,
+//         },
+//       }),
+//       providesTags: ["customer_codes"],
+//     }),
+
+//     viewInvoicePDF: builder.query({
+//       query: ({ docNum } = {}) => ({
+//         url: `/invoices/${docNum}/delivery/pdf`,
+//         method: "GET",
+//       }),
+//       providesTags: ["invoices"],
+//     }),
+//     getDeliveryTrackingDetails: builder.query({
+//       query: ({ docNum } = {}) => ({
+//         url: `/invoices/${docNum}/delivery-tracking`,
+//         method: "GET",
+//       }),
+//       providesTags: ["delivery_details"],
+//     }),
+//     deliveryStart: builder.mutation({
+//       query: (docNum) => ({
+//         url: `/invoices/${docNum}/delivery/start`,
+//         method: "POST",
+//         body: {},
+//       }),
+//       invalidatesTags: ["invoices"],
+//     }),
+//     deliveryComplete: builder.mutation({
+//       query: (docNum, payload) => ({
+//         url: `/invoices/${docNum}/delivery/complete`,
+//         method: "POST",
+//         body: payload,
+//       }),
+//       invalidatesTags: ["invoices"],
+//     }),
+  }),
 });
 
 export const {
@@ -197,6 +238,8 @@ export const {
 	useGetVerificationTrackingDetailsQuery,
 	useVerificationStartMutation,
 	useVerificationPushMutation,
+	// DISPATCH TRACKING
+	useFilterDispatchInvoicesMutation,
 	// COLLECTION TRACKING
 	useGetCollectionTrackingDetailsQuery,
 	useCollectionStartMutation,

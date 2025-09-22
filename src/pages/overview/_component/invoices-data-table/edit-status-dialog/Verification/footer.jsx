@@ -16,7 +16,7 @@ export default function VerificationFooter({
   errors,
   setErrors,
   refetchData,
-  setWeight, // <-- add this
+  setWeight, 
   setRemarks,
 }) {
   const [startDisabled, setStartDisabled] = useState(
@@ -42,7 +42,6 @@ export default function VerificationFooter({
       .then((response) => {
         toast.success("Verification started successfully");
 
-        // Enable Send to Dispatch after start succeeds
         setDispatchDisabled(false);
 
         if (refetchData) refetchData();
@@ -66,10 +65,9 @@ export default function VerificationFooter({
   };
 
   const handleDispatch = () => {
-    const isWeightEmpty = !weight || weight <= 0;
+    const isWeightEmpty = weight === "" || weight === null;
     const isRemarksEmpty = !remarks || remarks.trim() === "";
 
-    // Set field errors
     const fieldErrors = {};
     if (isWeightEmpty) fieldErrors.weight = "Weight is required";
     if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
@@ -79,23 +77,20 @@ export default function VerificationFooter({
       remarks: fieldErrors.remarks || undefined,
     });
 
-    // If both empty, reset fields
     if (isWeightEmpty && isRemarksEmpty) {
       setWeight(0);
       setRemarks("");
       return;
     }
 
-    // Stop submission if there are any errors
     if (Object.keys(fieldErrors).length > 0) return;
 
-    // Disable buttons during API call
     setStartDisabled(true);
     setDispatchDisabled(true);
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      totalWeightKg: weight,
+      totalWeightKg: Number(weight), 
       verificationRemarks: remarks,
     };
 
@@ -103,10 +98,10 @@ export default function VerificationFooter({
       .unwrap()
       .then((response) => {
         toast.success("Sent to Dispatch successfully");
-        setWeight(0);
+        setWeight(undefined);
+        if (refetchData) refetchData();
         setRemarks("");
         setErrors({});
-        if (refetchData) refetchData();
       })
       .catch((error) => {
         setStartDisabled(false);

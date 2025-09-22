@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
+  const [cancelDisabled, setCancelDisabled] = useState(false);
 
   const handleStart = () => {
     setStartDisabled(true);
@@ -11,38 +12,29 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
     if (onClose) onClose();
   };
 
-  const handleDelivery = () => {
+  const handleCancel =() => {
     setStartDisabled(true);
-    setDeliveryDisabled(true);
-    if (onSubmit) onSubmit(rowData);
+    setCancelDisabled(false);
     if (onClose) onClose();
-  };
+  }
 
   return (
-    <div className="flex flex-row justify-between w-full">
+    <div className="flex flex-row justify-end w-full">
       <Button
-        variant="verification"
+        variant="apply"
         onClick={handleStart}
         disabled={startDisabled}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
-        Print
+        Save
       </Button>
       <Button
         variant="destructive"
-        onClick={handleStart}
-        disabled={startDisabled}
+        onClick={handleCancel}
+        disabled={cancelDisabled}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
-        Remove
-      </Button>
-      <Button
-        variant="apply"
-        onClick={handleDelivery}
-        disabled={deliveryDisabled}
-        className="mt-1 uppercase text-xs font-medium "
-      >
-        Dispatch
+        Cancel
       </Button>
     </div>
   );

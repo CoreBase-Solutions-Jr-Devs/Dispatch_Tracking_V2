@@ -53,6 +53,9 @@
   --status-delivered: 92.1% 0.044 142.5; /* Delivered #28a745 at 40% opacity effect */
   --status-delivered-foreground: 56.8% 0.109 142.5; /* Green for text */
 
+    /* Grid header color*/
+  --gray-200: 95% 0 0; /* light gray */
+
   /* Row hover */
   --row-hover: 65.2% 0.004 240.1; /* Gray #a2a2a2 at 40% opacity effect */
 
@@ -187,6 +190,7 @@
   --color-status-verification: oklch(var(--status-verification));
   --color-status-verification-foreground: oklch(
     var(--status-verification-foreground)
+    --color-gray-200: oklch(var(--gray-200)); 
   );
   --color-status-dispatch: oklch(var(--status-dispatch));
   --color-status-dispatch-foreground: oklch(var(--status-dispatch-foreground));

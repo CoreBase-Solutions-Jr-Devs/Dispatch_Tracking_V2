@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import StoreHeader from "./header";
@@ -8,16 +8,32 @@ import StoreRemarks from "./remarks";
 import StoreMeta from "./meta";
 import StoreFooter from "./footer";
 import { Skeleton } from "@/components/ui/skeleton";
+
 import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function StorePopup({ rowData, onSubmit, onClose }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const [remarks, setRemarks] = useState();
-  const [weight, setWeight] = useState(0);
   const [errors, setErrors] = useState({
     weight: "",
     remarks: "",
   });
+  const [weight, setWeight] = useState(0);
+
+  const { data, isLoading, isError, refetch } = useGetStoreTrackingDetailsQuery(
+    {
+      docNum: Number(rowData.invoiceNo),
+    }
+  );
+
+  useEffect(() => {
+    if (data?.totalWeightKg !== undefined && data?.totalWeightKg !== null) {
+      setWeight(data.totalWeightKg);
+    } else {
+      setWeight(0);
+    }
+  }, [data?.totalWeightKg]);
 
   const handleRemarksChange = (newRemarks) => {
     setRemarks(newRemarks);
@@ -25,12 +41,6 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
   const handleWeightChange = (newWeight) => {
     setWeight(newWeight);
   };
-
-  const { data, isLoading, isError, refetch } = useGetStoreTrackingDetailsQuery(
-    {
-      docNum: Number(rowData.invoiceNo),
-    }
-  );
 
   if (isLoading) {
     return (
@@ -69,6 +79,7 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
         readOnly={readOnly}
         handleWeightChange={handleWeightChange}
         error={errors.weight}
+        weight={weight}
       />
 
       <StoreRemarks
@@ -84,8 +95,8 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
         <StoreFooter
           remarks={remarks}
           weight={weight}
-          setWeight={setWeight} // add this
-          setRemarks={setRemarks} // add this
+          setWeight={setWeight}
+          setRemarks={setRemarks}
           rowData={data}
           onSubmit={onSubmit}
           onClose={onClose}
