@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 
 import { useState, useEffect } from "react";
 
-
 export default function StoreSummary({
   data,
   readOnly,
@@ -24,10 +23,14 @@ export default function StoreSummary({
   if (!data) return null;
 
   return (
-    <section className="flex flex-row justify-start items-center mb-2 gap-x-20">
+    <section className="flex flex-row justify-between items-center mb-2 gap-x-20">
       <div className="flex items-center gap-x-2">
         <Label className="text-xs font-medium">Items:</Label>
         <Label className="text-xs font-medium ">{data?.items}</Label>
+      </div>
+      <div className="flex items-center gap-x-2">
+        <Label className="text-xs font-medium">Counts:</Label>
+        <Label className="text-xs font-medium ">{data?.counts}</Label>
       </div>
       <div className="flex items-center gap-x-1">
         <Label className="text-xs font-medium">Total Weight (kg):</Label>
@@ -37,7 +40,6 @@ export default function StoreSummary({
           className="w-20 h-8 text-xs font-medium "
           onChange={handleChange}
           readOnly={data?.workflowStatus === "Processed"}
-         
         />
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>
