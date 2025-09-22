@@ -14,10 +14,10 @@ const renderText = (text) => (
 const renderStatus = (status) => {
   let statusClass = "bg-muted text-muted-foreground border-border";
   switch (status) {
-    case "Pending": statusClass = "status-store border-status-store/20"; break;
-    case "Verified": statusClass = "status-verification border-status-verification/20"; break;
-    case "Delivered": statusClass = "status-delivered border-status-delivered/20"; break;
-    case "Ongoing": statusClass = "status-dispatch border-status-dispatch/20"; break;
+    case "PENDING": statusClass = "status-store border-status-store/20"; break;
+    case "VERIFIED": statusClass = "status-dispatch border-status-verification/20"; break;
+    case "ONGOING": statusClass = "status-verification border-status-dispatch/20"; break;
+    case "DELIVERED": statusClass = "status-delivered border-status-delivered/20"; break;
   }
   return (
     <Badge
