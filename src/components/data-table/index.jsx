@@ -181,6 +181,7 @@ export function DataTable({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => row.toggleSelected()}
+                    className="data-[state=selected]:bg-transparent"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="!text-[10px]">
