@@ -1,6 +1,12 @@
 import React, { useMemo } from "react";
 import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
+import { useSelectDispatchInvoiceMutation } from "@/features/dispatch/dispatchAPI";
+
+
+// Select Invoices API 
+const [selectInvoice,{ data, isLoading, isError }] = useSelectDispatchInvoiceMutation();
+const dispatchSelected = data?.invoices.isSelected;
 
 // Helpers
 const renderText = (text) => (
@@ -70,7 +76,7 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
             aria-label={`Select row ${row.original.invoiceNo}`}
             checked={row.getIsSelected()}
             disabled={!row.getCanSelect()}
-            onChange={row.getToggleSelectedHandler()}
+            onChange={row.toggleSelected()}
           />
         ),
         size: 40,
