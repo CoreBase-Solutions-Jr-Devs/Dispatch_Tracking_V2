@@ -28,7 +28,7 @@ export default function VerificationSummary({
         <Label className="text-xs font-medium ">{data?.items}</Label>
       </div>
       <div className="flex items-center gap-x-2">
-        <Label className="text-xs font-medium">Counts:</Label>
+        <Label className="text-xs font-medium">Pending Counts:</Label>
         <Label className="text-xs font-medium ">{data?.counts}</Label>
       </div>
       <div className="flex items-center gap-x-2">
