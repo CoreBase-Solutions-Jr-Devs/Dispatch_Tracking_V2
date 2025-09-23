@@ -5,6 +5,7 @@ import { Search as SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import RoleBasedFilters from "../../../filter-sheet/role-based-filters";
 import { useDispatchSearchQuery } from "@/features/dispatch/dispatchAPI";
+import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function DispatchSearch({
   value,
@@ -27,6 +28,9 @@ export default function DispatchSearch({
     if (onClose) onClose();
   };
   const { data, isLoading, isError } = useDispatchSearchQuery(searchValue);
+
+  const { data: filterOptions, isLoading: filtersLoading, isError: filtersError } = useFilterOptionsQuery();
+  const customerFilters = filterOptions?.filter((f) => f.key !== 'cusCode') || [];
 
   useEffect(() => {
    const handler = setTimeout(()=>
