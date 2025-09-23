@@ -45,6 +45,9 @@ export default function StoreFooter({
         setVerificationDisabled(false);
 
         if (refetchData) refetchData();
+
+        // ✅ Close parent popup after success
+        if (onClose) onClose();
       })
       .catch((error) => {
         setStartDisabled(false);
@@ -121,14 +124,6 @@ export default function StoreFooter({
 
   return (
     <div className="flex flex-row justify-end w-full">
-      <Button
-        variant="destructive"
-        onClick={handleClose}
-        className="mt-2 mr-2 uppercase"
-      >
-        Cancel
-      </Button>
-
       <StoreStartPopup
         rowData={rowData}
         onConfirm={(confirmed) => {
@@ -136,7 +131,7 @@ export default function StoreFooter({
         }}
       >
         <Button
-         variant="default"
+          variant="default"
           disabled={startDisabled}
           className="mt-2 mr-2 uppercase"
         >
@@ -151,6 +146,13 @@ export default function StoreFooter({
         className="mt-2 uppercase"
       >
         Send to Verification
+      </Button>
+      <Button
+        variant="destructive"
+        onClick={handleClose}
+        className="mt-2 mr-2 uppercase"
+      >
+        Cancel
       </Button>
     </div>
   );
