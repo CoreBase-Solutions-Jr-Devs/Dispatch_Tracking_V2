@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useSaveSelectionsMutation } from "@/features/dispatch/dispatchAPI";
 
-export default function DispatchFooter({ rowData, onSubmit, onClose }) {
+export default function DispatchFooter({ rowData, onSubmit, selectValues, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [cancelDisabled, setCancelDisabled] = useState(false);
+
+  const [saveSelections,{ data, isLoading, isError }] = useSaveSelectionsMutation(); // Save selections API
 
   const handleStart = () => {
     setStartDisabled(true);

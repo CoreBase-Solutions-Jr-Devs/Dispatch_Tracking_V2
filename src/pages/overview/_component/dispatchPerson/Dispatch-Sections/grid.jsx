@@ -140,8 +140,17 @@ export default function DispatchGrid() {
       {
         accessorKey: "actions",
         header: "Actions",
-        cell: ({ row }) =>
-          renderActionsButton(row, { onView: handleOpenPopup }),
+        cell: ({ row }) => (
+          <span
+            className="text-orange-600 underline cursor-pointer select-none px-2 py-1"
+            onClick={() => handleOpenPopup(row.original)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleOpenPopup(row.original); }}
+          >
+            View
+          </span>
+        ),
       },
     ];
   }, []);
