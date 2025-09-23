@@ -7,8 +7,6 @@ export default function DispatchFooter({ rowData, onSubmit, selectValues, onClos
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [cancelDisabled, setCancelDisabled] = useState(false);
 
-  const [saveSelections,{ data, isLoading, isError }] = useSaveSelectionsMutation(); // Save selections API
-
   const handleStart = () => {
     setStartDisabled(true);
     setDeliveryDisabled(false);

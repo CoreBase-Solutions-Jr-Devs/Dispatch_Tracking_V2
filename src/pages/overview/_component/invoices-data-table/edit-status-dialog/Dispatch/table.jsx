@@ -54,12 +54,7 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-export default function DispatchTable({ data = [], isLoading = false, pagination, onPageChange, onPageSizeChange }) {
-
-  // Select Invoices API 
-// const [selectInvoice,{ data, isLoading, isError }] = useSelectDispatchInvoiceMutation();
-// const dispatchSelected = data?.invoices.isSelected;
-
+export default function DispatchTable({ data = [], isLoading = false, pagination, onPageChange, onPageSizeChange, selected, onToggle }) {
   const columns = useMemo(() => {
     return [
       {
@@ -79,7 +74,7 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
             aria-label={`Select row ${row.original.invoiceNo}`}
             checked={row.getIsSelected()}
             disabled={!row.getCanSelect()}
-            onChange={row.toggleSelected()}
+            onChange={row.getToggleSelectedHandler()}
           />
         ),
         size: 40,
@@ -206,8 +201,8 @@ export default function DispatchTable({ data = [], isLoading = false, pagination
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Count: {pagination.totalItems ?? 0}</span>
-        <span>Total Value: KES </span>
+        <span>Total Count: {totalCount}</span>
+        <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
     </div>
   );

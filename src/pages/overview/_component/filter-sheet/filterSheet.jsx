@@ -105,7 +105,9 @@ export default function FilterSheet() {
 
     try {
       const data = await filterInvoices(payload).unwrap();
-      dispatch(setInvoices({ invoices: data.invoices }));
+      dispatch(
+        setInvoices({ invoices: data.invoices, pagination: data.pagination })
+      );
     } catch (error) {
       let description = "Please check your credentials and try again.";
       if (error?.data?.errors) {

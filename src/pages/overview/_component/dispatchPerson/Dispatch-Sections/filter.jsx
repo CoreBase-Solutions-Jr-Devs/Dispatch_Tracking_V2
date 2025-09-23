@@ -1,25 +1,32 @@
+import { useState } from "react";
+import { Filter, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-  import { useState } from "react";
-
-export default function DispatchFilter() {
-  const [filterType, setFilterType] = useState("");
+export default function DispatchFilterDesign() {
+  const [open, setOpen] = useState(false);
 
   return (
-<div className="flex flex-col gap-4 p-4">
-  {/* Main filter dropdown */}
-  <div className="flex flex-col w-40"> {/* 👈 sets width of the wrapper */}
+    <div className="relative inline-block p-4">
+      <Button
+        variant="outline"
+        size="sm"
+        className="flex items-center gap-2"
+        onClick={() => setOpen(!open)}
+      >
+        Filter
+        <ChevronDown className="h-4 w-4" />
+      </Button>
 
-    <select
-      className="border rounded-md  w-full"
-      value={filterType}
-      onChange={(e) => setFilterType(e.target.value)}
-    >
-      <option value="route">Route</option>
-      <option value="customer">Customer Name</option>
-    </select>
-  </div>
-</div>
-
+      {open && (
+        <div className="absolute mt-2 w-64 bg-white border rounded shadow-lg p-3 z-50">
+          <div className="flex flex-col gap-2">
+            <select className="border px-2 py-1 rounded text-sm">
+              <option>Route</option>
+              <option>Customer Name</option>
+            </select>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
-
