@@ -17,6 +17,7 @@ const renderStatus = (status) => {
   let statusClass;
   switch (status) {
     case "Pending":
+    case "In Process":
       statusClass = STATUS_STYLES.Store;
       break;
     case "Processed":
@@ -111,20 +112,28 @@ const renderDuration = (durationSeconds, avgDuration) => {
     </span>
   );
 };
-const renderInvoiceNo = (row, handlers = {}) => {
-  const { onView } = handlers;
+const renderInvoiceNo = (row, view) => {
   return (
-    <span
-      className="text-sm underline cursor-pointer text-primary hover:text-primary/80"
-      onClick={(e) => {
-        e.stopPropagation(); 
-        onView?.(row.original); 
-      }}
+    <EditStatusDialog
+      rowData={row.original}
+      view={view}
+      onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
     >
-      {row.original.invoiceNo}
-    </span>
+      <a
+        href="#"
+        className="text-sm underline cursor-pointer text-primary hover:text-primary/80"
+        onClick={(e) => {
+          e.preventDefault(); // prevent page reload
+          e.stopPropagation(); // prevent row click
+          // clicking this link now triggers the EditStatusDialog automatically
+        }}
+      >
+        {row.original.invoiceNo || "—"}
+      </a>
+    </EditStatusDialog>
   );
 };
+
 const renderActions = (row, handlers = {}, view) => {
   const { onView } = handlers;
   return (
@@ -163,7 +172,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
     invoiceNo: {
       accessorKey: "invoiceNo",
       header: "Invoice No",
-      cell: ({ row }) => renderInvoiceNo(row, handlers), 
+      cell: ({ row }) => renderInvoiceNo(row, view),
     },
 
     dispatchNo: {
@@ -194,7 +203,10 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
     status: {
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => renderStatus(row.original.status),
+      cell: ({ row }) => {
+        const value = row.original.status ?? row.original.workflowStatus;
+        return renderStatus(value);
+      },
     },
 
     items: {
