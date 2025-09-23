@@ -20,9 +20,9 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     const [query, setQuery] = useState("");
     const { user } = useSelector((state) => state.auth);
     // const { invoices } = useSelector((state) => state.invoice);
-    // const { data, isLoading, isError } = useGetDispatchInvoicesQuery({ page: 1, pageSize: 20 });
-
-    // let dispatchInvoices = data?.invoices || [];
+    const { data, isLoading, isError } = useSelectedCusCodeQuery({ page: 1, pageSize: 20 });
+    let invoicesForDispatch = data?.items || [];
+    console.log(invoicesForDispatch);
 
     const view = roleToView(user?.userRole || "User");
     
@@ -190,17 +190,17 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
                     </span>
                 }
                 <DataTable
-                    data={[]}
+                    data={invoicesForDispatch}
                     columns={columns}
                     selection={true}
                     isLoading={false}
                     emptyTitle="No invoices found"
                     isShowPagination={true}
                     pagination={{
-                        pageNumber: 1,
-                        pageSize: 20,
-                        totalItems: 0,
-                        totalPages: 0,
+                        pageNumber: data?.pageNumber,
+                        pageSize: data?.pageSize,
+                        totalItems: data?.totalCount,
+                        totalPages: data?.totalPages,
                     }}
                 />
                 <DispatchSummary data={rowData} />
