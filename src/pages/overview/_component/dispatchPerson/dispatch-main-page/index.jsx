@@ -3,10 +3,10 @@ import { useSelector } from "react-redux";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
 import { roleToView } from "@/lib/utils";
 import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
-import DispatchFilter from "../Dispatch-Sections/filter";
-import DispatchSearch from "../Dispatch-Sections/search";
-import DispatchGrid from "../Dispatch-Sections/grid";
-import DispatchButton from "../Dispatch-Sections/button";
+import DispatchFilter from "../dispatch-sections/filter";
+import DispatchSearch from "../dispatch-sections/search";
+import DispatchGrid from "../dispatch-sections/grid";
+import DispatchButton from "../dispatch-sections/button";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 
