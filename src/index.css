@@ -55,6 +55,8 @@
 
     /* Grid header color*/
   --gray-200: 95% 0 0; /* light gray */
+  /* Neutral light gray */
+  --gray-300: 95.1% 0 0; /* #e5e5e5 */
 
   /* Row hover */
   --row-hover: 65.2% 0.004 240.1; /* Gray #a2a2a2 at 40% opacity effect */
@@ -191,6 +193,8 @@
   --color-status-verification-foreground: oklch(
     var(--status-verification-foreground)
     --color-gray-200: oklch(var(--gray-200)); 
+      --color-gray-300: oklch(var(--gray-300));
+
   );
   --color-status-dispatch: oklch(var(--status-dispatch));
   --color-status-dispatch-foreground: oklch(var(--status-dispatch-foreground));

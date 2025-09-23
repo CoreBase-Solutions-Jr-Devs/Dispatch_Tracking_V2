@@ -2,39 +2,40 @@ import React, { useMemo, useState } from "react";
 import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
-import Dispatchpopup from "./popup"; // your popup component
+import { Eye, Loader2 } from "lucide-react";
+import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
+import Dispatchpopup from "./popup";
 
-// Helpers
+// ✅ Helpers
 const renderText = (text) => (
   <span className="text-foreground font-medium">{text || "—"}</span>
 );
+// --- Helpers ---
+const STATUS_STYLES = {
+  Pending: "status-store border-status-store/20",
+  Verified: "status-verification border-status-verification/20",
+  "In Dispatch": "status-dispatch border-status-dispatch/20",
+  Dispatched: "status-dispatch border-status-dispatch/20",
+  Saved: "status-dispatch border-status-dispatch/20", // use consistent casing
+  Delivered: "status-delivered border-status-delivered/20",
+  Default: "bg-muted text-muted-foreground border-border",
+};
 
 const renderStatus = (status) => {
-  let statusClass = "bg-muted text-muted-foreground border-border";
-  switch (status) {
-    case "Pending":
-      statusClass = "status-store border-status-store/20";
-      break;
-    case "Verified":
-      statusClass = "status-verification border-status-verification/20";
-      break;
-    case "In Dispatch":
-      statusClass = "status-dispatch border-status-dispatch/20";
-      break;
-    case "Dispatched":
-      statusClass = "status-dispatch border-status-dispatch/20";
-      break;
-    case "Delivered":
-      statusClass = "status-delivered border-status-delivered/20";
-      break;
-  }
+  // normalize casing so "SAVED" or "saved" both work
+  const normalizedStatus =
+    typeof status === "string"
+      ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+      : status;
+
+  const statusClass = STATUS_STYLES[normalizedStatus] || STATUS_STYLES.Default;
+
   return (
     <Badge
       variant="outline"
       className={`${statusClass} w-28 justify-center rounded-md text-xs px-3 py-1 font-medium border`}
     >
-      {status}
+      {normalizedStatus}
     </Badge>
   );
 };
@@ -52,59 +53,53 @@ const formatUKDateTime = (date) => {
 };
 
 const renderDateTime = (val) => (
-  <span className="font-mono text-sm">{formatUKDateTime(val)}</span>
+  <span className="font-mono">{formatUKDateTime(val)}</span>
 );
 
-const formatDuration = (seconds) => {
-  if (!seconds && seconds !== 0) return "—";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
+const formatDuration = (minutes) => {
+  if (minutes === null || minutes === undefined) return "—";
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-export default function DispatchGrid({ data = [], isLoading = false }) {
-  const [selectedRow, setSelectedRow] = useState(null);
+const renderActionsButton = (row, handlers = {}) => {
+  const { onView } = handlers;
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      className="h-8 w-8 p-0 hover:bg-accent"
+      onClick={(e) => {
+        e.stopPropagation();
+        onView?.(row.original);
+      }}
+    >
+      <Eye className="h-4 w-4 text-muted-foreground" />
+    </Button>
+  );
+};
 
+// ✅ Main Grid
+export default function DispatchGrid() {
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageSize = 50; // 👈 aligned with API default
+
+  const { data, isLoading, isFetching } = useGetSavedDispatchedQuery({
+    pageNumber,
+    pageSize,
+  });
+
+  const [selectedRow, setSelectedRow] = useState(null);
   const handleOpenPopup = (row) => setSelectedRow(row);
   const handleClosePopup = () => setSelectedRow(null);
 
   const columns = useMemo(() => {
     return [
       {
-        accessorKey: "dispatchNo",
+        accessorKey: "dispatchNumber",
         header: "Dispatch No",
-        cell: ({ row }) => (
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              handleOpenPopup(row.original);
-            }}
-            className="text-blue-600 underline cursor-pointer"
-          >
-            {row.original.invoiceNo}
-          </a>
-        ),
-      },
-      {
-        accessorKey: "customerName",
-        header: "Customer Name",
-        cell: ({ row }) => renderText(row.original.customerName),
-      },
-      {
-        accessorKey: "items",
-        header: "Items",
-        cell: ({ row }) => renderText(row.original.items),
-      },
-      {
-        accessorKey: "dispatcher",
-        header: "Dispatcher",
-        cell: ({ row }) => renderText(row.original.dispatcher),
-      },
-      {
-        accessorKey: "paymentTerms",
-        header: "Payment Terms",
-        cell: ({ row }) => renderText(row.original.paymentTerms),
+        cell: ({ row }) => renderText(row.original.dispatchNumber),
       },
       {
         accessorKey: "route",
@@ -112,20 +107,20 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         cell: ({ row }) => renderText(row.original.route),
       },
       {
+        accessorKey: "dispatcher",
+        header: "Dispatcher",
+        cell: ({ row }) => renderText(row.original.dispatcher),
+      },
+      {
         accessorKey: "dispatchDateTime",
         header: "Dispatch Date & Time",
         cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
       },
       {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => renderStatus(row.original.status),
-      },
-      {
-        accessorKey: "durationSeconds",
+        accessorKey: "durationMinutes",
         header: "Duration",
         cell: ({ row }) =>
-          renderText(formatDuration(row.original.durationSeconds)),
+          renderText(formatDuration(row.original.durationMinutes)),
       },
       {
         accessorKey: "amount",
@@ -138,43 +133,53 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
           ),
       },
       {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => renderStatus(row.original.status),
+      },
+      {
         accessorKey: "actions",
         header: "Actions",
-        cell: ({ row }) => (
-          <span
-            className="text-orange-600 underline cursor-pointer select-none px-2 py-1"
-            onClick={() => handleOpenPopup(row.original)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleOpenPopup(row.original); }}
-          >
-            View
-          </span>
-        ),
+        cell: ({ row }) =>
+          renderActionsButton(row, { onView: handleOpenPopup }),
       },
     ];
   }, []);
 
-  const totalCount = data.length;
-  const totalValue = data.reduce((acc, cur) => acc + (cur.amount || 0), 0);
+  const totalValue =
+    data?.items?.reduce((acc, cur) => acc + (cur.amount || 0), 0) || 0;
 
   return (
     <div className="space-y-4">
-      <DataTable
-        data={data}
-        columns={columns}
-        selection={true}
-        isLoading={isLoading}
-        emptyTitle="No dispatch records found"
-        isShowPagination={true}
-      />
+      {isLoading ? (
+        <div className="flex justify-center items-center h-40">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </div>
+      ) : (
+        <>
+          <DataTable
+            data={data?.items || []}
+            columns={columns}
+            selection={true}
+            isLoading={isFetching}
+            emptyTitle="No dispatch records found"
+            isShowPagination={true}
+            onPageChange={setPageNumber}
+            pagination={{
+              pageNumber: data?.pageNumber || 1,
+              pageSize: data?.pageSize || pageSize,
+              totalItems: data?.totalCount || 0,
+              totalPages: data?.totalPages || 1,
+            }}
+          />
 
-      <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Records: {totalCount}</span>
-        <span>Total Value: KES {totalValue.toLocaleString()}</span>
-      </div>
+          <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
+            <span>Total Records: {data?.totalCount || 0}</span>
+            <span>Total Value: KES {totalValue.toLocaleString()}</span>
+          </div>
+        </>
+      )}
 
-      {/* Render the popup */}
       {selectedRow && (
         <Dispatchpopup data={selectedRow} onClose={handleClosePopup} />
       )}
