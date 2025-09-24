@@ -19,7 +19,7 @@ export default function DispatchDetails({ collectionType }) {
     <div className="flex flex-col w-1/2 gap-2 text-xs font-medium">
       <section className="flex justify-between items-center h-full">
         <Label className="text-xs font-medium">Dispatch Date & Time:</Label>
-        <Label className="text-xs font-medium">08/20/2025 12:31</Label>
+        {/* <Label className="text-xs font-medium">08/20/2025 12:31</Label> */}
       </section>
 
       {/* Loading and error states for filter options */}
@@ -72,6 +72,23 @@ export default function DispatchDetails({ collectionType }) {
             </div>
           </section>
         </>
+      )}
+
+      {collectionType === "courier" && (
+        <section className="flex justify-between space-x-2">
+          <div className="flex flex-col items-center w-1/3">
+            <Label className="text-xs font-medium">Courier Name</Label>
+            <Input className="w-full h-6 text-xs" />
+          </div>
+          <div className="flex flex-col items-center w-1/3">
+            <Label className="text-xs font-medium">Courier ID</Label>
+            <Input className="w-full h-6 text-xs" />
+          </div>
+          <div className="flex flex-col items-center w-1/3">
+            <Label className="text-xs font-medium">Phone No</Label>
+            <Input className="w-full h-6 text-xs" />
+          </div>
+        </section>
       )}
     </div>
   );
