@@ -190,12 +190,10 @@
   --color-status-store: oklch(var(--status-store));
   --color-status-store-foreground: oklch(var(--status-store-foreground));
   --color-status-verification: oklch(var(--status-verification));
-  --color-status-verification-foreground: oklch(
-    var(--status-verification-foreground)
-    --color-gray-200: oklch(var(--gray-200)); 
-      --color-gray-300: oklch(var(--gray-300));
+  --color-status-verification-foreground: oklch(var(--status-verification-foreground));
+  --color-gray-200: oklch(var(--gray-200)); 
+  --color-gray-300: oklch(var(--gray-300));
 
-  );
   --color-status-dispatch: oklch(var(--status-dispatch));
   --color-status-dispatch-foreground: oklch(var(--status-dispatch-foreground));
   --color-status-delivered: oklch(var(--status-delivered));
