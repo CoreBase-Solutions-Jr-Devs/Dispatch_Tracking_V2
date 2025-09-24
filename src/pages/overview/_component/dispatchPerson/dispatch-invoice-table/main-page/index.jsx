@@ -176,19 +176,19 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
                 value={query}
                 onChange={setQuery}
                 data={rowData}
-                placeholder="invoice No..."
+                placeholder="Invoice No..."
             />
 
             <Separator className={"my-2"}/>
 
             {/* Table + Summary */}
             <div className="space-y-4">
-                {isLoading && <Skeleton />}
+                {/* {isLoading && <Skeleton />}
                 {isError && 
                     <span className="text-red-500 text-center text-xs font-semibold">
                         Invoice Table isn't Loading. Try again!
                     </span>
-                }
+                } */}
                 <DataTable
                     data={invoicesForDispatch}
                     columns={columns}

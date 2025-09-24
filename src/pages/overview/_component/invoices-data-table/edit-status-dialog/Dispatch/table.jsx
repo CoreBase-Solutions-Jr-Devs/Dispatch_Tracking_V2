@@ -4,6 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { useSelectDispatchInvoiceMutation } from "@/features/dispatch/dispatchAPI";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { setInvoices } from "@/features/dispatch/dispatchSlice";
 
 // Helpers
 const renderText = (text) => (
@@ -54,15 +57,16 @@ const formatDuration = (seconds) => {
 };
 
 export default function DispatchTable({ data }) {
+  const dispatch = useDispatch();
 
   // Select Invoices API 
 const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDispatchInvoiceMutation();
 // const dispatchSelected = data?.invoices.isSelected;
-
+  const rows = data;
 
   const handleRowSelection = (value, row) => {
     const payload = {
-      // deliveryId: row.,
+      dispatchId: row?.dispatchId,
       invoices: [
         {
           invoiceNo: row?.invoiceNo,
@@ -73,6 +77,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
     console.log(value, row);
     // setChecked(!checked);
     handleSelectionApi(payload);
+    // handleSelectionsAPI(payload);
   };
 
   const handleSelectionApi = (data) => {
@@ -91,11 +96,25 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
         } else if (error?.data?.message) {
           description = error.data.message;
         }
-        toast.error("Store start Failed", { description, duration: 4000 });
+        toast.error("Dispatch Invoice Selection Failed", { description, duration: 4000 });
       });
   };
 
-  const rows = data;
+  // const handleSelectionsAPI = async (formData) => {
+  //   try {
+  //     const data = await selectInvoice(formData).unwrap();
+  //     dispatch(setInvoices({ invoices: data.invoices, pagination: data.pagination }));
+  //   } catch (error) {
+  //     let description = `Error selecting invoices. Please try again`;
+  //     if (error?.data?.errors) {
+  //       const errorMessages = Object.values(error.data.errors).flat();
+  //       if (errorMessages.length > 0) description = errorMessages.join(" ");
+  //     } else if (error?.data?.message) description = error.data.message;
+
+  //     toast.error("Dispatch Invoice Selection Failed", { description, duration: 4000 });
+  //   }
+  // };
+
 
   return (
         <div className="overflow-x-auto">
@@ -104,7 +123,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
               {/* Header Row */}
               <TableRow className="bg-gray-100 text-xs font-medium">
                 <TableCell className="py-1 px-2">Select</TableCell>
-                <TableCell className="py-1 px-2">Disp. Id</TableCell>
+                {/* <TableCell className="py-1 px-2">Disp. Id</TableCell> */}
                 <TableCell className="py-1 px-2">Inv. No</TableCell>
                 <TableCell className="py-1 px-2">CusCode</TableCell>
                 <TableCell className="py-1 px-2">CusName</TableCell>
@@ -125,7 +144,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
                       onCheckedChange={(value) => handleRowSelection(value, row)}
                     />
                   </TableCell>
-                  <TableCell className="py-1 px-2">{renderText(row?.dispatchId)}</TableCell>
+                  {/* <TableCell className="py-1 px-2">{renderText(row?.dispatchId)}</TableCell> */}
                   <TableCell className="py-1 px-2">{renderText(row?.invoiceNo)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.customerCode)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.customerName)}</TableCell>

@@ -30,21 +30,10 @@ export default function SharedInvoiceDataTable() {
   const handlePageChange = (data) => {
     setPageNumber(data);
   };
-  const [search, setSearch] = React.useState("");
 
   return (
     <div className="space-y-4">
       <InvoiceToolbar role={view} />
-
-      <div className="flex-1 flex flex-col">
-        <Label className="text-xs text-muted-foreground">Search</Label>
-        <Input
-          placeholder="Invoice No / Account"
-          className="text-sm h-8 w-full sm:w-32 md:w-40 lg:w-44 xl:w-56"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
 
       <DataTable
         // data={mockInvoices}

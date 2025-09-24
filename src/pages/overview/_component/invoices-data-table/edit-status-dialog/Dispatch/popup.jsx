@@ -34,12 +34,12 @@ export default function DispatchPopup({ rowData, onSubmit }) {
   const dispatchData = data?.items || [];
 
   // Filter rows based on search query
-  const filteredData = useMemo(() => {
-    if (!query) return dispatchData;
-    return dispatchData.filter((row) =>
-      String(row.invoiceNo).toLowerCase().includes(query.toLowerCase())
-    );
-  }, [query, dispatchData]);
+  // const filteredData = useMemo(() => {
+  //   if (!query) return dispatchData;
+  //   return dispatchData.filter((row) =>
+  //     String(row.invoiceNo).toLowerCase().includes(query.toLowerCase())
+  //   );
+  // }, [query, dispatchData]);
 
   const [selectValues, setSelectValues] = useState({
     deliveryPerson: "",
@@ -86,7 +86,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
         <div className="space-y-4">
           <DispatchTable 
-            data={filteredData} 
+            data={dispatchData} 
             isLoading={isLoading} 
             selected={selectedDocs} 
             onToggle={handleToggleRow} 
@@ -98,7 +98,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
             }}
             onPageChange={setPageNumber}
             onPageSizeChange={setPageSize}
-/>
+          />
         </div>
 
         <Separator className="my-2" />
