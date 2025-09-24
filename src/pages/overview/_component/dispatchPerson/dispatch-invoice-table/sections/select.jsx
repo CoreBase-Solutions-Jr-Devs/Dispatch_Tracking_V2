@@ -20,6 +20,7 @@ export default function DispatchSelect({ values, onChange }) {
           <SelectContent className="bg-gray-200">
             <SelectItem value="self-collection">Self-Collection</SelectItem>
             <SelectItem value="delivery">Delivery</SelectItem>
+            <SelectItem value="courier">Courier</SelectItem>
           </SelectContent>
         </Select>
       </div>
