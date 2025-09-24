@@ -10,11 +10,13 @@ const initialState = {
     customerCourierPhone: "string",
     dispatchId: 0,
     dispatchIds: [],
+    dispatchRemarks: "",
     deliveryDriver: null,
     driverName: "",
     driverId: 0,
     invoiceNo: 0,
     invoices: [],
+    isPush: true,
     isSelected: true,
     pageNumber: 0,
     pageSize: 0,
@@ -62,6 +64,9 @@ const dispatchSlice = createSlice({
         setDispatchIds: (state, action) => {
             state.dispatchIds = action.payload.dispatchIds;
         },
+        setDispatchRemarks: (state, action) => {
+            state.dispatchRemarks = action.payload.dispatchRemarks;
+        },
         setDriverName: (state, action) => {
             state.driverName = action.payload.driverName;
         },
@@ -70,6 +75,9 @@ const dispatchSlice = createSlice({
         },
         setInvoiceNo: (state, action) => {
             state.invoiceNo = action.payload.invoiceNo;
+        },
+        setIsPush: (state, action) => {
+            state.isPush = action.payload.isPush;
         },
         setIsSelected: (state, action) => {
             state.isSelected = action.payload.isSelected;
