@@ -63,7 +63,7 @@ export default function DispatchFooter({ rowData, onSubmit, selectValues, onClos
         disabled={cancelDisabled}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
-        Cancel
+        Close
       </Button>
     </div>
   );
