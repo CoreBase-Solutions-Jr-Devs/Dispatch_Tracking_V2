@@ -4,20 +4,21 @@ import { useSaveSelectionsMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
 
 export default function DispatchFooter({ rowData, onSubmit, selectValues, onClose }) {
-  const [startDisabled, setStartDisabled] = useState(false);
+  const [startDisabled, setStartDisabled] = useState(true);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [cancelDisabled, setCancelDisabled] = useState(false);
 
   const [saveSelections,{ data, isLoading, isError }] = useSaveSelectionsMutation(); // Save selections API
 
   const handleStart = (data) => {
-    saveSelections(data);
     setStartDisabled(true);
+    saveSelections(data);
     const payload = {
       dispatchIds: [data?.dispatchIds],
     }
     console.log(data);
     handleSaveApi(payload);
+    setStartDisabled(false);
     setDeliveryDisabled(false);
     if (onClose) onClose();
   };
