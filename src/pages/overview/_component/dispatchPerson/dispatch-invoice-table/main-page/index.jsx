@@ -20,7 +20,9 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     const [query, setQuery] = useState("");
     const { user } = useSelector((state) => state.auth);
     // const { invoices } = useSelector((state) => state.invoice);
-    const { data, isLoading, isError } = useSelectedCusCodeQuery({ page: 1, pageSize: 20 });
+    const [pageNumber, setPageNumber] = useState(1);
+    const [pageSize, setPageSize] = useState(20);
+    const { data, isLoading, isError } = useSelectedCusCodeQuery({ pageNumber, pageSize });
     let invoicesForDispatch = data?.items || [];
     console.log(invoicesForDispatch);
 
@@ -196,11 +198,13 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
                     isLoading={false}
                     emptyTitle="No invoices found"
                     isShowPagination={true}
+                    onPageChange={setPageNumber}
+                    onPageSizeChange={setPageSize}
                     pagination={{
-                        pageNumber: data?.pageNumber,
-                        pageSize: data?.pageSize,
-                        totalItems: data?.totalCount,
-                        totalPages: data?.totalPages,
+                        pageNumber: data?.pageNumber || 1,
+                        pageSize: data?.pageSize || pageSize,
+                        totalItems: data?.totalCount || 0,
+                        totalPages: data?.totalPages || 1,
                     }}
                 />
                 <DispatchSummary data={rowData} />
