@@ -46,7 +46,7 @@ const renderStatus = (status) => {
   return (
     <Badge
       variant="outline"
-      className={`${statusClass} w-28 justify-center rounded-md text-xs px-3 py-1 font-medium border`}
+      className={`${statusClass} w-28 justify-center rounded-md text-xs px-3 py-1 font-medium border dark:bg-gray-400 dark: text-black`}
     >
       {status}
     </Badge>
