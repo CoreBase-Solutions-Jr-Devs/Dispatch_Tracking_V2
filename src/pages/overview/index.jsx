@@ -26,7 +26,7 @@ const Overview = () => {
     switch (user?.userRole) {
       case "StorePerson":
       case "VerificationPerson":
-      case "DispatchPerson":
+      // case "DispatchPerson":
         return <FilterSheet />;
       default:
         return null;
