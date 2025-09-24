@@ -104,7 +104,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
               {/* Header Row */}
               <TableRow className="bg-gray-100 text-xs font-medium">
                 <TableCell className="py-1 px-2">Select</TableCell>
-                <TableCell className="py-1 px-2">Disp. Id</TableCell>
+                {/* <TableCell className="py-1 px-2">Disp. Id</TableCell> */}
                 <TableCell className="py-1 px-2">Inv. No</TableCell>
                 <TableCell className="py-1 px-2">CusCode</TableCell>
                 <TableCell className="py-1 px-2">CusName</TableCell>
@@ -125,7 +125,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
                       onCheckedChange={(value) => handleRowSelection(value, row)}
                     />
                   </TableCell>
-                  <TableCell className="py-1 px-2">{renderText(row?.dispatchId)}</TableCell>
+                  {/* <TableCell className="py-1 px-2">{renderText(row?.dispatchId)}</TableCell> */}
                   <TableCell className="py-1 px-2">{renderText(row?.invoiceNo)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.customerCode)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.customerName)}</TableCell>
