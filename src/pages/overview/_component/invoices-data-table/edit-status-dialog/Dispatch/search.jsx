@@ -9,6 +9,7 @@ import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function DispatchSearch({
   value,
+  data,
   onChange,
   placeholder = "Invoice No",
   selectedCount = 0,
@@ -27,10 +28,12 @@ export default function DispatchSearch({
     setDeliveryDisabled(false);
     if (onClose) onClose();
   };
-  const { data, isLoading, isError } = useDispatchSearchQuery(searchValue);
+  const { data: searchOptions, isLoading, isError } = useDispatchSearchQuery(debounceValue, {
+    skip: !debounceValue,
+  });
 
   const { data: filterOptions, isLoading: filtersLoading, isError: filtersError } = useFilterOptionsQuery();
-  const customerFilters = filterOptions?.filter((f) => f.key !== 'cusCode') || [];
+  const customerFilters = filterOptions?.filter((f) => f.key !== 'cusCode' && f.key !== 'deliveryGuy' && f.key !== 'status') || [];
 
   useEffect(() => {
    const handler = setTimeout(()=>
@@ -56,9 +59,9 @@ export default function DispatchSearch({
 
       {/* Put Filter Options here */}
       <div className="flex-1 flex flex-col justify-end">
-        <Label className="text-xs text-muted-foreground">Filter by Customer Name</Label>
+        {/* <Label className="text-xs text-muted-foreground">Filter by Customer Code</Label> */}
         <RoleBasedFilters
-            filters={customerFilters}
+            // filters={customerFilters}
             selectedFilters={selectedFilters}
             onChange={(key, val) => setSelectedFilters(prev => ({ ...prev, [key]: val }))}
         />
