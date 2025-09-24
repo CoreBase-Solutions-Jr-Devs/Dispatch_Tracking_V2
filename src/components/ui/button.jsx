@@ -25,7 +25,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         // Pharmacy-specific variants
         apply: "bg-status-delivered-foreground text-white shadow-lg hover:bg-status-delivered-foreground/90 focus:ring-2 focus:ring-status-delivered-foreground/30",
-        verification: "bg-status-verification text-white shadow-xs hover:bg-status-verification-foreground/90",
+        verification: "bg-status-verification-foreground text-white shadow-xs hover:bg-status-verification-foreground/90",
         dispatch: "bg-status-dispatch text-status-dispatch-foreground shadow-xs hover:bg-status-dispatch/90",
         store: "bg-status-store text-status-store-foreground shadow-xs hover:bg-status-store/90",
       },
