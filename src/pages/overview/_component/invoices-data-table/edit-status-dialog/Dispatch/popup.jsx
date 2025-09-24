@@ -98,7 +98,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
             }}
             onPageChange={setPageNumber}
             onPageSizeChange={setPageSize}
-/>
+          />
         </div>
 
         <Separator className="my-2" />
