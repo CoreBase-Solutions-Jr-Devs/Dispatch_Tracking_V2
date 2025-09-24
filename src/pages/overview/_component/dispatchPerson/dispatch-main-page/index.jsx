@@ -29,10 +29,9 @@ export default function DispatchMain() {
         <InvoiceToolbar role={view} />
       </div> */}
 
-      <div className="grid grid-cols-3 gap-2 items-center">
+      <div className="grid grid-cols-3 gap-1 items-center">
         <DispatchSearch />
         <DispatchFilter />
-
         <div className="flex justify-end">
           <DispatchButton onClick={handleGoToDispatchPage} />
         </div>
