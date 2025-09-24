@@ -65,8 +65,7 @@ export function DataTable({
     : internalRowSelection;
 
   const handleRowSelectionChange = (updater) => {
-
-    console.log(updater)
+    console.log(updater);
 
     const newSelection =
       typeof updater === "function" ? updater(resolvedRowSelection) : updater;
@@ -166,7 +165,7 @@ export function DataTable({
                   {group.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="!font-medium !text-[12px] bg-gray-300"
+                      className="!font-medium !text-[14px] bg-gray-300 dark:bg-gray-700"
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -187,7 +186,7 @@ export function DataTable({
                     className="data-[state=selected]:bg-transparent"
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="!text-[10px]">
+                      <TableCell key={cell.id} className="!text-[12px]">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
