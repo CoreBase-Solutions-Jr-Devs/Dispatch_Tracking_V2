@@ -166,7 +166,7 @@ export function DataTable({
                   {group.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="!font-medium !text-[12px] bg-gray-300"
+                      className="!font-medium !text-[12px] bg-gray-300 dark:bg-gray-700"
                     >
                       {flexRender(
                         header.column.columnDef.header,
