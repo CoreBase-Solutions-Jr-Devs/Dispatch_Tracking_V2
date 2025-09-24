@@ -62,7 +62,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
 
   const handleRowSelection = (value, row) => {
     const payload = {
-      dispatchId: row?.dispatchId,
+      // deliveryId: row.,
       invoices: [
         {
           invoiceNo: row?.invoiceNo,
@@ -91,7 +91,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
         } else if (error?.data?.message) {
           description = error.data.message;
         }
-        toast.error("Dispatch Invoice Selection Failed", { description, duration: 4000 });
+        toast.error("Store start Failed", { description, duration: 4000 });
       });
   };
 

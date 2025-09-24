@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSaveSelectionsMutation } from "@/features/dispatch/dispatchAPI";
-import { toast } from "sonner";
 
 export default function DispatchFooter({ rowData, onSubmit, selectValues, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
