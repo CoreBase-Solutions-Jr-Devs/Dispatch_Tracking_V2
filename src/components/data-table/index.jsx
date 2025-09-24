@@ -187,10 +187,12 @@ export function DataTable({
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="!text-[12px]">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                        <div className="!text-[12px]">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </div>
                       </TableCell>
                     ))}
                   </TableRow>
