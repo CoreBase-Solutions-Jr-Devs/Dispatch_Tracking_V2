@@ -2,8 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
+    carMake: "",
+    carPlate: "",
+    collectionType: "",
+    customerCourierName: "string",
+    customerCourierId: 0,
+    customerCourierPhone: "string",
     dispatchId: 0,
+    dispatchIds: [],
     deliveryDriver: null,
+    driverName: "",
+    driverId: 0,
     invoiceNo: 0,
     invoices: [],
     isSelected: true,
@@ -14,6 +23,8 @@ const initialState = {
         pageNumber: 1,
         pageSize: 50,
     },
+    routeCode: 0,
+    routeName: "",
 }
 
 const dispatchSlice = createSlice({
@@ -24,11 +35,38 @@ const dispatchSlice = createSlice({
             state.invoices = action.payload.invoices;
             state.pagination = action.payload.pagination;
         },
+        setCarMake: (state, action) => {
+            state.carMake = action.payload.carMake;
+        },
+        setCarPlate: (state, action) => {
+            state.carPlate = action.payload.carPlate;
+        },
+        setCollectionType: (state, action) => {
+            state.collectionType = action.payload.collectionType;
+        },
+        setCustomerCourierName: (state, action) => {
+            state.customerCourierName = action.payload.customerCourierName;
+        },
+        setCustomerCourierId: (state, action) => {
+            state.customerCourierId = action.payload.customerCourierId;
+        },
+        setCustomerCourierPhone: (state, action) => {
+            state.customerCourierPhone= action.payload.customerCourierPhone;
+        },
         setDeliveryDriver: (state, action) => {
             state.deliveryDriver = action.payload.deliveryDriver;
         },
         setDispatchId: (state, action) => {
             state.dispatchId = action.payload.dispatchId;
+        },
+        setDispatchIds: (state, action) => {
+            state.dispatchIds = action.payload.dispatchIds;
+        },
+        setDriverName: (state, action) => {
+            state.driverName = action.payload.driverName;
+        },
+        setDriverId: (state, action) => {
+            state.driverId = action.payload.driverId;
         },
         setInvoiceNo: (state, action) => {
             state.invoiceNo = action.payload.invoiceNo;
@@ -41,6 +79,12 @@ const dispatchSlice = createSlice({
         },
         setPageSize: (state, action) => {
             state.pageSize =  action.payload.pageSize;
+        },
+        setRouteCode: (state, action) => {
+            state.routeCode =  action.payload.routeCode;
+        },
+        setRouteName: (state, action) => {
+            state.routeName =  action.payload.routeName;
         },
     }
 })
