@@ -6,9 +6,8 @@ import { Eye } from "lucide-react";
 import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
 import EditStatusDialog from "../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
-
 const renderText = (text) => (
-  <span className=" font-medium">{text || "—"}</span>
+  <span className="text-foreground  font-medium">{text || "—"}</span>
 );
 
 const STATUS_STYLES = {
@@ -91,7 +90,7 @@ const renderDispatchLink = (row) => (
     onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
   >
     <a
-      className="text-sm underline cursor-pointer text-primary hover:text-primary/80"
+      className="text-sm underline cursor-pointer text-primary font-medium  text-sm hover:text-primary/80"
       onClick={(e) => e.stopPropagation()}
     >
       {row.original.dispatchNumber || "—"}
@@ -115,7 +114,6 @@ const renderActions = (row) => (
     </Button>
   </EditStatusDialog>
 );
-
 
 export default function DispatchGrid() {
   const [pageNumber, setPageNumber] = useState(1);

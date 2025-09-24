@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 import { useGetSavedDispatchedDetailsQuery } from "@/features/Dispmain/dispatchAPI";
 
-
 const renderText = (text) => (
   <span className="text-foreground font-medium">{text ?? "—"}</span>
 );
@@ -53,15 +52,12 @@ export default function DispatchMainPopup({ rowData, onClose }) {
   return (
     <div className="my-1 overflow-x-auto">
       <DialogHeader>
-        <h2 className="text-lg font-semibold">
-          Dispatch Details - {dispatchNumber}
-        </h2>
+        <h2 className="text-lg font-semibold">Dispatch Details </h2>
       </DialogHeader>
 
       <Table>
         <TableBody>
-        
-          <TableRow className="bg-gray-100 text-xs font-medium">
+          <TableRow className="bg-gray-300 text-sm font-medium">
             <TableCell className="py-1 px-2">Dispatch No</TableCell>
             <TableCell className="py-1 px-2">Invoice No</TableCell>
             <TableCell className="py-1 px-2">Customer Name</TableCell>
@@ -71,10 +67,9 @@ export default function DispatchMainPopup({ rowData, onClose }) {
             <TableCell className="py-1 px-2">Status</TableCell>
           </TableRow>
 
-         
           {rows.map((row, index) => (
-            <TableRow key={index} className="text-xs font-medium">
-              <TableCell className="py-1 px-2">
+            <TableRow key={index} className="text-sm font-medium">
+              <TableCell className="py-2 px-2">
                 {renderText(row?.dispatchNumber || dispatchNumber)}
               </TableCell>
               <TableCell className="py-1 px-2">
@@ -89,14 +84,14 @@ export default function DispatchMainPopup({ rowData, onClose }) {
               <TableCell className="py-1 px-2">
                 {renderText(row?.amount?.toFixed(2))}
               </TableCell>
-              <TableCell className="py-1 px-2">
+              <TableCell className="py-1 px-2 font-mono">
                 {renderText(
                   row?.dispatchDateTime
                     ? new Date(row.dispatchDateTime).toLocaleString()
                     : "—"
                 )}
               </TableCell>
-              <TableCell className="py-1 px-2">
+              <TableCell className="py-1 px-1">
                 {renderStatus(row?.status)}
               </TableCell>
             </TableRow>
@@ -104,8 +99,8 @@ export default function DispatchMainPopup({ rowData, onClose }) {
         </TableBody>
       </Table>
 
-      <DialogFooter className="flex justify-end">
-        <Button variant="outline" onClick={onClose}>
+      <DialogFooter className="flex justify-end px-3 py-3">
+        <Button variant="default" onClick={onClose}>
           Close
         </Button>
       </DialogFooter>
