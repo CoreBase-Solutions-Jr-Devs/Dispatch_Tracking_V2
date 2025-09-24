@@ -121,7 +121,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
           <Table>
             <TableBody>
               {/* Header Row */}
-              <TableRow className="bg-gray-100 text-xs font-medium">
+              <TableRow className="bg-gray-100 dark:bg-gray-700 text-xs font-medium">
                 <TableCell className="py-1 px-2">Select</TableCell>
                 {/* <TableCell className="py-1 px-2">Disp. Id</TableCell> */}
                 <TableCell className="py-1 px-2">Inv. No</TableCell>
@@ -136,7 +136,7 @@ const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDis
     
               {/* Dynamic Rows */}
               {rows.map((row, index) => (
-                <TableRow key={index} className="text-xs font-medium">
+                <TableRow key={index} className="text-xs font-medium dark:bg-gray-700">
                   <TableCell className="py-1 px-2">
                     <Checkbox
                       className="border border-gray-400"
