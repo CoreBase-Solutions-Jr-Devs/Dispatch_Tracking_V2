@@ -20,7 +20,7 @@ const renderStatus = (status) => {
     case "In Process":
       statusClass = STATUS_STYLES.Store;
       break;
-    case "Processed":
+    case "Ongoing":
     case "In Verification":
       statusClass = STATUS_STYLES.Verification;
       break;
@@ -31,6 +31,7 @@ const renderStatus = (status) => {
     case "Return":
     case "Dispatched":
     case "In Delivery":
+    case "Processed":
       statusClass = STATUS_STYLES.Delivery;
       break;
     case "Recalled":
@@ -46,7 +47,7 @@ const renderStatus = (status) => {
   return (
     <Badge
       variant="outline"
-      className={`${statusClass} w-28 justify-center rounded-md  px-3 py-1 text-xs font-medium border`}
+      className={`${statusClass} w-28 justify-center rounded-md px-3 py-1  font-medium border`}
     >
       {status}
     </Badge>
@@ -54,7 +55,7 @@ const renderStatus = (status) => {
 };
 
 const renderText = (text) => (
-  <span className="text-foreground text-xs font-medium">{text || "—"}</span>
+  <span className="text-foreground  font-medium">{text || "—"}</span>
 );
 
 const formatUKDateTime = (date) => {
@@ -78,7 +79,9 @@ const renderDateTime = (value, position = 1) => {
       ? "text-foreground"
       : "text-muted";
   return (
-    <span className={`${baseColor} font-mono text-xs `}>{formattedDate}</span>
+    <span className={`${baseColor} font-mono font-medium text-sm`}>
+      {formattedDate}
+    </span>
   );
 };
 
@@ -104,7 +107,7 @@ const formatDuration = (seconds) => {
 const renderDuration = (durationSeconds, avgDuration) => {
   if (durationSeconds == null)
     return (
-      <span className="text-muted-foreground font-mono text-xs font-medium">
+      <span className="text-muted-foreground font-mono font-medium text-sm ">
         —
       </span>
     );
@@ -124,7 +127,7 @@ const renderInvoiceNo = (row, view) => {
       onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
     >
       <a
-        className=" underline cursor-pointer text-primary font-medium text-xs hover:text-primary/80"
+        className=" underline cursor-pointer text-primary font-medium  text-sm hover:text-primary/80"
         onClick={(e) => e.stopPropagation()}
       >
         {row.original.invoiceNo || "—"}
