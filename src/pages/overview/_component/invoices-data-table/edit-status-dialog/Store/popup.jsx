@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function StorePopup({ rowData, onSubmit, onClose }) {
-  const [remarks, setRemarks] = useState(null); // now nullable
+  const [remarks, setRemarks] = useState(null);
   const [errors, setErrors] = useState({
     remarks: "",
   });
@@ -24,7 +24,7 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
   );
 
   const handleRemarksChange = (newRemarks) => {
-    setRemarks(newRemarks); // nullable, can be null or empty
+    setRemarks(newRemarks);
   };
 
   if (isLoading) {
