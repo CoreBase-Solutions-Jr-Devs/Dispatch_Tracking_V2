@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useStoreStartMutation, useStorePushMutation } from "@/features/invoices/invoicesAPI";
+import {
+  useStoreStartMutation,
+  useStorePushMutation,
+} from "@/features/invoices/invoicesAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
 
@@ -14,7 +17,9 @@ export default function StoreFooter({
   refetchData,
 }) {
   const [startDisabled, setStartDisabled] = useState(
-    rowData?.workflowStatus === "Processed" || rowData?.storeStartDateTime || false
+    rowData?.workflowStatus === "Processed" ||
+      rowData?.storeStartDateTime ||
+      false
   );
 
   const [verificationDisabled, setVerificationDisabled] = useState(
@@ -28,23 +33,31 @@ export default function StoreFooter({
     setStartDisabled(true);
     setVerificationDisabled(true);
 
-    storeStart(Number(rowData.invoiceNo))
+   
+    const invoiceNo = Number(rowData.invoiceNo);
+
+    storeStart(invoiceNo)
       .unwrap()
       .then(() => {
         toast.success("Store process started successfully");
+
         setVerificationDisabled(false);
-        if (refetchData) refetchData();
+
+        if (refetchData) setTimeout(() => refetchData(), 50);
       })
       .catch((error) => {
         setStartDisabled(false);
         setVerificationDisabled(true);
+
         let description = "Please check your credentials and try again.";
+
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
           if (errorMessages.length > 0) description = errorMessages.join(" ");
         } else if (error?.data?.message) {
           description = error.data.message;
         }
+
         toast.error("Store start Failed", { description, duration: 4000 });
       });
   };
@@ -53,7 +66,6 @@ export default function StoreFooter({
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
 
     const fieldErrors = {};
-    // Remarks are optional, so only track if needed
     // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
 
     setErrors({
@@ -67,15 +79,17 @@ export default function StoreFooter({
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      storeRemarks: remarks || null, 
+      storeRemarks: remarks ?? "",
     };
 
     storePush(payload)
       .unwrap()
       .then(() => {
         toast.success("Sent to Verification successfully");
-        setRemarks(null); 
-        setErrors({});
+        setTimeout(() => {
+          setRemarks(null);
+          setErrors({});
+        }, 50);
         if (refetchData) refetchData();
       })
       .catch((error) => {
@@ -88,7 +102,10 @@ export default function StoreFooter({
         } else if (error?.data?.message) {
           description = error.data.message;
         }
-        toast.error("Send to Verification failed", { description, duration: 4000 });
+        toast.error("Send to Verification failed", {
+          description,
+          duration: 4000,
+        });
       });
   };
 

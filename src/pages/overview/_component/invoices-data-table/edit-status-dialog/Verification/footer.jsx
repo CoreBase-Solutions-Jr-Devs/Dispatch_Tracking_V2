@@ -35,23 +35,30 @@ export default function VerificationFooter({
     setStartDisabled(true);
     setDispatchDisabled(true);
 
-    verificationStart(Number(rowData.invoiceNo))
+    const invoiceNo = Number(rowData.invoiceNo);
+
+    verificationStart(invoiceNo)
       .unwrap()
       .then(() => {
         toast.success("Verification started successfully");
+
         setDispatchDisabled(false);
-        if (refetchData) refetchData();
+
+        if (refetchData) setTimeout(() => refetchData(), 50);
       })
       .catch((error) => {
         setStartDisabled(false);
         setDispatchDisabled(true);
+
         let description = "Please check your credentials and try again.";
+
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
           if (errorMessages.length > 0) description = errorMessages.join(" ");
         } else if (error?.data?.message) {
           description = error.data.message;
         }
+
         toast.error("Verification start Failed", {
           description,
           duration: 4000,
@@ -63,7 +70,7 @@ export default function VerificationFooter({
     const isRemarksEmpty = !remarks || remarks.trim() === "";
 
     const fieldErrors = {};
-    if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
+    // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
 
     setErrors({
       remarks: fieldErrors.remarks || undefined,
@@ -76,15 +83,17 @@ export default function VerificationFooter({
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      verificationRemarks: remarks || null,
+      verificationRemarks: remarks ?? "",
     };
 
     verificationPush(payload)
       .unwrap()
       .then(() => {
         toast.success("Sent to Dispatch successfully");
-        setRemarks("");
-        setErrors({});
+        setTimeout(() => {
+          setRemarks(null);
+          setErrors({});
+        }, 50);
         if (refetchData) refetchData();
       })
       .catch((error) => {

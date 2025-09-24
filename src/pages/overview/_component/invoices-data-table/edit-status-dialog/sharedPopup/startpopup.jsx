@@ -44,7 +44,7 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
       .then((data) => {
         dispatch(setCredentials(data));
 
-        // Trigger start API from StoreFooter
+        
         onSubmit?.();
 
         onClose?.();
@@ -76,7 +76,7 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
       </DialogHeader>
 
       <div className="p-2 space-y-4">
-        {/* Username */}
+        
         <div className="flex flex-col gap-1">
           <label
             htmlFor="username"
@@ -100,7 +100,7 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
           )}
         </div>
 
-        {/* Password */}
+       
         <div className="flex flex-col gap-1">
           <label
             htmlFor="password"
@@ -145,7 +145,7 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
           Login
         </Button>
         <Button variant="destructive" className="uppercase" onClick={onClose}>
-          Cancel
+          Close
         </Button>
       </DialogFooter>
     </div>
