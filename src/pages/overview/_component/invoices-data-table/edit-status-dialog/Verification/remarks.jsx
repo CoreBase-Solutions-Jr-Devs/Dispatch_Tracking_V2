@@ -8,15 +8,16 @@ export default function VerificationRemarks({
   handleRemarksChange,
   error,
 }) {
-  const [remarks, setRemarks] = useState(data?.verifyRemarks || "");
+  const [remarks, setRemarks] = useState(data?.verifyRemarks ?? null);
 
   useEffect(() => {
-    setRemarks(data?.verifyRemarks || "");
+    setRemarks(data?.verifyRemarks ?? null);
   }, [data?.verifyRemarks]);
 
   const handleChange = (e) => {
-    setRemarks(e.target.value);
-    handleRemarksChange(e.target.value);
+    const value = e.target.value.trim() === "" ? null : e.target.value;
+    setRemarks(value);
+    handleRemarksChange(value);
   };
 
   if (!data) return null;
@@ -27,10 +28,10 @@ export default function VerificationRemarks({
         <Label className="text-xs font-medium">Verification Remarks:</Label>
       </div>
       <Textarea
-        className="min-w-[80px] bg-gray-300 h-20 text-xs font-medium "
-        value={remarks}
+        className="min-w-[80px] bg-gray-300 h-20 text-xs font-medium"
+        value={remarks ?? ""} 
         onChange={handleChange}
-        readOnly={data?.workflowStatus === "Verified"}
+        readOnly={data?.workflowStatus === "Verified" || readOnly}
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </section>
