@@ -5,18 +5,16 @@ import {
   useVerificationPushMutation,
 } from "@/features/invoices/invoicesAPI";
 import { toast } from "sonner";
-import VerificationStartPopup from "./startpopup.jsx";
+import EditStatusDialog from "../edit-status-dialog";
 
 export default function VerificationFooter({
   rowData,
   onSubmit,
   onClose,
-  weight,
   remarks,
   errors,
   setErrors,
   refetchData,
-  setWeight, 
   setRemarks,
 }) {
   const [startDisabled, setStartDisabled] = useState(
@@ -39,17 +37,14 @@ export default function VerificationFooter({
 
     verificationStart(Number(rowData.invoiceNo))
       .unwrap()
-      .then((response) => {
+      .then(() => {
         toast.success("Verification started successfully");
-
         setDispatchDisabled(false);
-
         if (refetchData) refetchData();
       })
       .catch((error) => {
         setStartDisabled(false);
         setDispatchDisabled(true);
-
         let description = "Please check your credentials and try again.";
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
@@ -65,23 +60,14 @@ export default function VerificationFooter({
   };
 
   const handleDispatch = () => {
-    const isWeightEmpty = weight === "" || weight === null;
     const isRemarksEmpty = !remarks || remarks.trim() === "";
 
     const fieldErrors = {};
-    if (isWeightEmpty) fieldErrors.weight = "Weight is required";
     if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
 
     setErrors({
-      weight: fieldErrors.weight || undefined,
       remarks: fieldErrors.remarks || undefined,
     });
-
-    if (isWeightEmpty && isRemarksEmpty) {
-      setWeight(0);
-      setRemarks("");
-      return;
-    }
 
     if (Object.keys(fieldErrors).length > 0) return;
 
@@ -90,23 +76,20 @@ export default function VerificationFooter({
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      totalWeightKg: Number(weight), 
-      verificationRemarks: remarks,
+      verificationRemarks: remarks || null,
     };
 
     verificationPush(payload)
       .unwrap()
-      .then((response) => {
+      .then(() => {
         toast.success("Sent to Dispatch successfully");
-        setWeight(undefined);
-        if (refetchData) refetchData();
         setRemarks("");
         setErrors({});
+        if (refetchData) refetchData();
       })
       .catch((error) => {
         setStartDisabled(false);
         setDispatchDisabled(false);
-
         let description = "Please check your credentials and try again.";
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
@@ -121,29 +104,20 @@ export default function VerificationFooter({
   const handleClose = () => onClose();
 
   return (
-    <div className="flex flex-row justify-end w-full">
-      <Button
-        variant="destructive"
-        onClick={handleClose}
-        className="mt-2 mr-2 uppercase"
-      >
-        Cancel
-      </Button>
-
-      <VerificationStartPopup
+    <div className="flex flex-row justify-between w-full">
+      <EditStatusDialog
         rowData={rowData}
-        onConfirm={(confirmed) => {
-          if (confirmed) handleStartApi();
-        }}
+        view="verificationstart"
+        onSubmit={handleStartApi}
       >
         <Button
-          variant="verification"
+          variant="default"
           disabled={startDisabled}
           className="mt-2 mr-2 uppercase"
         >
           Start
         </Button>
-      </VerificationStartPopup>
+      </EditStatusDialog>
 
       <Button
         variant="apply"
@@ -152,6 +126,13 @@ export default function VerificationFooter({
         className="mt-2 uppercase"
       >
         Send to Dispatch
+      </Button>
+      <Button
+        variant="destructive"
+        onClick={handleClose}
+        className="mt-2 mr-2 uppercase"
+      >
+        Close
       </Button>
     </div>
   );
