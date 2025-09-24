@@ -9,6 +9,11 @@ const initialState = {
     isSelected: true,
     pageNumber: 0,
     pageSize: 0,
+    pagination: {
+        totalCount: 0,
+        pageNumber: 1,
+        pageSize: 50,
+    },
 }
 
 const dispatchSlice = createSlice({
@@ -17,6 +22,7 @@ const dispatchSlice = createSlice({
     reducers: {
         setInvoices: (state, action) => {
             state.invoices = action.payload.invoices;
+            state.pagination = action.payload.pagination;
         },
         setDeliveryDriver: (state, action) => {
             state.deliveryDriver = action.payload.deliveryDriver;
