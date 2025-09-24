@@ -98,10 +98,13 @@ const dispatchSlice = createSlice({
 })
 
 export const {
-    setInvoices,
-    setDeliveryDriver,
-    setDispatchId, setInvoiceNo,
-    setIsSelected, setPageNumber, setPageSize
+  setInvoices,setCarMake,setCarPlate,
+  setCollectionType,setCustomerCourierName,
+  setCustomerCourierId,setCustomerCourierPhone,setDeliveryDriver,
+  setDispatchId,setDispatchIds,setDispatchRemarks,
+  setDriverName,setDriverId,setInvoiceNo,
+  setIsPush,setIsSelected,setPageNumber,
+  setPageSize,setRouteCode,setRouteName,
 } = dispatchSlice.actions;
 
 export default dispatchSlice.reducer;
