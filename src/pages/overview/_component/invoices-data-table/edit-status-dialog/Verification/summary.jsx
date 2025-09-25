@@ -5,24 +5,24 @@ import { useState, useEffect } from "react";
 export default function VerificationSummary({
   data,
   readOnly,
-  handleWeightChange,
-  error,
+  // handleWeightChange,
+  // error,
 }) {
-  const [weight, setWeight] = useState(data?.totalWeightKg ?? 0);
+  // const [weight, setWeight] = useState(data?.totalWeightKg ?? 0);
 
-  useEffect(() => {
-    setWeight(data?.totalWeightKg ?? 0);
-  }, [data?.totalWeightKg]);
+  // useEffect(() => {
+  //   setWeight(data?.totalWeightKg ?? 0);
+  // }, [data?.totalWeightKg]);
 
-  const handleChange = (e) => {
-    setWeight(e.target.value);
-    handleWeightChange(e.target.value);
-  };
+  // const handleChange = (e) => {
+  //   setWeight(e.target.value);
+  //   handleWeightChange(e.target.value);
+  // };
 
   if (!data) return null;
 
   return (
-    <section className="flex flex-row justify-between items-center mb-2 gap-x-20">
+    <section className="flex flex-row justify-start items-center mb-2 gap-x-20">
       <div className="flex items-center gap-x-2">
         <Label className="text-xs font-medium">Items:</Label>
         <Label className="text-xs font-medium ">{data?.items}</Label>
@@ -31,6 +31,7 @@ export default function VerificationSummary({
         <Label className="text-xs font-medium">Pending Counts:</Label>
         <Label className="text-xs font-medium ">{data?.counts}</Label>
       </div>
+      {/*
       <div className="flex items-center gap-x-2">
         <Label className="text-xs font-medium">Total Weight (kg):</Label>
         <Input
@@ -42,6 +43,7 @@ export default function VerificationSummary({
         />
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>
+      */}
     </section>
   );
 }

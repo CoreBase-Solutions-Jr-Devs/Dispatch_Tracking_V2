@@ -10,16 +10,19 @@ export default function StoreRemarks({
 }) {
   console.log("Remarks Data:", data);
 
-  const [remarks, setRemarks] = useState(data?.storeRemarks || "");
+  
+  const [remarks, setRemarks] = useState(data?.storeRemarks ?? null);
 
   useEffect(() => {
-    setRemarks(data?.storeRemarks || "");
+    setRemarks(data?.storeRemarks ?? null);
   }, [data?.storeRemarks]);
 
   const handleChange = (e) => {
-    setRemarks(e.target.value);
-    handleRemarksChange(e.target.value);
+    const value = e.target.value.trim() === "" ? null : e.target.value;
+    setRemarks(value);
+    handleRemarksChange(value);
   };
+
   if (!data) return null;
 
   return (
@@ -29,9 +32,8 @@ export default function StoreRemarks({
       </div>
       <Textarea
         className="min-w-[80px] bg-gray-100 h-20 border border-gray-300 rounded-md text-xs font-medium"
-        value={remarks}
+        value={remarks || ""}
         onChange={handleChange}
-        // readOnly={readOnly}
         readOnly={data?.workflowStatus === "Processed"}
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}

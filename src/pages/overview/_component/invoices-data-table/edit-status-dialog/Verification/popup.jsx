@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import VerificationHeader from "./header";
@@ -12,9 +12,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetVerificationTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
 
 export default function VerificationPopup({ rowData, onSubmit, onClose }) {
-  const [remarks, setRemarks] = useState("");
-  const [weight, setWeight] = useState(0);
-  const [errors, setErrors] = useState({ weight: "", remarks: "" });
+  const [remarks, setRemarks] = useState(null); // nullable by default
+  // const [weight, setWeight] = useState(0);
+  const [errors, setErrors] = useState({
+    // weight: "",
+    remarks: "",
+  });
 
   const { data, isLoading, isError, refetch } =
     useGetVerificationTrackingDetailsQuery({
@@ -22,15 +25,12 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
     });
 
   useEffect(() => {
-    if (data?.totalWeightKg !== undefined && data?.totalWeightKg !== null) {
-      setWeight(data.totalWeightKg);
-    } else {
-      setWeight(0);
-    }
-  }, [data?.totalWeightKg]);
+    // setWeight(data?.totalWeightKg ?? 0);
+    setRemarks(data?.verifyRemarks ?? null); // nullable
+  }, [/* data?.totalWeightKg, */ data?.verifyRemarks]);
 
-  const handleRemarksChange = (newRemarks) => setRemarks(newRemarks);
-  const handleWeightChange = (newWeight) => setWeight(newWeight);
+  const handleRemarksChange = (newRemarks) => setRemarks(newRemarks ?? null);
+  // const handleWeightChange = (newWeight) => setWeight(newWeight);
 
   if (isLoading)
     return (
@@ -66,9 +66,9 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
       <VerificationSummary
         data={data}
         readOnly={readOnly}
-        handleWeightChange={handleWeightChange}
-        error={errors.remarks}
-        weight={weight}
+        // handleWeightChange={handleWeightChange}
+        error={/* errors.weight */ undefined} // commented out weight errors
+        // weight={weight}
       />
 
       <VerificationRemarks
@@ -76,6 +76,7 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
         readOnly={readOnly}
         handleRemarksChange={handleRemarksChange}
         error={errors.remarks}
+        value={remarks ?? ""} // pass empty string if null
       />
 
       <VerificationMeta data={data} readOnly={readOnly} />
@@ -83,18 +84,12 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
       <DialogFooter>
         <VerificationFooter
           remarks={remarks}
-          weight={weight}
+          // weight={weight}
           rowData={data}
           onSubmit={onSubmit}
           onClose={onClose}
           errors={errors}
-          setWeight={setWeight}
-          setRemarks={setRemarks}
-          setErrors={setErrors}
-          refetchData={refetch}
-          onClose={onClose}
-          errors={errors}
-          setWeight={setWeight}
+          // setWeight={setWeight}
           setRemarks={setRemarks}
           setErrors={setErrors}
           refetchData={refetch}

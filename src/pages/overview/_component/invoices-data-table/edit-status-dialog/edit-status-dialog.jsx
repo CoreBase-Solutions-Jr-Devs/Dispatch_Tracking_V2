@@ -5,6 +5,8 @@ import StorePopup from "./Store/popup.jsx";
 import VerificationPopup from "./Verification/popup.jsx";
 import DispatchPopup from "./Dispatch/popup.jsx";
 import DeliveryPopup from "./Delivery/popup.jsx";
+import DispatchMainPopup from "../../dispatchPerson/Dispatch-Sections/mainpopup.jsx";
+import StartPopup from "./sharedPopup/startpopup";
 
 const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,9 +22,13 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
         return VerificationPopup;
       case "dispatch":
         return DispatchPopup;
+      case "dispatchmain":
+        return DispatchMainPopup;
       case "delivery":
         return DeliveryPopup;
-        return CollectionPopup;
+      case "storestart":
+      case "verificationstart":
+        return StartPopup;
       default:
         return () => (
           <div className="p-4 text-muted-foreground">
@@ -34,10 +40,20 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
 
   const FormComponent = getForm();
 
+  let dialogClass = "";
+  switch (view?.toLowerCase()) {
+    case "storestart":
+    case "verificationstart":
+      dialogClass = "sm:max-w-sm";
+      break;
+    default:
+      dialogClass = "sm:max-w-xl md:max-w-2xl lg:max-w-3xl";
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
+      <DialogContent className={dialogClass}>
         <FormComponent
           rowData={rowData}
           onSubmit={onSubmit}
