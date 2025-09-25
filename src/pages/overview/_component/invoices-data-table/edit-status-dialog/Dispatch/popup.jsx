@@ -21,12 +21,15 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
   // Handle row toggle
   const handleToggleRow = (doc) => {
-    setSelectedDocs((prev) => 
-      prev.find((d) => d.invNo === doc.invNo)
-        ? prev.filter((d) => d.invNo !== doc.invNo)
-        : [...prev, doc]
-    );
-  }
+    setSelectedDocs((prev) => {
+      const exists = prev.some((d) => d.dispatchId === doc.dispatchId);
+      if (exists) {
+        return prev.filter((d) => d.dispatchId !== doc.dispatchId);
+      } else {
+        return [...prev, doc];
+      }
+    });
+  };
 
 
   // Fetch verified dispatch data
@@ -108,6 +111,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
           <DispatchFooter
             rowData={rowData}
             selectValues={selectValues}
+            selectedDocs={selectedDocs}
             onSubmit={onSubmit}
             onClose={handleDialogClose}
           />
