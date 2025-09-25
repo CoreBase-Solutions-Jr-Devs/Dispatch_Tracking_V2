@@ -47,7 +47,7 @@ const renderStatus = (status) => {
   return (
     <Badge
       variant="outline"
-      className={`${statusClass} w-28 justify-center rounded-md px-3 py-1  font-medium border`}
+      className={`${statusClass} w-28 justify-center rounded-md text-xs px-3 py-1 font-medium border dark:bg-gray-400 dark: text-black`}
     >
       {status}
     </Badge>
@@ -55,7 +55,7 @@ const renderStatus = (status) => {
 };
 
 const renderText = (text) => (
-  <span className="text-foreground  font-medium">{text || "—"}</span>
+  <span className="text-foreground font-medium">{text || "—"}</span>
 );
 
 const formatUKDateTime = (date) => {
@@ -79,9 +79,7 @@ const renderDateTime = (value, position = 1) => {
       ? "text-foreground"
       : "text-muted";
   return (
-    <span className={`${baseColor} font-mono font-medium text-sm`}>
-      {formattedDate}
-    </span>
+    <span className={`${baseColor} font-mono text-sm`}>{formattedDate}</span>
   );
 };
 
@@ -106,11 +104,7 @@ const formatDuration = (seconds) => {
 
 const renderDuration = (durationSeconds, avgDuration) => {
   if (durationSeconds == null)
-    return (
-      <span className="text-muted-foreground font-mono font-medium text-sm ">
-        —
-      </span>
-    );
+    return <span className="text-muted-foreground font-medium">—</span>;
   const colorClass =
     durationSeconds > avgDuration ? "text-red-600" : "text-green-600";
   return (
@@ -127,8 +121,13 @@ const renderInvoiceNo = (row, view) => {
       onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
     >
       <a
-        className=" underline cursor-pointer text-primary font-medium  text-sm hover:text-primary/80"
-        onClick={(e) => e.stopPropagation()}
+        href="#"
+        className="text-sm underline cursor-pointer text-primary hover:text-primary/80"
+        onClick={(e) => {
+          e.preventDefault(); // prevent page reload
+          e.stopPropagation(); // prevent row click
+          // clicking this link now triggers the EditStatusDialog automatically
+        }}
       >
         {row.original.invoiceNo || "—"}
       </a>
@@ -140,6 +139,17 @@ const renderActions = (row, handlers = {}, view) => {
   const { onView } = handlers;
   return (
     <div className="flex items-center gap-1">
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-8 w-8 p-0 hover:bg-accent"
+        onClick={(e) => {
+          e.stopPropagation();
+          onView?.(row.original);
+        }}
+      >
+        <Eye className="h-4 w-4 text-muted-foreground" />
+      </Button>
       <EditStatusDialog
         rowData={row.original}
         view={view}
@@ -195,7 +205,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
-        const value = row.original.status;
+        const value = row.original.status ?? row.original.workflowStatus;
         return renderStatus(value);
       },
     },
