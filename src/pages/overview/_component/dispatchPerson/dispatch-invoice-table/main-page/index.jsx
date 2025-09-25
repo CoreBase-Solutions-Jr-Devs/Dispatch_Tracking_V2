@@ -22,8 +22,8 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     // const { invoices } = useSelector((state) => state.invoice);
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(20);
-    const { data, isLoading, isError } = useSelectedCusCodeQuery({ pageNumber, pageSize });
-    let invoicesForDispatch = data?.items || [];
+    const { data: selectedInvoices, isLoading, isError } = useSelectedCusCodeQuery({ pageNumber, pageSize });
+    let invoicesForDispatch = selectedInvoices?.items || [];
     console.log(invoicesForDispatch);
 
     const view = roleToView(user?.userRole || "User");
@@ -201,10 +201,10 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
                     onPageChange={setPageNumber}
                     onPageSizeChange={setPageSize}
                     pagination={{
-                        pageNumber: data?.pageNumber || 1,
-                        pageSize: data?.pageSize || pageSize,
-                        totalItems: data?.totalCount || 0,
-                        totalPages: data?.totalPages || 1,
+                        pageNumber: selectedInvoices?.pageNumber || 1,
+                        pageSize: selectedInvoices?.pageSize || pageSize,
+                        totalItems: selectedInvoices?.totalCount || 0,
+                        totalPages: selectedInvoices?.totalPages || 1,
                     }}
                 />
                 <DispatchSummary data={rowData} />
