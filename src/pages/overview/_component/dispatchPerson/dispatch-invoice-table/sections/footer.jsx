@@ -160,8 +160,8 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
       </Button>
       <Button
         variant="verification"
-        onClick={handleSave}
-        disabled={saveDisabled}
+        onClick={handleRecall}
+        disabled={recallDisabled}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
         Save

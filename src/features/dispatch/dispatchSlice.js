@@ -25,8 +25,6 @@ const initialState = {
         pageNumber: 1,
         pageSize: 50,
     },
-    routeCode: 0,
-    routeName: "",
 }
 
 const dispatchSlice = createSlice({
@@ -36,24 +34,6 @@ const dispatchSlice = createSlice({
         setInvoices: (state, action) => {
             state.invoices = action.payload.invoices;
             state.pagination = action.payload.pagination;
-        },
-        setCarMake: (state, action) => {
-            state.carMake = action.payload.carMake;
-        },
-        setCarPlate: (state, action) => {
-            state.carPlate = action.payload.carPlate;
-        },
-        setCollectionType: (state, action) => {
-            state.collectionType = action.payload.collectionType;
-        },
-        setCustomerCourierName: (state, action) => {
-            state.customerCourierName = action.payload.customerCourierName;
-        },
-        setCustomerCourierId: (state, action) => {
-            state.customerCourierId = action.payload.customerCourierId;
-        },
-        setCustomerCourierPhone: (state, action) => {
-            state.customerCourierPhone= action.payload.customerCourierPhone;
         },
         setDeliveryDriver: (state, action) => {
             state.deliveryDriver = action.payload.deliveryDriver;

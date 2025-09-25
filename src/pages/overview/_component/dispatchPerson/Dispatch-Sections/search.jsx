@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Search as SearchIcon } from "lucide-react";
 
 export default function DispatchSearch({
-  placeholder = "DispatchNo/Cuscode",
+  placeholder = "DispatchNo",
   onSearch,
 }) {
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -11,7 +11,7 @@ export default function DispatchSearch({
   const handleChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    onSearch?.(value); 
+    onSearch?.(value);
   };
 
   return (

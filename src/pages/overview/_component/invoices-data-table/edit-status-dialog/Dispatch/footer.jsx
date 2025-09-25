@@ -10,29 +10,36 @@ export default function DispatchFooter({ rowData, selectedDocs = [], onSubmit, s
 
   const [saveSelections,{ data, isLoading, isError }] = useSaveSelectionsMutation(); // Save selections API
 
-  const handleSave = async () => {
-    if (!selectedDocs.length) return;
-
+  const handleStart = (data) => {
+    saveSelections(data);
+    setStartDisabled(true);
     const payload = {
-      dispatchIds: selectedDocs.map((doc) => doc.dispatchId),
-    };
-
-    try {
-      const res = await saveSelections(payload).unwrap();
-      toast.success("Successfully saved invoices!");
-      console.log(res);
-      if (onClose) onClose();
-    } catch (error) {
-      let description = "Error saving invoices. Please try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) {
-        description = error.data.message;
-      }
-      toast.error("Error saving invoices!", { description, duration: 4000 });
+      dispatchIds: [data?.dispatchIds],
     }
+    console.log(data);
+    handleSaveApi(payload);
+    setDeliveryDisabled(false);
+    if (onClose) onClose();
   };
+
+  const handleSaveApi = (data) => {
+    saveSelections(data)
+    .unwrap()
+    .then((data) => {
+      console.log("Selected Invoices:", data);
+      toast.success("Successfully saved invoices!")
+    })
+    .catch((error) => {
+        let description = "Error saving invoices. Please try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
+        toast.error("Error saving invoices!", { description, duration: 4000 });
+    })
+  }
 
   const handleCancel =() => {
     setStartDisabled(true);
