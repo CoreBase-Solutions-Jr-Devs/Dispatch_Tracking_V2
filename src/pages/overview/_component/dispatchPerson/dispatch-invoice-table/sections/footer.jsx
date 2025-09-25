@@ -1,27 +1,144 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useStartDispatchProcessMutation } from "@/features/dispatch/dispatchAPI";
+import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setCarMake, setCarPlate, setCollectionType, setCustomerCourierId, setCustomerCourierName, setCustomerCourierPhone, setDispatchIds, setDriverId, setDriverName, setInvoices, setRouteCode, setRouteName } from "@/features/dispatch/dispatchSlice";
 
 export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
-  const [recallDisabled, setRecallDisabled] = useState(true);
+  const [saveDisabled, setSaveDisabled] = useState(true);
+  const [collectionType, setCollectionType] = useState("");
+  const [routeCode, setRouteCode] = useState(0);
+  const [routeName, setRouteName] = useState("");
+  const [driverName, setDriverName] = useState("" || null);
+  const [driverId, setDriverId] = useState(0 || null);
+  const [carMake, setCarMake] = useState("" || null);
+  const [carPlate, setCarPlate] = useState("" || null);
+  const [customerCourierName, setCustomerCourierName] = useState("" || null);
+  const [customerCourierId, setCustomerCourierId] = useState("" || null);
+  const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
+  const [dispatchRemarks, setDispatchRemarks] = useState("");
+  const [isPush, setIsPush] = useState(true);
 
-  const handleStart = () => {
+  const dispatch = useDispatch();
+
+  const [startDispatch, {data: startData, isLoading: startLoading, isError: startError }] = useStartDispatchProcessMutation();
+  const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
+
+  const handleStart = async (cusCode) => {
     setStartDisabled(true);
-    setDeliveryDisabled(false);
-    if (onClose) onClose();
+    try {
+      const data = await startDispatch(cusCode).unwrap();
+      console.log(data);
+      setStartDisabled(false);
+    } catch (error) {
+      let description = "Please check your credentials and try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) description = errorMessages.join(" ");
+      } else if (error?.data?.message) description = error.data.message;
+      toast.error("Dispatch Process can not start. Please try again.", 
+        { description, duration: 4000 });
+    }
+
   };
 
-  const handleRecall =() => {
+  const handleSave = async () => {
+    setSaveDisabled(false);
     setStartDisabled(true);
-    setRecallDisabled(false);
+
+    const formData = {
+      dispatchIds: [],
+      collectionType,
+      routeCode,
+      routeName,
+      driverName,
+      driverId,
+      carMake,
+      carPlate,
+      customerCourierName,
+      customerCourierId,
+      customerCourierPhone,
+    }
+    try {
+      const data = await saveSelectedDispatches(formData).unwrap();
+      dispatch(setDispatchIds({ dispatchIds: data.dispatchIds }));
+      dispatch(setCollectionType({ collectionType: data.collectionType }));
+      dispatch(setRouteCode({ routeCode: data.routeCode }));
+      dispatch(setRouteName({ routeName: data.routeName }));
+      dispatch(setDriverName({ driverName: data.driverName }));
+      dispatch(setDriverId({ driverId: data.driverId }));
+      dispatch(setCarMake({ carMake: data.carMake }));
+      dispatch(setCarPlate({ carPlate: data.carPlate }));
+      dispatch(setCustomerCourierName({ customerCourierName: data.customerCourierName }));
+      dispatch(setCustomerCourierId({ customerCourierId: data.customerCourierId }));
+      dispatch(setCustomerCourierPhone({ customerCourierPhone: data.customerCourierPhone }));
+      console.log(data);
+    } catch (error) {
+      let description = "Saving failed. Please try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) description = errorMessages.join(" ");
+      } else if (error?.data?.message) description = error.data.message;
+
+      toast.error("Error saving invoices! Please try again.", { description, duration: 4000 });
+    }
+    setSaveDisabled(true);
+    setStartDisabled(false);
   }
 
-  const handleDelivery = () => {
+  const handleDelivery = async () => {
     setStartDisabled(true);
-    setDeliveryDisabled(true);
+    setSaveDisabled(true);
+    setDeliveryDisabled(false);
+
+    const formData = {
+      dispatchIds: [],
+      collectionType: 'DELIVERY',
+      routeCode,
+      routeName,
+      driverName,
+      driverId,
+      carMake,
+      carPlate,
+      customerCourierName,
+      customerCourierId,
+      customerCourierPhone,
+      dispatchRemarks,
+      isPush
+    }
+    try {
+      const data = await saveSelectedDispatches(formData).unwrap();
+      dispatch(setDispatchIds({ dispatchIds: data.dispatchIds }));
+      dispatch(setCollectionType({ collectionType: data.collectionType }));
+      dispatch(setRouteCode({ routeCode: data.routeCode }));
+      dispatch(setRouteName({ routeName: data.routeName }));
+      dispatch(setDriverName({ driverName: data.driverName }));
+      dispatch(setDriverId({ driverId: data.driverId }));
+      dispatch(setCarMake({ carMake: data.carMake }));
+      dispatch(setCarPlate({ carPlate: data.carPlate }));
+      dispatch(setCustomerCourierName({ customerCourierName: data.customerCourierName }));
+      dispatch(setCustomerCourierId({ customerCourierId: data.customerCourierId }));
+      dispatch(setCustomerCourierPhone({ customerCourierPhone: data.customerCourierPhone }));
+      dispatch(setDispatchRemarks({ dispatchRemarks: data.dispatchRemarks }));
+      dispatch(setIsPush({ isPush: data.isPush }));
+      console.log(data);
+    } catch (error) {
+      let description = "Saving failed. Please try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) description = errorMessages.join(" ");
+      } else if (error?.data?.message) description = error.data.message;
+
+      toast.error("Error saving invoices! Please try again.", { description, duration: 4000 });
+    }
+
     if (onSubmit) onSubmit(rowData);
     if (onClose) onClose();
+    setDeliveryDisabled(true);
   };
 
   return (
@@ -36,8 +153,8 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
       </Button>
       <Button
         variant="verification"
-        onClick={handleRecall}
-        disabled={recallDisabled}
+        onClick={handleSave}
+        disabled={saveDisabled}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
         Save
