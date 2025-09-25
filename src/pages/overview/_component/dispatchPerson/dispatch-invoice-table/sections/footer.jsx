@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useStartDispatchProcessMutation } from "@/features/dispatch/dispatchAPI";
+import { usePushDispatchProcessMutation, useStartDispatchProcessMutation } from "@/features/dispatch/dispatchAPI";
 import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [carMake, setCarMake] = useState("" || null);
   const [carPlate, setCarPlate] = useState("" || null);
   const [customerCourierName, setCustomerCourierName] = useState("" || null);
-  const [customerCourierId, setCustomerCourierId] = useState("" || null);
+  const [customerCourierId, setCustomerCourierId] = useState(0 || null);
   const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
   const [dispatchRemarks, setDispatchRemarks] = useState("");
   const [isPush, setIsPush] = useState(true);
@@ -26,10 +26,10 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const dispatch = useDispatch();
 
   const [startDispatch, {data: startData, isLoading: startLoading, isError: startError }] = useStartDispatchProcessMutation();
-  const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
+  const [sendDispatch, {data,isLoading,isError}] = usePushDispatchProcessMutation();
+  // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
   const handleStart = async (cusCode) => {
-    setStartDisabled(true);
     try {
       const data = await startDispatch(cusCode).unwrap();
       console.log(data);
@@ -43,18 +43,20 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
       toast.error("Dispatch Process can not start. Please try again.", 
         { description, duration: 4000 });
     }
-
+    setDeliveryDisabled(false);
+    setSaveDisabled(false);
   };
 
   const handleSave = async () => {
     setSaveDisabled(false);
     setStartDisabled(true);
+    setDeliveryDisabled(true);
 
     const formData = {
       dispatchIds: [],
-      collectionType,
-      routeCode,
-      routeName,
+      collectionType: 'DELIVERY',
+      routeCode: 0 || null,
+      routeName: '' || null,
       driverName,
       driverId,
       carMake,
@@ -62,9 +64,10 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
       customerCourierName,
       customerCourierId,
       customerCourierPhone,
+      isPush: false
     }
     try {
-      const data = await saveSelectedDispatches(formData).unwrap();
+      const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatchIds({ dispatchIds: data.dispatchIds }));
       dispatch(setCollectionType({ collectionType: data.collectionType }));
       dispatch(setRouteCode({ routeCode: data.routeCode }));
@@ -86,8 +89,10 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
 
       toast.error("Error saving invoices! Please try again.", { description, duration: 4000 });
     }
+    onSubmit(rowData);
     setSaveDisabled(true);
     setStartDisabled(false);
+    setDeliveryDisabled(false);
   }
 
   const handleDelivery = async () => {
@@ -108,10 +113,10 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
       customerCourierId,
       customerCourierPhone,
       dispatchRemarks,
-      isPush
+      isPush: true
     }
     try {
-      const data = await saveSelectedDispatches(formData).unwrap();
+      const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatchIds({ dispatchIds: data.dispatchIds }));
       dispatch(setCollectionType({ collectionType: data.collectionType }));
       dispatch(setRouteCode({ routeCode: data.routeCode }));
@@ -136,9 +141,11 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
       toast.error("Error saving invoices! Please try again.", { description, duration: 4000 });
     }
 
-    if (onSubmit) onSubmit(rowData);
+    onSubmit(rowData);
     if (onClose) onClose();
     setDeliveryDisabled(true);
+    setStartDisabled(false);
+    setSaveDisabled(false);
   };
 
   return (
