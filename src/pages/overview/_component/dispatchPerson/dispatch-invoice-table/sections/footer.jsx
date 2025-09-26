@@ -29,9 +29,9 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [sendDispatch, {data,isLoading,isError}] = usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const handleStart = async (cusCode) => {
+  const handleStart = async (event) => {
     try {
-      const data = await startDispatch(cusCode).unwrap();
+      const data = await startDispatch('CSC999').unwrap();
       console.log(data);
       setStartDisabled(false);
     } catch (error) {
@@ -154,7 +154,7 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
         variant="apply"
         onClick={handleStart}
         disabled={startDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
+        className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
       >
         Start
       </Button>

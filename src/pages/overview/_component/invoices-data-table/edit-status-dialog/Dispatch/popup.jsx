@@ -33,7 +33,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
 
   // Fetch verified dispatch data
-  const { data, isLoading } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
+  const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
   const dispatchData = data?.items || [];
 
   // Filter rows based on search query
@@ -91,6 +91,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
           <DispatchTable 
             data={dispatchData} 
             isLoading={isLoading} 
+            isError={isError}
             selected={selectedDocs} 
             onToggle={handleToggleRow} 
             pagination={{
