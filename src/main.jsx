@@ -9,6 +9,7 @@ import { persistor } from "./app/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 
 import "react-datepicker/dist/react-datepicker.css";
+import "react-phone-input-2/lib/style.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
