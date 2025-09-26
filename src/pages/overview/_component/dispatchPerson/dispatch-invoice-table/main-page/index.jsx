@@ -29,8 +29,8 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     const view = roleToView(user?.userRole || "User");
     
     const [selectValues, setSelectValues] = useState({
-        DispatchPerson: "",
-        DispatchRoute: "",
+        dispatchPerson: "",
+        dispatchRoute: "",
         vehicle: "",
         collectionType: "",
     });
@@ -38,8 +38,8 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     useEffect(() => {
         if (rowData) {
         setSelectValues({
-            DispatchPerson: rowData.DispatchPerson || "",
-            DispatchRoute: rowData.DispatchRoute || "",
+            dispatchPerson: rowData.dispatchPerson || "",
+            dispatchRoute: rowData.dispatchRoute || "",
             vehicle: rowData.vehicle || "",
             collectionType: rowData.collectionType || "",
         });
@@ -214,7 +214,7 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
 
             {/* Details + Select */}
             <div className="flex flex-col w-full md:flex-row md:gap-x-8 gap-y-4 mb-4">
-                <DispatchDetails data={rowData} collectionType={selectValues.collectionType}/>
+                <DispatchDetails data={rowData} collectionType={selectValues.collectionType} deliveryPerson={selectValues.dispatchPerson}/>
                 <DispatchSelect values={selectValues} onChange={handleSelectChange} />
             </div>
 

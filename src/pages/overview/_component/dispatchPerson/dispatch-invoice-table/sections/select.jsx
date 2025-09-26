@@ -28,11 +28,11 @@ export default function DispatchSelect({ values, onChange }) {
       <div className="flex justify-between items-center">
         <label className="text-xs font-medium">Delivery Person:</label>
         <Select
-          value={values.deliveryPerson}
-          onValueChange={(val) => onChange("deliveryPerson", val)}
+          value={values.dispatchPerson}
+          onValueChange={(val) => onChange("dispatchPerson", val)}
         >
           <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
-            {values.deliveryPerson || "Select..."}
+            {values.dispatchPerson || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
             <SelectItem value="dp1">John Doe</SelectItem>
@@ -44,11 +44,11 @@ export default function DispatchSelect({ values, onChange }) {
       <div className="flex justify-between items-center">
         <label className="text-xs font-medium">Delivery Route:</label>
         <Select
-          value={values.deliveryRoute}
-          onValueChange={(val) => onChange("deliveryRoute", val)}
+          value={values.dispatchRoute}
+          onValueChange={(val) => onChange("dispatchRoute", val)}
         >
           <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
-            {values.deliveryRoute || "Select..."}
+            {values.dispatchRoute || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
             <SelectItem value="route1">Route 1</SelectItem>

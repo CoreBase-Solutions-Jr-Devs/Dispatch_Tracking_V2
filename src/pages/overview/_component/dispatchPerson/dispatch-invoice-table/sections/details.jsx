@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
 import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
 
-export default function DispatchDetails({ collectionType }) {
+export default function DispatchDetails({ collectionType, deliveryPerson }) {
 
   // Fetch filter options to get delivery guy ID
   const { data: filterOptions, isLoading: filterLoading, isError: filterError } = useFilterOptionsQuery();
@@ -12,7 +12,7 @@ export default function DispatchDetails({ collectionType }) {
 
   // Fetch driver details based on delivery Guy ID
   const { data: driverDetails, isLoading: driverLoading, isError: driverError, error: driverApiError } = useGetDeliveryDriverQuery(deliveryGuyId, {
-    skip: !deliveryGuyId || collectionType !== "delivery",
+    skip: !deliveryGuyId || collectionType !== "delivery" || !deliveryPerson,
   });
 
   return (
@@ -47,7 +47,29 @@ export default function DispatchDetails({ collectionType }) {
         </section>
       )}
 
-      {collectionType === "delivery" && driverDetails && !driverLoading && !driverError && (
+      {collectionType === "delivery" && !deliveryPerson && (
+        <>
+          <section className="flex justify-between w-full h-full">
+            <div className="flex items-center gap-2">
+              <Label className="text-xs font-medium">DP ID:</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label className="text-xs font-medium">DP DL:</Label>
+            </div>
+          </section>
+
+          <section className="flex justify-between h-full">
+            <div className="flex items-center gap-2">
+              <Label className="text-xs font-medium">Car Make:</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label className="text-xs font-medium">Reg No:</Label>
+            </div>
+          </section>
+        </>
+      )}
+
+      {collectionType === "delivery" && deliveryPerson && driverDetails && !driverLoading && !driverError && (
         <>
           <section className="flex justify-between w-full h-full">
             <div className="flex items-center gap-2">
