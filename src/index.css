@@ -46,7 +46,7 @@
   /* Status colors - Exact values at 40% opacity effect */
   --status-store: 91.2% 0.015 29.2; /* Store #893232 at 40% opacity effect */
   --status-store-foreground: 38.6% 0.061 29.2; /* Darker red for text */
-  --status-verification: 92.5% 0.036 68.4; /* Verification #c58c4f at 40% opacity effect */
+  --status-verification: 81.96% 0.1003 68.4; /* Verification #c58c4f at 40% opacity effect */
   --status-verification-foreground: 64.8% 0.089 68.4; /* Orange for text */
   --status-dispatch: 87.4% 0.052 258.3; /* Dispatch #3258e0 at 40% opacity effect */
   --status-dispatch-foreground: 54.2% 0.131 258.3; /* Blue for text */
