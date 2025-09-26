@@ -33,6 +33,21 @@ const dispatchSlice = createSlice({
     name: 'dispatch',
     initialState,
     reducers: {
+        setDispatch:(state, action) => {
+            state.dispatchIds = action.payload.dispatchIds;
+            state.collectionType = action.payload.collectionType;
+            state.routeCode =  action.payload.routeCode;
+            state.routeName =  action.payload.routeName;
+            state.driverName = action.payload.driverName;
+            state.driverId = action.payload.driverId;
+            state.carMake = action.payload.carMake;
+            state.carPlate = action.payload.carPlate;
+            state.customerCourierName = action.payload.customerCourierName;
+            state.customerCourierId = action.payload.customerCourierId;
+            state.customerCourierPhone= action.payload.customerCourierPhone;
+            state.dispatchRemarks = action.payload.dispatchRemarks;
+            state.isPush = action.payload.isPush;
+        },
         setInvoices: (state, action) => {
             state.invoices = action.payload.invoices;
             state.pagination = action.payload.pagination;
@@ -105,6 +120,7 @@ export const {
   setDriverName,setDriverId,setInvoiceNo,
   setIsPush,setIsSelected,setPageNumber,
   setPageSize,setRouteCode,setRouteName,
+  setDispatch,
 } = dispatchSlice.actions;
 
 export default dispatchSlice.reducer;
