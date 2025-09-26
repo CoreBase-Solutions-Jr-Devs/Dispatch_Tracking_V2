@@ -47,7 +47,17 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
     }, [rowData]);
 
     const handleSelectChange = (field, value) => {
-        setSelectValues((prev) => ({ ...prev, [field]: value }));
+        setSelectValues((prev) => {
+            if (field === "collectionType") {
+                return {
+                    ...prev,
+                    collectionType: value,
+                    dispatchPerson: value === "delivery" ? prev.dispatchPerson : "",
+                    dispatchRoute: value === "delivery" ? prev.dispatchRoute : "",
+                };
+            }
+            return { ...prev, [field]: value };
+        });
     };
 
     // Helper Functions 
