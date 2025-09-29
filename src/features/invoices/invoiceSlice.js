@@ -13,7 +13,7 @@ const initialState = {
   storeRemarks: "",
   verificationRemarks: "",
   dateRange: "TODAY",
-  // search: "",
+  search: "",
 };
 
 const invoiceSlice = createSlice({
@@ -45,6 +45,9 @@ const invoiceSlice = createSlice({
     setVerificationRemarks: (state, action) => {
       state.verificationRemarks = action.payload;
     },
+    setSearch: (state, action) => {
+      state.search = action.payload;
+    },
   },
 });
 
@@ -55,5 +58,6 @@ export const {
   setDateRange,
   setStoreTotalWeight,
   setStoreRemarks,
+  setSearch,
 } = invoiceSlice.actions;
 export default invoiceSlice.reducer;

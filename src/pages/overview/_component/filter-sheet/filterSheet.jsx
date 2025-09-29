@@ -28,12 +28,13 @@ import RoleBasedFilters from "./role-based-filters";
 
 export default function FilterSheet() {
   const dispatch = useDispatch();
-  const { startDate, endDate, dateRange } = useSelector(
-    (state) => state.invoice
-  );
+const { startDate, endDate, dateRange, search } = useSelector(
+  (state) => state.invoice
+);
+
 
   const [selectedFilters, setSelectedFilters] = useState({});
-  const [search, setSearch] = useState("");
+
 
   const {
     data: filterOptions,
