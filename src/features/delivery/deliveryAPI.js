@@ -69,7 +69,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     // V2 API
     GetDispatchesForDeliveryHD: builder.query({
       query: () => ({
-        url: "/api/Deliveries/GetDispatchesForDeliveryHD",
+        url: "/api/v2/Deliveries/GetDispatchesForDeliveryHD",
         method: "GET",
         params: {
           bcode: 0,
@@ -79,7 +79,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     deliveryComplete: builder.mutation({
       query: (payload) => ({
-        url: `/api/Deliveries/DeliveredInvoices`,
+        url: `/api/v2/Deliveries/DeliveredInvoices`,
         method: "POST",
         params: {
           Comments: payload?.remarks,
@@ -90,7 +90,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     GenerateOTPForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
-        url: `/api/Deliveries/GenerateOTPForDeliveredInvoices`,
+        url: `/api/v2/Deliveries/GenerateOTPForDeliveredInvoices`,
         method: "POST",
         params: {
           dispatchnum: payload?.dispatchnum,
@@ -99,11 +99,10 @@ export const deliveryApi = apiClient.injectEndpoints({
         },
         body: {},
       }),
-      invalidatesTags: ["dipatch_deliveries"],
     }),
     ValidateOTPForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
-        url: `/api/Deliveries/ValidateOTPForDeliveredInvoices`,
+        url: `/api/v2/Deliveries/ValidateOTPForDeliveredInvoices`,
         method: "POST",
         params: {
           dispatchnum: payload?.dispatchnum,
@@ -117,7 +116,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     MakeMpesaSTKPushForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
-        url: `/api/Deliveries/MakeMpesaSTKPushForDeliveredInvoices`,
+        url: `/api/v2/Deliveries/MakeMpesaSTKPushForDeliveredInvoices`,
         method: "POST",
         params: {
           dispatchnum: payload?.dispatchnum,
