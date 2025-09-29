@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { setInvoices } from "@/features/dispatch/dispatchSlice";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Helpers
 const renderText = (text) => (
@@ -56,7 +57,7 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-export default function DispatchTable({ data, selected = [], onToggle }) {
+export default function DispatchTable({ data, isLoading, isError, selected = [], onToggle }) {
   const dispatch = useDispatch();
 
   // Select Invoices API 
@@ -134,17 +135,36 @@ export default function DispatchTable({ data, selected = [], onToggle }) {
             <TableCell className="py-1 px-2">Status</TableCell>
           </TableRow>
 
-          {rows.map((row, index) => {
-            const isChecked = selected.some((d) => d.dispatchId === row.dispatchId);
-            return (
-              <TableRow key={index} className="text-xs font-medium dark:bg-gray-700">
+          {isLoading &&
+            Array.from({ length: 5 }).map((_, index) => (
+              <TableRow key={index}>
                 <TableCell className="py-1 px-2">
-                  <Checkbox
-                    className="border border-gray-400"
-                    checked={isChecked}
-                    onCheckedChange={() => onToggle(row)}
-                  />
+                  <Skeleton className="h-4 w-4 rounded" />
                 </TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-16" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-24" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-12" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-28" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-12" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-24" /></TableCell>
+              </TableRow>
+            ))
+          }
+
+          {!isLoading && !isError && rows.length > 0 &&
+            rows.map((row, index) => {
+              const isChecked = selected.some((d) => d.dispatchId === row.dispatchId);
+              return (
+                <TableRow key={index} className="text-xs font-medium dark:bg-gray-700">
+                  <TableCell className="py-1 px-2">
+                    <Checkbox
+                      className="border border-gray-400"
+                      checked={isChecked}
+                      onCheckedChange={() => onToggle(row)}
+                    />
+                  </TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.invoiceNo)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.customerCode)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.customerName)}</TableCell>
@@ -153,9 +173,29 @@ export default function DispatchTable({ data, selected = [], onToggle }) {
                   <TableCell className="py-1 px-2">{renderDateTime(row?.verifiedDateTime)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(formatDuration(row?.durationMinutes))}</TableCell>
                   <TableCell className="py-1 px-2">{renderStatus(row?.dispatchStatus)}</TableCell>
-              </TableRow>
-            );
-          })}
+                </TableRow>
+              );
+            })
+          }
+
+
+          {/* Error state */}
+          {isError && !isLoading && (
+            <TableRow>
+              <TableCell colSpan={9} className="text-center py-4 text-red-500 text-sm">
+                Failed to load data. Please try again.
+              </TableCell>
+            </TableRow>
+          )}
+
+          {/* No data state */}
+          {!isLoading && !isError && rows.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={9} className="text-center py-4 text-muted-foreground text-sm">
+                No dispatch records found.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

@@ -4,7 +4,7 @@ import { usePushDispatchProcessMutation, useStartDispatchProcessMutation } from 
 import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
-import { setCarMake, setCarPlate, setCollectionType, setCustomerCourierId, setCustomerCourierName, setCustomerCourierPhone, setDispatchIds, setDriverId, setDriverName, setInvoices, setRouteCode, setRouteName } from "@/features/dispatch/dispatchSlice";
+import { setCarMake, setCarPlate, setCollectionType, setCustomerCourierId, setCustomerCourierName, setCustomerCourierPhone, setDispatch, setDispatchIds, setDriverId, setDriverName, setInvoices, setRouteCode, setRouteName } from "@/features/dispatch/dispatchSlice";
 
 export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
@@ -29,9 +29,9 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [sendDispatch, {data,isLoading,isError}] = usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const handleStart = async (cusCode) => {
+  const handleStart = async (event) => {
     try {
-      const data = await startDispatch(cusCode).unwrap();
+      const data = await startDispatch('CSC999').unwrap();
       console.log(data);
       setStartDisabled(false);
     } catch (error) {
@@ -68,17 +68,7 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
     }
     try {
       const data = await sendDispatch(formData).unwrap();
-      dispatch(setDispatchIds({ dispatchIds: data.dispatchIds }));
-      dispatch(setCollectionType({ collectionType: data.collectionType }));
-      dispatch(setRouteCode({ routeCode: data.routeCode }));
-      dispatch(setRouteName({ routeName: data.routeName }));
-      dispatch(setDriverName({ driverName: data.driverName }));
-      dispatch(setDriverId({ driverId: data.driverId }));
-      dispatch(setCarMake({ carMake: data.carMake }));
-      dispatch(setCarPlate({ carPlate: data.carPlate }));
-      dispatch(setCustomerCourierName({ customerCourierName: data.customerCourierName }));
-      dispatch(setCustomerCourierId({ customerCourierId: data.customerCourierId }));
-      dispatch(setCustomerCourierPhone({ customerCourierPhone: data.customerCourierPhone }));
+      dispatch(setDispatch(formData));
       console.log(data);
     } catch (error) {
       let description = "Saving failed. Please try again.";
@@ -117,19 +107,7 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
     }
     try {
       const data = await sendDispatch(formData).unwrap();
-      dispatch(setDispatchIds({ dispatchIds: data.dispatchIds }));
-      dispatch(setCollectionType({ collectionType: data.collectionType }));
-      dispatch(setRouteCode({ routeCode: data.routeCode }));
-      dispatch(setRouteName({ routeName: data.routeName }));
-      dispatch(setDriverName({ driverName: data.driverName }));
-      dispatch(setDriverId({ driverId: data.driverId }));
-      dispatch(setCarMake({ carMake: data.carMake }));
-      dispatch(setCarPlate({ carPlate: data.carPlate }));
-      dispatch(setCustomerCourierName({ customerCourierName: data.customerCourierName }));
-      dispatch(setCustomerCourierId({ customerCourierId: data.customerCourierId }));
-      dispatch(setCustomerCourierPhone({ customerCourierPhone: data.customerCourierPhone }));
-      dispatch(setDispatchRemarks({ dispatchRemarks: data.dispatchRemarks }));
-      dispatch(setIsPush({ isPush: data.isPush }));
+      dispatch(setDispatch(formData));
       console.log(data);
     } catch (error) {
       let description = "Saving failed. Please try again.";
@@ -154,7 +132,7 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
         variant="apply"
         onClick={handleStart}
         disabled={startDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
+        className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
       >
         Start
       </Button>
