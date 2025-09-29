@@ -1,6 +1,13 @@
 import React, { useMemo } from "react";
 import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
+import { useSelectDispatchInvoiceMutation } from "@/features/dispatch/dispatchAPI";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { setInvoices } from "@/features/dispatch/dispatchSlice";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Helpers
 const renderText = (text) => (
@@ -11,8 +18,8 @@ const renderStatus = (status) => {
   let statusClass = "bg-muted text-muted-foreground border-border";
   switch (status) {
     case "Pending": statusClass = "status-store border-status-store/20"; break;
-    case "Verified": statusClass = "status-verification border-status-verification/20"; break;
-    case "In Dispatch": statusClass = "status-dispatch border-status-dispatch/20"; break;
+    case "Verified": statusClass = "status-dispatch border-status-verification/20"; break;
+    case "Ongoing": statusClass = "status-verification border-status-dispatch/20"; break;
     case "Delivered": statusClass = "status-delivered border-status-delivered/20"; break;
   }
   return (
@@ -50,157 +57,147 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-export default function DispatchTable({ data = [], isLoading = false, pagination, onPageChange, onPageSizeChange, selected, onToggle }) {
-  const columns = useMemo(() => {
-    return [
-      {
-        id: "select",
-        // header: ({ table }) => (
-        //   <input
-        //     type="checkbox"
-        //     aria-label="Select all"
-        //     checked={table.getIsAllRowsSelected()}
-        //     indeterminate={table.getIsSomeRowsSelected() ? "true" : undefined}
-        //     onChange={table.getToggleAllRowsSelectedHandler()}
-        //   />
-        // ),
-        cell: ({ row }) => (
-          <input
-            type="checkbox"
-            aria-label={`Select row ${row.original.invoiceNo}`}
-            checked={row.getIsSelected()}
-            disabled={!row.getCanSelect()}
-            onChange={row.getToggleSelectedHandler()}
-          />
-        ),
-        size: 40,
-      },
-      {
-        accessorKey: "dispatchId",
-        header: "Disp. Id",
-        cell: ({ row }) => {
-          switch ("dispatchId") {
-            case "dispatchId": return renderText(row.original.dispatchId);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "invoiceNo",
-        header: "Inv. No",
-        cell: ({ row }) => {
-          switch ("invoiceNo") {
-            case "invoiceNo": return renderText(row.original.invoiceNo);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "customerCode",
-        header: "CusCode",
-        cell: ({ row }) => {
-          switch ("customerCode") {
-            case "customerCode": return renderText(row.original.customerCode);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "customerName",
-        header: "CusName",
-        cell: ({ row }) => {
-          switch ("customerName") {
-            case "customerName": return renderText(row.original.customerName);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "items",
-        header: "Items",
-        cell: ({ row }) => {
-          switch ("items") {
-            case "items": return renderText(row.original.items);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "paymentTerms",
-        header: "PayTerms",
-        cell: ({ row }) => {
-          switch ("paymentTerms") {
-            case "paymentTerms": return renderText(row.original.paymentTerms);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "verifiedDateTime",
-        header: "Ver. DateTime",
-        cell: ({ row }) => {
-          switch ("verifiedDateTime") {
-            case "verifiedDateTime": return renderDateTime(row.original.verifiedDateTime);
-            default: return renderText("—");
-          }
-        },
-      },
-      {
-        accessorKey: "durationMinutes",
-        header: "Duration",
-        cell: ({ row }) => {
-          switch ("durationMinutes") {
-            case "durationMinutes": return renderText(formatDuration(row.original.durationMinutes));
-            default: return renderText("—");
-          }
-        },
-      },
-      // {
-      //   accessorKey: "amount",
-      //   header: "Amount",
-      //   cell: ({ row }) => {
-      //     switch ("amount") {
-      //       case "amount": return renderText(`KES ${row.original.amount?.toLocaleString()}`);
-      //       default: return renderText("—");
-      //     }
-      //   },
-      // },
-      {
-        accessorKey: "dispatchStatus",
-        header: "Status",
-        cell: ({ row }) => {
-          switch ("status") {
-            case "status": return renderStatus(row.original.dispatchStatus);
-            default: return renderText("—");
-          }
-        },
-      },
-    ];
-  }, []);
+export default function DispatchTable({ data, isLoading, isError, selected = [], onToggle }) {
+  const dispatch = useDispatch();
 
-  // Calculate Totals
+  // Select Invoices API 
+// const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDispatchInvoiceMutation();
 
-  const totalCount = data.length;
-  const totalValue = data.reduce((acc, cur) => acc + (cur.amount || 0), 0);
+// const dispatchSelected = data?.invoices.isSelected;
+  const rows = data;
+
+  // const handleRowSelection = (value, row) => {
+  //   const payload = {
+  //     dispatchId: row?.dispatchId,
+  //     invoices: [
+  //       {
+  //         invoiceNo: row?.invoiceNo,
+  //         isSelected: value,
+  //       },
+  //     ],
+  //   };
+  //   console.log(value, row);
+  //   // setChecked(!checked);
+  //   handleSelectionApi(payload);
+  //   // handleSelectionsAPI(payload);
+  // };
+
+  // const handleSelectionApi = (data) => {
+  //   selectInvoice(data)
+  //     .unwrap()
+  //     .then((data) => {
+  //       console.log(data);
+  //       toast.success("selection successfully");
+  //       // if (refetchData) refetchData();
+  //     })
+  //     .catch((error) => {
+  //       let description = "Please check your credentials and try again.";
+  //       if (error?.data?.errors) {
+  //         const errorMessages = Object.values(error.data.errors).flat();
+  //         if (errorMessages.length > 0) description = errorMessages.join(" ");
+  //       } else if (error?.data?.message) {
+  //         description = error.data.message;
+  //       }
+  //       toast.error("Dispatch Invoice Selection Failed", { description, duration: 4000 });
+  //     });
+  // };
+
+  // const handleSelectionsAPI = async (formData) => {
+  //   try {
+  //     const data = await selectInvoice(formData).unwrap();
+  //     dispatch(setInvoices({ invoices: data.invoices, pagination: data.pagination }));
+  //   } catch (error) {
+  //     let description = `Error selecting invoices. Please try again`;
+  //     if (error?.data?.errors) {
+  //       const errorMessages = Object.values(error.data.errors).flat();
+  //       if (errorMessages.length > 0) description = errorMessages.join(" ");
+  //     } else if (error?.data?.message) description = error.data.message;
+
+  //     toast.error("Dispatch Invoice Selection Failed", { description, duration: 4000 });
+  //   }
+  // };
+
 
   return (
-    <div className="space-y-4">
-      <DataTable
-        data={data}
-        columns={columns}
-        selection={true}
-        isLoading={isLoading}
-        emptyTitle="No dispatch records found"
-        isShowPagination={true}
-        pagination={pagination}
-        onPageChange={onPageChange}
-        onPageSizeChange={onPageSizeChange}
-      />
+    <div className="overflow-x-auto">
+      <Table>
+        <TableBody>
+          {/* Header Row */}
+          <TableRow className="bg-gray-100 dark:bg-gray-700 text-xs font-medium">
+            <TableCell className="py-1 px-2">Select</TableCell>
+            <TableCell className="py-1 px-2">Inv. No</TableCell>
+            <TableCell className="py-1 px-2">CusCode</TableCell>
+            <TableCell className="py-1 px-2">CusName</TableCell>
+            <TableCell className="py-1 px-2">Items</TableCell>
+            <TableCell className="py-1 px-2">PayTerms</TableCell>
+            <TableCell className="py-1 px-2">Ver. Date & Time</TableCell>
+            <TableCell className="py-1 px-2">Duration</TableCell>
+            <TableCell className="py-1 px-2">Status</TableCell>
+          </TableRow>
 
-      <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Count: {totalCount}</span>
-        <span>Total Value: KES {totalValue.toLocaleString()}</span>
-      </div>
+          {isLoading &&
+            Array.from({ length: 5 }).map((_, index) => (
+              <TableRow key={index}>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-4 rounded" />
+                </TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-16" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-24" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-12" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-28" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-12" /></TableCell>
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-24" /></TableCell>
+              </TableRow>
+            ))
+          }
+
+          {!isLoading && !isError && rows.length > 0 &&
+            rows.map((row, index) => {
+              const isChecked = selected.some((d) => d.dispatchId === row.dispatchId);
+              return (
+                <TableRow key={index} className="text-xs font-medium dark:bg-gray-700">
+                  <TableCell className="py-1 px-2">
+                    <Checkbox
+                      className="border border-gray-400"
+                      checked={isChecked}
+                      onCheckedChange={() => onToggle(row)}
+                    />
+                  </TableCell>
+                  <TableCell className="py-1 px-2">{renderText(row?.invoiceNo)}</TableCell>
+                  <TableCell className="py-1 px-2">{renderText(row?.customerCode)}</TableCell>
+                  <TableCell className="py-1 px-2">{renderText(row?.customerName)}</TableCell>
+                  <TableCell className="py-1 px-2">{renderText(row?.items)}</TableCell>
+                  <TableCell className="py-1 px-2">{renderText(row?.payTerms)}</TableCell>
+                  <TableCell className="py-1 px-2">{renderDateTime(row?.verifiedDateTime)}</TableCell>
+                  <TableCell className="py-1 px-2">{renderText(formatDuration(row?.durationMinutes))}</TableCell>
+                  <TableCell className="py-1 px-2">{renderStatus(row?.dispatchStatus)}</TableCell>
+                </TableRow>
+              );
+            })
+          }
+
+
+          {/* Error state */}
+          {isError && !isLoading && (
+            <TableRow>
+              <TableCell colSpan={9} className="text-center py-4 text-red-500 text-sm">
+                Failed to load data. Please try again.
+              </TableCell>
+            </TableRow>
+          )}
+
+          {/* No data state */}
+          {!isLoading && !isError && rows.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={9} className="text-center py-4 text-muted-foreground text-sm">
+                No dispatch records found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 }

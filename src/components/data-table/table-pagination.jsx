@@ -34,7 +34,7 @@ export function DataTablePagination({
 
       <div className="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-x-8 lg:space-y-0">
         {/* Rows Per Page Selector */}
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Select
             value={`${pageSize}`}
@@ -55,7 +55,7 @@ export function DataTablePagination({
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         {/* Page Info */}
         <div className="flex items-center">

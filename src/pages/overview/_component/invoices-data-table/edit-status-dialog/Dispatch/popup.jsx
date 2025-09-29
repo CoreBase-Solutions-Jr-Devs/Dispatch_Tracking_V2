@@ -21,25 +21,28 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
   // Handle row toggle
   const handleToggleRow = (doc) => {
-    setSelectedDocs((prev) => 
-      prev.find((d) => d.invNo === doc.invNo)
-        ? prev.filter((d) => d.invNo !== doc.invNo)
-        : [...prev, doc]
-    );
-  }
+    setSelectedDocs((prev) => {
+      const exists = prev.some((d) => d.dispatchId === doc.dispatchId);
+      if (exists) {
+        return prev.filter((d) => d.dispatchId !== doc.dispatchId);
+      } else {
+        return [...prev, doc];
+      }
+    });
+  };
 
 
   // Fetch verified dispatch data
-  const { data, isLoading } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
+  const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
   const dispatchData = data?.items || [];
 
   // Filter rows based on search query
-  const filteredData = useMemo(() => {
-    if (!query) return dispatchData;
-    return dispatchData.filter((row) =>
-      String(row.invoiceNo).toLowerCase().includes(query.toLowerCase())
-    );
-  }, [query, dispatchData]);
+  // const filteredData = useMemo(() => {
+  //   if (!query) return dispatchData;
+  //   return dispatchData.filter((row) =>
+  //     String(row.invoiceNo).toLowerCase().includes(query.toLowerCase())
+  //   );
+  // }, [query, dispatchData]);
 
   const [selectValues, setSelectValues] = useState({
     deliveryPerson: "",
@@ -86,8 +89,9 @@ export default function DispatchPopup({ rowData, onSubmit }) {
 
         <div className="space-y-4">
           <DispatchTable 
-            data={filteredData} 
+            data={dispatchData} 
             isLoading={isLoading} 
+            isError={isError}
             selected={selectedDocs} 
             onToggle={handleToggleRow} 
             pagination={{
@@ -98,7 +102,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
             }}
             onPageChange={setPageNumber}
             onPageSizeChange={setPageSize}
-/>
+          />
         </div>
 
         <Separator className="my-2" />
@@ -108,6 +112,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
           <DispatchFooter
             rowData={rowData}
             selectValues={selectValues}
+            selectedDocs={selectedDocs}
             onSubmit={onSubmit}
             onClose={handleDialogClose}
           />

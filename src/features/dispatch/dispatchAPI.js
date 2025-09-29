@@ -37,19 +37,19 @@ export const dispatchApi = apiClient.injectEndpoints({
         }),
         pushDispatchProcess: builder.mutation({
             query: (formData) => ({
-                url: '/dispatch/push-process',
+                url: '/dispatch/save-push',
                 method: 'POST',
                 body: formData,
             }),
             invalidatesTags: ['dispatch_invoices', 'dispatch_driver'],
         }),
-        getDispatchInvoices: builder.query({
-            query: ({ page = 1, pageSize = 50 }) => ({
-                url: `/dispatch/invoices?page=${page}&pageSize=${pageSize}`,
-                method: 'GET',
-            }),
-            providesTags: ['dispatch_invoices'],
-        }),
+        // getDispatchInvoices: builder.query({
+        //     query: ({ page = 1, pageSize = 50 }) => ({
+        //         url: `/dispatch/invoices?page=${page}&pageSize=${pageSize}`,
+        //         method: 'GET',
+        //     }),
+        //     providesTags: ['dispatch_invoices'],
+        // }),
         getVerifiedOnDispatch: builder.query({
             query: ({ pageNumber = 1, pageSize = 20 }) => ({
                 url: `/dispatch/verified?pageNumber=${pageNumber}&pageSize=${pageSize}`,
@@ -72,7 +72,35 @@ export const dispatchApi = apiClient.injectEndpoints({
             }),
             providesTags: ['selected_dispatch_invoices'],
         }),
-
+        startDispatchProcess: builder.mutation({
+            query: (cusCode) => ({
+                url: `dispatch/${cusCode}/dispatch/start`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['dispatch_invoices'],
+        }),
+        saveSelectedDispatches: builder.mutation({
+            query: (formData) => ({
+                url: `/dispatch/save-dispatch`,
+                method: 'POST',
+                body: formData,
+            }),
+            invalidatesTags: ['dispatch_invoices'],
+        }),
+        getSavedDispatchedInvoices: builder.query({
+            query:({ pageNumber = 1, pageSize = 50 }) => ({
+                url: `dispatch/saved-dispatched?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+                method: 'GET',
+            }),
+            providesTags: ['saved_invoices', 'dispatched_invoices'],
+        }),
+        getSavedDispatchedInvoiceDetails: builder.query({
+            query: () => ({
+                url: `dispatch/saved-dispatched-details/${dispatchNumber}`,
+                method: 'GET',
+            }),
+            providesTags: ['saved_invoice', 'dispatched_invoice'],
+        }),
     }),
 })
 
@@ -85,4 +113,8 @@ export const {
     useGetVerifiedOnDispatchQuery,
     useSaveSelectionsMutation,
     useSelectedCusCodeQuery,
+    useSaveSelectedDispatchesMutation,
+    useStartDispatchProcessMutation,
+    useGetSavedDispatchedInvoicesQuery,
+    useGetSavedDispatchedInvoiceDetailsQuery
 } = dispatchApi;

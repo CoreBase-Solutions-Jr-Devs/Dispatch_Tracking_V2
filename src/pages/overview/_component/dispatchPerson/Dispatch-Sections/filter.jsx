@@ -1,25 +1,27 @@
-
-  import { useState } from "react";
+import { useState } from "react";
 
 export default function DispatchFilter() {
-  const [filterType, setFilterType] = useState("");
-
   return (
-<div className="flex flex-col gap-4 p-4">
-  {/* Main filter dropdown */}
-  <div className="flex flex-col w-40"> {/* 👈 sets width of the wrapper */}
+    <div className="flex justify-between p-4 items-center space-x-8">
+      <div className="flex items-center gap-2 text-sm">
+        <span className="font-medium whitespace-nowrap">Filter by Route:</span>
+        <input
+          type="text"
+          placeholder="Enter Route"
+          className="border px-2 py-1 rounded text-sm flex-1"
+        />
+      </div>
 
-    <select
-      className="border rounded-md  w-full"
-      value={filterType}
-      onChange={(e) => setFilterType(e.target.value)}
-    >
-      <option value="route">Route</option>
-      <option value="customer">Customer Name</option>
-    </select>
-  </div>
-</div>
-
+      <div className="flex items-center gap-2 text-sm">
+        <span className="font-medium whitespace-nowrap">
+          Filter by Customer:
+        </span>
+        <input
+          type="text"
+          placeholder="Enter Customer"
+          className="border px-2 py-1 rounded text-sm flex-1"
+        />
+      </div>
+    </div>
   );
 }
-

@@ -1,23 +1,20 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  useStorePushMutation,
   useStoreStartMutation,
+  useStorePushMutation,
 } from "@/features/invoices/invoicesAPI";
 import { toast } from "sonner";
-import StoreStartPopup from "./startpopup";
+import EditStatusDialog from "../edit-status-dialog";
 
 export default function StoreFooter({
   rowData,
   onSubmit,
   onClose,
-  weight,
   remarks,
   errors,
   setErrors,
   refetchData,
-  setWeight,
-  setRemarks,
 }) {
   const [startDisabled, setStartDisabled] = useState(
     rowData?.workflowStatus === "Processed" ||
@@ -36,69 +33,64 @@ export default function StoreFooter({
     setStartDisabled(true);
     setVerificationDisabled(true);
 
-    storeStart(Number(rowData.invoiceNo))
+   
+    const invoiceNo = Number(rowData.invoiceNo);
+
+    storeStart(invoiceNo)
       .unwrap()
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         toast.success("Store process started successfully");
 
         setVerificationDisabled(false);
 
-        if (refetchData) refetchData();
+        if (refetchData) setTimeout(() => refetchData(), 50);
       })
       .catch((error) => {
         setStartDisabled(false);
         setVerificationDisabled(true);
 
         let description = "Please check your credentials and try again.";
+
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
           if (errorMessages.length > 0) description = errorMessages.join(" ");
         } else if (error?.data?.message) {
           description = error.data.message;
         }
+
         toast.error("Store start Failed", { description, duration: 4000 });
       });
   };
 
   const handleVerification = () => {
-    const isWeightEmpty = weight === "" || weight === null;
-    const isRemarksEmpty = !remarks || remarks.trim() === "";
+    const isRemarksEmpty = remarks === null || remarks.trim() === "";
 
     const fieldErrors = {};
-    if (isWeightEmpty) fieldErrors.weight = "Weight is required";
-    if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
+    // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
 
     setErrors({
-      weight: fieldErrors.weight || undefined,
       remarks: fieldErrors.remarks || undefined,
     });
 
-    if (isWeightEmpty && isRemarksEmpty) {
-      setWeight(0);
-      setRemarks("");
-      return;
-    }
-
-    if (Object.keys(fieldErrors).length > 0) return;
+    // if (isRemarksEmpty) return; // no longer required
 
     setStartDisabled(true);
     setVerificationDisabled(true);
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      totalWeightKg: Number(weight),
-      storeRemarks: remarks,
+      storeRemarks: remarks ?? "",
     };
 
     storePush(payload)
       .unwrap()
-      .then((data) => {
+      .then(() => {
         toast.success("Sent to Verification successfully");
-        setWeight(undefined);
+        setTimeout(() => {
+          setRemarks(null);
+          setErrors({});
+        }, 50);
         if (refetchData) refetchData();
-        setRemarks("");
-        setErrors({});
       })
       .catch((error) => {
         setStartDisabled(false);
@@ -120,29 +112,20 @@ export default function StoreFooter({
   const handleClose = () => onClose();
 
   return (
-    <div className="flex flex-row justify-end w-full">
-      <Button
-        variant="destructive"
-        onClick={handleClose}
-        className="mt-2 mr-2 uppercase"
-      >
-        Cancel
-      </Button>
-
-      <StoreStartPopup
+    <div className="flex flex-row justify-between w-full">
+      <EditStatusDialog
+        view="storestart"
         rowData={rowData}
-        onConfirm={(confirmed) => {
-          if (confirmed) handleStartApi();
-        }}
+        onSubmit={handleStartApi}
       >
         <Button
-          variant="verification"
+          variant="default"
           disabled={startDisabled}
-          className="mt-2 mr-2 uppercase"
+          className="mt-2 uppercase"
         >
           Start
         </Button>
-      </StoreStartPopup>
+      </EditStatusDialog>
 
       <Button
         variant="apply"
@@ -151,6 +134,14 @@ export default function StoreFooter({
         className="mt-2 uppercase"
       >
         Send to Verification
+      </Button>
+
+      <Button
+        variant="destructive"
+        onClick={handleClose}
+        className="mt-2 mr-2 uppercase"
+      >
+        Close
       </Button>
     </div>
   );

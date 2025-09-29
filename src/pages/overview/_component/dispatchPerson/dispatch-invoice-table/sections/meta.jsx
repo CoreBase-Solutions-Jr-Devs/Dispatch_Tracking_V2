@@ -5,7 +5,7 @@ export default function DispatchMeta() {
         <section className="flex flex-row justify-between items-center gap-2">
             <section className="flex items-center gap-1">
                 <Label className="text-xs font-medium">Dispatch Control:</Label>
-                <Label className="text-xs font-medium uppercase">CoreDBA</Label>
+                <Label className="text-xs font-medium uppercase"></Label>
             </section>
         </section>
     );

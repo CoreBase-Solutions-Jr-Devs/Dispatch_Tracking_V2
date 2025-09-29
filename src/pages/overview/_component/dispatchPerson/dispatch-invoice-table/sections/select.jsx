@@ -15,47 +15,51 @@ export default function DispatchSelect({ values, onChange }) {
           onValueChange={(val) => onChange("collectionType", val)}
         >
           <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
-            {values.collectionType}
+            {values.collectionType || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
             <SelectItem value="self-collection">Self-Collection</SelectItem>
             <SelectItem value="delivery">Delivery</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      
-      <div className="flex justify-between items-center">
-        <label className="text-xs font-medium">Delivery Person:</label>
-        <Select
-          value={values.deliveryPerson}
-          onValueChange={(val) => onChange("deliveryPerson", val)}
-        >
-          <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
-            {values.deliveryPerson}
-          </SelectTrigger>
-          <SelectContent className="bg-gray-200">
-            <SelectItem value="dp1">John Doe</SelectItem>
-            <SelectItem value="dp2">Jane Smith</SelectItem>
+            <SelectItem value="courier">Courier</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <div className="flex justify-between items-center">
-        <label className="text-xs font-medium">Delivery Route:</label>
-        <Select
-          value={values.deliveryRoute}
-          onValueChange={(val) => onChange("deliveryRoute", val)}
-        >
-          <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
-            {values.deliveryRoute}
-          </SelectTrigger>
-          <SelectContent className="bg-gray-200">
-            <SelectItem value="route1">Route 1</SelectItem>
-            <SelectItem value="route2">Route 2</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {values.collectionType === "delivery" && (
+        <>
+          <div className="flex justify-between items-center">
+            <label className="text-xs font-medium">Delivery Person:</label>
+            <Select
+              value={values.dispatchPerson}
+              onValueChange={(val) => onChange("dispatchPerson", val)}
+            >
+              <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
+                {values.dispatchPerson || "Select..."}
+              </SelectTrigger>
+              <SelectContent className="bg-gray-200">
+                <SelectItem value="dp1">John Doe</SelectItem>
+                <SelectItem value="dp2">Jane Smith</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
+          <div className="flex justify-between items-center">
+            <label className="text-xs font-medium">Delivery Route:</label>
+            <Select
+              value={values.dispatchRoute}
+              onValueChange={(val) => onChange("dispatchRoute", val)}
+            >
+              <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
+                {values.dispatchRoute || "Select..."}
+              </SelectTrigger>
+              <SelectContent className="bg-gray-200">
+                <SelectItem value="route1">Route 1</SelectItem>
+                <SelectItem value="route2">Route 2</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </>
+      )}
     </div>
   );
 }
