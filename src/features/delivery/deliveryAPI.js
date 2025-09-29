@@ -66,13 +66,69 @@ export const deliveryApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["invoices"],
     }),
+    // V2 API
+    GetDispatchesForDeliveryHD: builder.query({
+      query: () => ({
+        url: "/api/Deliveries/GetDispatchesForDeliveryHD",
+        method: "GET",
+        params: {
+          bcode: 0,
+        },
+      }),
+      providesTags: ["dipatch_deliveries"],
+    }),
     deliveryComplete: builder.mutation({
-      query: (docNum, payload) => ({
-        url: `/invoices/${docNum}/delivery/complete`,
+      query: (payload) => ({
+        url: `/api/Deliveries/DeliveredInvoices`,
         method: "POST",
+        params: {
+          Comments: payload?.remarks,
+        },
         body: payload,
       }),
-      invalidatesTags: ["invoices"],
+      invalidatesTags: ["dipatch_deliveries"],
+    }),
+    GenerateOTPForDeliveredInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/api/Deliveries/GenerateOTPForDeliveredInvoices`,
+        method: "POST",
+        params: {
+          dispatchnum: payload?.dispatchnum,
+          bcode: payload?.bcode,
+          saleinv_num: payload?.saleinv_num,
+        },
+        body: {},
+      }),
+      invalidatesTags: ["dipatch_deliveries"],
+    }),
+    ValidateOTPForDeliveredInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/api/Deliveries/ValidateOTPForDeliveredInvoices`,
+        method: "POST",
+        params: {
+          dispatchnum: payload?.dispatchnum,
+          bcode: payload?.bcode,
+          saleinv_num: payload?.saleinv_num,
+          otp: payload?.otp,
+        },
+        body: {},
+      }),
+      invalidatesTags: ["dipatch_deliveries"],
+    }),
+    MakeMpesaSTKPushForDeliveredInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/api/Deliveries/MakeMpesaSTKPushForDeliveredInvoices`,
+        method: "POST",
+        params: {
+          dispatchnum: payload?.dispatchnum,
+          bcode: payload?.bcode,
+          cuscode: payload?.cuscode,
+          phonenumber: payload?.phonenumber,
+          amount: payload?.amount,
+        },
+        body: {},
+      }),
+      invalidatesTags: ["dipatch_deliveries"],
     }),
   }),
 });
@@ -86,6 +142,11 @@ export const {
   //
   useViewInvoicePDFQuery,
   useGetDeliveryTrackingDetailsQuery,
-  useDeliveryCompleteMutation,
   useDeliveryStartMutation,
+  // V2 API
+  useGetDispatchesForDeliveryHDQuery,
+  useDeliveryCompleteMutation,
+  useGenerateOTPForDeliveredInvoicesMutation,
+  useValidateOTPForDeliveredInvoicesMutation,
+  useMakeMpesaSTKPushForDeliveredInvoicesMutation,
 } = deliveryApi;
