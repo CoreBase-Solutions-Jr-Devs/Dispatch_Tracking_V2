@@ -214,8 +214,13 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
     processedDateTime: {
       accessorKey: "processedDateTime",
       header: "Processed Date & Time",
-      cell: ({ row }) => renderDateTime(row.original.processedDateTime),
+      cell: ({ row }) => (
+        <span className="text-red-600">
+          {renderDateTime(row.original.processedDateTime)}
+        </span>
+      ),
     },
+
     verificationDateTime: {
       accessorKey: "verificationDateTime",
       header: "Verification Date & Time",
@@ -297,7 +302,6 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.processedDateTime,
       base.durationSeconds,
       base.status,
-
       base.actions,
     ],
     verification: [
@@ -309,7 +313,6 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.verificationDateTime,
       base.durationSeconds,
       base.status,
-
       base.actions,
     ],
     dispatch: [
