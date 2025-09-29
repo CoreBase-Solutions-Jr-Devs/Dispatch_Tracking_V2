@@ -2,8 +2,20 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
 import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { setCourierDetails, setCustomerCourierId, setCustomerCourierName, setCustomerCourierPhone, setDriverDetails } from "@/features/dispatch/dispatchSlice";
 
 export default function DispatchDetails({ collectionType, deliveryPerson }) {
+
+
+  const [courierDetails,setCourierDetailsState] = useState({
+    customerCourierName:'',
+    customerCourierId:'',
+    customerCourierPhone:'',
+  })
+
+  const dispatch = useDispatch()
 
   // Fetch filter options to get delivery guy ID
   const { data: filterOptions, isLoading: filterLoading, isError: filterError } = useFilterOptionsQuery();
@@ -14,6 +26,36 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
   const { data: driverDetails, isLoading: driverLoading, isError: driverError, error: driverApiError } = useGetDeliveryDriverQuery(deliveryGuyId, {
     skip: !deliveryGuyId || collectionType !== "delivery" || !deliveryPerson,
   });
+
+// {
+//     "driverId": 23,
+//     "driverName": "delivery1",
+//     "personalId": "123456789",
+//     "driverLicenseNo": "D1234567",
+//     "phoneNo": "+254792514851",
+//     "email": "mikewanj@gmail.com",
+//     "carMake": "Toyota Hilux",
+//     "regNo": "KBA123A"
+// }
+
+  // alert(JSON.stringify(driverDetails))
+
+  const handleChange = (e) =>{
+    const {name,value} = e.target
+
+    setCourierDetailsState((prevState)=>({
+    ...prevState, [name]:value
+    }))
+
+    dispatch(setCourierDetails({...courierDetails, [name]:value}))
+
+  }
+
+  useEffect(() => {
+    dispatch(setDriverDetails(driverDetails))
+  
+  }, [driverDetails]);
+  
 
   return (
     <div className="flex flex-col w-1/2 gap-2 text-xs font-medium">
@@ -34,15 +76,27 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
         <section className="flex justify-between space-x-2">
           <div className="flex flex-col items-center w-1/3">
             <Label className="text-xs font-medium">Client Name</Label>
-            <Input className="w-full h-6 text-xs" />
+            <Input 
+              className="w-full h-6 text-xs" 
+              value= {courierDetails.customerCourierName} 
+              name="customerCourierName"
+              onChange={(e) => dispatch(setCustomerCourierName(e.target.value))} />
           </div>
           <div className="flex flex-col items-center w-1/3">
             <Label className="text-xs font-medium">Client ID</Label>
-            <Input className="w-full h-6 text-xs" />
+            <Input 
+              className="w-full h-6 text-xs" 
+              value={courierDetails.customerCourierId}
+              name="customerCourierId"
+              onChange={(e) => dispatch(setCustomerCourierId(e.target.value))} />
           </div>
           <div className="flex flex-col items-center w-1/3">
             <Label className="text-xs font-medium">Phone No</Label>
-            <Input className="w-full h-6 text-xs" />
+            <Input 
+              className="w-full h-6 text-xs" 
+              value={courierDetails.customerCourierPhone}
+              name="customerCourierPhone"
+              onChange={(e) => dispatch(setCustomerCourierPhone(e.target.value))} />
           </div>
         </section>
       )}
@@ -100,15 +154,34 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
         <section className="flex justify-between space-x-2">
           <div className="flex flex-col items-center w-1/3">
             <Label className="text-xs font-medium">Courier Name</Label>
-            <Input className="w-full h-6 text-xs" />
+            <Input
+              className="w-full h-6 text-xs"
+              value={courierDetails.customerCourierName || ""}
+              name="customerCourierName"
+              onChange={handleChange}
+              
+              // onChange={(e) => dispatch(setCustomerCourierName(e.target.value))}
+            />
           </div>
           <div className="flex flex-col items-center w-1/3">
             <Label className="text-xs font-medium">Courier ID</Label>
-            <Input className="w-full h-6 text-xs" />
+            <Input
+              className="w-full h-6 text-xs"
+              value={courierDetails.customerCourierId || ""}
+              name="customerCourierId"
+              onChange={handleChange}
+              // onChange={(e) => dispatch(setCustomerCourierId(e.target.value))}
+            />
           </div>
           <div className="flex flex-col items-center w-1/3">
             <Label className="text-xs font-medium">Phone No</Label>
-            <Input className="w-full h-6 text-xs" />
+            <Input
+              className="w-full h-6 text-xs"
+              value={courierDetails.customerCourierPhone}
+              name="customerCourierPhone"
+              onChange={handleChange}
+              // onChange={(e) => dispatch(setCustomerCourierPhone(e.target.value))}
+            />
           </div>
         </section>
       )}
