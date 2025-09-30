@@ -81,7 +81,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
           value={query}
           onChange={setQuery}
           data={rowData}
-          placeholder="Inv. No/Cus. Code"
+          placeholder="Inv.No/Cus.Code"
           selectedCount={selectedDocs.length}
         />
 
