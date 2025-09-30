@@ -65,8 +65,8 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
       </section>
 
       {/* Loading and error states for filter options */}
-      {filterLoading && <Label className="text-xs text-blue-500">Loading delivery options...</Label>}
-      {filterError && <Label className="text-xs text-red-500">Error loading delivery options: {filterError?.message || "Unknown error"}</Label>}
+      {/* {filterLoading && <Label className="text-xs text-blue-500">Loading delivery options...</Label>}
+      {filterError && <Label className="text-xs text-red-500">Error loading delivery options: {filterError?.message || "Unknown error"}</Label>} */}
 
       {/* Loading and error states for driver details */}
       {collectionType === "delivery" && driverLoading && <Label className="text-xs text-blue-500">Loading driver details...</Label>}
