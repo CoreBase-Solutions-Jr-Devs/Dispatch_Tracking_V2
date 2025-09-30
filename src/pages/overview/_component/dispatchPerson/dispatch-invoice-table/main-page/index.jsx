@@ -16,7 +16,7 @@ import { useGetDispatchInvoicesQuery, useSelectedCusCodeQuery } from "@/features
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function DispatchInvoice({ rowData, onSubmit }) {
+export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     const [query, setQuery] = useState("");
     const { user } = useSelector((state) => state.auth);
     // const { invoices } = useSelector((state) => state.invoice);
@@ -117,20 +117,20 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
                 cell: ({ row }) => row.original.customerCode
             
             },
-            {
-                accessorKey: "dispatchIds",
-                header: "DispId(s)",
-                cell:({row}) =>{
-                    return row.original.dispatchIds ?? '-'
-                }
-            },
-            {
-                accessorKey: "invoiceNumbers",
-                header: "InvNo(s)",
-                cell:({row}) =>{
-                    return row.original.invoiceNumbers ?? '-'
-                }
-            },
+            // {
+            //     accessorKey: "dispatchIds",
+            //     header: "DispId(s)",
+            //     cell:({row}) =>{
+            //         return row.original.dispatchIds ?? '-'
+            //     }
+            // },
+            // {
+            //     accessorKey: "invoiceNumbers",
+            //     header: "InvNo(s)",
+            //     cell:({row}) =>{
+            //         return row.original.invoiceNumbers ?? '-'
+            //     }
+            // },
             {
                 accessorKey: "items",
                 header: "InvCount",
@@ -188,7 +188,7 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
                 value={query}
                 onChange={setQuery}
                 data={rowData}
-                placeholder="Invoice No..."
+                placeholder="CusName/Inv.No/Route"
             />
 
             <Separator className={"my-2"}/>
@@ -237,6 +237,7 @@ export default function DispatchInvoice({ rowData, onSubmit }) {
                 rowData={rowData}
                 selectValues={selectValues}
                 onSubmit={onSubmit}
+                onClose={onClose}
             />
         </div>
     );
