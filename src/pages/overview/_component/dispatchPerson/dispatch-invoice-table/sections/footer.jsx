@@ -38,9 +38,9 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [sendDispatch, {data,isLoading,isError}] = usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const handleStart = async (event) => {
+  const handleStart = async () => {
     try {
-      const data = await startDispatch('CSC999').unwrap();
+      const data = await startDispatch().unwrap();
       console.log(data);
       setStartDisabled(false);
     } catch (error) {
