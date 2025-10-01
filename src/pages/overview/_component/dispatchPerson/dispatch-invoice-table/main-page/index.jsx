@@ -179,7 +179,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     }, []);
 
     return (
-        <div className="my-1 overflow-y-auto max-h-[90vh] px-2">
+        <div className="my-1 max-h-[90vh] px-2">
             {/* Header */}
             <DispatchHeader />
 
@@ -239,6 +239,14 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                             />
                             <DispatchRemarks />
                             <DispatchMeta />
+                            {/* Footer */}
+                            <DispatchFooter
+                                dispatchID={dispatchID}
+                                rowData={rowData}
+                                selectValues={selectValues}
+                                onSubmit={onSubmit}
+                                onClose={onClose}
+                            />
                         </CardContent>
                     </Card>
                 </div>
@@ -247,14 +255,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
 
             <Separator className="my-2" />
 
-            {/* Footer */}
-            <DispatchFooter
-                dispatchID={dispatchID}
-                rowData={rowData}
-                selectValues={selectValues}
-                onSubmit={onSubmit}
-                onClose={onClose}
-            />
         </div>
     );
 }
