@@ -151,7 +151,7 @@ export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose 
   };
 
   return (
-    <div className="flex flex-row justify-end w-full">
+    <div className="flex flex-row justify-center w-full">
       <Button
         variant="apply"
         onClick={handleStart}
@@ -174,7 +174,7 @@ export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose 
         disabled={deliveryDisabled}
         className="mt-1 uppercase text-xs font-medium "
       >
-        Send to Dispatch
+        Push
       </Button>
     </div>
   );
