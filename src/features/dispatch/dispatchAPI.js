@@ -70,7 +70,7 @@ export const dispatchApi = apiClient.injectEndpoints({
                 url: `/dispatch/selected-cuscode?pageNumber=${pageNumber}&pageSize=${pageSize}`,
                 method: 'GET',
             }),
-            providesTags: ['selected_dispatch_invoices'],
+            providesTags: ['dispatch_invoices'],
         }),
         startDispatchProcess: builder.mutation({
             query: (payload) => ({
