@@ -7,7 +7,7 @@ import ProtectedRoute from "./protectedRoute";
 import useAuthExpiration from "@/hooks/use-auth-expiration";
 
 function AppRoutes() {
-  useAuthExpiration();
+  // useAuthExpiration();
 
   return (
     <BrowserRouter>
