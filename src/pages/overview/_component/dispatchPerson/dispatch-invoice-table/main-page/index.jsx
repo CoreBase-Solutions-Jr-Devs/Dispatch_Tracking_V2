@@ -160,13 +160,13 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                     return formatDuration(row.original.durationMinutes ?? '-')
                 }
             },
-            {
-                accessorKey: "dispatchStatus",
-                header: "Status",
-                cell:({row}) =>{
-                    return renderStatus(row.original.dispatchStatus ?? '-')
-                }
-            },
+            // {
+            //     accessorKey: "dispatchStatus",
+            //     header: "Status",
+            //     cell:({row}) =>{
+            //         return renderStatus(row.original.dispatchStatus ?? '-')
+            //     }
+            // },
             {
                 accessorKey: "amount",
                 header: "Amount",
