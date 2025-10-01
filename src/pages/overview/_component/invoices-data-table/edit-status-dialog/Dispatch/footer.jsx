@@ -21,6 +21,9 @@ export default function DispatchFooter({ rowData, selectedDocs = [], onSubmit, s
       const res = await saveSelections(payload).unwrap();
       toast.success("Successfully saved invoices!");
       console.log(res);
+      if (onSubmit) {
+        onSubmit(selectedDocs, selectValues);
+      }
       if (onClose) onClose();
     } catch (error) {
       let description = "Error saving invoices. Please try again.";
@@ -34,9 +37,7 @@ export default function DispatchFooter({ rowData, selectedDocs = [], onSubmit, s
     }
   };
 
-  const handleCancel =() => {
-    setStartDisabled(true);
-    setCancelDisabled(false);
+  const handleClose =() => {
     if (onClose) onClose();
   }
 
@@ -52,7 +53,7 @@ export default function DispatchFooter({ rowData, selectedDocs = [], onSubmit, s
       </Button>
       <Button
         variant="destructive"
-        onClick={onClose}
+        onClick={handleClose}
         disabled={cancelDisabled}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >

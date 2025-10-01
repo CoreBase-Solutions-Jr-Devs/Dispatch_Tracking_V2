@@ -16,6 +16,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedDocs, setSelectedDocs] = useState([]);
+  const [savedInvoices, setSavedInvoices] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
@@ -36,14 +37,20 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
   const dispatchData = data?.items || [];
 
+  // Return only Pending dispatches
   const filteredDispatchData = useMemo(() => {
     return dispatchData.filter(
       (row) =>
         row.dispatchStatus === "Pending" &&
-        !selectedDocs.some((d) => d.dispatchId === row.dispatchId)
+        !savedInvoices.some((d) => d.dispatchId === row.dispatchId)
     );
-  }, [dispatchData, selectedDocs]);
+  }, [dispatchData, savedInvoices]);
 
+  const handleSave = () => {
+    setSavedInvoices((prev) => [...prev, ...selectedDocs]);
+    onSubmit?.(selectedDocs, selectValues);
+    setSelectedDocs([]);
+  };
 
   const [selectValues, setSelectValues] = useState({
     deliveryPerson: "",
@@ -114,7 +121,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
             rowData={rowData}
             selectValues={selectValues}
             selectedDocs={selectedDocs}
-            onSubmit={onSubmit}
+            onSubmit={handleSave}
             onClose={onClose}
           />
         </DialogFooter>
