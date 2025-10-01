@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setCarMake, setCarPlate, setCollectionType, setCustomerCourierId, setCustomerCourierName, setCustomerCourierPhone, setDispatch, setDispatchIds, setDriverId, setDriverName, setInvoices, setRouteCode, setRouteName } from "@/features/dispatch/dispatchSlice";
 
-export default function DispatchFooter({ rowData, onSubmit, onClose }) {
+export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -39,10 +39,14 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
   const handleStart = async () => {
+    const payload={
+      "dispatchIds": dispatchID
+    }
     try {
-      const data = await startDispatch().unwrap();
+      const data = await startDispatch(payload).unwrap();
       console.log(data);
       setStartDisabled(false);
+      toast.success('Dispatch started!');
     } catch (error) {
       let description = "Please check your credentials and try again.";
       if (error?.data?.errors) {

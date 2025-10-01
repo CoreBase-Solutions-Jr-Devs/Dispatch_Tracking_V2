@@ -24,7 +24,8 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     const [pageSize, setPageSize] = useState(20);
     const { data: selectedInvoices, isLoading, isError } = useSelectedCusCodeQuery({ pageNumber, pageSize });
     let invoicesForDispatch = selectedInvoices?.items || [];
-    console.log(invoicesForDispatch);
+    let dispatchID  = invoicesForDispatch.map((item) => item.dispatchId);
+    console.log(dispatchID);
 
     const view = roleToView(user?.userRole || "User");
     
@@ -234,6 +235,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
 
             {/* Footer */}
             <DispatchFooter
+                dispatchID={dispatchID}
                 rowData={rowData}
                 selectValues={selectValues}
                 onSubmit={onSubmit}
