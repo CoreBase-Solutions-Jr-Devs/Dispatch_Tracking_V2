@@ -13,6 +13,7 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
     customerCourierName:'',
     customerCourierId:'',
     customerCourierPhone:'',
+    customerCourierRegNo: '',
   })
 
   const dispatch = useDispatch()
@@ -181,6 +182,15 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
               name="customerCourierPhone"
               onChange={handleChange}
               // onChange={(e) => dispatch(setCustomerCourierPhone(e.target.value))}
+            />
+          </div>
+          <div className="flex flex-col items-center w-full">
+            <Label className="text-xs font-medium">Reg No</Label>
+            <Input
+              className="w-full h-6 text-xs"
+              value={courierDetails.customerCourierRegNo}
+              name="customerCourierRegNo"
+              onChange={handleChange}
             />
           </div>
         </section>
