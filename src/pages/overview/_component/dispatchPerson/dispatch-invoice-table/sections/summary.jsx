@@ -2,7 +2,7 @@ import { Label } from "@/components/ui/label";
 
 export default function DispatchSummary({ data }) {
     return (
-        <section className="flex flex-row  justify-end items-center mb-2">
+        <section className="flex flex-row  justify-center items-center mb-2">
             <div className="flex items-center  text-xs text-medium mr-4">
                 <Label>Total Count:</Label>
                 {/* <Label className="ml-2">2</Label> */}
