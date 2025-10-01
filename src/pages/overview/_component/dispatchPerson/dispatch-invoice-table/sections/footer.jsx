@@ -89,7 +89,8 @@ export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose 
         const errorMessages = Object.values(error.data.errors).flat();
         if (errorMessages.length > 0) description = errorMessages.join(" ");
       } else if (error?.data?.message) description = error.data.message;
-
+      setSaveDisabled(true);
+      setStartDisabled(false);
       toast.error("Error saving invoices! Please try again.", { description, duration: 4000 });
     }
     onSubmit(rowData);
