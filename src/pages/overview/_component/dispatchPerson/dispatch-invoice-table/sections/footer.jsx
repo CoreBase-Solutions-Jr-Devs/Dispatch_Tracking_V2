@@ -48,13 +48,13 @@ export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose 
       setStartDisabled(false);
       toast.success('Dispatch started!');
     } catch (error) {
-      let description = "Please check your credentials and try again.";
+      // let description = "Please check your credentials and try again.";
       if (error?.data?.errors) {
         const errorMessages = Object.values(error.data.errors).flat();
         if (errorMessages.length > 0) description = errorMessages.join(" ");
       } else if (error?.data?.message) description = error.data.message;
       toast.error("Dispatch Process can not start. Please try again.", 
-        { description, duration: 4000 });
+        { duration: 2500 });
     }
     setDeliveryDisabled(false);
     setSaveDisabled(false);
