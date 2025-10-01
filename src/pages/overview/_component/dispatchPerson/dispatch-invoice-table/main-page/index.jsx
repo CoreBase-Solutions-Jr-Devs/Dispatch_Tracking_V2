@@ -133,23 +133,23 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
             //         return row.original.invoiceNumbers ?? '-'
             //     }
             // },
-            {
-                accessorKey: "items",
-                header: "InvCount",
-                cell:({row}) =>{
-                    return row.original.items ?? '-'
-                }
-            },
+            // {
+            //     accessorKey: "items",
+            //     header: "InvCount",
+            //     cell:({row}) =>{
+            //         return row.original.items ?? '-'
+            //     }
+            // },
             {
                 accessorKey: "verifiedDateTime",
-                header: "Ver. DateTime",
+                header: "Ver. Date",
                 cell:({row}) =>{
                     return renderDateTime(row.original.verifiedDateTime ?? '-')
                 }
             },
             {
                 accessorKey: "dispatchDateTime",
-                header: "Disp. DateTime",
+                header: "Disp. Date",
                 cell:({row}) =>{
                     return renderDateTime(row.original.dispatchDateTime ?? '-')
                 }
