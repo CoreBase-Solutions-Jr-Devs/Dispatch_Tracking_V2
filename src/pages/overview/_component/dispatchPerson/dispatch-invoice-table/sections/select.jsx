@@ -14,7 +14,7 @@ export default function DispatchSelect({ values, onChange }) {
           value={values.collectionType}
           onValueChange={(val) => onChange("collectionType", val)}
         >
-          <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
+          <SelectTrigger className="w-24 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
             {values.collectionType || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
@@ -33,7 +33,7 @@ export default function DispatchSelect({ values, onChange }) {
               value={values.dispatchPerson}
               onValueChange={(val) => onChange("dispatchPerson", val)}
             >
-              <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
+              <SelectTrigger className="w-24 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
                 {values.dispatchPerson || "Select..."}
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
@@ -49,7 +49,7 @@ export default function DispatchSelect({ values, onChange }) {
               value={values.dispatchRoute}
               onValueChange={(val) => onChange("dispatchRoute", val)}
             >
-              <SelectTrigger className="w-32 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
+              <SelectTrigger className="w-24 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
                 {values.dispatchRoute || "Select..."}
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
