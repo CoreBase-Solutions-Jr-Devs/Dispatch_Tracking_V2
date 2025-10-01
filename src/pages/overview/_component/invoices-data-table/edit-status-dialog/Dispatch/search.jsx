@@ -33,7 +33,7 @@ export default function DispatchSearch({
   });
 
   const { data: filterOptions, isLoading: filtersLoading, isError: filtersError } = useFilterOptionsQuery();
-  const customerFilters = filterOptions?.filter((f) => f.key !== 'cusCode' && f.key !== 'deliveryGuy' && f.key !== 'status') || [];
+  const customerFilters = filterOptions?.filter((f) => f.key !== 'cusCode' && f.key !== 'deliveryGuy' && f.key !== 'dateRange') || [];
 
   useEffect(() => {
    const handler = setTimeout(()=>
@@ -53,7 +53,7 @@ export default function DispatchSearch({
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder={placeholder}
-          className="w-40 pl-9 pr-3 py-2 bg-gray-100"
+          className="w-52 pl-9 pr-3 py-2 bg-gray-100"
         />
       </div>
 
@@ -61,7 +61,7 @@ export default function DispatchSearch({
       <div className="flex-1 flex flex-col justify-end">
         {/* <Label className="text-xs text-muted-foreground">Filter by Customer Code</Label> */}
         <RoleBasedFilters
-            filters={customerFilters}
+            // filters={customerFilters}
             selectedFilters={selectedFilters}
             onChange={(key, val) => setSelectedFilters(prev => ({ ...prev, [key]: val }))}
         />
