@@ -36,13 +36,14 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
   const dispatchData = data?.items || [];
 
-  // Filter rows based on search query
-  // const filteredData = useMemo(() => {
-  //   if (!query) return dispatchData;
-  //   return dispatchData.filter((row) =>
-  //     String(row.invoiceNo).toLowerCase().includes(query.toLowerCase())
-  //   );
-  // }, [query, dispatchData]);
+  const filteredDispatchData = useMemo(() => {
+    return dispatchData.filter(
+      (row) =>
+        row.dispatchStatus === "Pending" &&
+        !selectedDocs.some((d) => d.dispatchId === row.dispatchId)
+    );
+  }, [dispatchData, selectedDocs]);
+
 
   const [selectValues, setSelectValues] = useState({
     deliveryPerson: "",
@@ -81,7 +82,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
           value={query}
           onChange={setQuery}
           data={rowData}
-          placeholder="Inv.No/Cus.Code"
+          placeholder="Inv.No/Cus.Code/Route"
           selectedCount={selectedDocs.length}
         />
 
@@ -89,7 +90,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
 
         <div className="space-y-4">
           <DispatchTable 
-            data={dispatchData} 
+            data={filteredDispatchData} 
             isLoading={isLoading} 
             isError={isError}
             selected={selectedDocs} 
@@ -97,8 +98,8 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
             pagination={{
               pageNumber: data?.pageNumber || pageNumber,
               pageSize: data?.pageSize || pageSize,
-              totalItems: data?.totalCount || 0,
-              totalPages: data?.totalPages || 1,
+              totalItems: data?.totalCount || 0 || filteredDispatchData.length,
+              totalPages: data?.totalPages || 1 || Math.ceil(filteredDispatchData.length / pageSize),
             }}
             onPageChange={setPageNumber}
             onPageSizeChange={setPageSize}
