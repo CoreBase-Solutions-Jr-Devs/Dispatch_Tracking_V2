@@ -7,7 +7,7 @@ import {
 
 export default function DispatchSelect({ values, onChange }) {
   return (
-    <div className="flex flex-col justify-between w-1/2 gap-2 text-xs font-medium">
+    <div className="flex flex-col justify-between gap-2 text-xs font-medium">
       <div className="flex justify-between items-center">
         <label className="text-xs font-medium">Collection Type:</label>
         <Select

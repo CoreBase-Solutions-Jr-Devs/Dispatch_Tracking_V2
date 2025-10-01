@@ -15,6 +15,7 @@ import { DataTable } from "@/components/data-table";
 import { useGetDispatchInvoicesQuery, useSelectedCusCodeQuery } from "@/features/dispatch/dispatchAPI";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     const [query, setQuery] = useState("");
@@ -194,44 +195,57 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
 
             <Separator className={"my-2"}/>
 
-            {/* Table + Summary */}
-            <div className="space-y-4">
-                {/* {isLoading && <Skeleton />}
-                {isError && 
-                    <span className="text-red-500 text-center text-xs font-semibold">
-                        Invoice Table isn't Loading. Try again!
-                    </span>
-                } */}
-                <DataTable
-                    data={invoicesForDispatch}
-                    columns={columns}
-                    selection={true}
-                    isLoading={false}
-                    emptyTitle="No invoices found"
-                    isShowPagination={true}
-                    onPageChange={setPageNumber}
-                    onPageSizeChange={setPageSize}
-                    pagination={{
-                        pageNumber: selectedInvoices?.pageNumber || 1,
-                        pageSize: selectedInvoices?.pageSize || pageSize,
-                        totalItems: selectedInvoices?.totalCount || 0,
-                        totalPages: selectedInvoices?.totalPages || 1,
-                    }}
-                />
-                <DispatchSummary data={rowData} />
+            <div className="flex justify-center items-start space-x-8">
+                <div className="w-3/4">
+                    {/* Table + Summary */}
+                    <div className="space-y-4">
+                        {/* {isLoading && <Skeleton />}
+                        {isError && 
+                            <span className="text-red-500 text-center text-xs font-semibold">
+                                Invoice Table isn't Loading. Try again!
+                            </span>
+                        } */}
+                        <DataTable
+                            data={invoicesForDispatch}
+                            columns={columns}
+                            selection={true}
+                            isLoading={false}
+                            emptyTitle="No invoices found"
+                            isShowPagination={true}
+                            onPageChange={setPageNumber}
+                            onPageSizeChange={setPageSize}
+                            pagination={{
+                                pageNumber: selectedInvoices?.pageNumber || 1,
+                                pageSize: selectedInvoices?.pageSize || pageSize,
+                                totalItems: selectedInvoices?.totalCount || 0,
+                                totalPages: selectedInvoices?.totalPages || 1,
+                            }}
+                        />
+                        <DispatchSummary data={rowData} />
+                    </div>
+                </div>
+                {/* Dispatch Selections*/}
+                <div className="w-1/4">
+                    <Card className="h-full flex flex-col p-2">
+                        <CardContent className="space-y-4">
+                            <DispatchSelect
+                                values={selectValues}
+                                onChange={handleSelectChange}
+                            />
+                            <DispatchDetails
+                                data={rowData}
+                                collectionType={selectValues.collectionType}
+                                deliveryPerson={selectValues.dispatchPerson}
+                            />
+                            <DispatchRemarks />
+                            <DispatchMeta />
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
+            
 
             <Separator className="my-2" />
-
-            {/* Details + Select */}
-            <div className="flex flex-col w-full md:flex-row md:gap-x-8 gap-y-4 mb-4">
-                <DispatchDetails data={rowData} collectionType={selectValues.collectionType} deliveryPerson={selectValues.dispatchPerson}/>
-                <DispatchSelect values={selectValues} onChange={handleSelectChange} />
-            </div>
-
-            {/* Remarks */}
-            <DispatchRemarks />
-            <DispatchMeta />
 
             {/* Footer */}
             <DispatchFooter

@@ -58,7 +58,7 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
   
 
   return (
-    <div className="flex flex-col w-1/2 gap-2 text-xs font-medium">
+    <div className="flex flex-col gap-2 text-xs font-medium">
       <section className="flex justify-between items-center h-full">
         <Label className="text-xs font-medium">Dispatch Date & Time:</Label>
         {/* <Label className="text-xs font-medium">08/20/2025 12:31</Label> */}
@@ -73,8 +73,8 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
       {collectionType === "delivery" && driverError && <Label className="text-xs text-red-500">Error loading driver details: {driverApiError?.message || "Unknown error"}</Label>}
 
       {collectionType === "self-collection" && (
-        <section className="flex justify-between space-x-2">
-          <div className="flex flex-col items-center w-1/3">
+        <section className="flex flex-col w-full justify-between space-x-2">
+          <div className="flex flex-col items-center w-full">
             <Label className="text-xs font-medium">Client Name</Label>
             <Input 
               className="w-full h-6 text-xs" 
@@ -82,7 +82,7 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
               name="customerCourierName"
               onChange={(e) => dispatch(setCustomerCourierName(e.target.value))} />
           </div>
-          <div className="flex flex-col items-center w-1/3">
+          <div className="flex flex-col items-center w-full">
             <Label className="text-xs font-medium">Client ID</Label>
             <Input 
               className="w-full h-6 text-xs" 
@@ -90,7 +90,7 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
               name="customerCourierId"
               onChange={(e) => dispatch(setCustomerCourierId(e.target.value))} />
           </div>
-          <div className="flex flex-col items-center w-1/3">
+          <div className="flex flex-col items-center w-full">
             <Label className="text-xs font-medium">Phone No</Label>
             <Input 
               className="w-full h-6 text-xs" 
@@ -151,8 +151,8 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
       )}
 
       {collectionType === "courier" && (
-        <section className="flex justify-between space-x-2">
-          <div className="flex flex-col items-center w-1/3">
+        <section className="flex flex-col justify-between space-x-2">
+          <div className="flex flex-col items-center w-full">
             <Label className="text-xs font-medium">Courier Name</Label>
             <Input
               className="w-full h-6 text-xs"
@@ -163,7 +163,7 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
               // onChange={(e) => dispatch(setCustomerCourierName(e.target.value))}
             />
           </div>
-          <div className="flex flex-col items-center w-1/3">
+          <div className="flex flex-col items-center w-full">
             <Label className="text-xs font-medium">Courier ID</Label>
             <Input
               className="w-full h-6 text-xs"
@@ -173,7 +173,7 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
               // onChange={(e) => dispatch(setCustomerCourierId(e.target.value))}
             />
           </div>
-          <div className="flex flex-col items-center w-1/3">
+          <div className="flex flex-col items-center w-full">
             <Label className="text-xs font-medium">Phone No</Label>
             <Input
               className="w-full h-6 text-xs"
