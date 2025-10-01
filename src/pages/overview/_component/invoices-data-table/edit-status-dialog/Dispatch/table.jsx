@@ -129,8 +129,8 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
             <TableCell className="py-1 px-2">CusCode</TableCell>
             <TableCell className="py-1 px-2">CusName</TableCell>
             <TableCell className="py-1 px-2">Items</TableCell>
-            <TableCell className="py-1 px-2">PayTerms</TableCell>
-            <TableCell className="py-1 px-2">Ver. Date & Time</TableCell>
+            <TableCell className="py-1 px-2">Terms</TableCell>
+            <TableCell className="py-1 px-2">Ver. Date</TableCell>
             <TableCell className="py-1 px-2">Duration</TableCell>
             {/* <TableCell className="py-1 px-2">Status</TableCell> */}
           </TableRow>
