@@ -132,7 +132,7 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
             <TableCell className="py-1 px-2">PayTerms</TableCell>
             <TableCell className="py-1 px-2">Ver. Date & Time</TableCell>
             <TableCell className="py-1 px-2">Duration</TableCell>
-            <TableCell className="py-1 px-2">Status</TableCell>
+            {/* <TableCell className="py-1 px-2">Status</TableCell> */}
           </TableRow>
 
           {isLoading &&
@@ -148,7 +148,7 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
                 <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
                 <TableCell className="py-1 px-2"><Skeleton className="h-4 w-28" /></TableCell>
                 <TableCell className="py-1 px-2"><Skeleton className="h-4 w-12" /></TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-24" /></TableCell>
+                {/* <TableCell className="py-1 px-2"><Skeleton className="h-4 w-24" /></TableCell> */}
               </TableRow>
             ))
           }
@@ -172,7 +172,7 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
                   <TableCell className="py-1 px-2">{renderText(row?.payTerms)}</TableCell>
                   <TableCell className="py-1 px-2">{renderDateTime(row?.verifiedDateTime)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(formatDuration(row?.durationMinutes))}</TableCell>
-                  <TableCell className="py-1 px-2">{renderStatus(row?.dispatchStatus)}</TableCell>
+                  {/* <TableCell className="py-1 px-2">{renderStatus(row?.dispatchStatus)}</TableCell> */}
                 </TableRow>
               );
             })
