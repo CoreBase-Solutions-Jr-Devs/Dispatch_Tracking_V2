@@ -84,7 +84,7 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
               onChange={(e) => dispatch(setCustomerCourierName(e.target.value))} />
           </div>
           <div className="flex flex-col items-center w-full">
-            <Label className="text-xs font-medium">Client ID</Label>
+            <Label className="text-xs font-medium">ID No</Label>
             <Input 
               className="w-full h-6 text-xs" 
               value={courierDetails.customerCourierId}
@@ -104,21 +104,45 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
 
       {collectionType === "delivery" && !deliveryPerson && (
         <>
-          <section className="flex justify-between w-full h-full">
-            <div className="flex items-center gap-2">
-              <Label className="text-xs font-medium">DP ID:</Label>
+          <section className="flex justify-between w-full h-full space-x-4">
+            <div className="flex items-center gap-2 justify-between w-1/2">
+              <Label className="text-xs font-medium w-1/3">DP ID:</Label>
+              <Input 
+                className='w-2/3 h-6 text-xs'
+                name='driverId'
+                value=''
+                onChange={(e) => e.handleChange?.(e.target.value)}
+              />
             </div>
-            <div className="flex items-center gap-2">
-              <Label className="text-xs font-medium">DP DL:</Label>
+            <div className="flex items-center gap-2 justify-between w-1/2">
+              <Label className="text-xs font-medium w-1/3">DP DL:</Label>
+              <Input 
+                className='w-2/3 h-6 text-xs'
+                name='driverLicense'
+                value=''
+                onChange={(e) => e.handleChange?.(e.target.value)}
+              />
             </div>
           </section>
 
-          <section className="flex justify-between h-full">
-            <div className="flex items-center gap-2">
-              <Label className="text-xs font-medium">Car Make:</Label>
+          <section className="flex justify-between h-full space-x-4">
+            <div className="flex items-center gap-2 justify-between w-1/2">
+              <Label className="text-xs font-medium w-1/3">Car Make:</Label>
+              <Input 
+                className='w-2/3 h-6 text-xs'
+                name='carMake'
+                value=''
+                onChange={(e) => e.handleChange?.(e.target.value)}
+              />
             </div>
-            <div className="flex items-center gap-2">
-              <Label className="text-xs font-medium">Reg No:</Label>
+            <div className="flex items-center gap-2 justify-between w-1/2">
+              <Label className="text-xs font-medium w-1/3">Reg No:</Label>
+              <Input 
+                className='w-2/3 h-6 text-xs'
+                name='regNo'
+                value=''
+                onChange={(e) => e.handleChange?.(e.target.value)}
+              />
             </div>
           </section>
         </>
