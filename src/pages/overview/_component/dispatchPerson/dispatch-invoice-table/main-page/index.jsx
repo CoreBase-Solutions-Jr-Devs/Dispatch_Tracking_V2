@@ -114,32 +114,40 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     const columns = useMemo(() =>{
         return [
             {
-                accessorKey: "customerCode",
-                header: "CusCode",
-                cell: ({ row }) => row.original.customerCode
-            
+                accessorKey: "invoiceNo",
+                header: "InvNo",
+                cell:({row}) =>{
+                    return row.original.invoiceNo ?? '-'
+                }
             },
-            // {
-            //     accessorKey: "dispatchIds",
-            //     header: "DispId(s)",
-            //     cell:({row}) =>{
-            //         return row.original.dispatchIds ?? '-'
-            //     }
-            // },
-            // {
-            //     accessorKey: "invoiceNumbers",
-            //     header: "InvNo(s)",
-            //     cell:({row}) =>{
-            //         return row.original.invoiceNumbers ?? '-'
-            //     }
-            // },
-            // {
-            //     accessorKey: "items",
-            //     header: "InvCount",
-            //     cell:({row}) =>{
-            //         return row.original.items ?? '-'
-            //     }
-            // },
+            {
+                accessorKey: "customerName",
+                header: "CusName",
+                cell:({row}) =>{
+                    return row.original.customerName ?? '-'
+                }
+            },
+            {
+                accessorKey: "items",
+                header: "Items",
+                cell:({row}) =>{
+                    return row.original.items ?? '-'
+                }
+            },
+            {
+                accessorKey: "docType",
+                header: "DocType",
+                cell:({row}) =>{
+                    return row.original.docType ?? '-'
+                }
+            },
+            {
+                accessorKey: "paymentTerms",
+                header: "Terms",
+                cell:({row}) =>{
+                    return row.original.paymentTerms ?? '-'
+                }
+            },
             {
                 accessorKey: "verifiedDateTime",
                 header: "Ver. Date",
@@ -161,13 +169,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                     return formatDuration(row.original.durationMinutes ?? '-')
                 }
             },
-            // {
-            //     accessorKey: "dispatchStatus",
-            //     header: "Status",
-            //     cell:({row}) =>{
-            //         return renderStatus(row.original.dispatchStatus ?? '-')
-            //     }
-            // },
             {
                 accessorKey: "amount",
                 header: "Amount",
@@ -199,12 +200,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 <div className="w-3/4">
                     {/* Table + Summary */}
                     <div className="space-y-4">
-                        {/* {isLoading && <Skeleton />}
-                        {isError && 
-                            <span className="text-red-500 text-center text-xs font-semibold">
-                                Invoice Table isn't Loading. Try again!
-                            </span>
-                        } */}
                         <DataTable
                             data={invoicesForDispatch}
                             columns={columns}
