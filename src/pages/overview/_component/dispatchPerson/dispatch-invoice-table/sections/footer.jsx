@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { usePushDispatchProcessMutation, useStartDispatchProcessMutation } from "@/features/dispatch/dispatchAPI";
 import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCarMake, setCarPlate, setCollectionType, setCustomerCourierId, setCustomerCourierName, setCustomerCourierPhone, setDispatch, setDispatchIds, setDriverId, setDriverName, setInvoices, setRouteCode, setRouteName } from "@/features/dispatch/dispatchSlice";
 
-export default function DispatchFooter({ rowData, onSubmit, onClose }) {
+export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -17,11 +17,20 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [driverId, setDriverId] = useState(0 || null);
   const [carMake, setCarMake] = useState("" || null);
   const [carPlate, setCarPlate] = useState("" || null);
-  const [customerCourierName, setCustomerCourierName] = useState("" || null);
-  const [customerCourierId, setCustomerCourierId] = useState(0 || null);
-  const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
+  // const [customerCourierName, setCustomerCourierName] = useState("" || null);
+  // const [customerCourierId, setCustomerCourierId] = useState(0 || null);
+  // const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
   const [dispatchRemarks, setDispatchRemarks] = useState("");
   const [isPush, setIsPush] = useState(true);
+
+  const {driverDetails} = useSelector(state => state.dispatch);
+
+  const {
+  courierDetails,
+} = useSelector((state) => state.dispatch);
+
+  console.log(courierDetails)
+
 
   const dispatch = useDispatch();
 
@@ -29,11 +38,15 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [sendDispatch, {data,isLoading,isError}] = usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const handleStart = async (event) => {
+  const handleStart = async () => {
+    const payload={
+      "dispatchIds": dispatchID
+    }
     try {
-      const data = await startDispatch('CSC999').unwrap();
+      const data = await startDispatch(payload).unwrap();
       console.log(data);
       setStartDisabled(false);
+      toast.success('Dispatch started!');
     } catch (error) {
       let description = "Please check your credentials and try again.";
       if (error?.data?.errors) {
@@ -57,13 +70,13 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
       collectionType: 'DELIVERY',
       routeCode: 0 || null,
       routeName: '' || null,
-      driverName,
-      driverId,
-      carMake,
-      carPlate,
-      customerCourierName,
-      customerCourierId,
-      customerCourierPhone,
+      driverName: driverDetails?.driverName,
+      driverId: driverDetails?.driverId,
+      carMake: driverDetails?.carMake,
+      carPlate: driverDetails?.regNo,
+      customerCourierName:courierDetails?.customerCourierName,
+      customerCourierId:courierDetails?.customerCourierId,
+      customerCourierPhone:courierDetails?.customerCourierPhone,
       isPush: false
     }
     try {
@@ -90,18 +103,29 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
     setSaveDisabled(true);
     setDeliveryDisabled(false);
 
+//     {
+//     "driverId": 23,
+//     "driverName": "delivery1",
+//     "personalId": "123456789",
+//     "driverLicenseNo": "D1234567",
+//     "phoneNo": "+254792514851",
+//     "email": "mikewanj@gmail.com",
+//     "carMake": "Toyota Hilux",
+//     "regNo": "KBA123A"
+// }
+
     const formData = {
       dispatchIds: [],
       collectionType: 'DELIVERY',
       routeCode,
       routeName,
-      driverName,
-      driverId,
-      carMake,
-      carPlate,
-      customerCourierName,
-      customerCourierId,
-      customerCourierPhone,
+      driverName:driverDetails?.driverName,
+      driverId:driverDetails?.driverId,
+      carMake:driverDetails?.carMake,
+      carPlate:driverDetails?.regNo,
+      customerCourierName:courierDetails?.customerCourierName,
+      customerCourierId:courierDetails?.customerCourierId,
+      customerCourierPhone:courierDetails?.customerCourierPhone,
       dispatchRemarks,
       isPush: true
     }

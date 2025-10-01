@@ -12,7 +12,7 @@ import DispatchFooter from "./footer";
 import DispatchSelect from "./select";
 import DispatchSearch from "./search";
 
-export default function DispatchPopup({ rowData, onSubmit }) {
+export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedDocs, setSelectedDocs] = useState([]);
@@ -81,7 +81,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
           value={query}
           onChange={setQuery}
           data={rowData}
-          placeholder="Inv. No/Cus. Code"
+          placeholder="Inv.No/Cus.Code"
           selectedCount={selectedDocs.length}
         />
 
@@ -114,7 +114,7 @@ export default function DispatchPopup({ rowData, onSubmit }) {
             selectValues={selectValues}
             selectedDocs={selectedDocs}
             onSubmit={onSubmit}
-            onClose={handleDialogClose}
+            onClose={onClose}
           />
         </DialogFooter>
       </div>
