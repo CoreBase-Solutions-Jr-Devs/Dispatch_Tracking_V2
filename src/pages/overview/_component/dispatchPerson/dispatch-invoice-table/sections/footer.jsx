@@ -104,17 +104,6 @@ export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose 
     setSaveDisabled(true);
     setDeliveryDisabled(false);
 
-//     {
-//     "driverId": 23,
-//     "driverName": "delivery1",
-//     "personalId": "123456789",
-//     "driverLicenseNo": "D1234567",
-//     "phoneNo": "+254792514851",
-//     "email": "mikewanj@gmail.com",
-//     "carMake": "Toyota Hilux",
-//     "regNo": "KBA123A"
-// }
-
     const formData = {
       dispatchIds: [],
       collectionType: 'DELIVERY',
