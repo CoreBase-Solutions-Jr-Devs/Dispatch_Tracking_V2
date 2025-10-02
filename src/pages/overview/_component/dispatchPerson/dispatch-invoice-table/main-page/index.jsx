@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
 import { roleToView } from "@/lib/utils";
 import { DataTable } from "@/components/data-table";
-import { useGetDispatchInvoicesQuery, useSelectedCusCodeQuery } from "@/features/dispatch/dispatchAPI";
+import { useGetDispatchInvoicesQuery, useSaveSelectedDispatchesMutation, useSelectedCusCodeQuery } from "@/features/dispatch/dispatchAPI";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,9 +23,9 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     // const { invoices } = useSelector((state) => state.invoice);
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(20);
-    const { data: selectedInvoices, isLoading, isError } = useSelectedCusCodeQuery({ pageNumber, pageSize });
-    let invoicesForDispatch = selectedInvoices?.items || [];
-    let dispatchID  = invoicesForDispatch.map((item) => item.dispatchId);
+    const [saveSelectedDispatches, { data: invoices , isLoading, isError }] = useSaveSelectedDispatchesMutation();
+    let dispatchInvoices = invoices?.updatedDispatches || [];
+    let dispatchID = dispatchInvoices.map((item) => item.dispatchId);
     console.log(dispatchID);
 
     const view = roleToView(user?.userRole || "User");
@@ -36,6 +36,10 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
         vehicle: "",
         collectionType: "",
     });
+
+    useEffect(() => {
+        saveSelectedDispatches({ pageNumber, pageSize }); 
+    }, [pageNumber, pageSize, saveSelectedDispatches]);
 
     useEffect(() => {
         if (rowData) {
@@ -163,13 +167,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 }
             },
             {
-                accessorKey: "durationMinutes",
-                header: "Duration",
-                cell:({row}) =>{
-                    return formatDuration(row.original.durationMinutes ?? '-')
-                }
-            },
-            {
                 accessorKey: "amount",
                 header: "Amount",
                 cell:({row}) =>{
@@ -201,7 +198,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                     {/* Table + Summary */}
                     <div className="space-y-4">
                         <DataTable
-                            data={invoicesForDispatch}
+                            data={dispatchInvoices}
                             columns={columns}
                             selection={true}
                             isLoading={false}
@@ -210,13 +207,13 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                             onPageChange={setPageNumber}
                             onPageSizeChange={setPageSize}
                             pagination={{
-                                pageNumber: selectedInvoices?.pageNumber || 1,
-                                pageSize: selectedInvoices?.pageSize || pageSize,
-                                totalItems: selectedInvoices?.totalCount || 0,
-                                totalPages: selectedInvoices?.totalPages || 1,
+                                pageNumber: dispatchInvoices?.pageNumber || 1,
+                                pageSize: dispatchInvoices?.pageSize || pageSize,
+                                totalItems: dispatchInvoices?.length,
+                                totalPages: Math.ceil(dispatchInvoices.length / pageSize) || 1,
                             }}
                         />
-                        <DispatchSummary data={rowData} />
+                        <DispatchSummary data={dispatchInvoices} />
                     </div>
                 </div>
                 {/* Dispatch Selections*/}
