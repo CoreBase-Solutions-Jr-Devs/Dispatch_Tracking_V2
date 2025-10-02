@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setCarMake, setCarPlate, setCollectionType, setCustomerCourierId, setCustomerCourierName, setCustomerCourierPhone, setDispatch, setDispatchIds, setDriverId, setDriverName, setInvoices, setRouteCode, setRouteName } from "@/features/dispatch/dispatchSlice";
 
-export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose }) {
+export default function DispatchFooter({ dispatchID, refetchData, rowData, onSubmit, onClose }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -45,6 +45,7 @@ export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose 
     try {
       const data = await startDispatch(payload).unwrap();
       console.log(data);
+      if (refetchData) setTimeout(() => refetchData(), 50);
       setStartDisabled(false);
       toast.success('Dispatch started!');
     } catch (error) {
@@ -82,6 +83,7 @@ export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose 
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
+      if (refetchData) refetchData();
       console.log(data);
     } catch (error) {
       let description = "Saving failed. Please try again.";
@@ -122,6 +124,7 @@ export default function DispatchFooter({ dispatchID, rowData, onSubmit, onClose 
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
+      if (refetchData) refetchData();
       console.log(data);
     } catch (error) {
       let description = "Saving failed. Please try again.";

@@ -23,7 +23,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     // const { invoices } = useSelector((state) => state.invoice);
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(20);
-    const [saveSelectedDispatches, { data: invoices , isLoading, isError }] = useSaveSelectedDispatchesMutation();
+    const [saveSelectedDispatches, { data: invoices , isLoading, isError, refetch }] = useSaveSelectedDispatchesMutation();
     let dispatchInvoices = invoices?.updatedDispatches || [];
     let dispatchID = dispatchInvoices.map((item) => item.dispatchId);
     console.log(dispatchID);
@@ -238,6 +238,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                                 selectValues={selectValues}
                                 onSubmit={onSubmit}
                                 onClose={onClose}
+                                refetchData={refetch}
                             />
                         </CardContent>
                     </Card>
