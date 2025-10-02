@@ -129,6 +129,14 @@ export const deliveryApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["dipatch_deliveries"],
     }),
+    DisputedAmountsInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/api/v2/Deliveries/DisputedAmountsInvoices`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["dipatch_deliveries"],
+    }),
   }),
 });
 
@@ -148,4 +156,5 @@ export const {
   useGenerateOTPForDeliveredInvoicesMutation,
   useValidateOTPForDeliveredInvoicesMutation,
   useMakeMpesaSTKPushForDeliveredInvoicesMutation,
+  useDisputedAmountsInvoicesMutation,
 } = deliveryApi;
