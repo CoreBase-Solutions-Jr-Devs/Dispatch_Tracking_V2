@@ -125,16 +125,17 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
           {/* Header Row */}
           <TableRow className="bg-gray-100 dark:bg-gray-700 text-xs font-medium">
             <TableCell className="py-1 px-2">Select</TableCell>
-            <TableCell className="py-1 px-2">Inv. No</TableCell>
+            <TableCell className="py-1 px-2">Doc. No</TableCell>
             <TableCell className="py-1 px-2">CusCode</TableCell>
             <TableCell className="py-1 px-2">CusName</TableCell>
             <TableCell className="py-1 px-2">Items</TableCell>
             <TableCell className="py-1 px-2">Terms</TableCell>
             <TableCell className="py-1 px-2">Ver. Date</TableCell>
             <TableCell className="py-1 px-2">Duration</TableCell>
-            {/* <TableCell className="py-1 px-2">Status</TableCell> */}
+            <TableCell className="py-1 px-2">Amount</TableCell>
           </TableRow>
-
+          
+          {/* Skeleton Loading State */}
           {isLoading &&
             Array.from({ length: 5 }).map((_, index) => (
               <TableRow key={index}>
@@ -148,11 +149,12 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
                 <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
                 <TableCell className="py-1 px-2"><Skeleton className="h-4 w-28" /></TableCell>
                 <TableCell className="py-1 px-2"><Skeleton className="h-4 w-12" /></TableCell>
-                {/* <TableCell className="py-1 px-2"><Skeleton className="h-4 w-24" /></TableCell> */}
+                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
               </TableRow>
             ))
           }
 
+          {/* Data Display State */}
           {!isLoading && !isError && rows.length > 0 &&
             rows.map((row, index) => {
               const isChecked = selected.some((d) => d.dispatchId === row.dispatchId);
@@ -165,14 +167,14 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
                       onCheckedChange={() => onToggle(row)}
                     />
                   </TableCell>
-                  <TableCell className="py-1 px-2">{renderText(row?.invoiceNo)}</TableCell>
+                  <TableCell className="py-1 px-2">{renderText(row?.docNo)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.customerCode)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.customerName)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.items)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(row?.payTerms)}</TableCell>
                   <TableCell className="py-1 px-2">{renderDateTime(row?.verifiedDateTime)}</TableCell>
                   <TableCell className="py-1 px-2">{renderText(formatDuration(row?.durationMinutes))}</TableCell>
-                  {/* <TableCell className="py-1 px-2">{renderStatus(row?.dispatchStatus)}</TableCell> */}
+                  <TableCell className="py-1 px-2">{row?.amount}</TableCell>
                 </TableRow>
               );
             })

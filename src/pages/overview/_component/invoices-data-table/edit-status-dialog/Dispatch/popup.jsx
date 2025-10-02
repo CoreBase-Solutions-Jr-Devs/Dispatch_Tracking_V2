@@ -35,14 +35,12 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
 
   // Fetch verified dispatch data
   const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
-  const dispatchData = data?.items || [];
+  const dispatchData = data?.invoices || [];
 
   // Return only Pending dispatches
   const filteredDispatchData = useMemo(() => {
     return dispatchData.filter(
-      (row) =>
-        row.dispatchStatus === "Pending" &&
-        !savedInvoices.some((d) => d.dispatchId === row.dispatchId)
+      (row) => !savedInvoices.some((d) => d.dispatchId === row.dispatchId)
     );
   }, [dispatchData, savedInvoices]);
 
