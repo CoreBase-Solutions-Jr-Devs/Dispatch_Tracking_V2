@@ -104,43 +104,43 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
 
       {collectionType === "delivery" && !deliveryPerson && (
         <>
-          <section className="flex justify-between w-full h-full space-x-4">
-            <div className="flex items-center gap-2 justify-between w-1/2">
-              <Label className="text-xs font-medium w-1/3">DP ID:</Label>
+          <section className="flex flex-col w-full h-full gap-2">
+            <div className="flex items-center gap-2 justify-between w-full">
+              <Label className="text-xs font-medium w-2/5">DP ID:</Label>
               <Input 
-                className='w-2/3 h-6 text-xs'
-                name='driverId'
-                value=''
+                className="w-3/5 h-5 text-xs"
+                name="driverId"
+                value=""
                 onChange={(e) => e.handleChange?.(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-2 justify-between w-1/2">
-              <Label className="text-xs font-medium w-1/3">DP DL:</Label>
-              <Input 
-                className='w-2/3 h-6 text-xs'
-                name='driverLicense'
-                value=''
-                onChange={(e) => e.handleChange?.(e.target.value)}
-              />
-            </div>
-          </section>
 
-          <section className="flex justify-between h-full space-x-4">
-            <div className="flex items-center gap-2 justify-between w-1/2">
-              <Label className="text-xs font-medium w-1/3">Car Make:</Label>
+            <div className="flex items-center gap-2 justify-between w-full">
+              <Label className="text-xs font-medium w-2/5">DP DL:</Label>
               <Input 
-                className='w-2/3 h-6 text-xs'
-                name='carMake'
-                value=''
+                className="w-3/5 h-5 text-xs"
+                name="driverLicense"
+                value=""
                 onChange={(e) => e.handleChange?.(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-2 justify-between w-1/2">
-              <Label className="text-xs font-medium w-1/3">Reg No:</Label>
+
+            <div className="flex items-center gap-2 justify-between w-full">
+              <Label className="text-xs font-medium w-2/5">Car Make:</Label>
               <Input 
-                className='w-2/3 h-6 text-xs'
-                name='regNo'
-                value=''
+                className="w-3/5 h-5 text-xs"
+                name="carMake"
+                value=""
+                onChange={(e) => e.handleChange?.(e.target.value)}
+              />
+            </div>
+
+            <div className="flex items-center gap-2 justify-between w-full">
+              <Label className="text-xs font-medium w-2/5">Reg No:</Label>
+              <Input 
+                className="w-3/5 h-5 text-xs"
+                name="regNo"
+                value=""
                 onChange={(e) => e.handleChange?.(e.target.value)}
               />
             </div>
@@ -149,30 +149,27 @@ export default function DispatchDetails({ collectionType, deliveryPerson }) {
       )}
 
       {collectionType === "delivery" && deliveryPerson && driverDetails && !driverLoading && !driverError && (
-        <>
-          <section className="flex justify-between w-full h-full">
-            <div className="flex items-center gap-2">
-              <Label className="text-xs font-medium">DP ID:</Label>
-              <Label className="text-xs font-medium">{driverDetails.personalId}</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Label className="text-xs font-medium">DP DL:</Label>
-              <Label className="text-xs font-medium">{driverDetails.driverLicenseNo}</Label>
-            </div>
-          </section>
+        <section className="flex flex-col w-full h-full gap-2">
+          <div className="flex items-center justify-between w-full">
+            <Label className="text-xs font-medium w-1/4">DP ID:</Label>
+            <Label className="text-xs font-medium w-3/4">{driverDetails.personalId}</Label>
+          </div>
 
-          <section className="flex justify-between h-full">
-            <div className="flex items-center gap-2">
-              <Label className="text-xs font-medium">Car Make:</Label>
-              <Label className="text-xs font-medium">{driverDetails.carMake}</Label>
-            </div>
+          <div className="flex items-center justify-between w-full">
+            <Label className="text-xs font-medium w-1/4">DP DL:</Label>
+            <Label className="text-xs font-medium w-3/4">{driverDetails.driverLicenseNo}</Label>
+          </div>
 
-            <div className="flex items-center gap-2">
-              <Label className="text-xs font-medium">Reg No:</Label>
-              <Label className="text-xs font-medium">{driverDetails.regNo}</Label>
-            </div>
-          </section>
-        </>
+          <div className="flex items-center justify-between w-full">
+            <Label className="text-xs font-medium w-1/4">Car Make:</Label>
+            <Label className="text-xs font-medium w-3/4">{driverDetails.carMake}</Label>
+          </div>
+
+          <div className="flex items-center justify-between w-full">
+            <Label className="text-xs font-medium w-1/4">Reg No:</Label>
+            <Label className="text-xs font-medium w-3/4">{driverDetails.regNo}</Label>
+          </div>
+        </section>
       )}
 
       {collectionType === "courier" && (
