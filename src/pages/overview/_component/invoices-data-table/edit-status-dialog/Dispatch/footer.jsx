@@ -15,6 +15,8 @@ export default function DispatchFooter({ rowData, selectedDocs = [], onSubmit, s
 
     const payload = {
       dispatchIds: selectedDocs.map((doc) => doc.dispatchId),
+      pageNumber: 0,
+      pageSize: 0,
     };
 
     try {
