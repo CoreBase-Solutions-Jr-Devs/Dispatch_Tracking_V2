@@ -1,28 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
+// Format helper (yyyy-MM-dd)
+const formatDate = (date) => new Date(date).toISOString().split("T")[0];
 
 const initialState = {
-  invoices: [],            // holds all invoices regardless of role
+  storeInvoices: [],
   pagination: {
     totalCount: 0,
     pageNumber: 1,
     pageSize: 50,
+    totalPages: 0,
   },
-  startDate: new Date().toISOString(),
-  endDate: new Date().toISOString(),
+  startDate: formatDate(new Date()), // 👉 yyyy-MM-dd
+  endDate: formatDate(new Date()), // 👉 yyyy-MM-dd
   dateRange: "TODAY",
-  selectedFilters: {},     // status or other filters
+  workflowStatus: "",
+  search: "",
 };
 
-const invoiceSlice = createSlice({
-  name: "invoice",
+const storeSlice = createSlice({
+  name: "store",
   initialState,
   reducers: {
-    setInvoices: (state, action) => {
-      state.invoices = action.payload.invoices || [];
+    setStoreInvoices: (state, action) => {
+      state.storeInvoices = action.payload.items || [];
       state.pagination = action.payload.pagination || {
         totalCount: 0,
         pageNumber: 1,
         pageSize: 50,
+        totalPages: 0,
       };
     },
     setStartDate: (state, action) => {
@@ -34,8 +39,11 @@ const invoiceSlice = createSlice({
     setDateRange: (state, action) => {
       state.dateRange = action.payload || "TODAY";
     },
-    setSelectedFilters: (state, action) => {
-      state.selectedFilters = action.payload || {};
+    setWorkflowStatus: (state, action) => {
+      state.workflowStatus = action.payload || "";
+    },
+    setSearch: (state, action) => {
+      state.search = action.payload;
     },
     setPageNumber: (state, action) => {
       state.pagination.pageNumber = action.payload || 1;
@@ -47,13 +55,14 @@ const invoiceSlice = createSlice({
 });
 
 export const {
-  setInvoices,
+  setStoreInvoices,
   setStartDate,
   setEndDate,
   setDateRange,
-  setSelectedFilters,
+  setWorkflowStatus,
+  setSearch,
   setPageNumber,
   setPageSize,
-} = invoiceSlice.actions;
+} = storeSlice.actions;
 
-export default invoiceSlice.reducer;
+export default storeSlice.reducer;

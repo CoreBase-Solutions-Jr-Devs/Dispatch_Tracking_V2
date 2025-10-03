@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  useVerificationStartMutation,
-  useVerificationPushMutation,
-} from "@/features/invoices/invoicesAPI";
+  useStartVerificationProcessMutation,
+  usePushVerificationInvoiceMutation,
+} from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
 
@@ -28,49 +28,59 @@ export default function VerificationFooter({
       !rowData?.verifyStartDateTime
   );
 
-  const [verificationStart] = useVerificationStartMutation();
-  const [verificationPush] = useVerificationPushMutation();
+  const [verificationStart] = useStartVerificationProcessMutation();
+  const [verificationPush] = usePushVerificationInvoiceMutation();
 
-  const handleStartApi = () => {
+  const handleStartApi = async () => {
     setStartDisabled(true);
     setDispatchDisabled(true);
 
     const invoiceNo = Number(rowData.invoiceNo);
+    console.log("Starting verification for invoiceNo:", invoiceNo);
 
-    verificationStart(invoiceNo)
-      .unwrap()
-      .then(() => {
-        toast.success("Verification started successfully");
+    try {
+      const res = await verificationStart( invoiceNo ).unwrap();
+      console.log("Start API response:", res);
 
-        setDispatchDisabled(false);
+      if (res?.error) {
+        throw new Error(res.error);
+      }
 
-        if (refetchData) setTimeout(() => refetchData(), 50);
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setDispatchDisabled(true);
+      toast.success("Verification started successfully");
 
-        let description = "Please check your credentials and try again.";
-
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
+      if (refetchData) {
+        try {
+          await refetchData();
+        } catch (err) {
+          console.error("Refetch failed:", err);
         }
+      }
 
-        toast.error("Verification start Failed", {
-          description,
-          duration: 4000,
-        });
-      });
+      setDispatchDisabled(false);
+    } catch (error) {
+      console.error("Start API failed:", error);
+      setStartDisabled(false);
+      setDispatchDisabled(true);
+
+      let description = "Please check your credentials and try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) description = errorMessages.join(" ");
+      } else if (error?.data?.message) {
+        description = error.data.message;
+      } else if (error?.message) {
+        description = error.message;
+      }
+
+      toast.error("Verification start Failed", { description, duration: 4000 });
+    }
   };
 
-  const handleDispatch = () => {
+  const handleDispatch = async () => {
     const isRemarksEmpty = !remarks || remarks.trim() === "";
+    console.log("Dispatching verification with remarks:", remarks);
 
     const fieldErrors = {};
-    // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
 
     setErrors({
       remarks: fieldErrors.remarks || undefined,
@@ -83,31 +93,54 @@ export default function VerificationFooter({
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
-      verificationRemarks: remarks ?? "",
+      totalWeightKg: rowData.totalWeightKg ?? 0,
+      storeRemarks: remarks ?? "",
     };
+    console.log("Dispatch payload:", payload);
 
-    verificationPush(payload)
-      .unwrap()
-      .then(() => {
-        toast.success("Sent to Dispatch successfully");
-        setTimeout(() => {
-          setRemarks(null);
-          setErrors({});
-        }, 50);
-        if (refetchData) refetchData();
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setDispatchDisabled(false);
-        let description = "Please check your credentials and try again.";
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
+    try {
+      const res = await verificationPush(payload).unwrap();
+      console.log("Dispatch API response:", res);
+
+      if (res?.error) {
+        throw new Error(res.error);
+      }
+
+      toast.success("Sent to Dispatch successfully");
+
+      setErrors({});
+      setRemarks(null);
+
+      if (refetchData) {
+        try {
+          await refetchData();
+        } catch (err) {
+          console.error("Refetch failed:", err);
         }
-        toast.error("Send to Dispatch Failed", { description, duration: 4000 });
+      }
+
+      setStartDisabled(true);
+      setDispatchDisabled(true);
+    } catch (error) {
+      console.error("Dispatch API failed:", error);
+      setStartDisabled(false);
+      setDispatchDisabled(false);
+
+      let description = "Please check your credentials and try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) description = errorMessages.join(" ");
+      } else if (error?.data?.message) {
+        description = error.data.message;
+      } else if (error?.message) {
+        description = error.message;
+      }
+
+      toast.error("Send to Dispatch Failed", {
+        description,
+        duration: 4000,
       });
+    }
   };
 
   const handleClose = () => onClose();
@@ -127,15 +160,20 @@ export default function VerificationFooter({
           Start
         </Button>
       </EditStatusDialog>
-
-      <Button
-        variant="apply"
-        onClick={handleDispatch}
-        disabled={dispatchDisabled}
-        className="mt-2 uppercase"
+      <EditStatusDialog
+        view="verificationpush"
+        rowData={rowData}
+        onSubmit={handleDispatch}
       >
-        Send to Dispatch
-      </Button>
+        <Button
+          variant="apply"
+          disabled={dispatchDisabled}
+          className="mt-2 uppercase"
+        >
+          Send to Verification
+        </Button>
+      </EditStatusDialog>
+
       <Button
         variant="destructive"
         onClick={handleClose}
