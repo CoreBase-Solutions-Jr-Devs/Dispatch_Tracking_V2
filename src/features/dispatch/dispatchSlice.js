@@ -4,10 +4,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     carMake: "",
     carPlate: "",
+    clientName: "",
+    clientId: "",
     collectionType: "",
-    customerCourierName: "string",
+    customerCourierName: "",
     customerCourierId: 0,
-    customerCourierPhone: "string",
+    customerCourierPhone: "",
     dispatchId: 0,
     dispatchIds: [],
     dispatchRemarks: "",
@@ -32,6 +34,9 @@ const initialState = {
     regNo: "",
     routeCode: 0,
     routeName: "",
+    // 
+    driverDetails:{},
+    courierDetails:{}
 }
 
 const dispatchSlice = createSlice({
@@ -54,14 +59,18 @@ const dispatchSlice = createSlice({
             state.isPush = action.payload.isPush;
         },
         setDriverDetails:(state, action) => {
-            state.driverId = action.payload.driverId;
-            state.driverName = action.payload.driverName;
-            state.personalId = action.payload.personalId;
-            state.driverLicenseNo = action.payload.driverLicenseNo;
-            state.phoneNo = action.payload.phoneNo;
-            state.email = action.payload.email;
-            state.carMake = action.payload.carMake;
-            state.regNo = action.payload.regNo;
+            state.driverDetails = action.payload;
+            // state.driverId = action.payload?.driverId;
+            // state.driverName = action.payload?.driverName;
+            // state.personalId = action.payload?.personalId;
+            // state.driverLicenseNo = action.payload?.driverLicenseNo;
+            // state.phoneNo = action.payload?.phoneNo;
+            // state.email = action.payload?.email;
+            // state.carMake = action.payload?.carMake;
+            // state.regNo = action.payload?.regNo;
+        },
+        setCourierDetails: (state, action) => {
+            state.courierDetails = action.payload;
         },
         setInvoices: (state, action) => {
             state.invoices = action.payload.invoices;
@@ -128,6 +137,7 @@ const dispatchSlice = createSlice({
 })
 
 export const {
+    setDriverDetails,setCourierDetails,
   setInvoices,setCarMake,setCarPlate,
   setCollectionType,setCustomerCourierName,
   setCustomerCourierId,setCustomerCourierPhone,setDeliveryDriver,

@@ -61,7 +61,7 @@ export default function DispatchSearch({
       <div className="flex-1 flex flex-col justify-end">
         {/* <Label className="text-xs text-muted-foreground">Filter by Customer Code</Label> */}
         <RoleBasedFilters
-            // filters={customerFilters}
+            filters={customerFilters}
             selectedFilters={selectedFilters}
             onChange={(key, val) => setSelectedFilters(prev => ({ ...prev, [key]: val }))}
         />
