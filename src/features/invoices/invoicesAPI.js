@@ -48,7 +48,7 @@ export const invoicesApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      providesTags: ["store_invoices"],
+      providesTags: ["store_invoices1"],
     }),
 
     getStoreTrackingDetails: builder.query({
@@ -65,7 +65,7 @@ export const invoicesApi = apiClient.injectEndpoints({
         method: "POST",
         body: {},
       }),
-      invalidatesTags: ["store_invoices"],
+      invalidatesTags: ["store_invoices1"],
     }),
 
     storePush: builder.mutation({
@@ -74,7 +74,7 @@ export const invoicesApi = apiClient.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["store_invoices"],
+      invalidatesTags: ["store_invoices1"],
     }),
 
     // VERIFICATION TRACKING
