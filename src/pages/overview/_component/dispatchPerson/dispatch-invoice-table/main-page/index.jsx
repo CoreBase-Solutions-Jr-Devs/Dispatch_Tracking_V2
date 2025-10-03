@@ -41,7 +41,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
 
   const { updatedDispatches } = useSelector((state) => state.dispatch);
 
-  let dispatchIDs = updatedDispatches.map((item) => item.dispatchId);
+  let dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
 
   // Fetch filter options to get delivery guy ID
   const {
