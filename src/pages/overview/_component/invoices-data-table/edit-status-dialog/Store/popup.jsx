@@ -9,7 +9,7 @@ import StoreMeta from "./meta";
 import StoreFooter from "./footer";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGetStoreTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
+import { useGetStoreTrackingQuery } from "@/features/store/storeAPI";
 
 export default function StorePopup({ rowData, onSubmit, onClose }) {
   const [remarks, setRemarks] = useState(null);
@@ -17,10 +17,8 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
     remarks: "",
   });
 
-  const { data, isLoading, isError, refetch } = useGetStoreTrackingDetailsQuery(
-    {
-      docNum: Number(rowData.invoiceNo),
-    }
+  const { data, isLoading, isError, refetch } = useGetStoreTrackingQuery(
+    Number(rowData.docNo)
   );
 
   const handleRemarksChange = (newRemarks) => {
@@ -60,8 +58,7 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
 
       <Separator className="my-2" />
 
-  
- <StoreSummary
+      <StoreSummary
         data={data}
         readOnly={readOnly}
         // handleWeightChange={handleWeightChange}
@@ -80,6 +77,7 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
       <DialogFooter>
         <StoreFooter
           remarks={remarks}
+          setRemarks={setRemarks}
           rowData={data}
           onSubmit={onSubmit}
           onClose={onClose}

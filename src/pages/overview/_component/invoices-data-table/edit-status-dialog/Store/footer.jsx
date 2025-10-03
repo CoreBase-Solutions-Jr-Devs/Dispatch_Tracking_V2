@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  useStoreStartMutation,
-  useStorePushMutation,
-} from "@/features/invoices/invoicesAPI";
+  useStartStoreProcessMutation,
+  usePushStoreInvoiceMutation,
+} from "@/features/store/storeAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
 
@@ -26,43 +26,55 @@ export default function StoreFooter({
     rowData?.workflowStatus !== "In Process" || !rowData?.storeStartDateTime
   );
 
-  const [storeStart] = useStoreStartMutation();
-  const [storePush] = useStorePushMutation();
+  const [storeStart] = useStartStoreProcessMutation();
+  const [storePush] = usePushStoreInvoiceMutation();
 
-  const handleStartApi = () => {
+  const handleStartApi = async () => {
     setStartDisabled(true);
     setVerificationDisabled(true);
 
-   
     const invoiceNo = Number(rowData.invoiceNo);
 
-    storeStart(invoiceNo)
-      .unwrap()
-      .then(() => {
-        toast.success("Store process started successfully");
+    try {
+      const res = await storeStart(invoiceNo).unwrap();
 
-        setVerificationDisabled(false);
+      // Check for backend “fake errors” in 2xx responses
+      if (res?.error) {
+        throw new Error(res.error);
+      }
 
-        if (refetchData) setTimeout(() => refetchData(), 50);
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setVerificationDisabled(true);
+      // Success
+      toast.success("Store process started successfully");
 
-        let description = "Please check your credentials and try again.";
-
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
+      if (refetchData) {
+        try {
+          await refetchData();
+        } catch (err) {
+          console.error("Refetch failed:", err);
         }
+      }
 
-        toast.error("Store start Failed", { description, duration: 4000 });
-      });
+      setVerificationDisabled(false);
+    } catch (error) {
+      // API error or explicit thrown error
+      setStartDisabled(false);
+      setVerificationDisabled(true);
+
+      let description = "Please check your credentials and try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) description = errorMessages.join(" ");
+      } else if (error?.data?.message) {
+        description = error.data.message;
+      } else if (error?.message) {
+        description = error.message;
+      }
+
+      toast.error("Store start Failed", { description, duration: 4000 });
+    }
   };
 
-  const handleVerification = () => {
+  const handleVerification = async () => {
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
 
     const fieldErrors = {};
@@ -79,34 +91,51 @@ export default function StoreFooter({
 
     const payload = {
       docNum: Number(rowData.invoiceNo),
+      totalWeightKg: rowData.totalWeightKg ?? 0,
       storeRemarks: remarks ?? "",
     };
 
-    storePush(payload)
-      .unwrap()
-      .then(() => {
-        toast.success("Sent to Verification successfully");
-        setTimeout(() => {
-          setRemarks(null);
-          setErrors({});
-        }, 50);
-        if (refetchData) refetchData();
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setVerificationDisabled(false);
-        let description = "Please check your credentials and try again.";
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
+    try {
+      const res = await storePush(payload).unwrap();
+
+      // Check for backend “fake errors” even if HTTP 200
+      if (res?.error) {
+        throw new Error(res.error);
+      }
+
+      // Success
+      toast.success("Sent to Verification successfully");
+
+      setErrors({});
+      if (refetchData) {
+        try {
+          await refetchData();
+        } catch (err) {
+          console.error("Refetch failed:", err);
         }
-        toast.error("Send to Verification failed", {
-          description,
-          duration: 4000,
-        });
+      }
+
+      setStartDisabled(true);
+      setVerificationDisabled(true);
+    } catch (error) {
+      setStartDisabled(false);
+      setVerificationDisabled(false);
+
+      let description = "Please check your credentials and try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) description = errorMessages.join(" ");
+      } else if (error?.data?.message) {
+        description = error.data.message;
+      } else if (error?.message) {
+        description = error.message;
+      }
+
+      toast.error("Send to Verification failed", {
+        description,
+        duration: 4000,
       });
+    }
   };
 
   const handleClose = () => onClose();
@@ -127,14 +156,19 @@ export default function StoreFooter({
         </Button>
       </EditStatusDialog>
 
-      <Button
-        variant="apply"
-        onClick={handleVerification}
-        disabled={verificationDisabled}
-        className="mt-2 uppercase"
+      <EditStatusDialog
+        view="storepush"
+        rowData={rowData}
+        onSubmit={handleVerification}
       >
-        Send to Verification
-      </Button>
+        <Button
+          variant="apply"
+          disabled={verificationDisabled}
+          className="mt-2 uppercase"
+        >
+          Send to Verification
+        </Button>
+      </EditStatusDialog>
 
       <Button
         variant="destructive"
