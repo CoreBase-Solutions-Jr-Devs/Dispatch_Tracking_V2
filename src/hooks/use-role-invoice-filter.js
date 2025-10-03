@@ -1,21 +1,27 @@
 import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatchAPI";
 import {
-  useFilterStoreInvoicesMutation,
-  useFilterVerificationInvoicesMutation,
-  // useFilterDispatchInvoicesMutation,
+  
+  useFilterDispatchInvoicesMutation,
   // useFilterDeliveryInvoicesMutation,
 } from "@/features/invoices/invoicesAPI";
+import { useLazyGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
+import { useLazyGetFilteredVerificationInvoicesQuery } from "@/features/verification/verificationAPI";
 
 export function useRoleInvoiceFilter(role) {
   switch (role) {
     case "store":
-      return useFilterStoreInvoicesMutation();
+      return useLazyGetFilteredStoreInvoicesQuery(); 
+
     case "verification":
-      return useFilterVerificationInvoicesMutation();
+   
+      return useLazyGetFilteredVerificationInvoicesQuery();
+
     case "dispatch":
-      return useGetSavedDispatchedInvoicesQuery();
-    // case 'delivery':
-    // 	return useFilterDeliveryInvoicesMutation();
+      return useFilterDispatchInvoicesMutation();
+
+    // case "delivery":
+    //   return useFilterDeliveryInvoicesMutation();
+
     default:
       throw new Error(`Unknown role: ${role}`);
   }

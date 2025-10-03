@@ -28,7 +28,8 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
         return DeliveryPopup;
       case "storestart":
       case "verificationstart":
-      case "dispatchstart":
+      case "storepush":
+         case "verificationpush":
         return StartPopup;
       default:
         return () => (
@@ -44,8 +45,9 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   let dialogClass = "";
   switch (view?.toLowerCase()) {
     case "storestart":
+    case "storepush":
     case "verificationstart":
-    case "dispatchstart":
+       case "verificationpush":
       dialogClass = "sm:max-w-sm";
       break;
     case "dispatch":

@@ -44,7 +44,6 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
       .then((data) => {
         dispatch(setCredentials(data));
 
-        
         onSubmit?.();
 
         onClose?.();
@@ -76,7 +75,6 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
       </DialogHeader>
 
       <div className="p-2 space-y-4">
-        
         <div className="flex flex-col gap-1">
           <label
             htmlFor="username"
@@ -100,7 +98,6 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
           )}
         </div>
 
-       
         <div className="flex flex-col gap-1">
           <label
             htmlFor="password"

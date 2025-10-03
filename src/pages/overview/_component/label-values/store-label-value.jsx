@@ -1,47 +1,54 @@
 import React, { useEffect } from "react";
-import { useFilterStoreInvoicesMutation } from "@/features/invoices/invoicesAPI";
+import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
 import { Skeleton } from "@/components/ui/skeleton";
 import LabelValue from "./shared-label-value";
 import { useTypedSelector } from "@/app/hook";
 import { toast } from "sonner";
+import { renderDuration } from "@/components/invoice-data-table/invoice-columns";
+
 const StoreLabelValue = () => {
   const { startDate, endDate, dateRange } = useTypedSelector(
     (state) => state.invoice
   );
 
-  const [filterStoreInvoices, { data, isLoading, isError }] =
-    useFilterStoreInvoicesMutation();
+  const { data, isLoading, isError, error, refetch } =
+    useGetFilteredStoreInvoicesQuery(
+      {
+        startDate: new Date(startDate).toISOString(),
+        endDate: new Date(endDate).toISOString(),
+        dateRange,
+        search: "",
+        status: {},
+        pageNumber: 1,
+        pageSize: 50,
+      },
+      { skip: !startDate || !endDate }
+    );
 
   const handleApplyFilter = async () => {
-    const payload = {
-      startDate: new Date(startDate).toISOString(),
-      endDate: new Date(endDate).toISOString(),
-      dateRange,
-      search: "",
-      status: {},
-      pageNumber: 1,
-      pageSize: 50,
-    };
-
-    console.log("Filter Payload:", JSON.stringify(payload, null, 2));
-
     try {
-      const data = await filterStoreInvoices(payload).unwrap();
-      console.log(data);
-    } catch (error) {
-      let description = "error occurred. Please try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) description = error.data.message;
-
-      toast.error("Invoices Failed", { description, duration: 4000 });
+      await refetch();
+    } catch (err) {
+      handleError(err);
     }
   };
 
+  const handleError = (err) => {
+    let description = "Error occurred. Please try again.";
+    if (err?.data?.errors) {
+      const errorMessages = Object.values(err.data.errors).flat();
+      if (errorMessages.length > 0) description = errorMessages.join(" ");
+    } else if (err?.data?.message) {
+      description = err.data.message;
+    }
+    toast.error("Invoices Failed", { description, duration: 4000 });
+  };
+
   useEffect(() => {
-    handleApplyFilter();
-  }, []);
+    if (isError) {
+      handleError(error);
+    }
+  }, [isError, error]);
 
   if (isLoading) {
     return (
@@ -54,14 +61,15 @@ const StoreLabelValue = () => {
     );
   }
 
-  if (isError) {
-    return (
-      <div className="text-center text-red-500">
-        Failed to load overview data.
-      </div>
-    );
-  }
-  const stats = data?.stats || {};
+  // If error → fallback to 0 stats instead of breaking UI
+  const stats = !isError && data?.stats ? data.stats : {
+    pendingCount: 0,
+    inProcessCount: 0,
+    processedCount: 0,
+    averageDurationSeconds: undefined,
+  };
+
+  const invoicesCount = !isError && data?.invoices ? data.invoices.length : 0;
 
   return (
     <div
@@ -72,27 +80,16 @@ const StoreLabelValue = () => {
         lg:gap-6
       "
     >
-      <LabelValue
-        status="Store"
-        label="Today"
-        value={data?.invoices?.length || 0}
-      />
-      <LabelValue
-        status="Verification"
-        label="Pending"
-        value={stats.pendingCount || 0}
-      />
-      <LabelValue
-        status="Dispatch"
-        label="Processed"
-        value={stats.processedCount || 0}
-      />
+      <LabelValue status="Store" label="Today" value={invoicesCount} />
+      <LabelValue status="Verification" label="Pending" value={stats.pendingCount || 0} />
+      <LabelValue status="Delivered" label="In Process" value={stats.inProcessCount || 0} />
+      <LabelValue status="Dispatch" label="Processed" value={stats.processedCount || 0} />
       <LabelValue
         status="Delivered"
         label="Avg. Processing Time"
         value={
-          stats.avgDurationSeconds !== undefined
-            ? `${stats.avgDurationSeconds} sec`
+          stats.averageDurationSeconds !== undefined
+            ? renderDuration(stats.averageDurationSeconds, stats.averageDurationSeconds)
             : "N/A"
         }
       />

@@ -12,18 +12,18 @@ const RoleBasedFilters = ({ filters = [], selectedFilters = {}, onChange }) => {
 
   return (
     <section className="flex flex-wrap gap-2 items-center">
-      {safeFilters.map(filter => (
+      {safeFilters.map((filter) => (
         <section key={filter.key} className="min-w-[120px]">
           <Select
             value={selectedFilters[filter.key] || ""}
-            onValueChange={val => onChange(filter.key, val)}
+            onValueChange={(val) => onChange(filter.key, val)}
           >
             <SelectTrigger className="h-8 text-sm bg-[var(--input)] border border-[var(--border)] text-[var(--foreground)] rounded-md">
               <SelectValue placeholder={filter.label} />
             </SelectTrigger>
 
             <SelectContent className="bg-gray-100 text-[var(--dropdown-foreground)] border border-[var(--border)] rounded-md shadow-lg">
-              {filter.options?.map(opt => (
+              {filter.options?.map((opt) => (
                 <SelectItem
                   key={opt.value}
                   value={opt.value}
@@ -32,10 +32,10 @@ const RoleBasedFilters = ({ filters = [], selectedFilters = {}, onChange }) => {
                   {opt.label}
                 </SelectItem>
               )) || (
-                  <SelectItem disabled className="text-red-500">
-                    No options
-                  </SelectItem>
-                )}
+                <SelectItem disabled className="text-red-500">
+                  No options
+                </SelectItem>
+              )}
             </SelectContent>
           </Select>
         </section>
