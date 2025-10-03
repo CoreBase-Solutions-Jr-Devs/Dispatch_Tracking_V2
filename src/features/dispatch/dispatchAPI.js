@@ -73,9 +73,10 @@ export const dispatchApi = apiClient.injectEndpoints({
             providesTags: ['selected_dispatch_invoices'],
         }),
         startDispatchProcess: builder.mutation({
-            query: (cusCode) => ({
-                url: `dispatch/${cusCode}/dispatch/start`,
+            query: (payload) => ({
+                url: `dispatch/dispatch/start`,
                 method: 'POST',
+                body: payload
             }),
             invalidatesTags: ['dispatch_invoices'],
         }),
