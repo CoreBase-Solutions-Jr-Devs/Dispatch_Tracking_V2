@@ -36,7 +36,7 @@ export const invoicesApi = apiClient.injectEndpoints({
 
     filterOptions: builder.query({
       query: () => ({
-        url: "/invoices/filter-options",
+        url: "/filters/filter-options",
         method: "GET",
       }),
       providesTags: ["filter_options"],
