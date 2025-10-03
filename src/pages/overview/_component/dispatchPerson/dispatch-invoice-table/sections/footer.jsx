@@ -22,6 +22,7 @@ import {
   usePushDispatchProcessMutation,
   useStartDispatchProcessMutation,
 } from "@/features/Dispmain/dispatchAPI";
+import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 export default function DispatchFooter({
   dispatchIDs,
@@ -98,8 +99,8 @@ export default function DispatchFooter({
     const formData = {
       dispatchIds: dispatchIDs,
       collectionType: selectValues.collectionType,
-      routeCode: 0 || null,
-      routeName: "" || null,
+      // routeCode: 0 || null,
+      routeName: selectValues?.dispatchRoute || null,
       driverName: driverDetails?.driverName,
       driverId: driverDetails?.driverId,
       carMake: driverDetails?.carMake,
@@ -144,8 +145,8 @@ export default function DispatchFooter({
     const formData = {
       dispatchIds: dispatchIDs,
       collectionType: selectValues.collectionType,
-      routeCode,
-      routeName,
+      // routeCode,
+      routeName:selectValues?.dispatchRoute,
       driverName: driverDetails?.driverName,
       driverId: driverDetails?.driverId,
       carMake: driverDetails?.carMake,
@@ -185,30 +186,48 @@ export default function DispatchFooter({
 
   return (
     <div className="flex flex-row justify-center w-full">
-      <Button
-        variant="apply"
-        onClick={handleStart}
-        // disabled={startDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleStart}
       >
-        Start
-      </Button>
-      <Button
-        variant="verification"
-        onClick={handleSave}
-        // disabled={saveDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
+        <Button
+          variant="apply"
+          // onClick={handleStart}
+          disabled={startDisabled}
+          className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
+        >
+          Start
+        </Button>
+      </EditStatusDialog>
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleSave}
       >
-        Save
-      </Button>
-      <Button
-        variant="apply"
-        onClick={handleDelivery}
-        // disabled={deliveryDisabled}
-        className="mt-1 uppercase text-xs font-medium "
+        <Button
+          variant="verification"
+          // onClick={handleSave}
+          disabled={saveDisabled}
+          className="mt-1 mr-2 uppercase text-xs font-medium"
+        >
+          Save
+        </Button>
+      </EditStatusDialog>
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleDelivery}
       >
-        Push
-      </Button>
+        <Button
+          variant="apply"
+          // onClick={handleDelivery}
+          disabled={deliveryDisabled}
+          className="mt-1 uppercase text-xs font-medium "
+        >
+          Push
+        </Button>
+      </EditStatusDialog>
     </div>
   );
 }
