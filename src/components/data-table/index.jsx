@@ -56,6 +56,8 @@ export function DataTable({
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [internalRowSelection, setInternalRowSelection] = React.useState({});
 
+  // console.log(data);
+
   const isControlled =
     typeof rowSelection !== "undefined" &&
     typeof onRowSelectionChange === "function";

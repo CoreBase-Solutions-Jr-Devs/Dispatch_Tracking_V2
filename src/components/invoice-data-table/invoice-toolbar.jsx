@@ -8,7 +8,6 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Search as SearchIcon } from "lucide-react";
-import { useDispatchSearchQuery } from "@/features/dispatch/dispatchAPI";
 
 export default function InvoiceToolbar({
   role = "admin",
@@ -17,13 +16,13 @@ export default function InvoiceToolbar({
   const [searchValue, setSearchValue] = useState("");
   const [debounceValue, setDebounceValue] = useState(searchValue);
 
-  const {
-    data: searchOptions,
-    isLoading,
-    isError,
-  } = useDispatchSearchQuery(debounceValue, {
-    skip: !debounceValue,
-  });
+  // const {
+  //   data: searchOptions,
+  //   isLoading,
+  //   isError,
+  // } = useDispatchSearchQuery(debounceValue, {
+  //   skip: !debounceValue,
+  // });
 
   useEffect(() => {
     const handler = setTimeout(() => setDebounceValue(searchValue), 1000);
@@ -50,7 +49,6 @@ export default function InvoiceToolbar({
 
   return (
     <div className="flex justify-between items-center w-full">
-     
       <div className="relative flex-1 flex flex-col max-w-xs">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
         <Input
@@ -62,7 +60,6 @@ export default function InvoiceToolbar({
         />
       </div>
 
-     
       <div className="flex items-center ml-auto">{renderSummaryCards()}</div>
     </div>
   );

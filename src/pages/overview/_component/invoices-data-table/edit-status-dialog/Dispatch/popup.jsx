@@ -7,10 +7,11 @@ import DispatchSummary from "./summary";
 import DispatchRemarks from "./remarks";
 import DispatchMeta from "./meta";
 import DispatchTable from "./table";
-import { useGetVerifiedOnDispatchQuery } from "@/features/dispatch/dispatchAPI";
+
 import DispatchFooter from "./footer";
 import DispatchSelect from "./select";
 import DispatchSearch from "./search";
+import { useGetVerifiedOnDispatchQuery } from "@/features/Dispmain/dispatchAPI";
 
 export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,9 +33,12 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
     });
   };
 
-
   // Fetch verified dispatch data
-  const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
+  const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({
+    pageNumber,
+    pageSize,
+  });
+
   const dispatchData = data?.invoices || [];
 
   // Return only Pending dispatches
@@ -57,16 +61,16 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
     collectionType: "",
   });
 
-  useEffect(() => {
-    if (rowData) {
-      setSelectValues({
-        deliveryPerson: rowData.deliveryPerson || "",
-        deliveryRoute: rowData.deliveryRoute || "",
-        vehicle: rowData.vehicle || "",
-        collectionType: rowData.collectionType || "",
-      });
-    }
-  }, [rowData]);
+  // useEffect(() => {
+  //   if (rowData) {
+  //     setSelectValues({
+  //       deliveryPerson: rowData.deliveryPerson || "",
+  //       deliveryRoute: rowData.deliveryRoute || "",
+  //       vehicle: rowData.vehicle || "",
+  //       collectionType: rowData.collectionType || "",
+  //     });
+  //   }
+  // }, [rowData]);
 
   const handleSelectChange = (field, value) => {
     setSelectValues((prev) => ({ ...prev, [field]: value }));
@@ -94,17 +98,20 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
         <Separator className="my-2" />
 
         <div className="space-y-4">
-          <DispatchTable 
-            data={filteredDispatchData} 
-            isLoading={isLoading} 
+          <DispatchTable
+            data={filteredDispatchData}
+            isLoading={isLoading}
             isError={isError}
-            selected={selectedDocs} 
-            onToggle={handleToggleRow} 
+            selected={selectedDocs}
+            onToggle={handleToggleRow}
             pagination={{
               pageNumber: data?.pageNumber || pageNumber,
               pageSize: data?.pageSize || pageSize,
               totalItems: data?.totalCount || 0 || filteredDispatchData.length,
-              totalPages: data?.totalPages || 1 || Math.ceil(filteredDispatchData.length / pageSize),
+              totalPages:
+                data?.totalPages ||
+                1 ||
+                Math.ceil(filteredDispatchData.length / pageSize),
             }}
             onPageChange={setPageNumber}
             onPageSizeChange={setPageSize}
@@ -113,7 +120,6 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
 
         <Separator className="my-2" />
 
-        
         <DialogFooter>
           <DispatchFooter
             rowData={rowData}

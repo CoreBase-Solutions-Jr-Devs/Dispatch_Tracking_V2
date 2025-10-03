@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
-import { useSelectDispatchInvoiceMutation } from "@/features/dispatch/dispatchAPI";
+// import { useSelectDispatchInvoiceMutation } from "@/features/dispatch/dispatchAPI";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch } from "react-redux";
@@ -17,10 +17,18 @@ const renderText = (text) => (
 const renderStatus = (status) => {
   let statusClass = "bg-muted text-muted-foreground border-border";
   switch (status) {
-    case "Pending": statusClass = "status-store border-status-store/20"; break;
-    case "Verified": statusClass = "status-dispatch border-status-verification/20"; break;
-    case "Ongoing": statusClass = "status-verification border-status-dispatch/20"; break;
-    case "Delivered": statusClass = "status-delivered border-status-delivered/20"; break;
+    case "Pending":
+      statusClass = "status-store border-status-store/20";
+      break;
+    case "Verified":
+      statusClass = "status-dispatch border-status-verification/20";
+      break;
+    case "Ongoing":
+      statusClass = "status-verification border-status-dispatch/20";
+      break;
+    case "Delivered":
+      statusClass = "status-delivered border-status-delivered/20";
+      break;
   }
   return (
     <Badge
@@ -45,9 +53,7 @@ const formatUKDateTime = (date) => {
 };
 
 const renderDateTime = (val) => (
-  <span className="font-mono text-sm">
-    {formatUKDateTime(val)}
-  </span>
+  <span className="font-mono text-sm">{formatUKDateTime(val)}</span>
 );
 
 const formatDuration = (seconds) => {
@@ -57,13 +63,19 @@ const formatDuration = (seconds) => {
   return `${h ? h + "h " : ""}${m}m`;
 };
 
-export default function DispatchTable({ data, isLoading, isError, selected = [], onToggle }) {
+export default function DispatchTable({
+  data,
+  isLoading,
+  isError,
+  selected = [],
+  onToggle,
+}) {
   const dispatch = useDispatch();
 
-  // Select Invoices API 
-// const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDispatchInvoiceMutation();
+  // Select Invoices API
+  // const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDispatchInvoiceMutation();
 
-// const dispatchSelected = data?.invoices.isSelected;
+  // const dispatchSelected = data?.invoices.isSelected;
   const rows = data;
 
   // const handleRowSelection = (value, row) => {
@@ -117,7 +129,6 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
   //   }
   // };
 
-
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -134,7 +145,7 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
             <TableCell className="py-1 px-2">Duration</TableCell>
             <TableCell className="py-1 px-2">Amount</TableCell>
           </TableRow>
-          
+
           {/* Skeleton Loading State */}
           {isLoading &&
             Array.from({ length: 5 }).map((_, index) => (
@@ -142,24 +153,46 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
                 <TableCell className="py-1 px-2">
                   <Skeleton className="h-4 w-4 rounded" />
                 </TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-16" /></TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-24" /></TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-12" /></TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-28" /></TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-12" /></TableCell>
-                <TableCell className="py-1 px-2"><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-16" />
+                </TableCell>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-20" />
+                </TableCell>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-24" />
+                </TableCell>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-12" />
+                </TableCell>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-20" />
+                </TableCell>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-28" />
+                </TableCell>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-12" />
+                </TableCell>
+                <TableCell className="py-1 px-2">
+                  <Skeleton className="h-4 w-20" />
+                </TableCell>
               </TableRow>
-            ))
-          }
+            ))}
 
           {/* Data Display State */}
-          {!isLoading && !isError && rows.length > 0 &&
+          {!isLoading &&
+            !isError &&
+            rows.length > 0 &&
             rows.map((row, index) => {
-              const isChecked = selected.some((d) => d.dispatchId === row.dispatchId);
+              const isChecked = selected.some(
+                (d) => d.dispatchId === row.dispatchId
+              );
               return (
-                <TableRow key={index} className="text-xs font-medium dark:bg-gray-700">
+                <TableRow
+                  key={index}
+                  className="text-xs font-medium dark:bg-gray-700"
+                >
                   <TableCell className="py-1 px-2">
                     <Checkbox
                       className="border border-gray-400"
@@ -167,24 +200,39 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
                       onCheckedChange={() => onToggle(row)}
                     />
                   </TableCell>
-                  <TableCell className="py-1 px-2">{renderText(row?.docNo)}</TableCell>
-                  <TableCell className="py-1 px-2">{renderText(row?.customerCode)}</TableCell>
-                  <TableCell className="py-1 px-2">{renderText(row?.customerName)}</TableCell>
-                  <TableCell className="py-1 px-2">{renderText(row?.items)}</TableCell>
-                  <TableCell className="py-1 px-2">{renderText(row?.payTerms)}</TableCell>
-                  <TableCell className="py-1 px-2">{renderDateTime(row?.verifiedDateTime)}</TableCell>
-                  <TableCell className="py-1 px-2">{renderText(formatDuration(row?.durationMinutes))}</TableCell>
+                  <TableCell className="py-1 px-2">
+                    {renderText(row?.docNo)}
+                  </TableCell>
+                  <TableCell className="py-1 px-2">
+                    {renderText(row?.customerCode)}
+                  </TableCell>
+                  <TableCell className="py-1 px-2">
+                    {renderText(row?.customerName)}
+                  </TableCell>
+                  <TableCell className="py-1 px-2">
+                    {renderText(row?.items)}
+                  </TableCell>
+                  <TableCell className="py-1 px-2">
+                    {renderText(row?.payTerms)}
+                  </TableCell>
+                  <TableCell className="py-1 px-2">
+                    {renderDateTime(row?.verifiedDateTime)}
+                  </TableCell>
+                  <TableCell className="py-1 px-2">
+                    {renderText(formatDuration(row?.durationSeconds))}
+                  </TableCell>
                   <TableCell className="py-1 px-2">{row?.amount}</TableCell>
                 </TableRow>
               );
-            })
-          }
-
+            })}
 
           {/* Error state */}
           {isError && !isLoading && (
             <TableRow>
-              <TableCell colSpan={9} className="text-center py-4 text-red-500 text-sm">
+              <TableCell
+                colSpan={9}
+                className="text-center py-4 text-red-500 text-sm"
+              >
                 Failed to load data. Please try again.
               </TableCell>
             </TableRow>
@@ -193,7 +241,10 @@ export default function DispatchTable({ data, isLoading, isError, selected = [],
           {/* No data state */}
           {!isLoading && !isError && rows.length === 0 && (
             <TableRow>
-              <TableCell colSpan={9} className="text-center py-4 text-muted-foreground text-sm">
+              <TableCell
+                colSpan={9}
+                className="text-center py-4 text-muted-foreground text-sm"
+              >
                 No dispatch records found.
               </TableCell>
             </TableRow>

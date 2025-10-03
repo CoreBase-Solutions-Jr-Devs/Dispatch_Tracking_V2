@@ -5,7 +5,12 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-export default function DispatchSelect({ values, onChange }) {
+export default function DispatchSelect({
+  values,
+  onChange,
+  deliveryGuyOptions,
+}) {
+  console.log(values);
   return (
     <div className="flex flex-col justify-between gap-2 text-xs font-medium">
       <div className="flex justify-between items-center">
@@ -37,8 +42,13 @@ export default function DispatchSelect({ values, onChange }) {
                 {values.dispatchPerson || "Select..."}
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
-                <SelectItem value="dp1">John Doe</SelectItem>
-                <SelectItem value="dp2">Jane Smith</SelectItem>
+                {deliveryGuyOptions.map((item, i) => (
+                  <SelectItem value={item.value} key={i}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+                {/* <SelectItem value="dp1">John Doe</SelectItem>
+                <SelectItem value="dp2">Jane Smith</SelectItem> */}
               </SelectContent>
             </Select>
           </div>
