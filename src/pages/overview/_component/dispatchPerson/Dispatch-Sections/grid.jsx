@@ -90,7 +90,7 @@ const renderDispatchLink = (row) => (
     onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
   >
     <a
-      className="text-sm underline cursor-pointer text-primary font-medium  text-sm hover:text-primary/80"
+      className="text-sm underline cursor-pointer text-primary font-medium hover:text-primary/80"
       onClick={(e) => e.stopPropagation()}
     >
       {row.original.dispatchNumber || "—"}

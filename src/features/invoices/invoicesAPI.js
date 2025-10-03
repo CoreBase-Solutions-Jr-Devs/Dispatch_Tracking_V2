@@ -112,35 +112,14 @@ export const invoicesApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["invoices"],
     }),
-
-		// DISPATCH TRACKING 
-		filterDispatchInvoices: builder.mutation({
-            query: (formData) => ({
-                url: '/invoices/dispatch-filter',
-                method: 'POST',
-                body: formData,
-            }),
-            invalidatesTags: ['dispatch_invoices'],
-        }),
-
-		// DISPATCH TRACKING 
-		filterDispatchInvoices: builder.mutation({
-            query: (formData) => ({
-                url: '/invoices/dispatch-filter',
-                method: 'POST',
-                body: formData,
-            }),
-            invalidatesTags: ['dispatch_invoices'],
-        }),
-
-		// COLLECTION TRACKING
-		getCollectionTrackingDetails: builder.query({
-			query: ({ docNum } = {}) => ({
-				url: `/invoices/${docNum}/collection-tracking`,
-				method: 'GET',
-			}),
-			providesTags: ['collection_details'],
-		}),
+    // COLLECTION TRACKING
+    getCollectionTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/collection-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["collection_details"],
+    }),
 
     collectionStart: builder.mutation({
       query: (docNum) => ({
@@ -170,84 +149,82 @@ export const invoicesApi = apiClient.injectEndpoints({
     }),
 
     // DELIVERY TRACKING
-//     filterDeliveryInvoices: builder.mutation({
-//       query: (formData) => ({
-//         url: "/api/v2/delivery/delivery-search",
-//         method: "POST",
-//         body: formData,
-//       }),
-//       invalidatesTags: ["delivery_invoices"],
-//     }),
+    //     filterDeliveryInvoices: builder.mutation({
+    //       query: (formData) => ({
+    //         url: "/api/v2/delivery/delivery-search",
+    //         method: "POST",
+    //         body: formData,
+    //       }),
+    //       invalidatesTags: ["delivery_invoices"],
+    //     }),
 
-//     getCustomerCodeSuggestions: builder.query({
-//       query: ({ input, maxResults = 10 }) => ({
-//         url: "/api/v2/delivery/customer-codes/suggestions",
-//         method: "GET",
-//         params: {
-//           input,
-//           maxResults,
-//         },
-//       }),
-//       providesTags: ["customer_codes"],
-//     }),
+    //     getCustomerCodeSuggestions: builder.query({
+    //       query: ({ input, maxResults = 10 }) => ({
+    //         url: "/api/v2/delivery/customer-codes/suggestions",
+    //         method: "GET",
+    //         params: {
+    //           input,
+    //           maxResults,
+    //         },
+    //       }),
+    //       providesTags: ["customer_codes"],
+    //     }),
 
-//     viewInvoicePDF: builder.query({
-//       query: ({ docNum } = {}) => ({
-//         url: `/invoices/${docNum}/delivery/pdf`,
-//         method: "GET",
-//       }),
-//       providesTags: ["invoices"],
-//     }),
-//     getDeliveryTrackingDetails: builder.query({
-//       query: ({ docNum } = {}) => ({
-//         url: `/invoices/${docNum}/delivery-tracking`,
-//         method: "GET",
-//       }),
-//       providesTags: ["delivery_details"],
-//     }),
-//     deliveryStart: builder.mutation({
-//       query: (docNum) => ({
-//         url: `/invoices/${docNum}/delivery/start`,
-//         method: "POST",
-//         body: {},
-//       }),
-//       invalidatesTags: ["invoices"],
-//     }),
-//     deliveryComplete: builder.mutation({
-//       query: (docNum, payload) => ({
-//         url: `/invoices/${docNum}/delivery/complete`,
-//         method: "POST",
-//         body: payload,
-//       }),
-//       invalidatesTags: ["invoices"],
-//     }),
+    //     viewInvoicePDF: builder.query({
+    //       query: ({ docNum } = {}) => ({
+    //         url: `/invoices/${docNum}/delivery/pdf`,
+    //         method: "GET",
+    //       }),
+    //       providesTags: ["invoices"],
+    //     }),
+    //     getDeliveryTrackingDetails: builder.query({
+    //       query: ({ docNum } = {}) => ({
+    //         url: `/invoices/${docNum}/delivery-tracking`,
+    //         method: "GET",
+    //       }),
+    //       providesTags: ["delivery_details"],
+    //     }),
+    //     deliveryStart: builder.mutation({
+    //       query: (docNum) => ({
+    //         url: `/invoices/${docNum}/delivery/start`,
+    //         method: "POST",
+    //         body: {},
+    //       }),
+    //       invalidatesTags: ["invoices"],
+    //     }),
+    //     deliveryComplete: builder.mutation({
+    //       query: (docNum, payload) => ({
+    //         url: `/invoices/${docNum}/delivery/complete`,
+    //         method: "POST",
+    //         body: payload,
+    //       }),
+    //       invalidatesTags: ["invoices"],
+    //     }),
   }),
 });
 
 export const {
-	useFilterInvoicesMutation,
-	useGetAllInvoicesQuery,
-	useFilterOptionsQuery,
-	// STORE TRACKING
-	useFilterStoreInvoicesMutation,
-	useGetStoreTrackingDetailsQuery,
-	useStoreStartMutation,
-	useStorePushMutation,
-	// VERIFICATION TRACKING
-	useFilterVerificationInvoicesMutation,
-	useGetVerificationTrackingDetailsQuery,
-	useVerificationStartMutation,
-	useVerificationPushMutation,
-	// DISPATCH TRACKING
-	useFilterDispatchInvoicesMutation,
-	// COLLECTION TRACKING
-	useGetCollectionTrackingDetailsQuery,
-	useCollectionStartMutation,
-	useCollectionRecallMutation,
-	useCollectionPushMutation,
-	// DELIVERY TRACKING
-	useViewInvoicePDFQuery,
-	useGetDeliveryTrackingDetailsQuery,
-	useDeliveryCompleteMutation,
-	useDeliveryStartMutation,
+  useFilterInvoicesMutation,
+  useGetAllInvoicesQuery,
+  useFilterOptionsQuery,
+  // STORE TRACKING
+  useFilterStoreInvoicesMutation,
+  useGetStoreTrackingDetailsQuery,
+  useStoreStartMutation,
+  useStorePushMutation,
+  // VERIFICATION TRACKING
+  useFilterVerificationInvoicesMutation,
+  useGetVerificationTrackingDetailsQuery,
+  useVerificationStartMutation,
+  useVerificationPushMutation,
+  // COLLECTION TRACKING
+  useGetCollectionTrackingDetailsQuery,
+  useCollectionStartMutation,
+  useCollectionRecallMutation,
+  useCollectionPushMutation,
+  // DELIVERY TRACKING
+  useViewInvoicePDFQuery,
+  useGetDeliveryTrackingDetailsQuery,
+  useDeliveryCompleteMutation,
+  useDeliveryStartMutation,
 } = invoicesApi;
