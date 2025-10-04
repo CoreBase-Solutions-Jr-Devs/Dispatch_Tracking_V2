@@ -34,22 +34,33 @@ export default function DeliveryFooter({
       >
         Print
       </Button> */}
-      <Button
-        variant="default"
-        onClick={generateOTP}
-        disabled={!rowData?.CUS_CODE}
-        className="mt-1  uppercase text-xs font-medium"
-      >
-        Generate OTP
-      </Button>
-      <Button
-        variant="apply"
-        onClick={handleDelivery}
-        disabled={isLoading || rowData?.BALANCE > 0}
-        className="mt-1  uppercase text-xs font-medium"
-      >
-        Complete
-      </Button>
+      {!rowData?.OTPValidated && (
+        <Button
+          variant="default"
+          onClick={generateOTP}
+          disabled={!rowData?.CUS_CODE}
+          className="mt-1  uppercase text-xs font-medium"
+        >
+          Generate OTP
+        </Button>
+      )}
+
+      {rowData?.OTPValidated && (
+        <Button
+          variant="apply"
+          onClick={handleDelivery}
+          disabled={
+            isLoading ||
+            (rowData?.DOCTYPE === "INVOICE   " &&
+              (rowData?.PAYMENT_TERMS === "ONDELIVERY" ||
+                rowData?.PAYMENT_TERMS === "ONORDER") &&
+              rowData?.BALANCE > 0)
+          }
+          className="mt-1  uppercase text-xs font-medium"
+        >
+          Complete
+        </Button>
+      )}
     </div>
   );
 }
