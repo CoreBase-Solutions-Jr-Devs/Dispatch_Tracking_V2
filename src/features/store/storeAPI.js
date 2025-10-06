@@ -56,7 +56,7 @@ export const StoreApi = apiClient.injectEndpoints({
 
     startStoreProcess: builder.mutation({
       query: (docNum) => ({
-        url: `/store/${docNum}/store/start`,
+        url: `/store/${docNum}/start`,
         method: "POST",
       }),
       invalidatesTags: ["store_tracking", "store_invoices"],
@@ -64,7 +64,7 @@ export const StoreApi = apiClient.injectEndpoints({
 
     pushStoreInvoice: builder.mutation({
       query: ({ docNum, totalWeightKg, storeRemarks }) => ({
-        url: `/store/${docNum}/store/push`,
+        url: `/store/${docNum}/push`,
         method: "POST",
         body: { docNum, totalWeightKg, storeRemarks },
       }),

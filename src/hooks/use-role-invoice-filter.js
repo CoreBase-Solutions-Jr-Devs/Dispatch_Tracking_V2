@@ -1,4 +1,8 @@
 import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatchAPI";
+
+import { useLazyGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
+import { useLazyGetFilteredVerificationInvoicesQuery } from "@/features/verification/verificationAPI";
+
 import {
   
   useFilterDispatchInvoicesMutation,
@@ -12,7 +16,11 @@ export function useRoleInvoiceFilter(role) {
     case "store":
       return useLazyGetFilteredStoreInvoicesQuery(); 
 
+      return useLazyGetFilteredStoreInvoicesQuery(); 
+
     case "verification":
+   
+      return useLazyGetFilteredVerificationInvoicesQuery();
    
       return useLazyGetFilteredVerificationInvoicesQuery();
 
@@ -25,4 +33,5 @@ export function useRoleInvoiceFilter(role) {
     default:
       throw new Error(`Unknown role: ${role}`);
   }
+ 
 }
