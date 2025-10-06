@@ -69,7 +69,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     // V2 API
     GetDispatchesForDeliveryHD: builder.query({
       query: () => ({
-        url: "/api/v2/Deliveries/GetDispatchesForDeliveryHD",
+        url: "/Deliveries/GetDispatchesForDeliveryHD",
         method: "GET",
         params: {
           bcode: 0,
@@ -79,7 +79,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     deliveryComplete: builder.mutation({
       query: (payload) => ({
-        url: `/api/v2/Deliveries/DeliveredInvoices`,
+        url: `/Deliveries/DeliveredInvoices`,
         method: "POST",
         params: {
           Comments: payload?.remarks,
@@ -90,7 +90,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     GenerateOTPForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
-        url: `/api/v2/Deliveries/GenerateOTPForDeliveredInvoices`,
+        url: `/Deliveries/GenerateOTPForDeliveredInvoices`,
         method: "POST",
         params: {
           dispatchnum: payload?.dispatchnum,
@@ -102,7 +102,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     ValidateOTPForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
-        url: `/api/v2/Deliveries/ValidateOTPForDeliveredInvoices`,
+        url: `/Deliveries/ValidateOTPForDeliveredInvoices`,
         method: "POST",
         params: {
           dispatchnum: payload?.dispatchnum,
@@ -116,7 +116,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     MakeMpesaSTKPushForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
-        url: `/api/v2/Deliveries/MakeMpesaSTKPushForDeliveredInvoices`,
+        url: `/Deliveries/MakeMpesaSTKPushForDeliveredInvoices`,
         method: "POST",
         params: {
           dispatchnum: payload?.dispatchnum,
@@ -131,7 +131,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     DisputedAmountsInvoices: builder.mutation({
       query: (payload) => ({
-        url: `/api/v2/Deliveries/DisputedAmountsInvoices`,
+        url: `/Deliveries/DisputedAmountsInvoices`,
         method: "POST",
         body: payload,
       }),
