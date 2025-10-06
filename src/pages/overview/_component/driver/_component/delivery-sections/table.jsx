@@ -8,6 +8,7 @@ export default function DeliveryTable({
   data = [],
   handleRowSelection,
   handleRowCheck,
+  checkedInvoices = [],
 }) {
   // const rows = data || [];
 
@@ -71,7 +72,9 @@ export default function DeliveryTable({
                   ? "text-red-700 text-xs font-medium"
                   : "text-xs font-medium"
               }
-              onClick={() => handleRowSelect(row)}
+              onClick={() =>
+                checkedInvoices.length > 0 ? null : handleRowSelect(row)
+              }
               data-state={
                 row.DISPATCHNUM === selectedRow?.DISPATCHNUM ? "selected" : ""
               }
