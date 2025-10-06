@@ -37,7 +37,7 @@ export default function VerificationFooter({
     setStartDisabled(true);
     setDispatchDisabled(true);
 
-    const docNum = Number(rowData.invoiceNo);
+    const docNum = Number(rowData.docNo);
 
     try {
       await verificationStart(docNum).unwrap();
