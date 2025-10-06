@@ -41,7 +41,6 @@ import DisputedDetails from "../delivery-sections/disputed";
 import DetailAmount from "../delivery-sections/detailAmount";
 
 export default function DeliveryInvoice({ rowData, onSubmit }) {
-  const [query, setQuery] = useState("");
   const [selectedRow, setSelectedRow] = useState({});
   const [checkedInvoices, setCheckedInvoices] = useState([]);
   const [remarks, setRemarks] = useState("");
@@ -49,8 +48,12 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const [mpesa, setMpesa] = useState(false);
   const [otp, setOTP] = useState("");
   const [mpesaDetails, setMpesaDetails] = useState({
-    phonenumber: selectedRow?.OTPPHONENUMBER || "",
-    amount: selectedRow?.BALANCE || 0,
+    phonenumber: "",
+    amount: 0,
+    DISPATCHNUM: "",
+    BCODE: "",
+    CUS_CODE: "",
+    SALEINV_NUM: "",
   });
 
   const [deliveryComplete, { isLoading }] = useDeliveryCompleteMutation();
@@ -96,10 +99,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
 
   const handleRowCheck = (value, row) => {
     setSelectedRow({});
-    // setCheckedInvoices((prev) => [
-    //   ...prev,
-    //   { ...row, isInvoiceChecked: value },
-    // ]);
+
     if (value) {
       setCheckedInvoices((prev) => [...prev, row]);
     } else {
@@ -116,9 +116,9 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const handleMPesaPayment = (e) => {
     e.preventDefault();
     const payload = {
-      dispatchnum: selectedRow?.DISPATCHNUM,
-      bcode: selectedRow?.BCODE,
-      cuscode: selectedRow?.CUS_CODE,
+      dispatchnum: mpesaDetails?.DISPATCHNUM,
+      bcode: mpesaDetails?.BCODE,
+      cuscode: mpesaDetails?.CUS_CODE,
       phonenumber: `0${mpesaDetails?.phonenumber.slice(3)}`,
       amount: mpesaDetails?.amount,
     };
@@ -132,6 +132,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
         setMpesaDetails({
           phonenumber: "",
           amount: "",
+          DISPATCHNUM: "",
+          BCODE: "",
+          CUS_CODE: "",
+          SALEINV_NUM: "",
         });
       })
       .catch((error) => {
@@ -252,8 +256,27 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
           ? `254${selectedRow?.OTPPHONENUMBER.slice(1)}`
           : selectedRow?.OTPPHONENUMBER || "",
       amount: selectedRow?.BALANCE || 0,
+      DISPATCHNUM: selectedRow?.DISPATCHNUM || "",
+      BCODE: selectedRow?.BCODE || "",
+      CUS_CODE: selectedRow?.CUS_CODE || "",
+      SALEINV_NUM: selectedRow?.SALEINV_NUM || "",
     });
   };
+
+  useEffect(() => {
+    setMpesaDetails({
+      phonenumber:
+        checkedInvoices[0]?.OTPPHONENUMBER[0] === "0"
+          ? `254${checkedInvoices[0]?.OTPPHONENUMBER.slice(1)}`
+          : checkedInvoices[0]?.OTPPHONENUMBER || "",
+      amount: checkedInvoices?.reduce((acc, curr) => acc + curr?.BALANCE, 0),
+      DISPATCHNUM: checkedInvoices[0]?.DISPATCHNUM,
+      BCODE: checkedInvoices[0]?.BCODE,
+      CUS_CODE: checkedInvoices[0]?.CUS_CODE,
+      SALEINV_NUM: checkedInvoices[0]?.SALEINV_NUM,
+    });
+    // setSelectedRow(checkedInvoices[0]);
+  }, [checkedInvoices]);
 
   return (
     <div className="overflow-y-auto max-h-[90vh] px-2">
@@ -270,9 +293,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
               data={deliveryInvoices}
               handleRowSelection={handleParentSelect}
               handleRowCheck={handleRowCheck}
+              checkedInvoices={checkedInvoices}
             />
           </div>
-          <DeliverySummary data={deliveryInvoices} />
+          {/* <DeliverySummary data={deliveryInvoices} /> */}
           <Separator className="my-2" />
           <DeliveryDetails
             data={
@@ -284,7 +308,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
 
         {Boolean(Object.keys(selectedRow).length) && (
           <div className="w-32 flex-1">
-            {typeof selectedRow.ISDISPUTED !== "object" ? (
+            {selectedRow.ISDISPUTED ? (
               <Card>
                 <CardHeader>
                   <CardTitle>
@@ -333,6 +357,62 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                 </CardContent>
               </Card>
             )}
+          </div>
+        )}
+
+        {checkedInvoices.length > 0 && (
+          <div className="w-32 flex-1">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-center">Mpesa Payment</CardTitle>
+                <CardTitle>{checkedInvoices[0]?.CUSNAME}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form
+                  autoComplete="off"
+                  className="space-y-4"
+                  onSubmit={handleMPesaPayment}
+                >
+                  <div>
+                    <Label className="text-sm font-medium">Phone</Label>
+                    <PhoneInput
+                      country={"ke"}
+                      value={mpesaDetails.phonenumber}
+                      inputStyle={{
+                        width: "100%",
+                        fontSize: "12px",
+                        lineHeight: "1.5",
+                        height: " calc(1.5em + 0.5rem + 2px)",
+                      }}
+                      id="phonenumber"
+                      name="phonenumber"
+                      masks={{ ke: "... ... ..." }}
+                      onChange={handlePhone}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium">Amount</Label>
+                    <Input
+                      type="number"
+                      value={mpesaDetails.amount}
+                      name="amount"
+                      onChange={handleChange}
+                      max={data?.BALANCE}
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    // onClick={() => setMpesa(false)}
+                    variant="default"
+                    className="w-full"
+                    // className="w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                  >
+                    Pay
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         )}
       </div>
