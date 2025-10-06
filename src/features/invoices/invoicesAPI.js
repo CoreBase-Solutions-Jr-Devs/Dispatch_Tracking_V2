@@ -159,7 +159,7 @@ export const invoicesApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      providesTags: ["dispatch_verification_invoices"],
+      providesTags: ["dispatch_verification_invoices1"],
     }),
 
     verificationPush: builder.mutation({
@@ -168,7 +168,7 @@ export const invoicesApi = apiClient.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["verification_invoices"],
+      invalidatesTags: ["verification_invoices1"],
     }),
     // COLLECTION TRACKING
     getCollectionTrackingDetails: builder.query({
@@ -259,6 +259,7 @@ export const invoicesApi = apiClient.injectEndpoints({
         //       invalidatesTags: ["invoices"],
         //     }),
   }),
+   }),
 });
 
 export const {
