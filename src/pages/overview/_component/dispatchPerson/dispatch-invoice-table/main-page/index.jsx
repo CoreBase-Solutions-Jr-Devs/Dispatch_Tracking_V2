@@ -197,13 +197,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
           return row.original.paymentTerms ?? "-";
         },
       },
-      {
-        accessorKey: "verifiedDateTime",
-        header: "Ver. Date",
-        cell: ({ row }) => {
-          return renderDateTime(row.original.verifiedDateTime ?? "-");
-        },
-      },
       // {
       //   accessorKey: "dispatchDateTime",
       //   header: "Disp. Date",
