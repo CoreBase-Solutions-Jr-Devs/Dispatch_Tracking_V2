@@ -47,6 +47,7 @@ export default function DispatchFooter({
   // const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
   const [dispatchRemarks, setDispatchRemarks] = useState("");
   const [isPush, setIsPush] = useState(true);
+  const hasCollectionType = Boolean(selectValues?.collectionType);
 
   const { courierDetails, driverDetails, clientDetails } = useSelector(
     (state) => state.dispatch
@@ -114,6 +115,14 @@ export default function DispatchFooter({
       delete formData.customerCourierPhone
     }
 
+    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
+      delete formData.driverId
+      delete formData.driverName
+      delete formData.routeName
+      delete formData.carMake
+      delete formData.carPlate
+    }
+
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
@@ -173,6 +182,8 @@ export default function DispatchFooter({
       delete formData.driverId
       delete formData.driverName
       delete formData.routeName
+      delete formData.carMake
+      delete formData.carPlate
     }
 
     try {
@@ -240,7 +251,7 @@ export default function DispatchFooter({
         <Button
           variant="apply"
           // onClick={handleDelivery}
-          disabled={deliveryDisabled}
+          disabled={deliveryDisabled || !hasCollectionType}
           className="mt-1 uppercase text-xs font-medium "
         >
           Push
