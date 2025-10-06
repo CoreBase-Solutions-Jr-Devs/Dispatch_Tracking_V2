@@ -4,9 +4,7 @@ import {
   useStartStoreProcessMutation,
   usePushStoreInvoiceMutation,
 } from "@/features/store/storeAPI";
-  useStartStoreProcessMutation,
-  usePushStoreInvoiceMutation,
-} from "@/features/store/storeAPI";
+ 
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
 
@@ -37,7 +35,7 @@ const handleStartApi = () => {
   setStartDisabled(true);
   setVerificationDisabled(true);
  console.log("RowData object:", rowData);
-  const docNum = Number(rowData.invoiceNo); 
+  const docNum = Number(rowData.docNo); 
   console.log("docNum:", docNum);
 
   storeStart(docNum)
@@ -78,8 +76,8 @@ const handleStartApi = () => {
     setVerificationDisabled(true);
 
     const payload = {
-      docNum: Number(rowData.invoiceNo),
-      totalWeightKg: rowData.totalWeightKg ?? 0,
+      docNum: Number(rowData.docNo),
+      
       totalWeightKg: rowData.totalWeightKg ?? 0,
       storeRemarks: remarks ?? "",
     };
