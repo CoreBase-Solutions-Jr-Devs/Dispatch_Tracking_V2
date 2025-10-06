@@ -59,12 +59,12 @@ export default function DispatchMainPopup({ rowData, onClose }) {
         <TableBody>
           <TableRow className="bg-gray-300 text-sm font-medium">
             <TableCell className="py-1 px-2">Dispatch No</TableCell>
-            <TableCell className="py-1 px-2">Invoice No</TableCell>
+            <TableCell className="py-1 px-2">Doc No</TableCell>
             <TableCell className="py-1 px-2">Customer Name</TableCell>
             <TableCell className="py-1 px-2">Items</TableCell>
             <TableCell className="py-1 px-2">Amount</TableCell>
             <TableCell className="py-1 px-2">Dispatch Date</TableCell>
-            <TableCell className="py-1 px-2">Status</TableCell>
+            {/* <TableCell className="py-1 px-2">Status</TableCell> */}
           </TableRow>
 
           {rows.map((row, index) => (
@@ -73,7 +73,7 @@ export default function DispatchMainPopup({ rowData, onClose }) {
                 {renderText(row?.dispatchNumber || dispatchNumber)}
               </TableCell>
               <TableCell className="py-1 px-2">
-                {renderText(row?.invoiceNumber)}
+                {renderText(row?.docNo)}
               </TableCell>
               <TableCell className="py-1 px-2">
                 {renderText(row?.customerName)}
@@ -91,9 +91,9 @@ export default function DispatchMainPopup({ rowData, onClose }) {
                     : "—"
                 )}
               </TableCell>
-              <TableCell className="py-1 px-1">
+              {/* <TableCell className="py-1 px-1">
                 {renderStatus(row?.status)}
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

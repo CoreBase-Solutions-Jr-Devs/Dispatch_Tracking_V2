@@ -81,7 +81,7 @@ export const dispatchApi = apiClient.injectEndpoints({
     }),
     startDispatchProcess: builder.mutation({
       query: (payload) => ({
-        url: `dispatch/dispatch/start`,
+        url: `dispatch/start`,
         method: "POST",
         body: payload,
       }),

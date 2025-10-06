@@ -22,22 +22,19 @@ import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
 import { useGetDispatchDriverQuery } from "@/features/Dispmain/dispatchAPI";
 import { setDriverDetails } from "@/features/dispatch/dispatchSlice";
 import { useAppDispatch } from "@/app/hook";
-// import { useGetVerifiedOnDispatchQuery } from "@/features/Dispmain/dispatchAPI";
 
 export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const [query, setQuery] = useState("");
   const { user } = useSelector((state) => state.auth);
-  // const { invoices } = useSelector((state) => state.invoice);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+  const [startDispatch, setStartDispatch] = useState(false); // Disable Selection before start
+
+  const handleDispatchStart = () => {
+    setStartDispatch(true);
+  }
 
   const dispatch = useAppDispatch();
-  // const [
-  //   saveSelectedDispatches,
-  //   { data: invoices, isLoading, isError, refetch },
-  // ] = useSaveSelectedDispatchesMutation();
-  // let dispatchInvoices = invoices?.updatedDispatches || [];
-  // let dispatchID = dispatchInvoices.map((item) => item.dispatchId);
 
   const { updatedDispatches } = useSelector((state) => state.dispatch);
 
@@ -166,10 +163,10 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const columns = useMemo(() => {
     return [
       {
-        accessorKey: "invoiceNo",
-        header: "InvNo",
+        accessorKey: "docNo",
+        header: "DocNo",
         cell: ({ row }) => {
-          return row.original.invoiceNo ?? "-";
+          return row.original.docNo ?? "-";
         },
       },
       {
@@ -207,13 +204,13 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
           return renderDateTime(row.original.verifiedDateTime ?? "-");
         },
       },
-      {
-        accessorKey: "dispatchDateTime",
-        header: "Disp. Date",
-        cell: ({ row }) => {
-          return renderDateTime(row.original.dispatchDateTime ?? "-");
-        },
-      },
+      // {
+      //   accessorKey: "dispatchDateTime",
+      //   header: "Disp. Date",
+      //   cell: ({ row }) => {
+      //     return renderDateTime(row.original.dispatchDateTime ?? "-");
+      //   },
+      // },
       {
         accessorKey: "amount",
         header: "Amount",
@@ -274,6 +271,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 values={selectValues}
                 onChange={handleSelectChange}
                 deliveryGuyOptions={deliveryGuyOptions}
+                enabled={startDispatch}
               />
               <DispatchDetails
                 data={driverDetails}
@@ -282,8 +280,9 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 driverLoading={driverLoading}
                 driverError={driverError}
                 driverApiError={driverApiError}
+                enabled={startDispatch}
               />
-              <DispatchRemarks />
+              <DispatchRemarks enabled={startDispatch}/>
               <DispatchMeta />
               {/* Footer */}
               <DispatchFooter
@@ -292,6 +291,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 selectValues={selectValues}
                 onSubmit={onSubmit}
                 onClose={onClose}
+                onEnableSelection={handleDispatchStart}
                 // refetchData={refetch}
               />
             </CardContent>

@@ -9,6 +9,7 @@ export default function DispatchSelect({
   values,
   onChange,
   deliveryGuyOptions,
+  enabled
 }) {
   console.log(values);
   return (
@@ -18,8 +19,9 @@ export default function DispatchSelect({
         <Select
           value={values.collectionType}
           onValueChange={(val) => onChange("collectionType", val)}
+          disabled={!enabled}
         >
-          <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
+          <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
             {values.collectionType || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
@@ -37,8 +39,9 @@ export default function DispatchSelect({
             <Select
               value={values.dispatchPerson}
               onValueChange={(val) => onChange("dispatchPerson", val)}
+              disabled={!enabled}
             >
-              <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
+              <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
                 {values.dispatchPerson || "Select..."}
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
@@ -58,8 +61,9 @@ export default function DispatchSelect({
             <Select
               value={values.dispatchRoute}
               onValueChange={(val) => onChange("dispatchRoute", val)}
+              disabled={!enabled}
             >
-              <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium">
+              <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
                 {values.dispatchRoute || "Select..."}
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
