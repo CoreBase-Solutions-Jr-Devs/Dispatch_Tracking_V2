@@ -47,6 +47,7 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   switch (view?.toLowerCase()) {
     case "storestart":
     case "storepush":
+    case "storepush":
     case "verificationstart":
     case "dispatchstart":
        case "verificationpush":

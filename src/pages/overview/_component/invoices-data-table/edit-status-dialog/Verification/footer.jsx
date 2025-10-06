@@ -4,6 +4,9 @@ import {
   useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
 } from "@/features/verification/verificationAPI";
+  useStartVerificationProcessMutation,
+  usePushVerificationInvoiceMutation,
+} from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
 import VerificationRemarks from "./remarks";
@@ -111,6 +114,7 @@ export default function VerificationFooter({
           duration: 4000,
         });
       });
+    }
   };
 
   const handleClose = () => onClose();

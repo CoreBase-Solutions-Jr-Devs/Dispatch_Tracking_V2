@@ -120,9 +120,38 @@ export const invoicesApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
+      providesTags: ["store_invoices1"],
+    }),
+
+    getStoreTrackingDetails: builder.query({
+      query: ({ docNum } = {}) => ({
+        url: `/invoices/${docNum}/store-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["store_details"],
+    }),
+
+    storeStart: builder.mutation({
+      query: (docNum) => ({
+        url: `/invoices/${docNum}/store/start`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["store_invoices1"],
       invalidatesTags: ["dispatch_invoices"],
     }),
 
+    storePush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/store/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["store_invoices1"],
+    }),
+
+    // VERIFICATION TRACKING
+    filterVerificationInvoices: builder.mutation({
     // DISPATCH TRACKING
     filterDispatchInvoices: builder.mutation({
       query: (formData) => ({
@@ -130,9 +159,17 @@ export const invoicesApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["dispatch_invoices"],
+      providesTags: ["dispatch_verification_invoices"],
     }),
 
+    verificationPush: builder.mutation({
+      query: (payload) => ({
+        url: `/invoices/${payload.docNum}/verification/push`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["verification_invoices"],
+    }),
     // COLLECTION TRACKING
     getCollectionTrackingDetails: builder.query({
       query: ({ docNum } = {}) => ({
