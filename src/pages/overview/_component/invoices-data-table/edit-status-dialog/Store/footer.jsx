@@ -35,7 +35,7 @@ const handleStartApi = () => {
   setStartDisabled(true);
   setVerificationDisabled(true);
  console.log("RowData object:", rowData);
-  const docNum = Number(rowData.invoiceNo); 
+  const docNum = Number(rowData.DocNo); 
   console.log("docNum:", docNum);
 
   storeStart(docNum)
@@ -76,7 +76,7 @@ const handleStartApi = () => {
     setVerificationDisabled(true);
 
     const payload = {
-      docNum: Number(rowData.invoiceNo),
+      docNum: Number(rowData.DocNo),
       totalWeightKg: rowData.totalWeightKg ?? 0,
       totalWeightKg: rowData.totalWeightKg ?? 0,
       storeRemarks: remarks ?? "",
