@@ -59,7 +59,7 @@ export default function DispatchMainPopup({ rowData, onClose }) {
         <TableBody>
           <TableRow className="bg-gray-300 text-sm font-medium">
             <TableCell className="py-1 px-2">Dispatch No</TableCell>
-            <TableCell className="py-1 px-2">Invoice No</TableCell>
+            <TableCell className="py-1 px-2">Doc No</TableCell>
             <TableCell className="py-1 px-2">Customer Name</TableCell>
             <TableCell className="py-1 px-2">Items</TableCell>
             <TableCell className="py-1 px-2">Amount</TableCell>
