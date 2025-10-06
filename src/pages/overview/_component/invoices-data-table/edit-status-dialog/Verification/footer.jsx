@@ -37,7 +37,7 @@ export default function VerificationFooter({
     setStartDisabled(true);
     setDispatchDisabled(true);
 
-    const docNum = Number(rowData.invoiceNo);
+    const docNum = Number(rowData.docNo);
 
     try {
       await verificationStart(docNum).unwrap();
@@ -82,7 +82,7 @@ export default function VerificationFooter({
     setDispatchDisabled(true);
 
     const payload = {
-      docNum: Number(rowData.invoiceNo),
+      docNum: Number(rowData.docNo),
       totalWeightKg: rowData.totalWeightKg ?? 0,
       verificationRemarks: remarks ?? "",
     };
@@ -141,7 +141,7 @@ export default function VerificationFooter({
           disabled={dispatchDisabled}
           className="mt-2 uppercase"
         >
-          Send to Verification
+          Send to Dispatch
         </Button>
       </EditStatusDialog>
 

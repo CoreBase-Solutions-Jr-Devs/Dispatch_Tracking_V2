@@ -10,7 +10,7 @@ const VerificationLabelValue = () => {
   const {
     startDate = new Date().toISOString(),
     endDate = new Date().toISOString(),
-    dateRange = "TODAY", // ✅ include dateRange with safe default
+    dateRange = "TODAY",
   } = useTypedSelector((state) => state.invoice || {});
 
   const { data, isLoading, isError, error, refetch } =
@@ -80,7 +80,7 @@ const VerificationLabelValue = () => {
         lg:gap-6
       "
     >
-      <LabelValue status="Verification" label="Today" value={invoicesCount} />
+      <LabelValue status="Verification" label="Total" value={invoicesCount} />
       <LabelValue
         status="Pending"
         label="Pending"

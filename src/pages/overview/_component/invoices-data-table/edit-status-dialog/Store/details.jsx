@@ -33,7 +33,7 @@ export default function StoreDetails({ data }) {
       <Row label="Customer Name:" value={data.customerName} />
       <div />
 
-      <Row label="Invoice No:" value={data.invoiceNo} />
+      <Row label="Invoice No:" value={data.docNo} />
       <Row
         label="Invoice Date & Time:"
         value={formatDateTime(data.invoiceDateTime)}
