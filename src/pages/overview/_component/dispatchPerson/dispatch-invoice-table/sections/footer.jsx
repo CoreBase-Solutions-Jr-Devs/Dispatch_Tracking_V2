@@ -30,6 +30,7 @@ export default function DispatchFooter({
   selectValues,
   onSubmit,
   onClose,
+  onEnableSelection
 }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
@@ -69,23 +70,19 @@ export default function DispatchFooter({
       const data = await startDispatch(payload).unwrap();
       console.log(data);
       // if (refetchData) setTimeout(() => refetchData(), 50);
-      setStartDisabled(false);
+      if (onEnableSelection) onEnableSelection();
+      setDeliveryDisabled(false);
+      setSaveDisabled(false);
+      setStartDisabled(true);
       toast.success("Dispatch started!");
     } catch (error) {
-      // let description = "Please check your credentials and try again.";
-      // if (error?.data?.errors) {
-      //   const errorMessages = Object.values(error.data.errors).flat();
-      //   if (errorMessages.length > 0) description = errorMessages.join(" ");
-      // } else if (error?.data?.message) description = error.data.message;
-      // toast.error("Dispatch Process can not start. Please try again.", {
-      //   duration: 2500,
-      // });
-
-      toast.error("Dispatched Failed", {
-        description:
-          error?.data?.message || error?.data?.title || "Please try again",
-        duration: 4000,
-      });
+        toast.error("Dispatch Failed", {
+          description:
+            error?.data?.message || error?.data?.title || "Please try again",
+          duration: 4000,
+        });
+      setDeliveryDisabled(true);
+      setSaveDisabled(true);
     }
     setDeliveryDisabled(false);
     setSaveDisabled(false);
@@ -110,6 +107,13 @@ export default function DispatchFooter({
       customerCourierPhone: courierDetails?.customerCourierPhone,
       isPush: false,
     };
+
+    if(selectValues.collectionType === 'delivery'){
+      delete formData.customerCourierId
+      delete formData.customerCourierName
+      delete formData.customerCourierPhone
+    }
+
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
@@ -117,6 +121,7 @@ export default function DispatchFooter({
       toast.success("Dispatch saved succesfully!");
       // if (refetchData) refetchData();
       console.log(data);
+      setDeliveryDisabled(false);
     } catch (error) {
       let description = "Saving failed. Please try again.";
       // if (error?.data?.errors) {
@@ -129,12 +134,11 @@ export default function DispatchFooter({
         duration: 4000,
       });
       setSaveDisabled(true);
-      setStartDisabled(false);
+      setStartDisabled(true);
     }
     onSubmit(rowData);
     setSaveDisabled(true);
-    setStartDisabled(false);
-    setDeliveryDisabled(false);
+    setStartDisabled(true);
   };
 
   const handleDelivery = async () => {
@@ -157,6 +161,20 @@ export default function DispatchFooter({
       dispatchRemarks,
       isPush: true,
     };
+
+    {/* Remove unneccessary values from payload */}
+    if(selectValues.collectionType === 'delivery'){
+      delete formData.customerCourierId
+      delete formData.customerCourierName
+      delete formData.customerCourierPhone
+    }
+
+    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
+      delete formData.driverId
+      delete formData.driverName
+      delete formData.routeName
+    }
+
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
@@ -200,7 +218,7 @@ export default function DispatchFooter({
           Start
         </Button>
       </EditStatusDialog>
-      <EditStatusDialog
+      {/* <EditStatusDialog
         rowData={rowData}
         view="dispatchstart"
         onSubmit={handleSave}
@@ -213,7 +231,7 @@ export default function DispatchFooter({
         >
           Save
         </Button>
-      </EditStatusDialog>
+      </EditStatusDialog> */}
       <EditStatusDialog
         rowData={rowData}
         view="dispatchstart"

@@ -28,10 +28,10 @@ export default function StoreSummary({
         <Label className="text-xs font-medium">Items:</Label>
         <Label className="text-xs font-medium ">{data?.items}</Label>
       </div>
-      <div className="flex items-center gap-x-2">
+      {/* <div className="flex items-center gap-x-2">
         <Label className="text-xs font-medium">Pending Counts:</Label>
         <Label className="text-xs font-medium ">{data?.counts}</Label>
-      </div>
+      </div> */}
       {/* <div className="flex items-center gap-x-1">
         <Label className="text-xs font-medium">Total Weight (kg):</Label>
         <Input

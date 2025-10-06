@@ -57,7 +57,7 @@ export const VerificationApi = apiClient.injectEndpoints({
 
     startVerificationProcess: builder.mutation({
       query: (docNum) => ({
-        url: `/verification/${docNum}/verification/start`,
+        url: `/verification/${docNum}/start`,
         method: "POST",
       }),
       invalidatesTags: ["verification_tracking", "verification_invoices"],
@@ -65,7 +65,7 @@ export const VerificationApi = apiClient.injectEndpoints({
 
     pushVerificationInvoice: builder.mutation({
       query: ({ docNum, totalWeightKg = 0, verificationRemarks = "" }) => ({
-        url: `/verification/${docNum}/verification/push`,
+        url: `/verification/${docNum}/push`,
         method: "POST",
         body: { docNum, totalWeightKg, verificationRemarks },
       }),

@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
 import { roleToView } from "@/lib/utils";
 // import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
-import DispatchFilter from "../Dispatch-Sections/filter";
 import DispatchSearch from "../Dispatch-Sections/search";
 import DispatchGrid from "../Dispatch-Sections/grid";
 import DispatchButton from "../Dispatch-Sections/button";
@@ -35,10 +34,6 @@ export default function DispatchMain() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-2 w-full mb-4">
         <div className="w-full sm:flex-1">
           <DispatchSearch />
-        </div>
-
-        <div className="w-full sm:flex-1 sm:mx-4 ">
-          <DispatchFilter />
         </div>
 
         <div className="w-full sm:w-auto flex lg:justify-end">
