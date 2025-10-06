@@ -26,6 +26,7 @@ import { useRoleInvoiceFilter } from "@/hooks/use-role-invoice-filter";
 import { roleToView } from "@/lib/utils";
 import RoleBasedFilters from "./role-based-filters";
 import { Loader2 } from "lucide-react";
+import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
 
 export default function FilterSheet() {
   const dispatch = useDispatch();
@@ -50,8 +51,22 @@ export default function FilterSheet() {
   const { user } = useSelector((state) => state.auth);
   const role = roleToView(user?.userRole);
 
-  const [filterInvoices, { isLoading }] = useRoleInvoiceFilter(role);
+  // const [filterInvoices, { isLoading }] = useRoleInvoiceFilter(role);
   const isCustomRange = dateRange === "CUSTOM_RANGE";
+
+  const { data, isLoading, isError, error, refetch } =
+    useGetFilteredStoreInvoicesQuery(
+      {
+        startDate: new Date(startDate).toISOString(),
+        endDate: new Date(endDate).toISOString(),
+        dateRange,
+        search: "",
+        status: {},
+        pageNumber: 1,
+        pageSize: 50,
+      },
+      { skip: !startDate || !endDate }
+    );
 
   // Always store ISO in Redux
   useEffect(() => {
@@ -91,37 +106,37 @@ export default function FilterSheet() {
     type === "start" ? dispatch(setStartDate(iso)) : dispatch(setEndDate(iso));
   };
 
-  const handleApplyFilter = async () => {
-    const payload = {
-      startDate,
-      endDate,
-      dateRange,
-      workflowStatus: selectedFilters?.status || "",
-      pageNumber: 1,
-      pageSize: 50,
-    };
+  // const handleApplyFilter = async () => {
+  //   const payload = {
+  //     startDate,
+  //     endDate,
+  //     dateRange,
+  //     workflowStatus: selectedFilters?.status || "",
+  //     pageNumber: 1,
+  //     pageSize: 50,
+  //   };
 
-    console.log("📌 Applying filters with payload:", payload);
+  //   console.log("📌 Applying filters with payload:", payload);
 
-    try {
-      const data = await filterInvoices(payload).unwrap();
-      dispatch(
-        setInvoices({
-          invoices: data.invoices,
-          pagination: data.pagination,
-        })
-      );
-      setIsOpen(false); // close the sheet
-    } catch (error) {
-      let description = "Please check your credentials and try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) description = error.data.message;
+  //   try {
+  //     const data = await filterInvoices(payload).unwrap();
+  //     dispatch(
+  //       setInvoices({
+  //         invoices: data.invoices,
+  //         pagination: data.pagination,
+  //       })
+  //     );
+  //     setIsOpen(false); // close the sheet
+  //   } catch (error) {
+  //     let description = "Please check your credentials and try again.";
+  //     if (error?.data?.errors) {
+  //       const errorMessages = Object.values(error.data.errors).flat();
+  //       if (errorMessages.length > 0) description = errorMessages.join(" ");
+  //     } else if (error?.data?.message) description = error.data.message;
 
-      toast.error("Invoices Failed", { description, duration: 4000 });
-    }
-  };
+  //     toast.error("Invoices Failed", { description, duration: 4000 });
+  //   }
+  // };
 
   const handleClearFilters = () => {
     console.log("Clearing filters...");
@@ -132,9 +147,19 @@ export default function FilterSheet() {
 
   // Load initial filters once
   useEffect(() => {
-    handleApplyFilter();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (data) {
+      dispatch(
+        setInvoices({
+          invoices: data.invoices,
+          pagination: data.pagination,
+        })
+      );
+    }
+  }, [data, dispatch]);
+  // useEffect(() => {
+  //   handleApplyFilter();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   if (role === "delivery") return null;
 
