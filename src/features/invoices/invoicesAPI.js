@@ -36,82 +36,82 @@ export const invoicesApi = apiClient.injectEndpoints({
 
     filterOptions: builder.query({
       query: () => ({
-        url: "/invoices/filter-options",
+        url: "/filters/filter-options",
         method: "GET",
       }),
       providesTags: ["filter_options"],
     }),
-    // STORE TRACKING
-    filterStoreInvoices: builder.mutation({
-      query: (formData) => ({
-        url: "/invoices/store-filter",
-        method: "POST",
-        body: formData,
-      }),
-      providesTags: ["store_invoices1"],
-    }),
+    // // STORE TRACKING
+    // filterStoreInvoices: builder.mutation({
+    //   query: (formData) => ({
+    //     url: "/invoices/store-filter",
+    //     method: "POST",
+    //     body: formData,
+    //   }),
+    //   providesTags: ["store_invoices1"],
+    // }),
 
-    getStoreTrackingDetails: builder.query({
-      query: ({ docNum } = {}) => ({
-        url: `/invoices/${docNum}/store-tracking`,
-        method: "GET",
-      }),
-      providesTags: ["store_details"],
-    }),
+    // getStoreTrackingDetails: builder.query({
+    //   query: ({ docNum } = {}) => ({
+    //     url: `/invoices/${docNum}/store-tracking`,
+    //     method: "GET",
+    //   }),
+    //   providesTags: ["store_details"],
+    // }),
 
-    storeStart: builder.mutation({
-      query: (docNum) => ({
-        url: `/invoices/${docNum}/store/start`,
-        method: "POST",
-        body: {},
-      }),
-      invalidatesTags: ["store_invoices1"],
-    }),
+    // storeStart: builder.mutation({
+    //   query: (docNum) => ({
+    //     url: `/invoices/${docNum}/store/start`,
+    //     method: "POST",
+    //     body: {},
+    //   }),
+    //   invalidatesTags: ["store_invoices1"],
+    // }),
 
-    storePush: builder.mutation({
-      query: (payload) => ({
-        url: `/invoices/${payload.docNum}/store/push`,
-        method: "POST",
-        body: payload,
-      }),
-      invalidatesTags: ["store_invoices1"],
-    }),
+    // storePush: builder.mutation({
+    //   query: (payload) => ({
+    //     url: `/invoices/${payload.docNum}/store/push`,
+    //     method: "POST",
+    //     body: payload,
+    //   }),
+    //   invalidatesTags: ["store_invoices1"],
+    // // }),
 
-    // VERIFICATION TRACKING
-    filterVerificationInvoices: builder.mutation({
-      query: (formData) => ({
-        url: "/invoices/verification-filter",
-        method: "POST",
-        body: formData,
-      }),
-      providesTags: ["verification_invoices"],
-    }),
+    // // VERIFICATION TRACKING
+    // filterVerificationInvoices: builder.mutation({
+    //   query: (formData) => ({
+    //     url: "/invoices/verification-filter",
+    //     method: "POST",
+    //     body: formData,
+    //   }),
+    //   providesTags: ["verification_invoices1"],
+    // }),
 
-    getVerificationTrackingDetails: builder.query({
-      query: ({ docNum } = {}) => ({
-        url: `/invoices/${docNum}/verification-tracking`,
-        method: "GET",
-      }),
-      providesTags: ["verification_details"],
-    }),
+    // getVerificationTrackingDetails: builder.query({
+    //   query: ({ docNum } = {}) => ({
+    //     url: `/invoices/${docNum}/verification-tracking1`,
+    //     method: "GET",
+    //   }),
+    //   providesTags: ["verification_details"],
+    // }),
 
-    verificationStart: builder.mutation({
-      query: (docNum) => ({
-        url: `/invoices/${docNum}/verification/start`,
-        method: "POST",
-        body: {},
-      }),
-      invalidatesTags: ["verification_invoices"],
-    }),
+    // verificationStart: builder.mutation({
+    //   query: (docNum) => ({
+    //     url: `/invoices/${docNum}/verification/start`,
+    //     method: "POST",
+    //     body: {},
+    //   }),
+    //   invalidatesTags: ["verification_invoices1"],
+    // }),
 
-    verificationPush: builder.mutation({
-      query: (payload) => ({
-        url: `/invoices/${payload.docNum}/verification/push`,
-        method: "POST",
-        body: payload,
-      }),
-      invalidatesTags: ["verification_invoices"],
-    }),
+    // verificationPush: builder.mutation({
+    //   query: (payload) => ({
+    //     url: `/invoices/${payload.docNum}/verification/push`,
+    //     method: "POST",
+    //     body: payload,
+    //   }),
+    //   invalidatesTags: ["verification_invoices1"],
+    // }),
 
     // DISPATCH TRACKING
     filterDispatchInvoices: builder.mutation({
@@ -228,16 +228,16 @@ export const {
   useFilterInvoicesMutation,
   useGetAllInvoicesQuery,
   useFilterOptionsQuery,
-  // STORE TRACKING
-  useFilterStoreInvoicesMutation,
-  useGetStoreTrackingDetailsQuery,
-  useStoreStartMutation,
-  useStorePushMutation,
-  // VERIFICATION TRACKING
-  useFilterVerificationInvoicesMutation,
-  useGetVerificationTrackingDetailsQuery,
-  useVerificationStartMutation,
-  useVerificationPushMutation,
+  // // STORE TRACKING
+  // useFilterStoreInvoicesMutation,
+  // useGetStoreTrackingDetailsQuery,
+  // useStoreStartMutation,
+  // useStorePushMutation,
+  // // VERIFICATION TRACKING
+  // useFilterVerificationInvoicesMutation,
+  // useGetVerificationTrackingDetailsQuery,
+  // useVerificationStartMutation,
+  // useVerificationPushMutation,
   // DISPATCH TRACKING
   useFilterDispatchInvoicesMutation,
   // COLLECTION TRACKING
@@ -245,32 +245,7 @@ export const {
   useCollectionStartMutation,
   useCollectionRecallMutation,
   useCollectionPushMutation,
-  // DELIVERY TRACKING
-  useViewInvoicePDFQuery,
-  useGetDeliveryTrackingDetailsQuery,
-  useDeliveryCompleteMutation,
-  useDeliveryStartMutation,
-  useFilterInvoicesMutation,
-  useGetAllInvoicesQuery,
-  useFilterOptionsQuery,
-  // STORE TRACKING
-  useFilterStoreInvoicesMutation,
-  useGetStoreTrackingDetailsQuery,
-  useStoreStartMutation,
-  useStorePushMutation,
-  // VERIFICATION TRACKING
-  useFilterVerificationInvoicesMutation,
-  useGetVerificationTrackingDetailsQuery,
-  useVerificationStartMutation,
-  useVerificationPushMutation,
-  // COLLECTION TRACKING
-  useGetCollectionTrackingDetailsQuery,
-  useCollectionStartMutation,
-  useCollectionRecallMutation,
-  useCollectionPushMutation,
-  // DELIVERY TRACKING
-  useViewInvoicePDFQuery,
-  useGetDeliveryTrackingDetailsQuery,
-  useDeliveryCompleteMutation,
-  useDeliveryStartMutation,
+  
+  
+
 } = invoicesApi;

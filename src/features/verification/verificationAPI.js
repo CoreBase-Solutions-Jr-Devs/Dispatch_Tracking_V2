@@ -8,7 +8,6 @@ export const VerificationApi = apiClient.injectEndpoints({
         method: "GET",
         params: { pageNumber, pageSize },
       }),
-      providesTags: ["verification_invoices"],
     }),
 
     getFilteredVerificationInvoices: builder.query({
@@ -25,7 +24,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         params: {
           pageNumber,
           pageSize,
-          // format as yyyy-MM-dd
+         
           startDate: startDate
             ? new Date(startDate).toISOString().split("T")[0]
             : undefined,
@@ -45,12 +44,12 @@ export const VerificationApi = apiClient.injectEndpoints({
         method: "GET",
         params: { searchWord },
       }),
-      providesTags: ["verification_invoices"],
+      invalidatesTags: ["verification_invoices"],
     }),
 
     getVerificationTracking: builder.query({
       query: (docNum) => ({
-        url: `/verification/${docNum}/verification-tracking`, // ✅ matches API spec
+        url: `/verification/${docNum}/verification-tracking`, 
         method: "GET",
       }),
       providesTags: ["verification_tracking"],
@@ -70,7 +69,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         method: "POST",
         body: { docNum, totalWeightKg, verificationRemarks },
       }),
-      invalidatesTags: ["verification_invoices", "verification_tracking"],
+      invalidatesTags: ["verification_tracking", "verification_invoices"],
     }),
   }),
 });
