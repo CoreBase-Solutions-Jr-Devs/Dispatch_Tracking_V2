@@ -1,12 +1,12 @@
-import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Search as SearchIcon } from "lucide-react";
+import { useState } from "react";
 
 export default function DispatchSearch({
-  placeholder = "DispatchNo",
+  placeholder = "Route / Customer Name",
   onSearch,
 }) {
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleChange = (e) => {
     const value = e.target.value;

@@ -20,6 +20,7 @@ export default function DispatchDetails({
   driverLoading,
   driverError,
   driverApiError,
+  enabled
 }) {
   const [courierDetails, setCourierDetailsState] = useState({
     customerCourierName: "",
@@ -29,41 +30,6 @@ export default function DispatchDetails({
   });
 
   const dispatch = useDispatch();
-
-  // Fetch filter options to get delivery guy ID
-  // const {
-  //   data: filterOptions,
-  //   isLoading: filterLoading,
-  //   isError: filterError,
-  // } = useFilterOptionsQuery();
-  // const deliveryGuyOption = filterOptions?.find(
-  //   (opt) => opt.key === "deliveryGuy"
-  // )?.options; // returns an array of delivery persons
-  // const deliveryGuyId = deliveryGuyOption?.value;
-  // const deliveryGuyId = {};
-
-  // Fetch driver details based on delivery Guy ID
-  // const {
-  //   data: driverDetails,
-  //   isLoading: driverLoading,
-  //   isError: driverError,
-  //   error: driverApiError,
-  // } = useGetDeliveryDriverQuery(deliveryGuyId, {
-  //   skip: !deliveryGuyId || collectionType !== "delivery" || !deliveryPerson,
-  // });
-
-  // {
-  //     "driverId": 23,
-  //     "driverName": "delivery1",
-  //     "personalId": "123456789",
-  //     "driverLicenseNo": "D1234567",
-  //     "phoneNo": "+254792514851",
-  //     "email": "mikewanj@gmail.com",
-  //     "carMake": "Toyota Hilux",
-  //     "regNo": "KBA123A"
-  // }
-
-  // alert(JSON.stringify(driverDetails))
 
   const handleChange = (field, e) => {
     const { name, value } = e.target;
@@ -82,9 +48,6 @@ export default function DispatchDetails({
     return;
   };
 
-  // useEffect(() => {
-  //   dispatch(setDriverDetails(driverDetails));
-  // }, [driverDetails]);
 
   return (
     <div className="flex flex-col gap-2 text-xs font-medium">
@@ -119,6 +82,7 @@ export default function DispatchDetails({
               value={courierDetails.customerCourierName}
               name="customerCourierName"
               onChange={(e) => handleChange("self-collection", e)}
+              disabled={!enabled}
               // onChange={(e) => dispatch(setCustomerCourierName(e.target.value))}
             />
           </div>
@@ -129,6 +93,7 @@ export default function DispatchDetails({
               value={courierDetails.customerCourierId}
               name="customerCourierId"
               onChange={(e) => handleChange("self-collection", e)}
+              disabled={!enabled}
               // onChange={(e) => dispatch(setCustomerCourierId(e.target.value))}
             />
           </div>
@@ -139,6 +104,7 @@ export default function DispatchDetails({
               value={courierDetails.customerCourierPhone}
               name="customerCourierPhone"
               onChange={(e) => handleChange("self-collection", e)}
+              disabled={!enabled}
               // onChange={(e) =>
               //   dispatch(setCustomerCourierPhone(e.target.value))
               // }
@@ -157,6 +123,7 @@ export default function DispatchDetails({
                 name="driverId"
                 value=""
                 onChange={(e) => e.handleChange?.(e.target.value)}
+                disabled={!enabled}
               />
             </div>
 
@@ -167,6 +134,7 @@ export default function DispatchDetails({
                 name="driverLicense"
                 value=""
                 onChange={(e) => e.handleChange?.(e.target.value)}
+                disabled={!enabled}
               />
             </div>
 
@@ -177,6 +145,7 @@ export default function DispatchDetails({
                 name="carMake"
                 value=""
                 onChange={(e) => e.handleChange?.(e.target.value)}
+                disabled={!enabled}
               />
             </div>
 
@@ -187,6 +156,7 @@ export default function DispatchDetails({
                 name="regNo"
                 value=""
                 onChange={(e) => e.handleChange?.(e.target.value)}
+                disabled={!enabled}
               />
             </div>
           </section>
@@ -230,7 +200,7 @@ export default function DispatchDetails({
               value={courierDetails.customerCourierName || ""}
               name="customerCourierName"
               onChange={(e) => handleChange("courier", e)}
-
+              disabled={!enabled}
               // onChange={(e) => dispatch(setCustomerCourierName(e.target.value))}
             />
           </div>
@@ -241,6 +211,7 @@ export default function DispatchDetails({
               value={courierDetails.customerCourierId || ""}
               name="customerCourierId"
               onChange={(e) => handleChange("courier", e)}
+              disabled={!enabled}
               // onChange={(e) => dispatch(setCustomerCourierId(e.target.value))}
             />
           </div>
@@ -251,6 +222,7 @@ export default function DispatchDetails({
               value={courierDetails.customerCourierPhone}
               name="customerCourierPhone"
               onChange={(e) => handleChange("courier", e)}
+              disabled={!enabled}
               // onChange={(e) => dispatch(setCustomerCourierPhone(e.target.value))}
             />
           </div>
@@ -261,6 +233,7 @@ export default function DispatchDetails({
               value={courierDetails.customerCourierRegNo}
               name="customerCourierRegNo"
               onChange={(e) => handleChange("courier", e)}
+              disabled={!enabled}
             />
           </div>
         </section>
