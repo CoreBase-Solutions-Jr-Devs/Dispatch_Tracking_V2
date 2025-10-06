@@ -9,30 +9,22 @@ import VerificationMeta from "./meta";
 import VerificationFooter from "./footer";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetVerificationTrackingDetailsQuery } from "@/features/invoices/invoicesAPI";
+import { useGetVerificationTrackingQuery } from "@/features/verification/verificationAPI";
 
 export default function VerificationPopup({ rowData, onSubmit, onClose }) {
-  const [remarks, setRemarks] = useState(null); // nullable by default
-  // const [weight, setWeight] = useState(0);
+  const [remarks, setRemarks] = useState(null);
   const [errors, setErrors] = useState({
-    // weight: "",
     remarks: "",
   });
 
-  const { data, isLoading, isError, refetch } =
-    useGetVerificationTrackingDetailsQuery({
-      docNum: Number(rowData.invoiceNo),
-    });
+  const { data, isLoading, isError, refetch } = useGetVerificationTrackingQuery(
+    Number(rowData.docNo)
+  );
+  const handleRemarksChange = (newRemarks) => {
+    setRemarks(newRemarks);
+  };
 
-  useEffect(() => {
-    // setWeight(data?.totalWeightKg ?? 0);
-    setRemarks(data?.verifyRemarks ?? null); // nullable
-  }, [/* data?.totalWeightKg, */ data?.verifyRemarks]);
-
-  const handleRemarksChange = (newRemarks) => setRemarks(newRemarks ?? null);
-  // const handleWeightChange = (newWeight) => setWeight(newWeight);
-
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-8 w-1/3" />
@@ -41,15 +33,17 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
         <Skeleton className="h-12 w-full" />
       </div>
     );
+  }
 
-  if (isError)
+  if (isError) {
     return (
       <div className="text-center text-red-500">
-        Failed to load verification tracking details.
+        Failed to load store tracking details.
       </div>
     );
+  }
 
-  const readOnly = rowData?.status === "Verified";
+  const readOnly = rowData?.workflowStatus === "Verified";
 
   return (
     <>
@@ -67,7 +61,7 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
         data={data}
         readOnly={readOnly}
         // handleWeightChange={handleWeightChange}
-        error={/* errors.weight */ undefined} // commented out weight errors
+        error={/* errors.weight */ undefined}
         // weight={weight}
       />
 
@@ -76,7 +70,7 @@ export default function VerificationPopup({ rowData, onSubmit, onClose }) {
         readOnly={readOnly}
         handleRemarksChange={handleRemarksChange}
         error={errors.remarks}
-        value={remarks ?? ""} // pass empty string if null
+        value={remarks ?? ""}
       />
 
       <VerificationMeta data={data} readOnly={readOnly} />

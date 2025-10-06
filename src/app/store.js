@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
 import invoiceReducer from "../features/invoices/invoiceSlice";
+import dispatchReducer from "../features/dispatch/dispatchSlice";
 import uiReducer from "../features/ui/uiSlice";
 import storage from "redux-persist/lib/storage";
 import {
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   [apiClient.reducerPath]: apiClient.reducer,
   auth: authReducer,
   invoice: invoiceReducer,
+  dispatch: dispatchReducer,
   ui: uiReducer,
 });
 

@@ -1,12 +1,37 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { usePushDispatchProcessMutation, useStartDispatchProcessMutation } from "@/features/dispatch/dispatchAPI";
-import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
+// import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
-import { setCarMake, setCarPlate, setCollectionType, setCustomerCourierId, setCustomerCourierName, setCustomerCourierPhone, setDispatch, setDispatchIds, setDriverId, setDriverName, setInvoices, setRouteCode, setRouteName } from "@/features/dispatch/dispatchSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCarMake,
+  setCarPlate,
+  setCollectionType,
+  setCustomerCourierId,
+  setCustomerCourierName,
+  setCustomerCourierPhone,
+  setDispatch,
+  setDispatchIds,
+  setDriverId,
+  setDriverName,
+  setInvoices,
+  setRouteCode,
+  setRouteName,
+} from "@/features/dispatch/dispatchSlice";
+import {
+  usePushDispatchProcessMutation,
+  useStartDispatchProcessMutation,
+} from "@/features/Dispmain/dispatchAPI";
+import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
-export default function DispatchFooter({ rowData, onSubmit, onClose }) {
+export default function DispatchFooter({
+  dispatchIDs,
+  rowData,
+  selectValues,
+  onSubmit,
+  onClose,
+  onEnableSelection
+}) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -17,31 +42,47 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   const [driverId, setDriverId] = useState(0 || null);
   const [carMake, setCarMake] = useState("" || null);
   const [carPlate, setCarPlate] = useState("" || null);
-  const [customerCourierName, setCustomerCourierName] = useState("" || null);
-  const [customerCourierId, setCustomerCourierId] = useState(0 || null);
-  const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
+  // const [customerCourierName, setCustomerCourierName] = useState("" || null);
+  // const [customerCourierId, setCustomerCourierId] = useState(0 || null);
+  // const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
   const [dispatchRemarks, setDispatchRemarks] = useState("");
   const [isPush, setIsPush] = useState(true);
 
+  const { courierDetails, driverDetails, clientDetails } = useSelector(
+    (state) => state.dispatch
+  );
+
   const dispatch = useDispatch();
 
-  const [startDispatch, {data: startData, isLoading: startLoading, isError: startError }] = useStartDispatchProcessMutation();
-  const [sendDispatch, {data,isLoading,isError}] = usePushDispatchProcessMutation();
+  const [
+    startDispatch,
+    { data: startData, isLoading: startLoading, isError: startError },
+  ] = useStartDispatchProcessMutation();
+  const [sendDispatch, { data, isLoading, isError }] =
+    usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const handleStart = async (event) => {
+  const handleStart = async () => {
+    const payload = {
+      dispatchIds: dispatchIDs,
+    };
     try {
-      const data = await startDispatch('CSC999').unwrap();
+      const data = await startDispatch(payload).unwrap();
       console.log(data);
-      setStartDisabled(false);
+      // if (refetchData) setTimeout(() => refetchData(), 50);
+      if (onEnableSelection) onEnableSelection();
+      setDeliveryDisabled(false);
+      setSaveDisabled(false);
+      setStartDisabled(true);
+      toast.success("Dispatch started!");
     } catch (error) {
-      let description = "Please check your credentials and try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) description = error.data.message;
-      toast.error("Dispatch Process can not start. Please try again.", 
-        { description, duration: 4000 });
+        toast.error("Dispatch Failed", {
+          description:
+            error?.data?.message || error?.data?.title || "Please try again",
+          duration: 4000,
+        });
+      setDeliveryDisabled(true);
+      setSaveDisabled(true);
     }
     setDeliveryDisabled(false);
     setSaveDisabled(false);
@@ -53,37 +94,52 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
     setDeliveryDisabled(true);
 
     const formData = {
-      dispatchIds: [],
-      collectionType: 'DELIVERY',
-      routeCode: 0 || null,
-      routeName: '' || null,
-      driverName,
-      driverId,
-      carMake,
-      carPlate,
-      customerCourierName,
-      customerCourierId,
-      customerCourierPhone,
-      isPush: false
+      dispatchIds: dispatchIDs,
+      collectionType: selectValues.collectionType,
+      // routeCode: 0 || null,
+      routeName: selectValues?.dispatchRoute || null,
+      driverName: driverDetails?.driverName,
+      driverId: driverDetails?.driverId,
+      carMake: driverDetails?.carMake,
+      carPlate: driverDetails?.regNo,
+      customerCourierName: courierDetails?.customerCourierName,
+      customerCourierId: courierDetails?.customerCourierId,
+      customerCourierPhone: courierDetails?.customerCourierPhone,
+      isPush: false,
+    };
+
+    if(selectValues.collectionType === 'delivery'){
+      delete formData.customerCourierId
+      delete formData.customerCourierName
+      delete formData.customerCourierPhone
     }
+
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
+
+      toast.success("Dispatch saved succesfully!");
+      // if (refetchData) refetchData();
       console.log(data);
+      setDeliveryDisabled(false);
     } catch (error) {
       let description = "Saving failed. Please try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) description = error.data.message;
+      // if (error?.data?.errors) {
+      //   const errorMessages = Object.values(error.data.errors).flat();
+      //   if (errorMessages.length > 0) description = errorMessages.join(" ");
+      // } else if (error?.data?.message) description = error.data.message;
 
-      toast.error("Error saving invoices! Please try again.", { description, duration: 4000 });
+      toast.error("Dispatching start Failed", {
+        description: error?.data?.message || error?.data?.title || description,
+        duration: 4000,
+      });
+      setSaveDisabled(true);
+      setStartDisabled(true);
     }
     onSubmit(rowData);
     setSaveDisabled(true);
-    setStartDisabled(false);
-    setDeliveryDisabled(false);
-  }
+    setStartDisabled(true);
+  };
 
   const handleDelivery = async () => {
     setStartDisabled(true);
@@ -91,32 +147,52 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
     setDeliveryDisabled(false);
 
     const formData = {
-      dispatchIds: [],
-      collectionType: 'DELIVERY',
-      routeCode,
-      routeName,
-      driverName,
-      driverId,
-      carMake,
-      carPlate,
-      customerCourierName,
-      customerCourierId,
-      customerCourierPhone,
+      dispatchIds: dispatchIDs,
+      collectionType: selectValues.collectionType,
+      // routeCode,
+      routeName:selectValues?.dispatchRoute,
+      driverName: driverDetails?.driverName,
+      driverId: driverDetails?.driverId,
+      carMake: driverDetails?.carMake,
+      carPlate: driverDetails?.regNo,
+      customerCourierName: courierDetails?.customerCourierName,
+      customerCourierId: courierDetails?.customerCourierId,
+      customerCourierPhone: courierDetails?.customerCourierPhone,
       dispatchRemarks,
-      isPush: true
+      isPush: true,
+    };
+
+    {/* Remove unneccessary values from payload */}
+    if(selectValues.collectionType === 'delivery'){
+      delete formData.customerCourierId
+      delete formData.customerCourierName
+      delete formData.customerCourierPhone
     }
+
+    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
+      delete formData.driverId
+      delete formData.driverName
+      delete formData.routeName
+    }
+
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
+
+      toast.success("Dispatch pushed succesfully!");
+      // if (refetchData) refetchData();
       console.log(data);
     } catch (error) {
       let description = "Saving failed. Please try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) description = error.data.message;
+      // if (error?.data?.errors) {
+      //   const errorMessages = Object.values(error.data.errors).flat();
+      //   if (errorMessages.length > 0) description = errorMessages.join(" ");
+      // } else if (error?.data?.message) description = error.data.message;
 
-      toast.error("Error saving invoices! Please try again.", { description, duration: 4000 });
+      toast.error("Dispatching push Failed", {
+        description: error?.data?.message || error?.data?.title || description,
+        duration: 4000,
+      });
     }
 
     onSubmit(rowData);
@@ -127,31 +203,49 @@ export default function DispatchFooter({ rowData, onSubmit, onClose }) {
   };
 
   return (
-    <div className="flex flex-row justify-end w-full">
-      <Button
-        variant="apply"
-        onClick={handleStart}
-        disabled={startDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
+    <div className="flex flex-row justify-center w-full">
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleStart}
       >
-        Start
-      </Button>
-      <Button
-        variant="verification"
-        onClick={handleSave}
-        disabled={saveDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
+        <Button
+          variant="apply"
+          // onClick={handleStart}
+          disabled={startDisabled}
+          className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
+        >
+          Start
+        </Button>
+      </EditStatusDialog>
+      {/* <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleSave}
       >
-        Save
-      </Button>
-      <Button
-        variant="apply"
-        onClick={handleDelivery}
-        disabled={deliveryDisabled}
-        className="mt-1 uppercase text-xs font-medium "
+        <Button
+          variant="verification"
+          // onClick={handleSave}
+          disabled={saveDisabled}
+          className="mt-1 mr-2 uppercase text-xs font-medium"
+        >
+          Save
+        </Button>
+      </EditStatusDialog> */}
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleDelivery}
       >
-        Send to Dispatch
-      </Button>
+        <Button
+          variant="apply"
+          // onClick={handleDelivery}
+          disabled={deliveryDisabled}
+          className="mt-1 uppercase text-xs font-medium "
+        >
+          Push
+        </Button>
+      </EditStatusDialog>
     </div>
   );
 }

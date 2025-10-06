@@ -28,6 +28,9 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
         return DeliveryPopup;
       case "storestart":
       case "verificationstart":
+      case "dispatchstart":
+      case "storepush":
+      case "verificationpush":
         return StartPopup;
       default:
         return () => (
@@ -43,8 +46,14 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   let dialogClass = "";
   switch (view?.toLowerCase()) {
     case "storestart":
+    case "storepush":
     case "verificationstart":
+    case "dispatchstart":
+    case "verificationpush":
       dialogClass = "sm:max-w-sm";
+      break;
+    case "dispatch":
+      dialogClass = "w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl";
       break;
     default:
       dialogClass = "sm:max-w-xl md:max-w-2xl lg:max-w-3xl";

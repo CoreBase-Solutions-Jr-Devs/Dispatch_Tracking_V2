@@ -14,6 +14,8 @@ import FilterSheet from "./_component/filter-sheet/filterSheet";
 import DeliveryInvoice from "./_component/driver/_component/delivery-main-page/index.";
 import DispatchInvoice from "./_component/dispatchPerson/dispatch-invoice-table/main-page";
 import DispatchMain from "./_component/dispatchPerson/dispatch-main-page";
+import StorePage from "./_component/invoices-data-table/Store-invoicedatatable";
+import VerificationPage from "./_component/invoices-data-table/Verif-invoices";
 // import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
 
 const Overview = () => {
@@ -26,12 +28,12 @@ const Overview = () => {
     switch (user?.userRole) {
       case "StorePerson":
       case "VerificationPerson":
-      // case "DispatchPerson":
+        // case "DispatchPerson":
         return <FilterSheet />;
       default:
         return null;
     }
-  }
+  };
 
   const renderLabelValues = () => {
     switch (user?.userRole) {
@@ -56,19 +58,21 @@ const Overview = () => {
       case "Driver":
         return <DeliveryInvoice />;
       case "DispatchPerson":
-        return <DispatchMain/>
+        return <DispatchMain />;
+      case "StorePerson":
+        return <StorePage />;
+      case "VerificationPerson":
+        return <VerificationPage />;
       default:
         return <InvoicesDataTable />;
-        
     }
-  }
+  };
 
   return (
     <PageLayout
       title={pageMeta?.title}
       subtitle={pageMeta?.subtitle}
       middleAction={
-          
         <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
           {renderLabelValues()}
           {/* <InvoiceToolbar role={view} /> */}

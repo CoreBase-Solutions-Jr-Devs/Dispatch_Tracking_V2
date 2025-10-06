@@ -3,14 +3,12 @@ import { useSelector } from "react-redux";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
 import { roleToView } from "@/lib/utils";
 // import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
-import DispatchFilter from "../Dispatch-Sections/filter";
 import DispatchSearch from "../Dispatch-Sections/search";
 import DispatchGrid from "../Dispatch-Sections/grid";
 import DispatchButton from "../Dispatch-Sections/button";
 
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
-
 
 export default function DispatchMain() {
   const { user } = useSelector((state) => state.auth);
@@ -26,26 +24,26 @@ export default function DispatchMain() {
   };
 
   return (
-    <div className="p-1">
+    <div className="p-1 w-full">
+      {/* Toolbar (optional, center align if needed) */}
       {/* <div className="flex justify-center">
-        <InvoiceToolbar role={view} />
-      </div> */}
+    <InvoiceToolbar role={view} />
+  </div> */}
 
-      <div className="flex justify-between items-center gap-2">
-        <div className="flex-1">
+    
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-2 w-full mb-4">
+        <div className="w-full sm:flex-1">
           <DispatchSearch />
         </div>
 
-        <div className="flex-1 mx-4">
-          <DispatchFilter />
-        </div>
-
-        <div className="flex justify-end flex-1">
+        <div className="w-full sm:w-auto flex lg:justify-end">
           <DispatchButton onClick={handleGoToDispatchPage} />
         </div>
       </div>
 
-      <DispatchGrid data={invoices} isLoading={false} />
+      <div className="w-full">
+        <DispatchGrid data={invoices} isLoading={false} />
+      </div>
     </div>
   );
 }

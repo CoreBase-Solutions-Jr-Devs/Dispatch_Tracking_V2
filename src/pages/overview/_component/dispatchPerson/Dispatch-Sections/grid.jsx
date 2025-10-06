@@ -14,7 +14,7 @@ const STATUS_STYLES = {
   Store: "status-store border-status-store/20",
   Verification: "status-verification border-status-verification/20",
   Dispatch: "status-dispatch border-status-dispatch/20",
-  SAVED: "status-delivered border-status-delivered/20",
+  Saved: "status-delivered border-status-delivered/20",
   Muted: "bg-muted text-muted-foreground border-border",
 };
 
@@ -39,7 +39,7 @@ const renderStatus = (status) => {
     case "dispatched":
     case "in delivery":
     case "saved":
-      statusClass = STATUS_STYLES.SAVED;
+      statusClass = STATUS_STYLES.Saved;
       break;
     default:
       statusClass = STATUS_STYLES.Muted;
@@ -90,7 +90,7 @@ const renderDispatchLink = (row) => (
     onSubmit={(updatedData) => console.log("Edited row data:", updatedData)}
   >
     <a
-      className="text-sm underline cursor-pointer text-primary font-medium  text-sm hover:text-primary/80"
+      className="text-sm underline cursor-pointer text-primary font-medium hover:text-primary/80"
       onClick={(e) => e.stopPropagation()}
     >
       {row.original.dispatchNumber || "—"}
@@ -147,10 +147,10 @@ export default function DispatchGrid() {
         cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
       },
       {
-        accessorKey: "durationMinutes",
+        accessorKey: "durationSeconds",
         header: "Duration",
         cell: ({ row }) =>
-          renderText(formatDuration(row.original.durationMinutes)),
+          renderText(formatDuration(row.original.durationSeconds)),
       },
       {
         accessorKey: "amount",
@@ -158,14 +158,9 @@ export default function DispatchGrid() {
         cell: ({ row }) =>
           renderText(
             row.original.amount
-              ? `KES ${row.original.amount.toLocaleString()}`
+              ? `KES ${row.original.amount}`
               : "—"
           ),
-      },
-      {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => renderStatus(row.original.status),
       },
       {
         accessorKey: "actions",

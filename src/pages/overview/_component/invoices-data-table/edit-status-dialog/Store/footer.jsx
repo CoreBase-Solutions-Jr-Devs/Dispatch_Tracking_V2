@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  useStoreStartMutation,
-  useStorePushMutation,
-} from "@/features/invoices/invoicesAPI";
+  useStartStoreProcessMutation,
+  usePushStoreInvoiceMutation,
+} from "@/features/store/storeAPI";
+ 
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
 
@@ -26,59 +27,58 @@ export default function StoreFooter({
     rowData?.workflowStatus !== "In Process" || !rowData?.storeStartDateTime
   );
 
-  const [storeStart] = useStoreStartMutation();
-  const [storePush] = useStorePushMutation();
+  const [storeStart] = useStartStoreProcessMutation();
+  const [storePush] = usePushStoreInvoiceMutation();
 
-  const handleStartApi = () => {
-    setStartDisabled(true);
-    setVerificationDisabled(true);
 
-   
-    const invoiceNo = Number(rowData.invoiceNo);
+const handleStartApi = () => {
+  setStartDisabled(true);
+  setVerificationDisabled(true);
+ console.log("RowData object:", rowData);
+  const docNum = Number(rowData.docNo); 
+  console.log("docNum:", docNum);
 
-    storeStart(invoiceNo)
-      .unwrap()
-      .then(() => {
-        toast.success("Store process started successfully");
+  storeStart(docNum)
+    .unwrap()
+    .then(() => {
+      toast.success("Store process started successfully");
+      setVerificationDisabled(false);
+    })
+    .catch((error) => {
+      setStartDisabled(false);
+      setVerificationDisabled(true);
 
-        setVerificationDisabled(false);
+      let description = "Please check your credentials and try again.";
+      if (error?.data?.errors) {
+        const errorMessages = Object.values(error.data.errors).flat();
+        if (errorMessages.length > 0) description = errorMessages.join(" ");
+      } else if (error?.data?.message) {
+        description = error.data.message;
+      }
 
-        if (refetchData) setTimeout(() => refetchData(), 50);
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setVerificationDisabled(true);
+      toast.error("Store start failed", { description, duration: 4000 });
+    });
+};
 
-        let description = "Please check your credentials and try again.";
 
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
-        }
-
-        toast.error("Store start Failed", { description, duration: 4000 });
-      });
-  };
-
-  const handleVerification = () => {
+  const handleVerification = async () => {
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
-
     const fieldErrors = {};
+
+    // (optional validation if you want remarks to be required)
     // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
 
-    setErrors({
-      remarks: fieldErrors.remarks || undefined,
-    });
+    setErrors({ remarks: fieldErrors.remarks || undefined });
 
-    // if (isRemarksEmpty) return; // no longer required
+    // if (isRemarksEmpty) return; // (disabled intentionally)
 
     setStartDisabled(true);
     setVerificationDisabled(true);
 
     const payload = {
-      docNum: Number(rowData.invoiceNo),
+      docNum: Number(rowData.docNo),
+      
+      totalWeightKg: rowData.totalWeightKg ?? 0,
       storeRemarks: remarks ?? "",
     };
 
@@ -87,14 +87,13 @@ export default function StoreFooter({
       .then(() => {
         toast.success("Sent to Verification successfully");
         setTimeout(() => {
-          setRemarks(null);
           setErrors({});
         }, 50);
-        if (refetchData) refetchData();
       })
       .catch((error) => {
         setStartDisabled(false);
         setVerificationDisabled(false);
+
         let description = "Please check your credentials and try again.";
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
@@ -102,6 +101,7 @@ export default function StoreFooter({
         } else if (error?.data?.message) {
           description = error.data.message;
         }
+
         toast.error("Send to Verification failed", {
           description,
           duration: 4000,
@@ -127,14 +127,19 @@ export default function StoreFooter({
         </Button>
       </EditStatusDialog>
 
-      <Button
-        variant="apply"
-        onClick={handleVerification}
-        disabled={verificationDisabled}
-        className="mt-2 uppercase"
+      <EditStatusDialog
+        view="storepush"
+        rowData={rowData}
+        onSubmit={handleVerification}
       >
-        Send to Verification
-      </Button>
+        <Button
+          variant="apply"
+          disabled={verificationDisabled}
+          className="mt-2 uppercase"
+        >
+          Send to Verification
+        </Button>
+      </EditStatusDialog>
 
       <Button
         variant="destructive"

@@ -17,20 +17,20 @@ const renderStatus = (status) => {
   let statusClass;
   switch (status) {
     case "Pending":
-    case "In Process":
       statusClass = STATUS_STYLES.Store;
       break;
-    case "Ongoing":
+
+    case "In Process":
     case "In Verification":
       statusClass = STATUS_STYLES.Verification;
       break;
-    case "Verified":
+    case "In Delivery":
     case "In Dispatch":
       statusClass = STATUS_STYLES.Dispatch;
       break;
     case "Return":
     case "Dispatched":
-    case "In Delivery":
+    case "Verified":
     case "Processed":
       statusClass = STATUS_STYLES.Delivery;
       break;
@@ -70,14 +70,15 @@ const formatUKDateTime = (date) => {
   )}:${String(d.getMinutes()).padStart(2, "0")}`;
 };
 
-const renderDateTime = (value, position = 1) => {
+const renderDateTime = (value, position = 1, color) => {
   const formattedDate = formatUKDateTime(value);
   const baseColor =
-    formattedDate === "—"
+    color ||
+    (formattedDate === "—"
       ? "text-muted-foreground"
       : position === 1
       ? "text-foreground"
-      : "text-muted";
+      : "text-muted");
   return (
     <span className={`${baseColor} font-mono font-medium text-sm`}>
       {formattedDate}
@@ -130,7 +131,7 @@ const renderInvoiceNo = (row, view) => {
         className=" underline cursor-pointer text-primary font-medium  text-sm hover:text-primary/80"
         onClick={(e) => e.stopPropagation()}
       >
-        {row.original.invoiceNo || "—"}
+        {row.original.docNo || "—"}
       </a>
     </EditStatusDialog>
   );
@@ -162,13 +163,13 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
   const base = {
     invoiceNo: {
       accessorKey: "invoiceNo",
-      header: "Invoice No",
+      header: "Doc No",
       cell: ({ row }) => renderInvoiceNo(row, view),
     },
 
     dispatchNo: {
       accessorKey: "dispatchNo",
-      header: "DispNo",
+      header: "Doc No",
       cell: ({ row }) => renderText(row.original.dispatchNo),
     },
     docType: {
@@ -195,27 +196,29 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
-        const value = row.original.status;
+        const value = row.original.workflowStatus;
         return renderStatus(value);
       },
     },
 
     items: {
       accessorKey: "items",
-      header: "inv Count ",
+      header: "Items ",
       cell: ({ row }) => renderText((row.original.items || 0).toString()),
     },
 
     docDateTime: {
       accessorKey: "docDateTime",
-      header: "Doc Date & Time",
+      header: "Doc Date ",
       cell: ({ row }) => renderDateTime(row.original.docDateTime),
     },
     processedDateTime: {
       accessorKey: "processedDateTime",
-      header: "Processed Date & Time",
-      cell: ({ row }) => renderDateTime(row.original.processedDateTime),
+      header: "Processed Date ",
+      cell: ({ row }) =>
+        renderDateTime(row.original.processedDateTime, 1, "text-red-600"),
     },
+
     verificationDateTime: {
       accessorKey: "verificationDateTime",
       header: "Verification Date & Time",
@@ -250,7 +253,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
     },
     paymentTerms: {
       accessorKey: "paymentTerms",
-      header: "Payment Terms",
+      header: "Terms",
       cell: ({ row }) => renderText(row.original.paymentTerms || "N/A"),
     },
     printCopies: {
@@ -290,6 +293,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
     ],
     store: [
       base.invoiceNo,
+      base.docType,
       base.customerName,
       base.items,
       base.paymentTerms,
@@ -297,11 +301,11 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.processedDateTime,
       base.durationSeconds,
       base.status,
-
       base.actions,
     ],
     verification: [
       base.invoiceNo,
+      base.docType,
       base.customerName,
       base.items,
       base.paymentTerms,
@@ -309,11 +313,11 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.verificationDateTime,
       base.durationSeconds,
       base.status,
-
       base.actions,
     ],
     dispatch: [
       base.dispatchNo,
+      base.docType,
       base.invoiceNo,
       base.customerName,
       base.customerCode,
@@ -340,3 +344,4 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
 
   return views[view.toLowerCase()] || views.default;
 }
+export { formatDuration, renderDuration };
