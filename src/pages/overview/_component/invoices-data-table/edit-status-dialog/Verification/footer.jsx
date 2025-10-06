@@ -4,12 +4,8 @@ import {
   useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
 } from "@/features/verification/verificationAPI";
-  useStartVerificationProcessMutation,
-  usePushVerificationInvoiceMutation,
-} from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
-import VerificationRemarks from "./remarks";
 
 export default function VerificationFooter({
   rowData,
@@ -34,6 +30,8 @@ export default function VerificationFooter({
 
   const [verificationStart] = useStartVerificationProcessMutation();
   const [verificationPush] = usePushVerificationInvoiceMutation();
+
+  // ✅ Start Verification
   const handleStartApi = async () => {
     setStartDisabled(true);
     setDispatchDisabled(true);
@@ -48,6 +46,7 @@ export default function VerificationFooter({
         toast.success("Verification process started successfully");
         setDispatchDisabled(false);
 
+        // ✅ Refetch data after success
         if (refetchData) {
           setTimeout(() => refetchData(), 100);
         }
@@ -71,6 +70,7 @@ export default function VerificationFooter({
       });
   };
 
+  // ✅ Send to Verification
   const handleDispatch = async () => {
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
     const fieldErrors = {};
@@ -91,6 +91,7 @@ export default function VerificationFooter({
       .then(() => {
         toast.success("Sent to Verification successfully");
 
+        // ✅ Refetch after success
         if (refetchData) {
           setTimeout(() => refetchData(), 100);
         }
@@ -114,7 +115,6 @@ export default function VerificationFooter({
           duration: 4000,
         });
       });
-    }
   };
 
   const handleClose = () => onClose();
@@ -134,6 +134,7 @@ export default function VerificationFooter({
           Start
         </Button>
       </EditStatusDialog>
+
       <EditStatusDialog
         view="verificationpush"
         rowData={rowData}

@@ -3,26 +3,18 @@ import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatch
 import { useLazyGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
 import { useLazyGetFilteredVerificationInvoicesQuery } from "@/features/verification/verificationAPI";
 
-import {
-  
-  useFilterDispatchInvoicesMutation,
-  // useFilterDeliveryInvoicesMutation,
-} from "@/features/invoices/invoicesAPI";
-import { useLazyGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
-import { useLazyGetFilteredVerificationInvoicesQuery } from "@/features/verification/verificationAPI";
+
 
 export function useRoleInvoiceFilter(role) {
   switch (role) {
     case "store":
       return useLazyGetFilteredStoreInvoicesQuery(); 
 
-      return useLazyGetFilteredStoreInvoicesQuery(); 
 
     case "verification":
    
       return useLazyGetFilteredVerificationInvoicesQuery();
    
-      return useLazyGetFilteredVerificationInvoicesQuery();
 
     case "dispatch":
       return useFilterDispatchInvoicesMutation();
