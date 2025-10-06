@@ -6,6 +6,7 @@ import {
 } from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
+import VerificationRemarks from "./remarks";
 
 export default function VerificationFooter({
   rowData,
@@ -30,63 +31,48 @@ export default function VerificationFooter({
 
   const [verificationStart] = useStartVerificationProcessMutation();
   const [verificationPush] = usePushVerificationInvoiceMutation();
-
   const handleStartApi = async () => {
     setStartDisabled(true);
     setDispatchDisabled(true);
 
-    const invoiceNo = Number(rowData.invoiceNo);
-    console.log("Starting verification for invoiceNo:", invoiceNo);
+    console.log("RowData object:", rowData);
+    const docNum = Number(rowData.invoiceNo);
+    console.log("docNum:", docNum);
 
-    try {
-      const res = await verificationStart( invoiceNo ).unwrap();
-      console.log("Start API response:", res);
+    verificationStart(docNum)
+      .unwrap()
+      .then(() => {
+        toast.success("Verification process started successfully");
+        setDispatchDisabled(false);
 
-      if (res?.error) {
-        throw new Error(res.error);
-      }
-
-      toast.success("Verification started successfully");
-
-      if (refetchData) {
-        try {
-          await refetchData();
-        } catch (err) {
-          console.error("Refetch failed:", err);
+        if (refetchData) {
+          setTimeout(() => refetchData(), 100);
         }
-      }
+      })
+      .catch((error) => {
+        setStartDisabled(false);
+        setDispatchDisabled(true);
 
-      setDispatchDisabled(false);
-    } catch (error) {
-      console.error("Start API failed:", error);
-      setStartDisabled(false);
-      setDispatchDisabled(true);
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
 
-      let description = "Please check your credentials and try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) {
-        description = error.data.message;
-      } else if (error?.message) {
-        description = error.message;
-      }
-
-      toast.error("Verification start Failed", { description, duration: 4000 });
-    }
+        toast.error("Verification start failed", {
+          description,
+          duration: 4000,
+        });
+      });
   };
 
   const handleDispatch = async () => {
-    const isRemarksEmpty = !remarks || remarks.trim() === "";
-    console.log("Dispatching verification with remarks:", remarks);
-
+    const isRemarksEmpty = remarks === null || remarks.trim() === "";
     const fieldErrors = {};
 
-    setErrors({
-      remarks: fieldErrors.remarks || undefined,
-    });
-
-    if (Object.keys(fieldErrors).length > 0) return;
+    setErrors({ remarks: fieldErrors.remarks || undefined });
 
     setStartDisabled(true);
     setDispatchDisabled(true);
@@ -94,53 +80,37 @@ export default function VerificationFooter({
     const payload = {
       docNum: Number(rowData.invoiceNo),
       totalWeightKg: rowData.totalWeightKg ?? 0,
-      storeRemarks: remarks ?? "",
+      verificationRemarks: remarks ?? "",
     };
-    console.log("Dispatch payload:", payload);
 
-    try {
-      const res = await verificationPush(payload).unwrap();
-      console.log("Dispatch API response:", res);
+    verificationPush(payload)
+      .unwrap()
+      .then(() => {
+        toast.success("Sent to Verification successfully");
 
-      if (res?.error) {
-        throw new Error(res.error);
-      }
-
-      toast.success("Sent to Dispatch successfully");
-
-      setErrors({});
-      setRemarks(null);
-
-      if (refetchData) {
-        try {
-          await refetchData();
-        } catch (err) {
-          console.error("Refetch failed:", err);
+        if (refetchData) {
+          setTimeout(() => refetchData(), 100);
         }
-      }
 
-      setStartDisabled(true);
-      setDispatchDisabled(true);
-    } catch (error) {
-      console.error("Dispatch API failed:", error);
-      setStartDisabled(false);
-      setDispatchDisabled(false);
+        setTimeout(() => setErrors({}), 50);
+      })
+      .catch((error) => {
+        setStartDisabled(false);
+        setDispatchDisabled(false);
 
-      let description = "Please check your credentials and try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) {
-        description = error.data.message;
-      } else if (error?.message) {
-        description = error.message;
-      }
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
 
-      toast.error("Send to Dispatch Failed", {
-        description,
-        duration: 4000,
+        toast.error("Send to Dispatch failed", {
+          description,
+          duration: 4000,
+        });
       });
-    }
   };
 
   const handleClose = () => onClose();

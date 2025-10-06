@@ -29,34 +29,21 @@ export default function StoreFooter({
   const [storeStart] = useStartStoreProcessMutation();
   const [storePush] = usePushStoreInvoiceMutation();
 
-  const handleStartApi = async () => {
-    setStartDisabled(true);
-    setVerificationDisabled(true);
 
-    const invoiceNo = Number(rowData.invoiceNo);
+const handleStartApi = () => {
+  setStartDisabled(true);
+  setVerificationDisabled(true);
+ console.log("RowData object:", rowData);
+  const docNum = Number(rowData.invoiceNo); 
+  console.log("docNum:", docNum);
 
-    try {
-      const res = await storeStart(invoiceNo).unwrap();
-
-      // Check for backend “fake errors” in 2xx responses
-      if (res?.error) {
-        throw new Error(res.error);
-      }
-
-      // Success
+  storeStart(docNum)
+    .unwrap()
+    .then(() => {
       toast.success("Store process started successfully");
-
-      if (refetchData) {
-        try {
-          await refetchData();
-        } catch (err) {
-          console.error("Refetch failed:", err);
-        }
-      }
-
       setVerificationDisabled(false);
-    } catch (error) {
-      // API error or explicit thrown error
+    })
+    .catch((error) => {
       setStartDisabled(false);
       setVerificationDisabled(true);
 
@@ -66,25 +53,23 @@ export default function StoreFooter({
         if (errorMessages.length > 0) description = errorMessages.join(" ");
       } else if (error?.data?.message) {
         description = error.data.message;
-      } else if (error?.message) {
-        description = error.message;
       }
 
-      toast.error("Store start Failed", { description, duration: 4000 });
-    }
-  };
+      toast.error("Store start failed", { description, duration: 4000 });
+    });
+};
 
-  const handleVerification = async () => {
+
+  const handleVerification = () => {
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
-
     const fieldErrors = {};
+
+    // (optional validation if you want remarks to be required)
     // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
 
-    setErrors({
-      remarks: fieldErrors.remarks || undefined,
-    });
+    setErrors({ remarks: fieldErrors.remarks || undefined });
 
-    // if (isRemarksEmpty) return; // no longer required
+    // if (isRemarksEmpty) return; // (disabled intentionally)
 
     setStartDisabled(true);
     setVerificationDisabled(true);
@@ -95,47 +80,31 @@ export default function StoreFooter({
       storeRemarks: remarks ?? "",
     };
 
-    try {
-      const res = await storePush(payload).unwrap();
+    storePush(payload)
+      .unwrap()
+      .then(() => {
+        toast.success("Sent to Verification successfully");
+        setTimeout(() => {
+          setErrors({});
+        }, 50);
+      })
+      .catch((error) => {
+        setStartDisabled(false);
+        setVerificationDisabled(false);
 
-      // Check for backend “fake errors” even if HTTP 200
-      if (res?.error) {
-        throw new Error(res.error);
-      }
-
-      // Success
-      toast.success("Sent to Verification successfully");
-
-      setErrors({});
-      if (refetchData) {
-        try {
-          await refetchData();
-        } catch (err) {
-          console.error("Refetch failed:", err);
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
         }
-      }
 
-      setStartDisabled(true);
-      setVerificationDisabled(true);
-    } catch (error) {
-      setStartDisabled(false);
-      setVerificationDisabled(false);
-
-      let description = "Please check your credentials and try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) {
-        description = error.data.message;
-      } else if (error?.message) {
-        description = error.message;
-      }
-
-      toast.error("Send to Verification failed", {
-        description,
-        duration: 4000,
+        toast.error("Send to Verification failed", {
+          description,
+          duration: 4000,
+        });
       });
-    }
   };
 
   const handleClose = () => onClose();
