@@ -1,12 +1,12 @@
 import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatchAPI";
 
-import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
+// import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
 import { useLazyGetFilteredVerificationInvoicesQuery } from "@/features/verification/verificationAPI";
 
 export function useRoleInvoiceFilter(role) {
   switch (role) {
     case "store":
-      return useGetFilteredStoreInvoicesQuery();
+      return useLazyGetFilteredVerificationInvoicesQuery();
 
     case "verification":
       return useLazyGetFilteredVerificationInvoicesQuery();
