@@ -1,10 +1,10 @@
 import { Label } from "@/components/ui/label";
 
-export default function DeliveryDetails({ data }) {
+export default function DeliveryDetails({ data = [] }) {
   return (
     <div>
       <div className="flex flex-row gap-2 font-medium justify-between">
-        <Label className="text-sm font-medium">
+        {/* <Label className="text-sm font-medium">
           Total: {new Intl.NumberFormat("en-GB").format(data?.DOCAMT ?? 0)}
         </Label>
         <Label className="text-sm font-medium">
@@ -12,7 +12,30 @@ export default function DeliveryDetails({ data }) {
         </Label>
         <Label className="text-sm font-medium">
           Balance: {new Intl.NumberFormat("en-GB").format(data?.BALANCE ?? 0)}
+        </Label> */}
+
+        <Label className="text-sm font-medium">
+          Total:{" "}
+          {new Intl.NumberFormat("en-GB", {
+            style: "currency",
+            currency: "KES",
+          }).format(data.reduce((acc, curr) => acc + curr?.DOCAMT || 0, 0))}
         </Label>
+        <Label className="text-sm font-medium">
+          Paid:{" "}
+          {new Intl.NumberFormat("en-GB", {
+            style: "currency",
+            currency: "KES",
+          }).format(data.reduce((acc, curr) => acc + curr?.PAID || 0, 0))}
+        </Label>
+        <Label className="text-sm font-medium">
+          Balance:{" "}
+          {new Intl.NumberFormat("en-GB", {
+            style: "currency",
+            currency: "KES",
+          }).format(data.reduce((acc, curr) => acc + curr?.BALANCE || 0, 0))}
+        </Label>
+
         {/* <div className="flex items-center gap-3">
         <Label className="text-xs font-medium">Collector's Name:</Label>
         <input

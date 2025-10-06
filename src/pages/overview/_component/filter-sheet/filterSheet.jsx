@@ -25,34 +25,35 @@ import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
 import { useRoleInvoiceFilter } from "@/hooks/use-role-invoice-filter";
 import { roleToView } from "@/lib/utils";
 import RoleBasedFilters from "./role-based-filters";
+import { Loader2 } from "lucide-react";
 
 export default function FilterSheet() {
   const dispatch = useDispatch();
   const { startDate, endDate, dateRange } = useSelector(
     (state) => state.invoice
   );
-
   const [selectedFilters, setSelectedFilters] = useState({});
-  const [search, setSearch] = useState("");
+  const [isOpen, setIsOpen] = useState(false); // control sheet
+  const [applyLoading, setApplyLoading] = useState(false);
+  const [clearLoading, setClearLoading] = useState(false);
 
   const {
     data: filterOptions,
     isLoading: filtersLoading,
     isError: filtersError,
   } = useFilterOptionsQuery();
+
   const dateRanges =
     filterOptions?.find((f) => f.key === "dateRange")?.options || [];
   const roleFilters = filterOptions?.filter((f) => f.key !== "dateRange") || [];
 
   const { user } = useSelector((state) => state.auth);
   const role = roleToView(user?.userRole);
-  const [filterInvoices] = useRoleInvoiceFilter(role);
 
+  const [filterInvoices, { isLoading }] = useRoleInvoiceFilter(role);
   const isCustomRange = dateRange === "CUSTOM_RANGE";
 
-  const formatDDMMYYYY = (date) =>
-    date ? new Date(date).toLocaleDateString("en-GB") : null;
-
+  // Always store ISO in Redux
   useEffect(() => {
     const today = new Date();
     let start, end;
@@ -86,28 +87,31 @@ export default function FilterSheet() {
 
   const handleDateChange = (type, date) => {
     if (!date) return;
-    const formatted = formatDDMMYYYY(date);
-    type === "start"
-      ? dispatch(setStartDate(formatted))
-      : dispatch(setEndDate(formatted));
+    const iso = date.toISOString();
+    type === "start" ? dispatch(setStartDate(iso)) : dispatch(setEndDate(iso));
   };
 
   const handleApplyFilter = async () => {
     const payload = {
-      startDate: new Date(startDate).toISOString(),
-      endDate: new Date(endDate).toISOString(),
+      startDate,
+      endDate,
       dateRange,
-      search,
-      status: selectedFilters,
+      workflowStatus: selectedFilters?.status || "",
       pageNumber: 1,
       pageSize: 50,
     };
 
+    console.log("📌 Applying filters with payload:", payload);
+
     try {
       const data = await filterInvoices(payload).unwrap();
       dispatch(
-        setInvoices({ invoices: data.invoices, pagination: data.pagination })
+        setInvoices({
+          invoices: data.invoices,
+          pagination: data.pagination,
+        })
       );
+      setIsOpen(false); // close the sheet
     } catch (error) {
       let description = "Please check your credentials and try again.";
       if (error?.data?.errors) {
@@ -120,21 +124,24 @@ export default function FilterSheet() {
   };
 
   const handleClearFilters = () => {
+    console.log("Clearing filters...");
     dispatch(setDateRange("TODAY"));
-    setSearch("");
     setSelectedFilters({});
+    setIsOpen(false);
   };
 
+  // Load initial filters once
   useEffect(() => {
     handleApplyFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (role === "delivery") return null;
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
           Filter
         </Button>
       </SheetTrigger>
@@ -207,23 +214,42 @@ export default function FilterSheet() {
 
         {/* Footer */}
         <SheetFooter className="border-t border-border flex justify-between items-center gap-x-4">
-          <div className="flex items-center gap-2 text-xs">
-            <span>From:</span>
-            <span className="font-medium">{startDate || "-"}</span>
-            <span>To:</span>
-            <span className="font-medium">{endDate || "-"}</span>
-          </div>
-
           <div className="flex gap-2">
-            <Button variant="apply" size="sm" onClick={handleApplyFilter}>
-              Apply
+            <Button
+              variant="apply"
+              size="sm"
+              onClick={async () => {
+                setApplyLoading(true);
+                await handleApplyFilter();
+                setApplyLoading(false);
+              }}
+            >
+              {applyLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Apply
+                </span>
+              ) : (
+                "Apply"
+              )}
             </Button>
+
             <Button
               variant="destructive"
               size="sm"
-              onClick={handleClearFilters}
+              onClick={async () => {
+                setClearLoading(true);
+                await new Promise((resolve) => setTimeout(resolve, 300));
+                handleClearFilters();
+                setClearLoading(false);
+              }}
             >
-              Clear
+              {clearLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Clear
+                </span>
+              ) : (
+                "Clear"
+              )}
             </Button>
           </div>
         </SheetFooter>

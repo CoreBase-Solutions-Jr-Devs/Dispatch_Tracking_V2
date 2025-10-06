@@ -7,15 +7,17 @@ import DispatchSummary from "./summary";
 import DispatchRemarks from "./remarks";
 import DispatchMeta from "./meta";
 import DispatchTable from "./table";
-import { useGetVerifiedOnDispatchQuery } from "@/features/dispatch/dispatchAPI";
+
 import DispatchFooter from "./footer";
 import DispatchSelect from "./select";
 import DispatchSearch from "./search";
+import { useGetVerifiedOnDispatchQuery } from "@/features/Dispmain/dispatchAPI";
 
 export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedDocs, setSelectedDocs] = useState([]);
+  const [savedInvoices, setSavedInvoices] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
@@ -31,18 +33,26 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
     });
   };
 
-
   // Fetch verified dispatch data
-  const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
-  const dispatchData = data?.items || [];
+  const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({
+    pageNumber,
+    pageSize,
+  });
 
-  // Filter rows based on search query
-  // const filteredData = useMemo(() => {
-  //   if (!query) return dispatchData;
-  //   return dispatchData.filter((row) =>
-  //     String(row.invoiceNo).toLowerCase().includes(query.toLowerCase())
-  //   );
-  // }, [query, dispatchData]);
+  const dispatchData = data?.invoices || [];
+
+  // Return only Pending dispatches
+  const filteredDispatchData = useMemo(() => {
+    return dispatchData.filter(
+      (row) => !savedInvoices.some((d) => d.dispatchId === row.dispatchId)
+    );
+  }, [dispatchData, savedInvoices]);
+
+  const handleSave = () => {
+    setSavedInvoices((prev) => [...prev, ...selectedDocs]);
+    onSubmit?.(selectedDocs, selectValues);
+    setSelectedDocs([]);
+  };
 
   const [selectValues, setSelectValues] = useState({
     deliveryPerson: "",
@@ -51,16 +61,16 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
     collectionType: "",
   });
 
-  useEffect(() => {
-    if (rowData) {
-      setSelectValues({
-        deliveryPerson: rowData.deliveryPerson || "",
-        deliveryRoute: rowData.deliveryRoute || "",
-        vehicle: rowData.vehicle || "",
-        collectionType: rowData.collectionType || "",
-      });
-    }
-  }, [rowData]);
+  // useEffect(() => {
+  //   if (rowData) {
+  //     setSelectValues({
+  //       deliveryPerson: rowData.deliveryPerson || "",
+  //       deliveryRoute: rowData.deliveryRoute || "",
+  //       vehicle: rowData.vehicle || "",
+  //       collectionType: rowData.collectionType || "",
+  //     });
+  //   }
+  // }, [rowData]);
 
   const handleSelectChange = (field, value) => {
     setSelectValues((prev) => ({ ...prev, [field]: value }));
@@ -81,24 +91,27 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
           value={query}
           onChange={setQuery}
           data={rowData}
-          placeholder="Inv.No/Cus.Code"
+          placeholder="Inv.No/Cus.Code/Route"
           selectedCount={selectedDocs.length}
         />
 
         <Separator className="my-2" />
 
         <div className="space-y-4">
-          <DispatchTable 
-            data={dispatchData} 
-            isLoading={isLoading} 
+          <DispatchTable
+            data={filteredDispatchData}
+            isLoading={isLoading}
             isError={isError}
-            selected={selectedDocs} 
-            onToggle={handleToggleRow} 
+            selected={selectedDocs}
+            onToggle={handleToggleRow}
             pagination={{
               pageNumber: data?.pageNumber || pageNumber,
               pageSize: data?.pageSize || pageSize,
-              totalItems: data?.totalCount || 0,
-              totalPages: data?.totalPages || 1,
+              totalItems: data?.totalCount || 0 || filteredDispatchData.length,
+              totalPages:
+                data?.totalPages ||
+                1 ||
+                Math.ceil(filteredDispatchData.length / pageSize),
             }}
             onPageChange={setPageNumber}
             onPageSizeChange={setPageSize}
@@ -107,13 +120,12 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
 
         <Separator className="my-2" />
 
-        
         <DialogFooter>
           <DispatchFooter
             rowData={rowData}
             selectValues={selectValues}
             selectedDocs={selectedDocs}
-            onSubmit={onSubmit}
+            onSubmit={handleSave}
             onClose={onClose}
           />
         </DialogFooter>

@@ -17,30 +17,36 @@ export default function VerificationDetails({ data }) {
   };
 
   const Row = ({ label, value }) => (
-    <div className="flex gap-2 min-w-0">
-      <Label className="text-xs font-medium min-w-[130px]">{label}</Label>
-      <Label className="text-xs font-medium  truncate">
-        {value || "—"}
+    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
+      <Label className="text-xs font-medium min-w-[130px] shrink-0">
+        {label}
+    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
+      <Label className="text-xs font-medium min-w-[130px] shrink-0">
+        {label}
       </Label>
+      <Label className="text-xs font-medium truncate">{value || "—"}</Label>
     </div>
   );
 
   if (!data) return null;
 
   return (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-2 p-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 p-2">
       <Row label="Customer Name:" value={data.customerName} />
       <div />
+
       <Row label="Invoice No:" value={data.invoiceNo} />
       <Row
         label="Invoice Date & Time:"
         value={formatDateTime(data.invoiceDateTime)}
       />
+
       <Row label="Salesman:" value={data.salesman} />
       <Row
         label="Start Date & Time:"
         value={formatDateTime(data.verifyStartDateTime)}
       />
+
       <Row label="Verified By:" value={data.verifiedBy} />
       <Row
         label="End Date & Time:"
