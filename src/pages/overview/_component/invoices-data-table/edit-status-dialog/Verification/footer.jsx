@@ -4,8 +4,12 @@ import {
   useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
 } from "@/features/verification/verificationAPI";
+  useStartVerificationProcessMutation,
+  usePushVerificationInvoiceMutation,
+} from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
+import VerificationRemarks from "./remarks";
 
 export default function VerificationFooter({
   rowData,
@@ -54,7 +58,18 @@ export default function VerificationFooter({
       .catch((error) => {
         setStartDisabled(false);
         setDispatchDisabled(true);
+      })
+      .catch((error) => {
+        setStartDisabled(false);
+        setDispatchDisabled(true);
 
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
         let description = "Please check your credentials and try again.";
         if (error?.data?.errors) {
           const errorMessages = Object.values(error.data.errors).flat();
@@ -68,6 +83,11 @@ export default function VerificationFooter({
           duration: 4000,
         });
       });
+        toast.error("Verification start failed", {
+          description,
+          duration: 4000,
+        });
+      });
   };
 
   // ✅ Send to Verification
@@ -76,6 +96,7 @@ export default function VerificationFooter({
     const fieldErrors = {};
 
     setErrors({ remarks: fieldErrors.remarks || undefined });
+    setErrors({ remarks: fieldErrors.remarks || undefined });
 
     setStartDisabled(true);
     setDispatchDisabled(true);
@@ -83,6 +104,7 @@ export default function VerificationFooter({
     const payload = {
       docNum: Number(rowData.invoiceNo),
       totalWeightKg: rowData.totalWeightKg ?? 0,
+      verificationRemarks: remarks ?? "",
       verificationRemarks: remarks ?? "",
     };
 
@@ -109,7 +131,18 @@ export default function VerificationFooter({
         } else if (error?.data?.message) {
           description = error.data.message;
         }
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
 
+        toast.error("Send to Dispatch failed", {
+          description,
+          duration: 4000,
+        });
         toast.error("Send to Dispatch failed", {
           description,
           duration: 4000,

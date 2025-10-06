@@ -21,6 +21,9 @@ export default function VerificationDetails({ data }) {
     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
       <Label className="text-xs font-medium min-w-[130px] shrink-0">
         {label}
+    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
+      <Label className="text-xs font-medium min-w-[130px] shrink-0">
+        {label}
       </Label>
       <Label className="text-xs font-medium truncate">{value || "—"}</Label>
     </div>
