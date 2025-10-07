@@ -64,7 +64,7 @@ export default function DispatchFooter({
         disabled={isLoading || !selectedDocs.length}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
-        {isLoading ? "Saving..." : "Save"}
+        {isLoading ? "Picking..." : "Pick"}
       </Button>
       <Button
         variant="destructive"
