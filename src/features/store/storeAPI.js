@@ -9,9 +9,10 @@ export const StoreApi = apiClient.injectEndpoints({
         params: { pageNumber, pageSize },
       }),
     }),
-
+    //
     getFilteredStoreInvoices: builder.query({
       query: ({
+        role,
         pageNumber = 1,
         pageSize = 50,
         startDate,
@@ -19,7 +20,10 @@ export const StoreApi = apiClient.injectEndpoints({
         workflowStatus,
         dateRange,
       } = {}) => ({
-        url: "/store/filtered",
+        url:
+          role === "verification"
+            ? "/verification/filtered"
+            : "/store/filtered",
         method: "GET",
         params: {
           pageNumber,

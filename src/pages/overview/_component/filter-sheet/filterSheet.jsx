@@ -26,6 +26,7 @@ import { useRoleInvoiceFilter } from "@/hooks/use-role-invoice-filter";
 import { roleToView } from "@/lib/utils";
 import RoleBasedFilters from "./role-based-filters";
 import { Loader2 } from "lucide-react";
+import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
 
 export default function FilterSheet() {
   const dispatch = useDispatch();
@@ -52,6 +53,20 @@ export default function FilterSheet() {
 
   const [filterInvoices, { isLoading }] = useRoleInvoiceFilter(role);
   const isCustomRange = dateRange === "CUSTOM_RANGE";
+
+  const { data, isError, error, refetch } = useGetFilteredStoreInvoicesQuery(
+    {
+      role,
+      startDate: new Date(startDate).toISOString(),
+      endDate: new Date(endDate).toISOString(),
+      dateRange,
+      search: "",
+      workflowStatus: selectedFilters?.status || "",
+      pageNumber: 1,
+      pageSize: 50,
+    },
+    { skip: !startDate || !endDate }
+  );
 
   // Always store ISO in Redux
   useEffect(() => {
@@ -132,9 +147,20 @@ export default function FilterSheet() {
 
   // Load initial filters once
   useEffect(() => {
-    handleApplyFilter();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (data) {
+      dispatch(
+        setInvoices({
+          invoices: data.invoices,
+          pagination: data.pagination,
+        })
+      );
+    }
+  }, [data, dispatch]);
+
+  // useEffect(() => {
+  //   handleApplyFilter();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   if (role === "delivery") return null;
 
