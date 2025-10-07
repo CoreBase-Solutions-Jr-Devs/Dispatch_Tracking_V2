@@ -166,27 +166,27 @@ export default function DispatchDetails({
       {collectionType === "delivery" && deliveryPerson && data && (
         <section className="flex flex-col w-full h-full gap-2">
           <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/4">DP ID:</Label>
-            <Label className="text-xs font-medium w-3/4">
+            <Label className="text-xs font-medium">DP ID:</Label>
+            <Label className="text-xs font-medium">
               {data.personalId}
             </Label>
           </div>
 
           <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/4">DP DL:</Label>
-            <Label className="text-xs font-medium w-3/4">
+            <Label className="text-xs font-medium">DP DL:</Label>
+            <Label className="text-xs font-medium">
               {data.driverLicenseNo}
             </Label>
           </div>
 
           <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/4">Car Make:</Label>
-            <Label className="text-xs font-medium w-3/4">{data.carMake}</Label>
+            <Label className="text-xs font-medium">Car Make:</Label>
+            <Label className="text-xs font-medium">{data.carMake}</Label>
           </div>
 
           <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/4">Reg No:</Label>
-            <Label className="text-xs font-medium w-3/4">{data.regNo}</Label>
+            <Label className="text-xs font-medium">Reg No:</Label>
+            <Label className="text-xs font-medium">{data.regNo}</Label>
           </div>
         </section>
       )}
