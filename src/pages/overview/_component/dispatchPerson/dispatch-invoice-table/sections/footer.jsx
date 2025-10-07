@@ -229,7 +229,7 @@ export default function DispatchFooter({
           Start
         </Button>
       </EditStatusDialog>
-      {/* <EditStatusDialog
+      <EditStatusDialog
         rowData={rowData}
         view="dispatchstart"
         onSubmit={handleSave}
@@ -242,7 +242,7 @@ export default function DispatchFooter({
         >
           Save
         </Button>
-      </EditStatusDialog> */}
+      </EditStatusDialog>
       <EditStatusDialog
         rowData={rowData}
         view="dispatchstart"
