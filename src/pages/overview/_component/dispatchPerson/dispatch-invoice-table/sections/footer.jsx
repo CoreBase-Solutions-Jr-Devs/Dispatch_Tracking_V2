@@ -23,6 +23,8 @@ import {
   useStartDispatchProcessMutation,
 } from "@/features/Dispmain/dispatchAPI";
 import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
+import { useNavigate } from "react-router-dom";
+import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 
 export default function DispatchFooter({
   dispatchIDs,
@@ -48,6 +50,7 @@ export default function DispatchFooter({
   const [dispatchRemarks, setDispatchRemarks] = useState("");
   const [isPush, setIsPush] = useState(true);
   const hasCollectionType = Boolean(selectValues?.collectionType);
+  const navigate = useNavigate();
 
   const { courierDetails, driverDetails, clientDetails } = useSelector(
     (state) => state.dispatch
@@ -128,15 +131,11 @@ export default function DispatchFooter({
       dispatch(setDispatch(formData));
 
       toast.success("Dispatch saved succesfully!");
-      // if (refetchData) refetchData();
       console.log(data);
       setDeliveryDisabled(false);
+      navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
       let description = "Saving failed. Please try again.";
-      // if (error?.data?.errors) {
-      //   const errorMessages = Object.values(error.data.errors).flat();
-      //   if (errorMessages.length > 0) description = errorMessages.join(" ");
-      // } else if (error?.data?.message) description = error.data.message;
 
       toast.error("Dispatching start Failed", {
         description: error?.data?.message || error?.data?.title || description,
@@ -191,14 +190,10 @@ export default function DispatchFooter({
       dispatch(setDispatch(formData));
 
       toast.success("Dispatch pushed succesfully!");
-      // if (refetchData) refetchData();
       console.log(data);
+      navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
       let description = "Saving failed. Please try again.";
-      // if (error?.data?.errors) {
-      //   const errorMessages = Object.values(error.data.errors).flat();
-      //   if (errorMessages.length > 0) description = errorMessages.join(" ");
-      // } else if (error?.data?.message) description = error.data.message;
 
       toast.error("Dispatching push Failed", {
         description: error?.data?.message || error?.data?.title || description,
