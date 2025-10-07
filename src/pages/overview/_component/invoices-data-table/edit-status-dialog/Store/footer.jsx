@@ -4,7 +4,7 @@ import {
   useStartStoreProcessMutation,
   usePushStoreInvoiceMutation,
 } from "@/features/store/storeAPI";
- 
+
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
 
@@ -30,36 +30,34 @@ export default function StoreFooter({
   const [storeStart] = useStartStoreProcessMutation();
   const [storePush] = usePushStoreInvoiceMutation();
 
+  const handleStartApi = () => {
+    setStartDisabled(true);
+    setVerificationDisabled(true);
+    console.log("RowData object:", rowData);
+    const docNum = Number(rowData.docNo);
+    console.log("docNum:", docNum);
 
-const handleStartApi = () => {
-  setStartDisabled(true);
-  setVerificationDisabled(true);
- console.log("RowData object:", rowData);
-  const docNum = Number(rowData.docNo); 
-  console.log("docNum:", docNum);
+    storeStart(docNum)
+      .unwrap()
+      .then(() => {
+        toast.success("Store process started successfully");
+        setVerificationDisabled(false);
+      })
+      .catch((error) => {
+        setStartDisabled(false);
+        setVerificationDisabled(true);
 
-  storeStart(docNum)
-    .unwrap()
-    .then(() => {
-      toast.success("Store process started successfully");
-      setVerificationDisabled(false);
-    })
-    .catch((error) => {
-      setStartDisabled(false);
-      setVerificationDisabled(true);
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
 
-      let description = "Please check your credentials and try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) {
-        description = error.data.message;
-      }
-
-      toast.error("Store start failed", { description, duration: 4000 });
-    });
-};
-
+        toast.error("Store start failed", { description, duration: 4000 });
+      });
+  };
 
   const handleVerification = async () => {
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
@@ -77,7 +75,7 @@ const handleStartApi = () => {
 
     const payload = {
       docNum: Number(rowData.docNo),
-      
+      totalWeightKg: rowData.totalWeightKg ?? 0,
       totalWeightKg: rowData.totalWeightKg ?? 0,
       storeRemarks: remarks ?? "",
     };
