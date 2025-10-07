@@ -3,7 +3,7 @@ import { Search as SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function DispatchSearch({
-  placeholder = "Route / Customer Name",
+  placeholder = "DispatchNo/Route/Dispatcher",
   onSearch,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,7 +23,7 @@ export default function DispatchSearch({
           value={searchTerm}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-50 pl-9 pr-3 py-2 bg-gray-100"
+          className="w-60 pl-9 pr-3 py-2 bg-gray-100"
         />
       </div>
     </section>
