@@ -59,7 +59,7 @@ const handleStartApi = () => {
       toast.error("Verification start failed", { description, duration: 4000 });
     });
 };
-  // ✅ Start Verification
+  // ✅ Start Dispatch
   const handleDispatch = async () => {
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
     const fieldErrors = {};
