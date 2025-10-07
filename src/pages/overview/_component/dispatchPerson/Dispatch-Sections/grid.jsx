@@ -71,15 +71,22 @@ const renderDateTime = (val) => (
   <span className="font-mono text-sm font-medium">{formatUKDateTime(val)}</span>
 );
 
-const formatDuration = (minutes) => {
-  if (minutes === null || minutes === undefined)
-    return <span className="font-mono text-sm font-medium">—</span>;
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
+const formatDuration = (seconds) => {
+  if (!seconds && seconds !== 0) return "—";
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
   return (
-    <span className="font-mono text-sm font-medium">
-      {`${h ? h + "h " : ""}${m}m`}
-    </span>
+    [
+      days && `${days}D`,
+      hours && `${hours}H`,
+      mins && `${mins}M`,
+      secs && `${secs}S`,
+    ]
+      .filter(Boolean)
+      .join(" ") || "0m"
   );
 };
 
@@ -142,8 +149,18 @@ export default function DispatchGrid() {
         cell: ({ row }) => renderText(row.original.dispatcher),
       },
       {
+        acccessorkey: "collectionType",
+        header: "CollType",
+        cell: ({ row }) => renderText(row.original.collectionType),
+      },
+      {
         accessorKey: "dispatchDateTime",
-        header: "Dispatch Date & Time",
+        header: "Disp.Start",
+        cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
+      },
+      {
+        accessorKey: "dispatchDateTime",
+        header: "Disp.End",
         cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
       },
       {
@@ -159,8 +176,13 @@ export default function DispatchGrid() {
           renderText(
             row.original.amount
               ? `KES ${row.original.amount}`
-              : "—"
+            : "0"
           ),
+      },
+      {
+        accessorkey: "status",
+        header: "Status",
+        cell: ({ row }) => renderStatus(row.original.status),
       },
       {
         accessorKey: "actions",

@@ -60,6 +60,25 @@ const dispatchSlice = createSlice({
       state.dispatchRemarks = action.payload.dispatchRemarks;
       state.isPush = action.payload.isPush;
     },
+    resetDispatchData: (state) => {
+      state.updatedDispatches = [];
+      state.dispatchIds = [];
+      state.driverDetails = {};
+      state.courierDetails = {};
+      state.clientDetails = {};
+      state.collectionType = "";
+      state.routeCode = 0;
+      state.routeName = "";
+      state.driverName = "";
+      state.driverId = 0;
+      state.carMake = "";
+      state.carPlate = "";
+      state.customerCourierName = "";
+      state.customerCourierId = 0;
+      state.customerCourierPhone = "";
+      state.dispatchRemarks = "";
+      state.isPush = true;
+    },
     setInvoices: (state, action) => {
       state.invoices = action.payload.invoices;
       state.pagination = action.payload.pagination;
@@ -167,6 +186,7 @@ export const {
   setRouteCode,
   setRouteName,
   setDispatch,
+  resetDispatchData,
   //
   setSelectedDipatches,
   setDriverDetails,

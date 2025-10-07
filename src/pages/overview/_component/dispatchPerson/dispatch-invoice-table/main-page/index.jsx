@@ -242,7 +242,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
               selection={true}
               isLoading={false}
               emptyTitle="No invoices found"
-              isShowPagination={true}
+              isShowPagination={false}
               onPageChange={setPageNumber}
               onPageSizeChange={setPageSize}
               pagination={{
@@ -253,7 +253,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                   Math.ceil(updatedDispatches?.length / pageSize) || 1,
               }}
             />
-            <DispatchSummary data={updatedDispatches} />
+            {/* <DispatchSummary data={updatedDispatches} /> */}
           </div>
         </div>
         {/* Dispatch Selections*/}

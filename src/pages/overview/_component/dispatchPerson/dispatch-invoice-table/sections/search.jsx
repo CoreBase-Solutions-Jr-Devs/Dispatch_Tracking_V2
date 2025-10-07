@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search as SearchIcon } from "lucide-react";
 import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog"; 
+import { PROTECTED_ROUTES } from "@/routes/common/routePath";
+import { useNavigate } from "react-router-dom";
 
 export default function DispatchSearch({
     value,
@@ -11,6 +13,12 @@ export default function DispatchSearch({
     rowData, 
     onSubmit, 
 }) {
+
+    const navigate = useNavigate();
+    const backToMainPage = () => {
+        navigate(PROTECTED_ROUTES.OVERVIEW);
+    };
+
     return (
         <section className="flex justify-between items-center w-full">
             <div className="relative w-1/2 max-w-sm">
@@ -24,14 +32,24 @@ export default function DispatchSearch({
                 /> */}
             </div>
 
-            <EditStatusDialog rowData={rowData} view="dispatch" onSubmit={onSubmit}>
-                <Button 
+            <div className="relative w-1/2 max-w-sm flex flex-row space-x-2 justify-end">
+                <EditStatusDialog rowData={rowData} view="dispatch" onSubmit={onSubmit}>
+                    <Button 
+                        className="uppercase text-xs font-medium"
+                        variant="apply"
+                    >
+                        Pick Invoice
+                    </Button>
+                </EditStatusDialog>
+                <Button
                     className="uppercase text-xs font-medium"
-                    variant="apply"
+                    variant="destructive"
+                    onClick={backToMainPage}
                 >
-                    Pick Invoice
+                    Cancel
                 </Button>
-            </EditStatusDialog>
+            </div>
+
         </section>
     );
 }
