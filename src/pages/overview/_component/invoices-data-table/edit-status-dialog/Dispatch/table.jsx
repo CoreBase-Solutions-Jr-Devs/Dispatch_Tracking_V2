@@ -57,10 +57,22 @@ const renderDateTime = (val) => (
 );
 
 const formatDuration = (seconds) => {
-  if (!seconds) return "—";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return `${h ? h + "h " : ""}${m}m`;
+  if (!seconds && seconds !== 0) return "—";
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  return (
+    [
+      days && `${days} D`,
+      hours && `${hours} H`,
+      mins && `${mins} m`,
+      secs && `${secs} s`,
+    ]
+      .filter(Boolean)
+      .join(" ") || "0m"
+  );
 };
 
 export default function DispatchTable({
