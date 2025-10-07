@@ -24,7 +24,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         params: {
           pageNumber,
           pageSize,
-         
+
           startDate: startDate
             ? new Date(startDate).toISOString().split("T")[0]
             : undefined,
@@ -49,7 +49,7 @@ export const VerificationApi = apiClient.injectEndpoints({
 
     getVerificationTracking: builder.query({
       query: (docNum) => ({
-        url: `/verification/${docNum}/verification-tracking`, 
+        url: `/verification/${docNum}/verification-tracking`,
         method: "GET",
       }),
       providesTags: ["verification_tracking"],
@@ -60,7 +60,11 @@ export const VerificationApi = apiClient.injectEndpoints({
         url: `/verification/${docNum}/start`,
         method: "POST",
       }),
-      invalidatesTags: ["verification_tracking", "verification_invoices"],
+      invalidatesTags: [
+        "verification_tracking",
+        "verification_invoices",
+        "store_invoices",
+      ],
     }),
 
     pushVerificationInvoice: builder.mutation({
@@ -69,7 +73,11 @@ export const VerificationApi = apiClient.injectEndpoints({
         method: "POST",
         body: { docNum, totalWeightKg, verificationRemarks },
       }),
-      invalidatesTags: ["verification_tracking", "verification_invoices"],
+      invalidatesTags: [
+        "verification_tracking",
+        "verification_invoices",
+        "store_invoices",
+      ],
     }),
   }),
 });
