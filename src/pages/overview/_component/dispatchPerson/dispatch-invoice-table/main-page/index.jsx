@@ -226,7 +226,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
         value={query}
         onChange={setQuery}
         data={rowData}
-        placeholder="CusName/Inv.No/Route"
+        placeholder="CusName/Doc.No"
       />
 
       <Separator className={"my-2"} />
