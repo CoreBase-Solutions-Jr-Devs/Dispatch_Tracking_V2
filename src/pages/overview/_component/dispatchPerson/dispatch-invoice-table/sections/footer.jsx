@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  resetDispatchData,
   setCarMake,
   setCarPlate,
   setCollectionType,
@@ -25,6 +26,7 @@ import {
 import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
+import { useAppDispatch } from "@/app/hook";
 
 export default function DispatchFooter({
   dispatchIDs,
@@ -56,7 +58,8 @@ export default function DispatchFooter({
     (state) => state.dispatch
   );
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [
     startDispatch,
@@ -133,6 +136,7 @@ export default function DispatchFooter({
       toast.success("Dispatch saved succesfully!");
       console.log(data);
       setDeliveryDisabled(false);
+      dispatch(resetDispatchData());
       navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
       let description = "Saving failed. Please try again.";
@@ -189,9 +193,10 @@ export default function DispatchFooter({
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
 
-      toast.success("Dispatch pushed succesfully!");
+      toast.success("Dispatch pushed successfully!");
       console.log(data);
       navigate(PROTECTED_ROUTES.OVERVIEW);
+      dispatch(resetDispatchData());
     } catch (error) {
       let description = "Saving failed. Please try again.";
 
