@@ -56,6 +56,7 @@ export default function FilterSheet() {
 
   const { data, isError, error, refetch } = useGetFilteredStoreInvoicesQuery(
     {
+      role,
       startDate: new Date(startDate).toISOString(),
       endDate: new Date(endDate).toISOString(),
       dateRange,
@@ -155,6 +156,7 @@ export default function FilterSheet() {
       );
     }
   }, [data, dispatch]);
+
   // useEffect(() => {
   //   handleApplyFilter();
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
