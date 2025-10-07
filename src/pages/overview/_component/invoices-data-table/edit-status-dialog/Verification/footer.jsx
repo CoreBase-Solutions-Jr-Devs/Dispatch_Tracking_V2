@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  useStartVerificationProcessMutation,
+ useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
 } from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
@@ -31,23 +31,20 @@ export default function VerificationFooter({
 
   const [verificationStart] = useStartVerificationProcessMutation();
   const [verificationPush] = usePushVerificationInvoiceMutation();
+const handleStartApi = () => {
+  setStartDisabled(true);
+  setDispatchDisabled(true);
+ console.log("RowData object:", rowData);
+  const docNum = Number(rowData.docNo); 
+  console.log("docNum:", docNum);
 
-  // ✅ Start Verification
-  const handleStartApi = async () => {
-    setStartDisabled(true);
-    setDispatchDisabled(true);
-
-    const docNum = Number(rowData.docNo);
-
-    try {
-      await verificationStart(docNum).unwrap();
+  verificationStart(docNum)
+    .unwrap()
+    .then(() => {
       toast.success("Verification process started successfully");
       setDispatchDisabled(false);
-
-      if (refetchData) {
-        setTimeout(() => refetchData(), 100);
-      }
-    } catch (error) {
+    })
+    .catch((error) => {
       setStartDisabled(false);
       setDispatchDisabled(true);
 
@@ -59,61 +56,58 @@ export default function VerificationFooter({
         description = error.data.message;
       }
 
-      toast.error("Verification start failed", {
-        description,
-        duration: 4000,
-      });
-    }
-  };
-
-  // ✅ Send to Verification
+      toast.error("Verification start failed", { description, duration: 4000 });
+    });
+};
+  // ✅ Start Verification
   const handleDispatch = async () => {
-    const isRemarksEmpty = !remarks?.trim();
+    const isRemarksEmpty = remarks === null || remarks.trim() === "";
     const fieldErrors = {};
 
-    if (isRemarksEmpty) {
-      fieldErrors.remarks = "Remarks are required.";
-      setErrors(fieldErrors);
-      return;
-    }
+    // (optional validation if you want remarks to be required)
+    // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
 
-    setErrors({});
+    setErrors({ remarks: fieldErrors.remarks || undefined });
+
+    // if (isRemarksEmpty) return; // (disabled intentionally)
+
     setStartDisabled(true);
     setDispatchDisabled(true);
 
     const payload = {
       docNum: Number(rowData.docNo),
+      
       totalWeightKg: rowData.totalWeightKg ?? 0,
       verificationRemarks: remarks ?? "",
     };
 
-    try {
-      await verificationPush(payload).unwrap();
-      toast.success("Sent to Verification successfully");
+    verificationPush(payload)
+      .unwrap()
+      .then(() => {
+        toast.success("Sent to Dispatch successfully");
+        setTimeout(() => {
+          setErrors({});
+        }, 50);
+      })
+      .catch((error) => {
+        setStartDisabled(false);
+        setVerificationDisabled(false);
 
-      if (refetchData) {
-        setTimeout(() => refetchData(), 100);
-      }
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
 
-      setTimeout(() => setErrors({}), 50);
-    } catch (error) {
-      setStartDisabled(false);
-      setDispatchDisabled(false);
-
-      let description = "Please check your credentials and try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) {
-        description = error.data.message;
-      }
-
-      toast.error("Send to Verification failed", {
-        description,
-        duration: 4000,
+        toast.error("Send to Dispatch failed", {
+          description,
+          duration: 4000,
+        });
       });
-    }
   };
+ const handleClose = () => onClose();
 
   return (
     <div className="flex flex-row justify-between w-full">
