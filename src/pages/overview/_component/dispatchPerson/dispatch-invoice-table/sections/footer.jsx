@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 // import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
@@ -22,8 +22,7 @@ import {
 import {
   usePushDispatchProcessMutation,
   useStartDispatchProcessMutation,
-} from "@/features/Dispmain/dispatchAPI";
-import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
+} from "@/features/dispatch/dispatchAPI";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useAppDispatch } from "@/app/hook";
@@ -54,11 +53,7 @@ export default function DispatchFooter({
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
 
-  const { courierDetails, driverDetails, clientDetails } = useSelector(
-    (state) => state.dispatch
-  );
-
-  // const dispatch = useDispatch();
+  const { courierDetails, driverDetails, updatedDispatches } = useSelector((state) => state.dispatch);
   const dispatch = useAppDispatch();
 
   const [
@@ -68,6 +63,15 @@ export default function DispatchFooter({
   const [sendDispatch, { data, isLoading, isError }] =
     usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
+
+  // Ensure Start is disabled if there are no selected dispatches
+  useEffect(() => {
+    if (updatedDispatches && updatedDispatches.length > 0) {
+      setStartDisabled(false);
+    } else {
+      setStartDisabled(true);
+    }
+  }, [updatedDispatches]);
 
   const handleStart = async () => {
     const payload = {

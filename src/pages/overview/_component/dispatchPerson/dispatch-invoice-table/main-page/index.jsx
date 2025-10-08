@@ -19,7 +19,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
-import { useGetDispatchDriverQuery } from "@/features/Dispmain/dispatchAPI";
+// import { useGetDispatchDriverQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
 import { setDriverDetails } from "@/features/dispatch/dispatchSlice";
 import { useAppDispatch } from "@/app/hook";
 
@@ -96,7 +97,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     isLoading: driverLoading,
     isError: driverError,
     error: driverApiError,
-  } = useGetDispatchDriverQuery(selectValues.dispatchPerson, {
+  } = useGetDeliveryDriverQuery(selectValues.dispatchPerson, {
     skip:
       selectValues.collectionType !== "delivery" ||
       !selectValues.dispatchPerson,
