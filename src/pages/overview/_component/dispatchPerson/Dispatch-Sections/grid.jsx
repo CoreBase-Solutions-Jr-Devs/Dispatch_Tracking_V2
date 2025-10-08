@@ -19,9 +19,22 @@ const STATUS_STYLES = {
   Muted: "bg-muted text-muted-foreground border-border",
 };
 
-const renderStatus = (status) => {
+const getStatusLabel = (statusCode) => {
+  const statusMap = {
+    0: "Verified",
+    1: "Selected",
+    2: "In Dispatch",
+    3: "Saved",
+    4: "Dispatched",
+  };
+  return statusMap[Number(statusCode)] || "Unknown";
+}
+
+const renderStatus = (statusCode) => {
+  const statusLabel = getStatusLabel(statusCode);
   let statusClass;
-  switch (status?.toLowerCase()) {
+
+  switch (statusLabel) {
     case "pending":
     case "in process":
     case "recalled":
@@ -34,10 +47,11 @@ const renderStatus = (status) => {
       break;
     case "verified":
     case "in dispatch":
+    case "PendingPush":
       statusClass = STATUS_STYLES.Dispatch;
       break;
     case "return":
-    case "dispatched":
+    case "Dispatched":
     case "in delivery":
     case "saved":
       statusClass = STATUS_STYLES.Saved;
@@ -51,7 +65,7 @@ const renderStatus = (status) => {
       variant="outline"
       className={`${statusClass} w-28 justify-center rounded-md  font-medium px-3 py-1 border`}
     >
-      {status || "—"}
+      {statusLabel || "—"}
     </Badge>
   );
 };
