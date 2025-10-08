@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import LabelValue from "./shared-label-value";
 import { useTypedSelector } from "@/app/hook";
 import { toast } from "sonner";
-import { useGetAggregateDispatchesQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetAggregateDispatchesQuery } from "@/features/dispatch/dispatchAPI";
 
 const DispatchLabelValue = () => {
   const { startDate, endDate, dateRange } = useTypedSelector(

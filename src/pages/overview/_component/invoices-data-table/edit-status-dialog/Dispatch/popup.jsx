@@ -11,7 +11,7 @@ import DispatchTable from "./table";
 import DispatchFooter from "./footer";
 import DispatchSelect from "./select";
 import DispatchSearch from "./search";
-import { useGetVerifiedOnDispatchQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetVerifiedOnDispatchQuery } from "@/features/dispatch/dispatchAPI";
 
 export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);

@@ -4,15 +4,15 @@ import DispatchDetails from "../dispatch-invoice-table/sections/details";
 import DispatchRemarks from "../dispatch-invoice-table/sections/remarks";
 import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 import { Button } from "@/components/ui/button";
-import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
+import { usePushDispatchProcessMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
-import { useGetDispatchDriverQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
 import { useAppDispatch } from "@/app/hook";
 import { setDriverDetails } from "@/features/dispatch/dispatchSlice";
 
 const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
-    const [saveDispatch, { isLoading }] = useSaveSelectedDispatchesMutation();
+    const [saveDispatch, { isLoading }] = usePushDispatchProcessMutation();
     const [editedDispatch, setEditedDispatch] = useState({
         dispatchPerson: "",
         dispatchRoute: "",
@@ -31,7 +31,7 @@ const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
         ? filterOptions.find((opt) => opt.key === "deliveryGuy")?.options || []
         : [];
 
-    const { data: driverDetails } = useGetDispatchDriverQuery(
+    const { data: driverDetails } = useGetDeliveryDriverQuery(
         editedDispatch.dispatchPerson,
         {
             skip: editedDispatch.collectionType !== "delivery" || !editedDispatch.dispatchPerson,
