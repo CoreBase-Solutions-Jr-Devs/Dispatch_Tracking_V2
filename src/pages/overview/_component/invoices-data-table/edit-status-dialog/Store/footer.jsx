@@ -63,19 +63,13 @@ export default function StoreFooter({
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
     const fieldErrors = {};
 
-    // (optional validation if you want remarks to be required)
-    // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
-
     setErrors({ remarks: fieldErrors.remarks || undefined });
-
-    // if (isRemarksEmpty) return; // (disabled intentionally)
 
     setStartDisabled(true);
     setVerificationDisabled(true);
 
     const payload = {
       docNum: Number(rowData.docNo),
-      totalWeightKg: rowData.totalWeightKg ?? 0,
       totalWeightKg: rowData.totalWeightKg ?? 0,
       storeRemarks: remarks ?? "",
     };
