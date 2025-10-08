@@ -3,7 +3,8 @@ import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
+// import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatchAPI";
 import EditStatusDialog from "../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 const renderText = (text) => (
@@ -122,11 +123,11 @@ const renderActions = (row) => (
   </EditStatusDialog>
 );
 
-export default function DispatchGrid() {
+export default function DispatchGrid({ data = [], isLoading = false }) {
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 50;
 
-  const { data, isFetching } = useGetSavedDispatchedQuery({
+  const { data: savedDispatches, isFetching } = useGetSavedDispatchedInvoicesQuery({
     pageNumber,
     pageSize,
   });
@@ -199,7 +200,7 @@ export default function DispatchGrid() {
   return (
     <div className="space-y-4">
       <DataTable
-        data={data?.items || []}
+        data={savedDispatches?.items || []}
         columns={columns}
         selection
         isLoading={isFetching}
@@ -207,10 +208,10 @@ export default function DispatchGrid() {
         isShowPagination
         onPageChange={setPageNumber}
         pagination={{
-          pageNumber: data?.pageNumber || 1,
-          pageSize: data?.pageSize || pageSize,
-          totalItems: data?.totalCount || 0,
-          totalPages: data?.totalPages || 1,
+          pageNumber: savedDispatches?.pageNumber || 1,
+          pageSize: savedDispatches?.pageSize || pageSize,
+          totalItems: savedDispatches?.totalCount || 0,
+          totalPages: savedDispatches?.totalPages || 1,
         }}
       />
 
