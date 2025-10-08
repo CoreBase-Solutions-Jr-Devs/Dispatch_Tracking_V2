@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
-
+ 
 import { DateRangeDropdown } from "@/components/ui/date-range-dropdown";
 import {
   setDateRange,
@@ -27,7 +27,7 @@ import { roleToView } from "@/lib/utils";
 import RoleBasedFilters from "./role-based-filters";
 import { Loader2 } from "lucide-react";
 import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
-
+ 
 export default function FilterSheet() {
   const dispatch = useDispatch();
   const { startDate, endDate, dateRange } = useSelector(
@@ -37,23 +37,23 @@ export default function FilterSheet() {
   const [isOpen, setIsOpen] = useState(false); // control sheet
   const [applyLoading, setApplyLoading] = useState(false);
   const [clearLoading, setClearLoading] = useState(false);
-
+ 
   const {
     data: filterOptions,
     isLoading: filtersLoading,
     isError: filtersError,
   } = useFilterOptionsQuery();
-
+ 
   const dateRanges =
     filterOptions?.find((f) => f.key === "dateRange")?.options || [];
   const roleFilters = filterOptions?.filter((f) => f.key !== "dateRange") || [];
-
+ 
   const { user } = useSelector((state) => state.auth);
   const role = roleToView(user?.userRole);
-
+ 
   const [filterInvoices, { isLoading }] = useRoleInvoiceFilter(role);
   const isCustomRange = dateRange === "CUSTOM_RANGE";
-
+ 
   const { data, isError, error, refetch } = useGetFilteredStoreInvoicesQuery(
     {
       role,
@@ -67,12 +67,12 @@ export default function FilterSheet() {
     },
     { skip: !startDate || !endDate }
   );
-
+ 
   // Always store ISO in Redux
   useEffect(() => {
     const today = new Date();
     let start, end;
-
+ 
     switch (dateRange) {
       case "TODAY":
         start = end = today;
@@ -95,17 +95,17 @@ export default function FilterSheet() {
       default:
         return;
     }
-
+ 
     dispatch(setStartDate(start.toISOString()));
     dispatch(setEndDate(end.toISOString()));
   }, [dateRange, dispatch]);
-
+ 
   const handleDateChange = (type, date) => {
     if (!date) return;
     const iso = date.toISOString();
     type === "start" ? dispatch(setStartDate(iso)) : dispatch(setEndDate(iso));
   };
-
+ 
   const handleApplyFilter = async () => {
     const payload = {
       startDate,
@@ -115,9 +115,9 @@ export default function FilterSheet() {
       pageNumber: 1,
       pageSize: 50,
     };
-
+ 
     console.log("📌 Applying filters with payload:", payload);
-
+ 
     try {
       const data = await filterInvoices(payload).unwrap();
       dispatch(
@@ -133,18 +133,18 @@ export default function FilterSheet() {
         const errorMessages = Object.values(error.data.errors).flat();
         if (errorMessages.length > 0) description = errorMessages.join(" ");
       } else if (error?.data?.message) description = error.data.message;
-
+ 
       toast.error("Invoices Failed", { description, duration: 4000 });
     }
   };
-
+ 
   const handleClearFilters = () => {
     console.log("Clearing filters...");
     dispatch(setDateRange("TODAY"));
     setSelectedFilters({});
     setIsOpen(false);
   };
-
+ 
   // Load initial filters once
   useEffect(() => {
     if (data) {
@@ -156,14 +156,14 @@ export default function FilterSheet() {
       );
     }
   }, [data, dispatch]);
-
+ 
   // useEffect(() => {
   //   handleApplyFilter();
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
-
+ 
   if (role === "delivery") return null;
-
+ 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
@@ -171,12 +171,12 @@ export default function FilterSheet() {
           Filter
         </Button>
       </SheetTrigger>
-
+ 
       <SheetContent side="right" className="w-full sm:max-w-md py-8 px-6">
         <SheetHeader>
           <SheetTitle>Filter Options</SheetTitle>
         </SheetHeader>
-
+ 
         {/* Date Range Dropdown */}
         <section className="mb-4">
           <Label className="text-xs text-muted">Date Range</Label>
@@ -188,7 +188,7 @@ export default function FilterSheet() {
             isError={filtersError}
           />
         </section>
-
+ 
         {/* Start/End Date Pickers */}
         <section className="flex gap-4 mb-4">
           <div
@@ -205,7 +205,7 @@ export default function FilterSheet() {
               disabled={!isCustomRange}
             />
           </div>
-
+ 
           <div
             className={`flex-1 flex flex-col ${
               isCustomRange ? "border border-primary rounded-md p-1" : ""
@@ -221,7 +221,7 @@ export default function FilterSheet() {
             />
           </div>
         </section>
-
+ 
         {/* Search + Role Filters */}
         <section className="flex gap-2 mb-4 items-end">
           <div className="flex-1 flex flex-col justify-end">
@@ -237,7 +237,7 @@ export default function FilterSheet() {
             />
           </div>
         </section>
-
+ 
         {/* Footer */}
         <SheetFooter className="border-t border-border flex justify-between items-center gap-x-4">
           <div className="flex gap-2">
@@ -258,7 +258,7 @@ export default function FilterSheet() {
                 "Apply"
               )}
             </Button>
-
+ 
             <Button
               variant="destructive"
               size="sm"
@@ -283,3 +283,4 @@ export default function FilterSheet() {
     </Sheet>
   );
 }
+ 
