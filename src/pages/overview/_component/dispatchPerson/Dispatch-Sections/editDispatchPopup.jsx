@@ -54,6 +54,17 @@ const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
         }
     };
 
+    const handlePush = async () => {
+        try {
+            await saveDispatch(editedDispatch).unwrap();
+            toast.success("Dispatch updated successfully");
+            onClose();
+        } catch (err) {
+            toast.error("Failed to update dispatch");
+            console.error(err);
+        }
+    };
+
     return (
         <div className="space-y-4 p-4">
             <DispatchSelect
@@ -71,11 +82,14 @@ const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
             <DispatchMeta data={editedDispatch} enabled={true} />
 
             <div className="flex justify-end gap-2 mt-6">
-                <Button variant="destructive" onClick={onClose}>
-                    Cancel
-                </Button>
                 <Button onClick={handleUpdate} disabled={isLoading} variant="apply">
-                    {isLoading ? "Updating..." : "Update"}
+                    {isLoading ? "UPDATING..." : "UPDATE"}
+                </Button>
+                <Button onClick={handlePush} disabled={isLoading} variant="apply">
+                    {isLoading ? "PUSHING..." : "PUSH"}
+                </Button>
+                <Button variant="destructive" onClick={onClose}>
+                    CANCEL
                 </Button>
             </div>
         </div>
