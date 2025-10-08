@@ -42,11 +42,11 @@ export default function DispatchMain() {
     pageSize: 50,
   });
 
-  const dataToDisplay = searchValue
-    ? searchData?.invoices || []
-    : savedData?.items || [];
-
-  const isLoading = searchValue ? isSearching : isLoadingSaved;
+  const hasSearchResults = searchValue?.trim()?.length > 0;
+  const dataToDisplay = hasSearchResults
+    ? searchData?.invoices ?? []
+    : savedData?.items ?? [];
+  const isLoading = hasSearchResults ? isSearching : isLoadingSaved;
 
   return (
     <div className="p-1 w-full">
@@ -69,7 +69,7 @@ export default function DispatchMain() {
         </div>
       </div>
 
-      <div className="w-full">
+      <div key={searchValue || 'saved'} className="w-full">
         <DispatchGrid data={dataToDisplay} isLoading={isLoading} />
       </div>
     </div>
