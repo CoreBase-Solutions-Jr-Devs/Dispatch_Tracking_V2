@@ -7,6 +7,7 @@ import DispatchPopup from "./Dispatch/popup.jsx";
 import DeliveryPopup from "./Delivery/popup.jsx";
 import DispatchMainPopup from "../../dispatchPerson/Dispatch-Sections/mainpopup.jsx";
 import StartPopup from "./sharedPopup/startpopup";
+import EditDispatchPopup from "../../dispatchPerson/Dispatch-Sections/editDispatchPopup.jsx";
 
 const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +33,8 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
       case "storepush":
       case "verificationpush":
         return StartPopup;
+      case "dispatchedit":
+        return EditDispatchPopup;
       default:
         return () => (
           <div className="p-4 text-muted-foreground">
@@ -49,7 +52,7 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
     case "storepush":
     case "verificationstart":
     case "dispatchstart":
-    case "verificationpush":
+       case "verificationpush":
       dialogClass = "sm:max-w-sm";
       break;
     case "dispatch":
