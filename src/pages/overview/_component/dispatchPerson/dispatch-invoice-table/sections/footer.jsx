@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
@@ -36,11 +36,20 @@ export default function DispatchFooter({
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
 
-  const { courierDetails, driverDetails } = useSelector((state) => state.dispatch);
+  const { courierDetails, driverDetails, updatedDispatches } = useSelector((state) => state.dispatch);
   const dispatch = useAppDispatch();
 
   const [startDispatch] = useStartDispatchProcessMutation();
   const [sendDispatch] = usePushDispatchProcessMutation();
+
+  // Ensure Start is disabled if there are no selected dispatches
+  useEffect(() => {
+    if (updatedDispatches && updatedDispatches.length > 0) {
+      setStartDisabled(false);
+    } else {
+      setStartDisabled(true);
+    }
+  }, [updatedDispatches]);
 
   const handleStart = async () => {
     try {
