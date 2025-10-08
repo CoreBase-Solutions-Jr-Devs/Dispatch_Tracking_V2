@@ -157,10 +157,12 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 50;
 
-  const { data: savedDispatches, isFetching } = useGetSavedDispatchedInvoicesQuery({
-    pageNumber,
-    pageSize,
-  });
+  const { data: savedDispatches, isFetching } = useGetSavedDispatchedInvoicesQuery(
+      { pageNumber, pageSize },
+      { skip: data?.length > 0 }
+  );
+
+  const displayData = data?.length > 0 ? data : savedDispatches?.items || [];
 
   const columns = useMemo(
     () => [
@@ -230,7 +232,7 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
   return (
     <div className="space-y-4">
       <DataTable
-        data={savedDispatches?.items || []}
+        data={displayData}
         columns={columns}
         selection
         isLoading={isFetching}
