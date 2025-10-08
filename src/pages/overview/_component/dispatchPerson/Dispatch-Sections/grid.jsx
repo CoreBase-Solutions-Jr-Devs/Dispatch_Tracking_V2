@@ -72,6 +72,22 @@ const renderDateTime = (val) => (
   <span className="font-mono text-sm font-medium">{formatUKDateTime(val)}</span>
 );
 
+const renderDuration = (durationSeconds, avgDuration) => {
+  if (durationSeconds == null)
+    return (
+      <span className="text-muted-foreground font-mono font-medium text-sm ">
+        —
+      </span>
+    );
+  const colorClass =
+    durationSeconds > avgDuration ? "text-red-600" : "text-green-600";
+  return (
+    <span className={`font-medium ${colorClass}`}>
+      {formatDuration(durationSeconds)}
+    </span>
+  );
+};
+
 const formatDuration = (seconds) => {
   if (!seconds && seconds !== 0) return "—";
   const days = Math.floor(seconds / 86400);
@@ -155,20 +171,20 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         cell: ({ row }) => renderText(row.original.collectionType),
       },
       {
-        accessorKey: "dispatchDateTime",
+        accessorKey: "dispatchStart",
         header: "Disp.Start",
-        cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
+        cell: ({ row }) => renderDateTime(row.original.dispatchStart),
       },
       {
-        accessorKey: "dispatchDateTime",
+        accessorKey: "dispatchEnd",
         header: "Disp.End",
-        cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
+        cell: ({ row }) => renderDateTime(row.original.dispatchEnd),
       },
       {
         accessorKey: "durationSeconds",
         header: "Duration",
         cell: ({ row }) =>
-          renderText(formatDuration(row.original.durationSeconds)),
+          renderText(renderDuration(row.original.durationSeconds)),
       },
       {
         accessorKey: "amount",
@@ -216,7 +232,7 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Records: {data?.totalCount || 0}</span>
+        <span>Total Records: {savedDispatches?.totalCount || 0}</span>
         <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
     </div>
