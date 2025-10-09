@@ -153,7 +153,7 @@ const renderActions = (row) => (
   </EditStatusDialog>
 );
 
-export default function DispatchGrid({ data = [], isLoading = false }) {
+export default function DispatchGrid({ data = [], isLoading = false, isSearch }) {
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 50;
 
@@ -162,7 +162,11 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
       { skip: data?.length > 0 }
   );
 
-  const displayData = data?.length > 0 ? data : savedDispatches?.items || [];
+  const isSearchResult = data?.length > 0;
+
+  const displayData = isSearchResult
+    ? data
+    : savedDispatches?.items || [];
 
   const columns = useMemo(
     () => [
@@ -226,8 +230,24 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
     []
   );
 
-  const totalValue =
-    data?.items?.reduce((acc, cur) => acc + (cur.amount || 0), 0) || 0;
+  const totalValue = displayData.reduce(
+    (sum, cur) => sum + (Number(cur.amount) || 0),
+    0
+  );
+
+  const paginationData = isSearchResult
+    ? {
+        pageNumber: 1,
+        pageSize: data.length || 1,
+        totalItems: data.length || 0,
+        totalPages: 1,
+      }
+    : {
+        pageNumber: savedDispatches?.pageNumber || 1,
+        pageSize: savedDispatches?.pageSize || pageSize,
+        totalItems: savedDispatches?.totalCount || 0,
+        totalPages: savedDispatches?.totalPages || 1,
+      };
 
   return (
     <div className="space-y-4">
@@ -239,16 +259,11 @@ export default function DispatchGrid({ data = [], isLoading = false }) {
         emptyTitle="No dispatch records found"
         isShowPagination
         onPageChange={setPageNumber}
-        pagination={{
-          pageNumber: savedDispatches?.pageNumber || 1,
-          pageSize: savedDispatches?.pageSize || pageSize,
-          totalItems: savedDispatches?.totalCount || 0,
-          totalPages: savedDispatches?.totalPages || 1,
-        }}
+        pagination={paginationData}
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Records: {savedDispatches?.totalCount || 0}</span>
+        <span>Total Records: {paginationData.totalItems}</span>
         <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
     </div>

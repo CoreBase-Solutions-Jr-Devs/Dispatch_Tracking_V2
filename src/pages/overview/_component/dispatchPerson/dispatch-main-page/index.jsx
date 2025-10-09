@@ -70,7 +70,7 @@ export default function DispatchMain() {
       </div>
 
       <div key={searchValue || 'saved'} className="w-full">
-        <DispatchGrid data={dataToDisplay} isLoading={isLoading} />
+        <DispatchGrid data={dataToDisplay} isLoading={isLoading} isSearch={hasSearchResults}/>
       </div>
     </div>
   );

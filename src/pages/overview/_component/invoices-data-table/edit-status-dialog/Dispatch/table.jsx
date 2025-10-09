@@ -84,62 +84,7 @@ export default function DispatchTable({
 }) {
   const dispatch = useDispatch();
 
-  // Select Invoices API
-  // const [selectInvoice, { data: selectedData, isLoading, isError }] = useSelectDispatchInvoiceMutation();
-
-  // const dispatchSelected = data?.invoices.isSelected;
   const rows = data;
-
-  // const handleRowSelection = (value, row) => {
-  //   const payload = {
-  //     dispatchId: row?.dispatchId,
-  //     invoices: [
-  //       {
-  //         invoiceNo: row?.invoiceNo,
-  //         isSelected: value,
-  //       },
-  //     ],
-  //   };
-  //   console.log(value, row);
-  //   // setChecked(!checked);
-  //   handleSelectionApi(payload);
-  //   // handleSelectionsAPI(payload);
-  // };
-
-  // const handleSelectionApi = (data) => {
-  //   selectInvoice(data)
-  //     .unwrap()
-  //     .then((data) => {
-  //       console.log(data);
-  //       toast.success("selection successfully");
-  //       // if (refetchData) refetchData();
-  //     })
-  //     .catch((error) => {
-  //       let description = "Please check your credentials and try again.";
-  //       if (error?.data?.errors) {
-  //         const errorMessages = Object.values(error.data.errors).flat();
-  //         if (errorMessages.length > 0) description = errorMessages.join(" ");
-  //       } else if (error?.data?.message) {
-  //         description = error.data.message;
-  //       }
-  //       toast.error("Dispatch Invoice Selection Failed", { description, duration: 4000 });
-  //     });
-  // };
-
-  // const handleSelectionsAPI = async (formData) => {
-  //   try {
-  //     const data = await selectInvoice(formData).unwrap();
-  //     dispatch(setInvoices({ invoices: data.invoices, pagination: data.pagination }));
-  //   } catch (error) {
-  //     let description = `Error selecting invoices. Please try again`;
-  //     if (error?.data?.errors) {
-  //       const errorMessages = Object.values(error.data.errors).flat();
-  //       if (errorMessages.length > 0) description = errorMessages.join(" ");
-  //     } else if (error?.data?.message) description = error.data.message;
-
-  //     toast.error("Dispatch Invoice Selection Failed", { description, duration: 4000 });
-  //   }
-  // };
 
   return (
     <div className="overflow-x-auto">
@@ -225,10 +170,10 @@ export default function DispatchTable({
                     {renderText(row?.items)}
                   </TableCell>
                   <TableCell className="py-1 px-2">
-                    {renderText(row?.payTerms)}
+                    {renderText(row?.payTerms || row?.paymentTerms)}
                   </TableCell>
                   <TableCell className="py-1 px-2">
-                    {renderDateTime(row?.verifiedDateTime)}
+                    {renderDateTime(row?.verifiedDateTime || row?.verificationDateTime)}
                   </TableCell>
                   <TableCell className="py-1 px-2">
                     {renderText(formatDuration(row?.durationSeconds))}
