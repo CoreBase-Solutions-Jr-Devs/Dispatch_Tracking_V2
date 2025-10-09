@@ -1,99 +1,126 @@
 import React, { useState, useEffect } from "react";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/app/hook";
+import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
+import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
+import { setDriverDetails } from "@/features/dispatch/dispatchSlice";
+
 import DispatchSelect from "../dispatch-invoice-table/sections/select";
 import DispatchDetails from "../dispatch-invoice-table/sections/details";
 import DispatchRemarks from "../dispatch-invoice-table/sections/remarks";
 import DispatchMeta from "../dispatch-invoice-table/sections/meta";
-import { Button } from "@/components/ui/button";
-import { usePushDispatchProcessMutation } from "@/features/dispatch/dispatchAPI";
-import { toast } from "sonner";
-import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
-import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
-import { useAppDispatch } from "@/app/hook";
-import { setDriverDetails } from "@/features/dispatch/dispatchSlice";
 
 const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
-    const [saveDispatch, { isLoading }] = usePushDispatchProcessMutation();
-    const [editedDispatch, setEditedDispatch] = useState({
-        dispatchPerson: "",
-        dispatchRoute: "",
-        vehicle: "",
-        collectionType: "",
-        remarks: "",
-        ...selectedDispatch,
-    });
+  const dispatch = useAppDispatch();
 
-    const handleFieldChange = (field, value) => {
-        setEditedDispatch((prev) => ({ ...prev, [field]: value }));
-    };
+  const [editedDispatch, setEditedDispatch] = useState({
+    dispatchPerson: "",
+    dispatchRoute: "",
+    vehicle: "",
+    collectionType: "",
+    remarks: "",
+    ...selectedDispatch,
+  });
 
-    const { data: filterOptions, isLoading: filterLoading } = useFilterOptionsQuery();
-    const deliveryGuyOptions = Array.isArray(filterOptions)
-        ? filterOptions.find((opt) => opt.key === "deliveryGuy")?.options || []
-        : [];
+  const handleFieldChange = (field, value) => {
+    setEditedDispatch((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
-    const { data: driverDetails } = useGetDeliveryDriverQuery(
-        editedDispatch.dispatchPerson,
-        {
-            skip: editedDispatch.collectionType !== "delivery" || !editedDispatch.dispatchPerson,
-        }
-    );
+  const {
+    data: filterOptions,
+    isLoading: filterLoading,
+    isError: filterError,
+  } = useFilterOptionsQuery();
 
-    const dispatch = useAppDispatch();
-    useEffect(() => {
-        if (driverDetails) dispatch(setDriverDetails(driverDetails));
-    }, [driverDetails]);
+  const deliveryGuyOptions =
+    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
 
-    const handleUpdate = async () => {
-        try {
-            await saveDispatch(editedDispatch).unwrap();
-            toast.success("Dispatch updated successfully");
-            onClose();
-        } catch (err) {
-            toast.error("Failed to update dispatch");
-            console.error(err);
-        }
-    };
+  const {
+    data: driverDetails,
+    isLoading: driverLoading,
+    isError: driverError,
+    error: driverApiError,
+  } = useGetDeliveryDriverQuery(editedDispatch.dispatchPerson, {
+    skip:
+      editedDispatch.collectionType !== "delivery" ||
+      !editedDispatch.dispatchPerson,
+  });
 
-    const handlePush = async () => {
-        try {
-            await saveDispatch(editedDispatch).unwrap();
-            toast.success("Dispatch updated successfully");
-            onClose();
-        } catch (err) {
-            toast.error("Failed to update dispatch");
-            console.error(err);
-        }
-    };
+  useEffect(() => {
+    if (driverDetails) {
+      dispatch(setDriverDetails(driverDetails));
+    }
+  }, [driverDetails, dispatch]);
 
-    return (
-        <div className="space-y-4 p-4">
-            <DispatchSelect
+  return (
+    <div className="my-1 max-h-[90vh] px-2 space-y-4">
+      <h2 className="text-lg font-semibold text-foreground">
+        Edit Dispatch Details
+      </h2>
+
+      <Separator className="my-2" />
+
+      <div className="flex justify-center items-start space-x-6">
+        <div className="w-3/4">
+          <Card className="flex flex-col p-3 h-full">
+            <CardContent className="space-y-4">
+              <DispatchSelect
                 values={editedDispatch}
                 onChange={handleFieldChange}
                 deliveryGuyOptions={deliveryGuyOptions}
                 enabled={true}
-            />
-            <DispatchDetails
-                data={driverDetails || editedDispatch}
-                collectionType={editedDispatch.collectionType}
-                enabled={true}
-            />
-            <DispatchRemarks data={editedDispatch} enabled={true} />
-            <DispatchMeta data={editedDispatch} enabled={true} />
+              />
 
-            <div className="flex justify-end gap-2 mt-6">
-                <Button onClick={handleUpdate} disabled={isLoading} variant="apply">
-                    {isLoading ? "UPDATING..." : "UPDATE"}
-                </Button>
-                <Button onClick={handlePush} disabled={isLoading} variant="apply">
-                    {isLoading ? "PUSHING..." : "PUSH"}
-                </Button>
-                <Button variant="destructive" onClick={onClose}>
-                    CANCEL
-                </Button>
-            </div>
+              <DispatchDetails
+                data={driverDetails}
+                collectionType={editedDispatch.collectionType}
+                deliveryPerson={editedDispatch.dispatchPerson}
+                driverLoading={driverLoading}
+                driverError={driverError}
+                driverApiError={driverApiError}
+                enabled={true}
+              />
+
+              <DispatchRemarks
+                data={editedDispatch}
+                onChange={handleFieldChange}
+                enabled={true}
+              />
+
+              <DispatchMeta data={editedDispatch} enabled={true} />
+            </CardContent>
+          </Card>
         </div>
-    );
+
+        <div className="w-1/4 flex flex-col justify-start space-y-3">
+          {" "}
+          <Button
+           
+            variant="apply"
+            className="w-full"
+          >
+            UPDATE
+          </Button>{" "}
+          <Button
+            
+            variant="apply"
+            className="w-full"
+          >
+        PUSH
+          </Button>
+          <Button variant="destructive" onClick={onClose} className="w-full">
+            CLOSE
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default EditDispatchPopup;
