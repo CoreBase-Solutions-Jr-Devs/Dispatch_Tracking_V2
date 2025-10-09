@@ -63,6 +63,16 @@ const dispatchIds =
       editedDispatch.collectionType !== "delivery" ||
       !editedDispatch.dispatchPerson,
   });
+  const {
+    data: driverDetails,
+    isLoading: driverLoading,
+    isError: driverError,
+    error: driverApiError,
+  } = useGetDeliveryDriverQuery(editedDispatch.dispatchPerson, {
+    skip:
+      editedDispatch.collectionType !== "delivery" ||
+      !editedDispatch.dispatchPerson,
+  });
 
   useEffect(() => {
     if (driverDetails) {
