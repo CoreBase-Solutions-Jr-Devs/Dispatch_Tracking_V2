@@ -1,5 +1,6 @@
+ 
 import { apiClient } from "@/app/api-client";
-
+ 
 export const VerificationApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getVerificationInvoices: builder.query({
@@ -9,7 +10,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         params: { pageNumber, pageSize },
       }),
     }),
-
+ 
     getFilteredVerificationInvoices: builder.query({
       query: ({
         pageNumber = 1,
@@ -24,7 +25,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         params: {
           pageNumber,
           pageSize,
-
+ 
           startDate: startDate
             ? new Date(startDate).toISOString().split("T")[0]
             : undefined,
@@ -37,7 +38,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       providesTags: ["verification_invoices"],
     }),
-
+ 
     searchVerificationInvoices: builder.query({
       query: ({ searchWord }) => ({
         url: "/verification/search",
@@ -46,7 +47,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["verification_invoices"],
     }),
-
+ 
     getVerificationTracking: builder.query({
       query: (docNum) => ({
         url: `/verification/${docNum}/verification-tracking`,
@@ -54,7 +55,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       providesTags: ["verification_tracking"],
     }),
-
+ 
     startVerificationProcess: builder.mutation({
       query: (docNum) => ({
         url: `/verification/${docNum}/start`,
@@ -66,7 +67,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         "store_invoices",
       ],
     }),
-
+ 
     pushVerificationInvoice: builder.mutation({
       query: ({ docNum, totalWeightKg = 0, verificationRemarks = "" }) => ({
         url: `/verification/${docNum}/push`,
@@ -81,7 +82,7 @@ export const VerificationApi = apiClient.injectEndpoints({
     }),
   }),
 });
-
+ 
 export const {
   useGetVerificationInvoicesQuery,
   useGetFilteredVerificationInvoicesQuery,
@@ -91,3 +92,4 @@ export const {
   useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
 } = VerificationApi;
+ 
