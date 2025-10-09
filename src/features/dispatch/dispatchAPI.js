@@ -12,7 +12,7 @@ export const dispatchApi = apiClient.injectEndpoints({
           params,
         };
       },
-      providesTags: ["saved_dispatched"],
+      providesTags: ["verified_invoices"],
     }),
     dispatchSearch: builder.query({
       query: (query) => {
