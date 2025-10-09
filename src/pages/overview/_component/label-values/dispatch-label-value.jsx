@@ -13,6 +13,24 @@ const DispatchLabelValue = () => {
 
   const { data: aggregateStats, isLoading, isError } = useGetAggregateDispatchesQuery();
 
+  const formatDuration = (seconds) => {
+    if (!seconds && seconds !== 0) return "—";
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    return (
+      [
+        days && `${days}D`,
+        hours && `${hours}H`,
+        mins && `${mins}M`,
+        secs && `${secs}S`,
+      ]
+        .filter(Boolean)
+        .join(" ") || "0m"
+    );
+  };
 
   if (isLoading) {
     return (
@@ -63,6 +81,12 @@ const DispatchLabelValue = () => {
         status="Delivered"
         label="Dispatched"
         value={aggregateStats?.dispatchedCount || 0}
+      />
+
+      <LabelValue
+        status="Delivered"
+        label="Avg. Disp.Time"
+        value={formatDuration(aggregateStats?.averageDurationSeconds) || 0}
       />
     </div>
   );

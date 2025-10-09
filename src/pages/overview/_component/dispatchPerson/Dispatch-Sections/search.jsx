@@ -4,28 +4,18 @@ import { useEffect, useState } from "react";
 
 export default function DispatchSearch({
   placeholder = "DispatchNo/Route/Dispatcher",
-  onSearch,
   searchValue,
   setSearchValue,
 }) {
-  const [debounced, setDebounced] = useState(searchValue);
+  const [localValue, setLocalValue] = useState(searchValue);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    onSearch?.(value);
-  };
-
-  // Debounce search input
+  
   useEffect(() => {
-    const handler = setTimeout(() => setDebounced(searchValue), 500);
-    return () => clearTimeout(handler);
-  }, [searchValue]);
-
-  // Trigger parent search callback when debounced value changes
-  useEffect(() => {
-    if (onSearch) onSearch(debounced);
-  }, [debounced]);
+    const delay = setTimeout(() => {
+      setSearchValue(localValue.trim());
+    }, 500); 
+    return () => clearTimeout(delay);
+  }, [localValue, setSearchValue]);
 
   return (
     <section className="flex justify-between items-center w-full">
@@ -33,8 +23,8 @@ export default function DispatchSearch({
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
         <Input
           type="text"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          value={localValue}
+          onChange={(e) => setLocalValue(e.target.value)}
           placeholder={placeholder}
           className="w-60 pl-9 pr-3 py-2 bg-gray-100"
         />
