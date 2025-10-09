@@ -21,20 +21,15 @@ import DispatchDetails from "../dispatch-invoice-table/sections/details";
 import DispatchRemarks from "../dispatch-invoice-table/sections/remarks";
 import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 
-const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
+const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const dispatch = useAppDispatch();
+
+  const { updatedDispatches } = useSelector((state) => state.dispatch);
+
+  let dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
-  const { updatedDispatches, dispatchIds: sliceDispatchIds } = useSelector(
-    (state) => state.dispatch
-  );
-
-const dispatchIds =
-  updatedDispatches?.length > 0
-    ? updatedDispatches.map((item) => item.dispatchId)
-    : [selectedDispatch?.dispatchId];
-
 
   const [editedDispatch, setEditedDispatch] = useState({
     dispatchPerson: "",
@@ -63,7 +58,6 @@ const dispatchIds =
       editedDispatch.collectionType !== "delivery" ||
       !editedDispatch.dispatchPerson,
   });
- 
 
   useEffect(() => {
     if (driverDetails) {
@@ -88,7 +82,7 @@ const dispatchIds =
 
   const preparePayload = (isPush = false) => {
     const payload = {
-      dispatchIds,
+      dispatchIds: dispatchIDs,
       collectionType: editedDispatch.collectionType,
       routeName: editedDispatch.dispatchRoute || null,
       driverName: driverDetails?.driverName || null,
@@ -96,7 +90,7 @@ const dispatchIds =
       carMake: driverDetails?.carMake || null,
       carPlate: driverDetails?.regNo || null,
       dispatchRemarks: editedDispatch.remarks || "",
-      isPush: isPush,
+      isPush,
     };
 
     cleanForm(payload, editedDispatch.collectionType);
@@ -105,6 +99,8 @@ const dispatchIds =
 
   const handleAction = async (isPush = false) => {
     const payload = preparePayload(isPush);
+    if (!payload) return;
+
     try {
       await pushDispatch(payload).unwrap();
       dispatch(setDispatch(payload));
@@ -118,9 +114,7 @@ const dispatchIds =
     } catch (error) {
       toast.error(
         isPush ? "Failed to push dispatch" : "Failed to update dispatch",
-        {
-          description: error?.data?.message || "Please try again",
-        }
+        { description: error?.data?.message || "Please try again" }
       );
     }
   };
@@ -164,11 +158,13 @@ const dispatchIds =
         </CardContent>
       </Card>
 
-      {/* Buttons at bottom */}
       <div className="flex flex-col md:flex-row justify-end md:space-x-3 mt-4 space-y-2 md:space-y-0">
         <Button
           variant="apply"
-          onClick={() => handleAction(false)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAction(false);
+          }}
           disabled={isAnyLoading}
         >
           UPDATE
@@ -176,7 +172,10 @@ const dispatchIds =
 
         <Button
           variant="apply"
-          onClick={() => handleAction(true)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAction(true);
+          }}
           disabled={isAnyLoading}
         >
           PUSH
