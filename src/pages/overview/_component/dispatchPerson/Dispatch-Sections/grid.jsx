@@ -3,7 +3,8 @@ import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
+// import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatchAPI";
 import EditStatusDialog from "../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 const renderText = (text) => (
@@ -18,9 +19,22 @@ const STATUS_STYLES = {
   Muted: "bg-muted text-muted-foreground border-border",
 };
 
-const renderStatus = (status) => {
+const getStatusLabel = (statusCode) => {
+  const statusMap = {
+    0: "Verified",
+    1: "Selected",
+    2: "In Dispatch",
+    3: "Saved",
+    4: "Dispatched",
+  };
+  return statusMap[Number(statusCode)] || "Unknown";
+}
+
+const renderStatus = (statusCode) => {
+  const statusLabel = getStatusLabel(statusCode);
   let statusClass;
-  switch (status?.toLowerCase()) {
+
+  switch (statusLabel) {
     case "pending":
     case "in process":
     case "recalled":
@@ -33,10 +47,11 @@ const renderStatus = (status) => {
       break;
     case "verified":
     case "in dispatch":
+    case "PendingPush":
       statusClass = STATUS_STYLES.Dispatch;
       break;
     case "return":
-    case "dispatched":
+    case "Dispatched":
     case "in delivery":
     case "saved":
       statusClass = STATUS_STYLES.Saved;
@@ -50,7 +65,7 @@ const renderStatus = (status) => {
       variant="outline"
       className={`${statusClass} w-28 justify-center rounded-md  font-medium px-3 py-1 border`}
     >
-      {status || "—"}
+      {statusLabel || "—"}
     </Badge>
   );
 };
@@ -70,6 +85,22 @@ const formatUKDateTime = (date) => {
 const renderDateTime = (val) => (
   <span className="font-mono text-sm font-medium">{formatUKDateTime(val)}</span>
 );
+
+const renderDuration = (durationSeconds, avgDuration) => {
+  if (durationSeconds == null)
+    return (
+      <span className="text-muted-foreground font-mono font-medium text-sm ">
+        —
+      </span>
+    );
+  const colorClass =
+    durationSeconds > avgDuration ? "text-red-600" : "text-green-600";
+  return (
+    <span className={`font-medium ${colorClass}`}>
+      {formatDuration(durationSeconds)}
+    </span>
+  );
+};
 
 const formatDuration = (seconds) => {
   if (!seconds && seconds !== 0) return "—";
@@ -122,14 +153,16 @@ const renderActions = (row) => (
   </EditStatusDialog>
 );
 
-export default function DispatchGrid() {
+export default function DispatchGrid({ data = [], isLoading = false }) {
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 50;
 
-  const { data, isFetching } = useGetSavedDispatchedQuery({
-    pageNumber,
-    pageSize,
-  });
+  const { data: savedDispatches, isFetching } = useGetSavedDispatchedInvoicesQuery(
+      { pageNumber, pageSize },
+      { skip: data?.length > 0 }
+  );
+
+  const displayData = data?.length > 0 ? data : savedDispatches?.items || [];
 
   const columns = useMemo(
     () => [
@@ -154,20 +187,20 @@ export default function DispatchGrid() {
         cell: ({ row }) => renderText(row.original.collectionType),
       },
       {
-        accessorKey: "dispatchDateTime",
+        accessorKey: "dispatchStart",
         header: "Disp.Start",
-        cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
+        cell: ({ row }) => renderDateTime(row.original.dispatchStart),
       },
       {
-        accessorKey: "dispatchDateTime",
+        accessorKey: "dispatchEnd",
         header: "Disp.End",
-        cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
+        cell: ({ row }) => renderDateTime(row.original.dispatchEnd),
       },
       {
         accessorKey: "durationSeconds",
         header: "Duration",
         cell: ({ row }) =>
-          renderText(formatDuration(row.original.durationSeconds)),
+          renderText(renderDuration(row.original.durationSeconds)),
       },
       {
         accessorKey: "amount",
@@ -199,7 +232,7 @@ export default function DispatchGrid() {
   return (
     <div className="space-y-4">
       <DataTable
-        data={data?.items || []}
+        data={displayData}
         columns={columns}
         selection
         isLoading={isFetching}
@@ -207,15 +240,15 @@ export default function DispatchGrid() {
         isShowPagination
         onPageChange={setPageNumber}
         pagination={{
-          pageNumber: data?.pageNumber || 1,
-          pageSize: data?.pageSize || pageSize,
-          totalItems: data?.totalCount || 0,
-          totalPages: data?.totalPages || 1,
+          pageNumber: savedDispatches?.pageNumber || 1,
+          pageSize: savedDispatches?.pageSize || pageSize,
+          totalItems: savedDispatches?.totalCount || 0,
+          totalPages: savedDispatches?.totalPages || 1,
         }}
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Records: {data?.totalCount || 0}</span>
+        <span>Total Records: {savedDispatches?.totalCount || 0}</span>
         <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
     </div>

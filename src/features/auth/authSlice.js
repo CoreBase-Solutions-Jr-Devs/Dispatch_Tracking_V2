@@ -12,14 +12,14 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action) => {
       state.accessToken = action.payload.accessToken;
-      state.expiresAt = action.payload.expiresAt;
+      // state.expiresAt = action.payload.expiresAt;
       state.user = action.payload.user;
     },
     updateCredentials: (state, action) => {
       const { accessToken, expiresAt, user } = action.payload;
 
       if (accessToken !== undefined) state.accessToken = accessToken;
-      if (expiresAt !== undefined) state.expiresAt = expiresAt;
+      // if (expiresAt !== undefined) state.expiresAt = expiresAt;
       if (user !== undefined) {
         state.user = state.user ? { ...state.user, ...user } : user;
       }

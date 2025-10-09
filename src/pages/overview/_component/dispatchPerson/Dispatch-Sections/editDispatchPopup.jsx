@@ -4,15 +4,15 @@ import DispatchDetails from "../dispatch-invoice-table/sections/details";
 import DispatchRemarks from "../dispatch-invoice-table/sections/remarks";
 import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 import { Button } from "@/components/ui/button";
-import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
+import { usePushDispatchProcessMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
-import { useGetDispatchDriverQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
 import { useAppDispatch } from "@/app/hook";
 import { setDriverDetails } from "@/features/dispatch/dispatchSlice";
 
 const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
-    const [saveDispatch, { isLoading }] = useSaveSelectedDispatchesMutation();
+    const [saveDispatch, { isLoading }] = usePushDispatchProcessMutation();
     const [editedDispatch, setEditedDispatch] = useState({
         dispatchPerson: "",
         dispatchRoute: "",
@@ -31,7 +31,7 @@ const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
         ? filterOptions.find((opt) => opt.key === "deliveryGuy")?.options || []
         : [];
 
-    const { data: driverDetails } = useGetDispatchDriverQuery(
+    const { data: driverDetails } = useGetDeliveryDriverQuery(
         editedDispatch.dispatchPerson,
         {
             skip: editedDispatch.collectionType !== "delivery" || !editedDispatch.dispatchPerson,
@@ -44,6 +44,17 @@ const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
     }, [driverDetails]);
 
     const handleUpdate = async () => {
+        try {
+            await saveDispatch(editedDispatch).unwrap();
+            toast.success("Dispatch updated successfully");
+            onClose();
+        } catch (err) {
+            toast.error("Failed to update dispatch");
+            console.error(err);
+        }
+    };
+
+    const handlePush = async () => {
         try {
             await saveDispatch(editedDispatch).unwrap();
             toast.success("Dispatch updated successfully");
@@ -71,11 +82,14 @@ const EditDispatchPopup = ({ selectedDispatch, onClose }) => {
             <DispatchMeta data={editedDispatch} enabled={true} />
 
             <div className="flex justify-end gap-2 mt-6">
-                <Button variant="destructive" onClick={onClose}>
-                    Cancel
-                </Button>
                 <Button onClick={handleUpdate} disabled={isLoading} variant="apply">
-                    {isLoading ? "Updating..." : "Update"}
+                    {isLoading ? "UPDATING..." : "UPDATE"}
+                </Button>
+                <Button onClick={handlePush} disabled={isLoading} variant="apply">
+                    {isLoading ? "PUSHING..." : "PUSH"}
+                </Button>
+                <Button variant="destructive" onClick={onClose}>
+                    CANCEL
                 </Button>
             </div>
         </div>

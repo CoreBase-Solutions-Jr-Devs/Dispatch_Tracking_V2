@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
-import { useGetSavedDispatchedDetailsQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetSavedDispatchedDetailsQuery } from "@/features/dispatch/dispatchAPI";
 import EditStatusDialog from "../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 const renderText = (text) => (

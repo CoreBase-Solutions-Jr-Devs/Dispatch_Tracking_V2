@@ -5,7 +5,7 @@ import { Search as SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import RoleBasedFilters from "../../../filter-sheet/role-based-filters";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
-import { useDispatchSearchQuery } from "@/features/Dispmain/dispatchAPI";
+import { useDispatchSearchQuery } from "@/features/dispatch/dispatchAPI";
 
 export default function DispatchSearch({
   value,
