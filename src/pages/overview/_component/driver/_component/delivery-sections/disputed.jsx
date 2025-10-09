@@ -6,7 +6,7 @@ import { useDisputedAmountsInvoicesMutation } from "@/features/delivery/delivery
 import { useState } from "react";
 import { toast } from "sonner";
 
-function DisputedDetails({ data }) {
+function DisputedDetails({ data, handleDispute }) {
   const [disputeDetails, setDisputeDetails] = useState({
     dispatchnum: data?.DISPATCHNUM || 0,
     bcode: data?.BCODE || 0,
@@ -45,6 +45,7 @@ function DisputedDetails({ data }) {
       .then((data) => {
         toast.success("Dispute resolved successful");
         console.log(data);
+        handleDispute();
       })
       .catch((error) => {
         toast.error("Dispute resolve Failed", {
@@ -98,8 +99,9 @@ function DisputedDetails({ data }) {
         />
       </div>
 
-      <div className="flex mt-1 justify-end">
+      <div className="flex mt-1 justify-end gap-3">
         <Button
+          type="submit"
           variant="default"
           // onClick={generateOTP}
           disabled={isLoading}
@@ -107,6 +109,17 @@ function DisputedDetails({ data }) {
         >
           Resolve
         </Button>
+        {!data?.ISDISPUTED && (
+          <Button
+            variant="destructive"
+            type="button"
+            onClick={handleDispute}
+            disabled={isLoading}
+            className="text-xs font-medium"
+          >
+            Cancel
+          </Button>
+        )}
       </div>
     </form>
   );
