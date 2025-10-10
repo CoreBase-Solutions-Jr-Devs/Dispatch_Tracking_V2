@@ -5,6 +5,11 @@ import { AUTH_ROUTES } from "./common/routePath";
 const ProtectedRoute = ({ allowedRoles }) => {
   const { accessToken, user } = useSelector((state) => state.auth);
 
+  // let rights = user["userrights"]?.map((item) => item?.moduleCode);
+
+  // const role =
+  //   user["userrights"]?.map((item) => item?.moduleArea)[0]?.toLowerCase() || "";
+
   // Wait until user state is loaded
   if (accessToken === undefined || user === undefined) return null;
 
@@ -14,9 +19,12 @@ const ProtectedRoute = ({ allowedRoles }) => {
   }
 
   // Role not allowed? redirect to unauthorized page
-  if (allowedRoles && !allowedRoles.includes(user.userRole)) {
-    return <Navigate to="/unauthorized" replace />;
-  }
+  // if (allowedRoles && !allowedRoles.includes(user.userRole)) {
+  //   return <Navigate to="/unauthorized" replace />;
+  // }
+  // if (allowedRoles && !allowedRoles.join(" ").includes(role)) {
+  //   return <Navigate to="/unauthorized" replace />;
+  // }
 
   return <Outlet />;
 };

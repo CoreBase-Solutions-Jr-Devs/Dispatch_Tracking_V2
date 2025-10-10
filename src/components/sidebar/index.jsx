@@ -12,11 +12,16 @@ const SideBar = () => {
   const { sidebarCollapsed } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
 
+  const role = user["userrights"]?.map((item) => item?.moduleArea)[0] || "";
+
   if (!user) return null;
 
   // Filters routes based on user role
+  // const allowedRoutes = protectedRoutePaths.filter((route) =>
+  //   route.roles.includes(role)
+  // );
   const allowedRoutes = protectedRoutePaths.filter((route) =>
-    route.roles.includes(user.userRole)
+    route.roles.join(" ").includes(role)
   );
 
   // Global hotkey listener: Ctrl + C
@@ -61,7 +66,8 @@ const SideBar = () => {
                 <NavLink
                   className={cn(
                     "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
-                    pathname === route.path && "bg-secondary text-secondary-foreground"
+                    pathname === route.path &&
+                      "bg-secondary text-secondary-foreground"
                   )}
                   to={route.path}
                 >

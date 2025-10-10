@@ -21,51 +21,85 @@ import VerificationPage from "./_component/invoices-data-table/Verif-invoices";
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
 
-  const view = roleToView(user?.userRole);
-  const pageMeta = viewMeta[view];
+  // let rights = user["userrights"]?.map((item) => {
+  //   return {
+  //     modul: item?.modul,
+  //     moduleArea: item?.moduleArea,
+  //     moduleCode: item?.moduleCode,
+  //   };
+  // });
+  let rights = user["userrights"]?.map((item) => item?.moduleCode);
+  let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
+
+  // const view = roleToView(user?.userRole);
+  const pageMeta = viewMeta[moduleArea[0]?.toLowerCase() || ""];
+
+  // const renderFilterSheet = () => {
+  //   switch (user?.userRole) {
+  //     case "StorePerson":
+  //     case "VerificationPerson":
+  //       // case "DispatchPerson":
+  //       return <FilterSheet />;
+  //     default:
+  //       return null;
+  //   }
+  // };
+
+  // const renderLabelValues = () => {
+  //   switch (user?.userRole) {
+  //     // case "Admin":
+  //     // case "Client":
+  //     //   return <AdminLabelValue />;
+  //     case "StorePerson":
+  //       return <StoreLabelValue />;
+  //     case "VerificationPerson":
+  //       return <VerificationLabelValue />;
+  //     case "DispatchPerson":
+  //       return <DispatchLabelValue />;
+  //     // case "Driver":
+  //     //   return <DeliveryLabelValue />;
+  //     default:
+  //       return null;
+  //   }
+  // };
+
+  // const renderMainContent = () => {
+  //   switch (user?.userRole) {
+  //     case "Driver":
+  //       return <DeliveryInvoice />;
+  //     case "DispatchPerson":
+  //       return <DispatchMain />;
+  //     case "StorePerson":
+  //       return <StorePage />;
+  //     case "VerificationPerson":
+  //       return <VerificationPage />;
+  //     default:
+  //       return <InvoicesDataTable />;
+  //   }
+  // };
 
   const renderFilterSheet = () => {
-    switch (user?.userRole) {
-      case "StorePerson":
-      case "VerificationPerson":
-        // case "DispatchPerson":
-        return <FilterSheet />;
-      default:
-        return null;
-    }
+    if (rights?.includes(5145) || rights?.includes(5146))
+      return <FilterSheet />;
+
+    return null;
   };
 
   const renderLabelValues = () => {
-    switch (user?.userRole) {
-      // case "Admin":
-      // case "Client":
-      //   return <AdminLabelValue />;
-      case "StorePerson":
-        return <StoreLabelValue />;
-      case "VerificationPerson":
-        return <VerificationLabelValue />;
-      case "DispatchPerson":
-        return <DispatchLabelValue />;
-      // case "Driver":
-      //   return <DeliveryLabelValue />;
-      default:
-        return null;
-    }
+    if (rights?.includes(5147)) return <DispatchLabelValue />;
+    if (rights?.includes(5145)) return <StoreLabelValue />;
+    if (rights?.includes(5146)) return <VerificationLabelValue />;
+
+    return null;
   };
 
   const renderMainContent = () => {
-    switch (user?.userRole) {
-      case "Driver":
-        return <DeliveryInvoice />;
-      case "DispatchPerson":
-        return <DispatchMain />;
-      case "StorePerson":
-        return <StorePage />;
-      case "VerificationPerson":
-        return <VerificationPage />;
-      default:
-        return <InvoicesDataTable />;
-    }
+    if (rights?.includes(5148)) return <DeliveryInvoice />;
+    if (rights?.includes(5147)) return <DispatchMain />;
+    if (rights?.includes(5145)) return <StorePage />;
+    if (rights?.includes(5146)) return <VerificationPage />;
+
+    return <InvoicesDataTable />;
   };
 
   return (
@@ -75,7 +109,6 @@ const Overview = () => {
       middleAction={
         <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
           {renderLabelValues()}
-          {/* <InvoiceToolbar role={view} /> */}
         </div>
       }
       rightAction={
@@ -90,6 +123,7 @@ const Overview = () => {
         {renderMainContent()}
       </div>
     </PageLayout>
+    // <h1>Greatness Awaits</h1>
   );
 };
 
