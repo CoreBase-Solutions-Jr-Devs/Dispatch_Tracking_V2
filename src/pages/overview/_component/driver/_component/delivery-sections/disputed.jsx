@@ -109,17 +109,18 @@ function DisputedDetails({ data, handleDispute }) {
         >
           Resolve
         </Button>
-        {!data?.ISDISPUTED && (
-          <Button
-            variant="destructive"
-            type="button"
-            onClick={handleDispute}
-            disabled={isLoading}
-            className="text-xs font-medium"
-          >
-            Cancel
-          </Button>
-        )}
+        <Button
+          variant="destructive"
+          type="button"
+          onClick={handleDispute}
+          disabled={isLoading}
+          className="text-xs font-medium"
+        >
+          Cancel
+        </Button>
+        {/* {!data?.ISDISPUTED && (
+
+        )} */}
       </div>
     </form>
   );
