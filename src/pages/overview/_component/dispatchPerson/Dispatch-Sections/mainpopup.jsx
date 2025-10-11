@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useGetSavedDispatchedDetailsQuery } from "@/features/dispatch/dispatchAPI";
 import EditStatusDialog from "../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
@@ -104,10 +105,12 @@ export default function DispatchMainPopup({ rowData, onClose }) {
         <EditStatusDialog
           rowData={rowData}
           view="dispatchedit"
-          onSubmit={(updatedData) => console.log("Edited collection type:", updatedData)}
+          onSubmit={(updatedData) =>
+            console.log("Edited collection type:", updatedData)
+          }
         >
-          <Button variant="apply">
-            Edit
+          <Button variant="apply" onClick={(e) => e.stopPropagation()}>
+            Edit{" "}
           </Button>
         </EditStatusDialog>
 

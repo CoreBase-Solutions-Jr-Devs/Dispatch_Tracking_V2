@@ -49,7 +49,9 @@ export default function FilterSheet() {
   const roleFilters = filterOptions?.filter((f) => f.key !== "dateRange") || [];
 
   const { user } = useSelector((state) => state.auth);
-  const role = roleToView(user?.userRole);
+  // const role = roleToView(user?.userRole);
+  const role =
+    user["userrights"]?.map((item) => item?.moduleArea)[0]?.toLowerCase() || "";
 
   const [filterInvoices, { isLoading }] = useRoleInvoiceFilter(role);
   const isCustomRange = dateRange === "CUSTOM_RANGE";

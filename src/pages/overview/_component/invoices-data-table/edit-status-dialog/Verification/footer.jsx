@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
- useStartVerificationProcessMutation,
+  useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
 } from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
@@ -31,34 +31,37 @@ export default function VerificationFooter({
 
   const [verificationStart] = useStartVerificationProcessMutation();
   const [verificationPush] = usePushVerificationInvoiceMutation();
-const handleStartApi = () => {
-  setStartDisabled(true);
-  setDispatchDisabled(true);
- console.log("RowData object:", rowData);
-  const docNum = Number(rowData.docNo); 
-  console.log("docNum:", docNum);
+  const handleStartApi = () => {
+    setStartDisabled(true);
+    setDispatchDisabled(true);
+    console.log("RowData object:", rowData);
+    const docNum = Number(rowData.docNo);
+    console.log("docNum:", docNum);
 
-  verificationStart(docNum)
-    .unwrap()
-    .then(() => {
-      toast.success("Verification process started successfully");
-      setDispatchDisabled(false);
-    })
-    .catch((error) => {
-      setStartDisabled(false);
-      setDispatchDisabled(true);
+    verificationStart(docNum)
+      .unwrap()
+      .then(() => {
+        toast.success("Verification process started successfully");
+        setDispatchDisabled(false);
+      })
+      .catch((error) => {
+        setStartDisabled(false);
+        setDispatchDisabled(true);
 
-      let description = "Please check your credentials and try again.";
-      if (error?.data?.errors) {
-        const errorMessages = Object.values(error.data.errors).flat();
-        if (errorMessages.length > 0) description = errorMessages.join(" ");
-      } else if (error?.data?.message) {
-        description = error.data.message;
-      }
+        let description = "Please check your credentials and try again.";
+        if (error?.data?.errors) {
+          const errorMessages = Object.values(error.data.errors).flat();
+          if (errorMessages.length > 0) description = errorMessages.join(" ");
+        } else if (error?.data?.message) {
+          description = error.data.message;
+        }
 
-      toast.error("Verification start failed", { description, duration: 4000 });
-    });
-};
+        toast.error("Verification start failed", {
+          description,
+          duration: 4000,
+        });
+      });
+  };
   // ✅ Start Dispatch
   const handleDispatch = async () => {
     const isRemarksEmpty = remarks === null || remarks.trim() === "";
@@ -76,7 +79,7 @@ const handleStartApi = () => {
 
     const payload = {
       docNum: Number(rowData.docNo),
-      
+
       totalWeightKg: rowData.totalWeightKg ?? 0,
       verificationRemarks: remarks ?? "",
     };
@@ -107,7 +110,7 @@ const handleStartApi = () => {
         });
       });
   };
- const handleClose = () => onClose();
+  const handleClose = () => onClose();
 
   return (
     <div className="flex flex-row justify-between w-full">
