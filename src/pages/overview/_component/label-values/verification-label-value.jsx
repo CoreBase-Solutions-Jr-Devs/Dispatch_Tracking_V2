@@ -80,7 +80,7 @@ const VerificationLabelValue = () => {
         lg:gap-6
       "
     >
-      <LabelValue status="Verification" label="Total" value={invoicesCount} />
+      <LabelValue status="Verification" label="Total" value={stats.totalCount || 0} />
       <LabelValue
         status="Pending"
         label="Pending"

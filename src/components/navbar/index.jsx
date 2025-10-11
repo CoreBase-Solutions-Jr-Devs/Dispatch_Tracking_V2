@@ -42,9 +42,6 @@ const Navbar = () => {
   const routes = useMemo(
     () => [
       { icon: Home, href: PROTECTED_ROUTES.OVERVIEW, label: "Overview" },
-      { icon: Folder, href: PROTECTED_ROUTES.INVOICES, label: "Invoices" },
-      { icon: HelpCircle, href: PROTECTED_ROUTES.DOCS, label: "Docs" },
-      { icon: Key, href: PROTECTED_ROUTES.REPORTS, label: "Reports" },
       { icon: Settings, href: PROTECTED_ROUTES.SETTINGS, label: "Settings" },
     ],
     []
@@ -113,7 +110,7 @@ const Navbar = () => {
             />
           )}
 
-          {/* Notifications */}
+          {/* Notifications
           <button
             type="button"
             className="relative rounded-md p-1.5 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -123,7 +120,7 @@ const Navbar = () => {
             <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-xs font-medium text-destructive-foreground">
               1
             </span>
-          </button>
+          </button> */}
 
           {/* Theme Toggle */}
           <Button
