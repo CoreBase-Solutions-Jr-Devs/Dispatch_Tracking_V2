@@ -47,7 +47,6 @@ export function roleToView(role) {
   }
 }
 
-
 /**
  * View metadata (title + subtitle) per role/view
  */
