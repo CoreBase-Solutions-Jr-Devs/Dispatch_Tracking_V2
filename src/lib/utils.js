@@ -47,6 +47,26 @@ export function roleToView(role) {
   }
 }
 
+export function rightsToView(rights = []) {
+  if (!Array.isArray(rights)) return "user";
+
+  // Rights mapping to sections
+  const VIEW_RIGHTS = {
+    store: [5145],
+    verification: [5146],
+    dispatch: [5147],
+    delivery: [5148],
+  };
+
+  if (rights.some((r) => VIEW_RIGHTS.store.includes(r))) return "store";
+  if (rights.some((r) => VIEW_RIGHTS.verification.includes(r))) return "verification";
+  if (rights.some((r) => VIEW_RIGHTS.dispatch.includes(r))) return "dispatch";
+  if (rights.some((r) => VIEW_RIGHTS.delivery.includes(r))) return "delivery";
+
+  return "user";
+}
+
+
 /**
  * View metadata (title + subtitle) per role/view
  */

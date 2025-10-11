@@ -27,6 +27,7 @@ import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/ed
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useAppDispatch } from "@/app/hook";
+import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 export default function DispatchFooter({
   dispatchIDs,
