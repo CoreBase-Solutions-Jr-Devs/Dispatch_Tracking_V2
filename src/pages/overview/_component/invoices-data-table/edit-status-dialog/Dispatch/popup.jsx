@@ -11,11 +11,12 @@ import DispatchTable from "./table";
 import DispatchFooter from "./footer";
 import DispatchSelect from "./select";
 import DispatchSearch from "./search";
-import { useGetVerifiedOnDispatchQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetVerifiedOnDispatchQuery, useSearchVerifiedOnDispatchQuery } from "@/features/dispatch/dispatchAPI";
 
 export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [debounced, setDebounced] = useState("");
   const [selectedDocs, setSelectedDocs] = useState([]);
   const [savedInvoices, setSavedInvoices] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
@@ -33,13 +34,33 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
     });
   };
 
+  // Debounce input
+  useEffect(() => {
+    const handler = setTimeout(() => setDebounced(query), 500);
+    return () => clearTimeout(handler);
+  }, [query]);
+
+  const shouldSearch = debounced && debounced.trim().length > 0;
+
   // Fetch verified dispatch data
-  const { data, isLoading, isError } = useGetVerifiedOnDispatchQuery({
+  const { data: verifiedData, isLoading: verifiedLoading, isError: verifiedError } = useGetVerifiedOnDispatchQuery({
     pageNumber,
     pageSize,
   });
 
-  const dispatchData = data?.invoices || [];
+  // Handle search queries
+  const {
+    data: searchData,
+    isLoading: searchLoading,
+    isError: searchError,
+  } = useSearchVerifiedOnDispatchQuery(debounced, {
+    skip: !shouldSearch,
+  });
+
+  const dispatchData = shouldSearch
+    ? searchData?.invoices || []
+    : verifiedData?.invoices || [];
+
 
   // Return only Pending dispatches
   const filteredDispatchData = useMemo(() => {
@@ -61,17 +82,6 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
     collectionType: "",
   });
 
-  // useEffect(() => {
-  //   if (rowData) {
-  //     setSelectValues({
-  //       deliveryPerson: rowData.deliveryPerson || "",
-  //       deliveryRoute: rowData.deliveryRoute || "",
-  //       vehicle: rowData.vehicle || "",
-  //       collectionType: rowData.collectionType || "",
-  //     });
-  //   }
-  // }, [rowData]);
-
   const handleSelectChange = (field, value) => {
     setSelectValues((prev) => ({ ...prev, [field]: value }));
   };
@@ -90,8 +100,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
         <DispatchSearch
           value={query}
           onChange={setQuery}
-          data={rowData}
-          placeholder="Inv.No/Cus.Code/Route"
+          placeholder="Doc.No/Cus.Name"
           selectedCount={selectedDocs.length}
         />
 
@@ -100,16 +109,16 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
         <div className="space-y-4">
           <DispatchTable
             data={filteredDispatchData}
-            isLoading={isLoading}
-            isError={isError}
+            isLoading={verifiedLoading || searchLoading}
+            isError={verifiedError || searchError}
             selected={selectedDocs}
             onToggle={handleToggleRow}
             pagination={{
-              pageNumber: data?.pageNumber || pageNumber,
-              pageSize: data?.pageSize || pageSize,
-              totalItems: data?.totalCount || 0 || filteredDispatchData.length,
+              pageNumber: verifiedData?.pageNumber || pageNumber,
+              pageSize: verifiedData?.pageSize || pageSize,
+              totalItems: verifiedData?.totalCount || 0 || filteredDispatchData.length,
               totalPages:
-                data?.totalPages ||
+                verifiedData?.totalPages ||
                 1 ||
                 Math.ceil(filteredDispatchData.length / pageSize),
             }}

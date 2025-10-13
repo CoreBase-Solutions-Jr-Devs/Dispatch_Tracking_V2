@@ -8,21 +8,27 @@ import {
 export default function DispatchSelect({
   values,
   onChange,
-  deliveryGuyOptions,
+  deliveryGuyOptions = [],
   enabled
 }) {
   console.log(values);
+
+  const getDeliveryGuyLabel = (val) => {
+    const found = deliveryGuyOptions.find((item) => item.value === val);
+    return found ? found.label : "Select...";
+  };
+
   return (
     <div className="flex flex-col justify-between gap-2 text-xs font-medium">
       <div className="flex justify-between items-center">
         <label className="text-xs font-medium">Collection Type:</label>
         <Select
-          value={values.collectionType}
+          value={values?.collectionType}
           onValueChange={(val) => onChange("collectionType", val)}
           disabled={!enabled}
         >
           <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
-            {values.collectionType || "Select..."}
+            {values?.collectionType || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
             <SelectItem value="self-collection">Self-Collection</SelectItem>
@@ -32,26 +38,30 @@ export default function DispatchSelect({
         </Select>
       </div>
 
-      {values.collectionType === "delivery" && (
+      {values?.collectionType === "delivery" && (
         <>
           <div className="flex justify-between items-center">
             <label className="text-xs font-medium">Delivery Person:</label>
             <Select
-              value={values.dispatchPerson}
+              value={values?.dispatchPerson || ""}
               onValueChange={(val) => onChange("dispatchPerson", val)}
               disabled={!enabled}
             >
               <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
-                {values.dispatchPerson || "Select..."}
+                <span>{getDeliveryGuyLabel(values?.dispatchPerson)}</span>
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
-                {deliveryGuyOptions.map((item, i) => (
-                  <SelectItem value={item.value} key={i}>
-                    {item.label}
+                {deliveryGuyOptions.length > 0 ? (
+                  deliveryGuyOptions.map((item, i) => (
+                    <SelectItem key={`${item.value}_${i}`} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem disabled value="">
+                    No delivery options
                   </SelectItem>
-                ))}
-                {/* <SelectItem value="dp1">John Doe</SelectItem>
-                <SelectItem value="dp2">Jane Smith</SelectItem> */}
+                )}
               </SelectContent>
             </Select>
           </div>
@@ -59,12 +69,12 @@ export default function DispatchSelect({
           <div className="flex justify-between items-center">
             <label className="text-xs font-medium">Delivery Route:</label>
             <Select
-              value={values.dispatchRoute}
+              value={values?.dispatchRoute || ""}
               onValueChange={(val) => onChange("dispatchRoute", val)}
               disabled={!enabled}
             >
               <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
-                {values.dispatchRoute || "Select..."}
+                {values?.dispatchRoute || "Select..."}
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
                 <SelectItem value="route1">Route 1</SelectItem>

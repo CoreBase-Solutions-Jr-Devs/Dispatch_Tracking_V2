@@ -19,7 +19,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
-import { useGetDispatchDriverQuery } from "@/features/Dispmain/dispatchAPI";
+// import { useGetDispatchDriverQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
 import { setDriverDetails } from "@/features/dispatch/dispatchSlice";
 import { useAppDispatch } from "@/app/hook";
 
@@ -96,7 +97,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     isLoading: driverLoading,
     isError: driverError,
     error: driverApiError,
-  } = useGetDispatchDriverQuery(selectValues.dispatchPerson, {
+  } = useGetDeliveryDriverQuery(selectValues.dispatchPerson, {
     skip:
       selectValues.collectionType !== "delivery" ||
       !selectValues.dispatchPerson,
@@ -197,13 +198,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
           return row.original.paymentTerms ?? "-";
         },
       },
-      {
-        accessorKey: "verifiedDateTime",
-        header: "Ver. Date",
-        cell: ({ row }) => {
-          return renderDateTime(row.original.verifiedDateTime ?? "-");
-        },
-      },
       // {
       //   accessorKey: "dispatchDateTime",
       //   header: "Disp. Date",
@@ -233,7 +227,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
         value={query}
         onChange={setQuery}
         data={rowData}
-        placeholder="CusName/Inv.No/Route"
+        placeholder="CusName/Doc.No"
       />
 
       <Separator className={"my-2"} />
@@ -249,7 +243,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
               selection={true}
               isLoading={false}
               emptyTitle="No invoices found"
-              isShowPagination={true}
+              isShowPagination={false}
               onPageChange={setPageNumber}
               onPageSizeChange={setPageSize}
               pagination={{
@@ -260,7 +254,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                   Math.ceil(updatedDispatches?.length / pageSize) || 1,
               }}
             />
-            <DispatchSummary data={updatedDispatches} />
+            {/* <DispatchSummary data={updatedDispatches} /> */}
           </div>
         </div>
         {/* Dispatch Selections*/}

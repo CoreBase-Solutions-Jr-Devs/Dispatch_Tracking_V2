@@ -47,8 +47,15 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const [show, setShow] = useState(false);
   const [mpesa, setMpesa] = useState(false);
   const [dispute, setDispute] = useState(false);
+  const [dispute, setDispute] = useState(false);
   const [otp, setOTP] = useState("");
   const [mpesaDetails, setMpesaDetails] = useState({
+    phonenumber: "",
+    amount: 0,
+    DISPATCHNUM: "",
+    BCODE: "",
+    CUS_CODE: "",
+    SALEINV_NUM: "",
     phonenumber: "",
     amount: 0,
     DISPATCHNUM: "",
@@ -101,6 +108,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const handleRowCheck = (value, row) => {
     setSelectedRow({});
 
+
     if (value) {
       setCheckedInvoices((prev) => [...prev, row]);
     } else {
@@ -120,9 +128,26 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       dispatchnum: mpesaDetails?.DISPATCHNUM,
       bcode: mpesaDetails?.BCODE,
       cuscode: mpesaDetails?.CUS_CODE,
+      dispatchnum: mpesaDetails?.DISPATCHNUM,
+      bcode: mpesaDetails?.BCODE,
+      cuscode: mpesaDetails?.CUS_CODE,
       phonenumber: `0${mpesaDetails?.phonenumber.slice(3)}`,
       amount: mpesaDetails?.amount,
     };
+    // CUS_CODE
+    if (
+      checkedInvoices.length > 0 &&
+      !checkedInvoices.every(
+        (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
+      )
+    ) {
+      console.log(checkedInvoices);
+      toast.error("Wrong invoice selected", {
+        description: "please select invoices belonging to the same customer",
+        duration: 6000,
+      });
+      return;
+    }
     // CUS_CODE
     if (
       checkedInvoices.length > 0 &&
@@ -147,6 +172,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
         setMpesaDetails({
           phonenumber: "",
           amount: "",
+          DISPATCHNUM: "",
+          BCODE: "",
+          CUS_CODE: "",
+          SALEINV_NUM: "",
           DISPATCHNUM: "",
           BCODE: "",
           CUS_CODE: "",
@@ -176,6 +205,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       .unwrap()
       .then((data) => {
         toast.success("OTP Validated successful");
+        setSelectedRow({});
         setSelectedRow({});
         setRemarks("");
         // setOTP("");
@@ -275,6 +305,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       BCODE: selectedRow?.BCODE || "",
       CUS_CODE: selectedRow?.CUS_CODE || "",
       SALEINV_NUM: selectedRow?.SALEINV_NUM || "",
+      DISPATCHNUM: selectedRow?.DISPATCHNUM || "",
+      BCODE: selectedRow?.BCODE || "",
+      CUS_CODE: selectedRow?.CUS_CODE || "",
+      SALEINV_NUM: selectedRow?.SALEINV_NUM || "",
     });
   };
 
@@ -313,8 +347,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
               handleRowSelection={handleParentSelect}
               handleRowCheck={handleRowCheck}
               checkedInvoices={checkedInvoices}
+              checkedInvoices={checkedInvoices}
             />
           </div>
+          {/* <DeliverySummary data={deliveryInvoices} /> */}
           {/* <DeliverySummary data={deliveryInvoices} /> */}
           <Separator className="my-2" />
           <DeliveryDetails
@@ -361,9 +397,14 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                       !Boolean(Object.keys(selectedRow).length) ||
                       isGeneratingOTPLoading ||
                       isvalidatingOTPLoading
+                      isLoading ||
+                      !Boolean(Object.keys(selectedRow).length) ||
+                      isGeneratingOTPLoading ||
+                      isvalidatingOTPLoading
                     }
                     generateOTP={handleOTPGenerate}
                     onSubmit={handleCompleteDelivery}
+                    handleDispute={handleDispute}
                     handleDispute={handleDispute}
                   />
                 </CardFooter>
@@ -380,9 +421,69 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                     data={selectedRow}
                     handleDispute={handleDispute}
                   />
+                  <DisputedDetails
+                    data={selectedRow}
+                    handleDispute={handleDispute}
+                  />
                 </CardContent>
               </Card>
             )}
+          </div>
+        )}
+
+        {checkedInvoices.length > 0 && (
+          <div className="w-32 flex-1">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-center">Mpesa Payment</CardTitle>
+                <CardTitle>{checkedInvoices[0]?.CUSNAME}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form
+                  autoComplete="off"
+                  className="space-y-4"
+                  onSubmit={handleMPesaPayment}
+                >
+                  <div>
+                    <Label className="text-sm font-medium">Phone</Label>
+                    <PhoneInput
+                      country={"ke"}
+                      value={mpesaDetails.phonenumber}
+                      inputStyle={{
+                        width: "100%",
+                        fontSize: "12px",
+                        lineHeight: "1.5",
+                        height: " calc(1.5em + 0.5rem + 2px)",
+                      }}
+                      id="phonenumber"
+                      name="phonenumber"
+                      masks={{ ke: "... ... ..." }}
+                      onChange={handlePhone}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium">Amount</Label>
+                    <Input
+                      type="number"
+                      value={mpesaDetails.amount}
+                      name="amount"
+                      onChange={handleChange}
+                      max={data?.BALANCE}
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    // onClick={() => setMpesa(false)}
+                    variant="default"
+                    className="w-full"
+                    // className="w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                  >
+                    Pay
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         )}
 
@@ -476,6 +577,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
               />
             </div>
             <Button variant="default" type="submit" className="w-full">
+            <Button variant="default" type="submit" className="w-full">
               Validate
             </Button>
           </form>
@@ -528,6 +630,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
             <Button
               type="submit"
               // onClick={() => setMpesa(false)}
+              disabled={isPayingLoading}
               disabled={isPayingLoading}
               variant="default"
               className="w-full"
