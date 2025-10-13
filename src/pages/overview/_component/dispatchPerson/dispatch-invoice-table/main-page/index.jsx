@@ -277,7 +277,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 enabled={startDispatch}
               />
               <DispatchRemarks enabled={startDispatch}/>
-              <DispatchMeta />
+              <DispatchMeta startDispatch={startDispatch}/>
               {/* Footer */}
               <DispatchFooter
                 dispatchIDs={dispatchIDs}

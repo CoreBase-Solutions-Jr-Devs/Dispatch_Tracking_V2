@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import {
   resetDispatchData,
+  setAssignedTo,
   setCarMake,
   setCarPlate,
   setCollectionType,
@@ -22,12 +23,11 @@ import {
 import {
   usePushDispatchProcessMutation,
   useStartDispatchProcessMutation,
-} from "@/features/Dispmain/dispatchAPI";
+} from "@/features/dispatch/dispatchAPI";
 import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useAppDispatch } from "@/app/hook";
-import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 export default function DispatchFooter({
   dispatchIDs,
@@ -67,20 +67,15 @@ export default function DispatchFooter({
     usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const [
-    startDispatch,
-    { data: startData, isLoading: startLoading, isError: startError },
-  ] = useStartDispatchProcessMutation();
-  const [sendDispatch, { data, isLoading, isError }] =
-    usePushDispatchProcessMutation();
-  // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
-
   const handleStart = async () => {
     const payload = {
       dispatchIds: dispatchIDs,
+      userName: "",
     };
     try {
       const data = await startDispatch(payload).unwrap();
+      const assignedTo = data?.value?.assignedTo || "—";
+      dispatch(setAssignedTo(assignedTo));
       console.log(data);
       // if (refetchData) setTimeout(() => refetchData(), 50);
       if (onEnableSelection) onEnableSelection();

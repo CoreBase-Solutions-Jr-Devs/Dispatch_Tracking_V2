@@ -30,6 +30,7 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
       case "storestart":
       case "verificationstart":
       case "dispatchstart":
+      case "dispatchpick":
       case "storepush":
       case "verificationpush":
         return StartPopup;
