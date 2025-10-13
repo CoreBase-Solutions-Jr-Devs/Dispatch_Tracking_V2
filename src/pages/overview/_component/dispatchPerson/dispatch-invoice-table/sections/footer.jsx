@@ -22,7 +22,8 @@ import {
 import {
   usePushDispatchProcessMutation,
   useStartDispatchProcessMutation,
-} from "@/features/dispatch/dispatchAPI";
+} from "@/features/Dispmain/dispatchAPI";
+import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useAppDispatch } from "@/app/hook";
@@ -54,8 +55,9 @@ export default function DispatchFooter({
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
 
-  const { courierDetails, driverDetails, updatedDispatches } = useSelector((state) => state.dispatch);
-  const dispatch = useAppDispatch();
+  const { courierDetails, driverDetails, clientDetails } = useSelector(
+    (state) => state.dispatch
+  );
 
   const [
     startDispatch,
@@ -65,14 +67,13 @@ export default function DispatchFooter({
     usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  // Ensure Start is disabled if there are no selected dispatches
-  useEffect(() => {
-    if (updatedDispatches && updatedDispatches.length > 0) {
-      setStartDisabled(false);
-    } else {
-      setStartDisabled(true);
-    }
-  }, [updatedDispatches]);
+  const [
+    startDispatch,
+    { data: startData, isLoading: startLoading, isError: startError },
+  ] = useStartDispatchProcessMutation();
+  const [sendDispatch, { data, isLoading, isError }] =
+    usePushDispatchProcessMutation();
+  // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
   const handleStart = async () => {
     const payload = {
