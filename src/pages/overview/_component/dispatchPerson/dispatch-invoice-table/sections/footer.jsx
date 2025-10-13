@@ -27,7 +27,6 @@ import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/ed
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useAppDispatch } from "@/app/hook";
-import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 export default function DispatchFooter({
   dispatchIDs,
@@ -35,7 +34,7 @@ export default function DispatchFooter({
   selectValues,
   onSubmit,
   onClose,
-  onEnableSelection
+  onEnableSelection,
 }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
@@ -67,14 +66,6 @@ export default function DispatchFooter({
     usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const [
-    startDispatch,
-    { data: startData, isLoading: startLoading, isError: startError },
-  ] = useStartDispatchProcessMutation();
-  const [sendDispatch, { data, isLoading, isError }] =
-    usePushDispatchProcessMutation();
-  // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
-
   const handleStart = async () => {
     const payload = {
       dispatchIds: dispatchIDs,
@@ -89,11 +80,11 @@ export default function DispatchFooter({
       setStartDisabled(true);
       toast.success("Dispatch started!");
     } catch (error) {
-        toast.error("Dispatch Failed", {
-          description:
-            error?.data?.message || error?.data?.title || "Please try again",
-          duration: 4000,
-        });
+      toast.error("Dispatch Failed", {
+        description:
+          error?.data?.message || error?.data?.title || "Please try again",
+        duration: 4000,
+      });
       setDeliveryDisabled(true);
       setSaveDisabled(true);
     }
@@ -121,18 +112,21 @@ export default function DispatchFooter({
       isPush: false,
     };
 
-    if(selectValues.collectionType === 'delivery'){
-      delete formData.customerCourierId
-      delete formData.customerCourierName
-      delete formData.customerCourierPhone
+    if (selectValues.collectionType === "delivery") {
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
 
-    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
-      delete formData.driverId
-      delete formData.driverName
-      delete formData.routeName
-      delete formData.carMake
-      delete formData.carPlate
+    if (
+      selectValues.collectionType === "self-collection" ||
+      selectValues.collectionType === "courier"
+    ) {
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
 
     try {
@@ -168,7 +162,7 @@ export default function DispatchFooter({
       dispatchIds: dispatchIDs,
       collectionType: selectValues.collectionType,
       // routeCode,
-      routeName:selectValues?.dispatchRoute,
+      routeName: selectValues?.dispatchRoute,
       driverName: driverDetails?.driverName,
       driverId: driverDetails?.driverId,
       carMake: driverDetails?.carMake,
@@ -180,19 +174,24 @@ export default function DispatchFooter({
       isPush: true,
     };
 
-    {/* Remove unneccessary values from payload */}
-    if(selectValues.collectionType === 'delivery'){
-      delete formData.customerCourierId
-      delete formData.customerCourierName
-      delete formData.customerCourierPhone
+    {
+      /* Remove unneccessary values from payload */
+    }
+    if (selectValues.collectionType === "delivery") {
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
 
-    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
-      delete formData.driverId
-      delete formData.driverName
-      delete formData.routeName
-      delete formData.carMake
-      delete formData.carPlate
+    if (
+      selectValues.collectionType === "self-collection" ||
+      selectValues.collectionType === "courier"
+    ) {
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
 
     try {
