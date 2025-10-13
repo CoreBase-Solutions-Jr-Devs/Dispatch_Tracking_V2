@@ -7,6 +7,7 @@ export default function DeliveryFooter({
   isLoading,
   generateOTP,
   onSubmit,
+  handleDispute,
 }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
@@ -27,18 +28,21 @@ export default function DeliveryFooter({
 
   return (
     <div className="flex flex-row justify-end max-w-full gap-5">
-      {/* <Button
-        variant="default"
-        onClick={handleStart}
-        className="mt-1 uppercase text-xs font-medium"
-      >
-        Print
-      </Button> */}
+      {!rowData?.ISDISPUTED && (
+        <Button
+          variant="destructive"
+          onClick={handleDispute}
+          className="mt-1 uppercase text-xs font-medium"
+        >
+          Dispute
+        </Button>
+      )}
+
       {!rowData?.OTPValidated && (
         <Button
           variant="default"
           onClick={generateOTP}
-          disabled={!rowData?.CUS_CODE}
+          disabled={isLoading || !rowData?.CUS_CODE}
           className="mt-1  uppercase text-xs font-medium"
         >
           Generate OTP

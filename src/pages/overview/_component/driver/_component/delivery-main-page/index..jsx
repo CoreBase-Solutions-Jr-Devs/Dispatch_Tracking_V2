@@ -46,6 +46,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const [remarks, setRemarks] = useState("");
   const [show, setShow] = useState(false);
   const [mpesa, setMpesa] = useState(false);
+  const [dispute, setDispute] = useState(false);
   const [otp, setOTP] = useState("");
   const [mpesaDetails, setMpesaDetails] = useState({
     phonenumber: "",
@@ -122,6 +123,20 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       phonenumber: `0${mpesaDetails?.phonenumber.slice(3)}`,
       amount: mpesaDetails?.amount,
     };
+    // CUS_CODE
+    if (
+      checkedInvoices.length > 0 &&
+      !checkedInvoices.every(
+        (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
+      )
+    ) {
+      console.log(checkedInvoices);
+      toast.error("Wrong invoice selected", {
+        description: "please select invoices belonging to the same customer",
+        duration: 6000,
+      });
+      return;
+    }
     console.log(payload);
     MakeMpesaSTKPushForDeliveredInvoices(payload)
       .unwrap()
@@ -161,7 +176,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       .unwrap()
       .then((data) => {
         toast.success("OTP Validated successful");
-        // setSelectedRow({});
+        setSelectedRow({});
         setRemarks("");
         // setOTP("");
         setShow(false);
@@ -338,10 +353,14 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                   <DeliveryFooter
                     rowData={selectedRow}
                     isLoading={
-                      isLoading || !Boolean(Object.keys(selectedRow).length)
+                      isLoading ||
+                      !Boolean(Object.keys(selectedRow).length) ||
+                      isGeneratingOTPLoading ||
+                      isvalidatingOTPLoading
                     }
                     generateOTP={handleOTPGenerate}
                     onSubmit={handleCompleteDelivery}
+                    handleDispute={handleDispute}
                   />
                 </CardFooter>
               </Card>
@@ -353,7 +372,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <DisputedDetails data={selectedRow} />
+                  <DisputedDetails
+                    data={selectedRow}
+                    handleDispute={handleDispute}
+                  />
                 </CardContent>
               </Card>
             )}
@@ -449,12 +471,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                 required
               />
             </div>
-            <Button
-              variant="default"
-              type="submit"
-              onClick={() => setShow(false)}
-              className="w-full"
-            >
+            <Button variant="default" type="submit" className="w-full">
               Validate
             </Button>
           </form>
@@ -507,6 +524,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
             <Button
               type="submit"
               // onClick={() => setMpesa(false)}
+              disabled={isPayingLoading}
               variant="default"
               className="w-full"
               // className="w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
