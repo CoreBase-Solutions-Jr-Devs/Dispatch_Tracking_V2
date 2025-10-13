@@ -25,28 +25,25 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const dispatch = useAppDispatch();
 
   const { updatedDispatches } = useSelector((state) => state.dispatch);
-
-  let dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  const dispatchIDs = (updatedDispatches || []).map(
+    (item) => item.dispatchId
+  );
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
 
-  const [editedDispatch, setEditedDispatch] = useState({
+  const { data: filterOptions } = useFilterOptionsQuery();
+
+  const [editedDispatch, setEditedDispatch] = useState(() => ({
     dispatchPerson: "",
     dispatchRoute: "",
     vehicle: "",
     collectionType: "",
     remarks: "",
-    ...selectedDispatch,
-  });
+    ...JSON.parse(JSON.stringify(selectedDispatch || {})),
+  }));
 
-  const handleFieldChange = (field, value) => {
-    setEditedDispatch((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const { data: filterOptions } = useFilterOptionsQuery();
-  const deliveryGuyOptions =
-    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
+  const [localDriverDetails, setLocalDriverDetails] = useState(null);
 
   const {
     data: driverDetails,
@@ -60,10 +57,17 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   });
 
   useEffect(() => {
-    if (driverDetails) {
-      dispatch(setDriverDetails(driverDetails));
-    }
-  }, [driverDetails, dispatch]);
+    if (driverDetails) setLocalDriverDetails(driverDetails);
+  }, [driverDetails]);
+
+  const handleFieldChange = (field, value) => {
+    setEditedDispatch((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const deliveryGuyOptions =
+    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
+  const routeOptions =
+    filterOptions?.find((opt) => opt.key === "route")?.options || [];
 
   const cleanForm = (formData, type) => {
     if (type === "delivery") {
@@ -85,10 +89,10 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
       dispatchIds: dispatchIDs,
       collectionType: editedDispatch.collectionType,
       routeName: editedDispatch.dispatchRoute || null,
-      driverName: driverDetails?.driverName || null,
-      driverId: driverDetails?.driverId || null,
-      carMake: driverDetails?.carMake || null,
-      carPlate: driverDetails?.regNo || null,
+      driverName: localDriverDetails?.driverName || null,
+      driverId: localDriverDetails?.driverId || null,
+      carMake: localDriverDetails?.carMake || null,
+      carPlate: localDriverDetails?.regNo || null,
       dispatchRemarks: editedDispatch.remarks || "",
       isPush,
     };
@@ -104,6 +108,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     try {
       await pushDispatch(payload).unwrap();
       dispatch(setDispatch(payload));
+      dispatch(setDriverDetails(localDriverDetails));
       toast.success(
         isPush
           ? "Dispatch pushed successfully!"
@@ -134,18 +139,26 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
           <DispatchSelect
             values={editedDispatch}
             onChange={handleFieldChange}
-            deliveryGuyOptions={deliveryGuyOptions}
+            deliveryGuyOptions={deliveryGuyOptions.map((opt) => ({
+              label: opt.label,
+              value: opt.label,
+            }))}
+            routeOptions={routeOptions.map((opt) => ({
+              label: opt.label,
+              value: opt.label,
+            }))}
             enabled
           />
 
           <DispatchDetails
-            data={driverDetails}
+            data={localDriverDetails}
             collectionType={editedDispatch.collectionType}
             deliveryPerson={editedDispatch.dispatchPerson}
             driverLoading={driverLoading}
             driverError={driverError}
             driverApiError={driverApiError}
             enabled
+            route={editedDispatch.dispatchRoute}
           />
 
           <DispatchRemarks
@@ -181,7 +194,13 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
           PUSH
         </Button>
 
-        <Button variant="destructive" onClick={onClose}>
+        <Button
+          variant="destructive"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
+        >
           CLOSE
         </Button>
       </div>
