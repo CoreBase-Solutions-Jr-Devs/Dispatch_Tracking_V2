@@ -3,7 +3,8 @@ import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
+// import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
+import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatchAPI";
 import EditStatusDialog from "../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 const renderText = (text) => (
@@ -18,9 +19,22 @@ const STATUS_STYLES = {
   Muted: "bg-muted text-muted-foreground border-border",
 };
 
-const renderStatus = (status) => {
+const getStatusLabel = (statusCode) => {
+  const statusMap = {
+    0: "Verified",
+    1: "Selected",
+    2: "In Dispatch",
+    3: "Saved",
+    4: "Dispatched",
+  };
+  return statusMap[Number(statusCode)] || "Unknown";
+}
+
+const renderStatus = (statusCode) => {
+  const statusLabel = getStatusLabel(statusCode);
   let statusClass;
-  switch (status?.toLowerCase()) {
+
+  switch (statusLabel) {
     case "pending":
     case "in process":
     case "recalled":
@@ -33,10 +47,11 @@ const renderStatus = (status) => {
       break;
     case "verified":
     case "in dispatch":
+    case "PendingPush":
       statusClass = STATUS_STYLES.Dispatch;
       break;
     case "return":
-    case "dispatched":
+    case "Dispatched":
     case "in delivery":
     case "saved":
       statusClass = STATUS_STYLES.Saved;
@@ -50,7 +65,7 @@ const renderStatus = (status) => {
       variant="outline"
       className={`${statusClass} w-28 justify-center rounded-md  font-medium px-3 py-1 border`}
     >
-      {status || "—"}
+      {statusLabel || "—"}
     </Badge>
   );
 };
@@ -71,15 +86,38 @@ const renderDateTime = (val) => (
   <span className="font-mono text-sm font-medium">{formatUKDateTime(val)}</span>
 );
 
-const formatDuration = (minutes) => {
-  if (minutes === null || minutes === undefined)
-    return <span className="font-mono text-sm font-medium">—</span>;
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
+const renderDuration = (durationSeconds, avgDuration) => {
+  if (durationSeconds == null)
+    return (
+      <span className="text-muted-foreground font-mono font-medium text-sm ">
+        —
+      </span>
+    );
+  const colorClass =
+    durationSeconds > avgDuration ? "text-red-600" : "text-green-600";
   return (
-    <span className="font-mono text-sm font-medium">
-      {`${h ? h + "h " : ""}${m}m`}
+    <span className={`font-medium ${colorClass}`}>
+      {formatDuration(durationSeconds)}
     </span>
+  );
+};
+
+const formatDuration = (seconds) => {
+  if (!seconds && seconds !== 0) return "—";
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  return (
+    [
+      days && `${days}D`,
+      hours && `${hours}H`,
+      mins && `${mins}M`,
+      secs && `${secs}S`,
+    ]
+      .filter(Boolean)
+      .join(" ") || "0m"
   );
 };
 
@@ -115,14 +153,20 @@ const renderActions = (row) => (
   </EditStatusDialog>
 );
 
-export default function DispatchGrid() {
+export default function DispatchGrid({ data = [], isLoading = false, isSearch }) {
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 50;
 
-  const { data, isFetching } = useGetSavedDispatchedQuery({
-    pageNumber,
-    pageSize,
-  });
+  const { data: savedDispatches, isFetching } = useGetSavedDispatchedInvoicesQuery(
+      { pageNumber, pageSize },
+      { skip: data?.length > 0 }
+  );
+
+  const isSearchResult = data?.length > 0;
+
+  const displayData = isSearchResult
+    ? data
+    : savedDispatches?.items || [];
 
   const columns = useMemo(
     () => [
@@ -142,15 +186,25 @@ export default function DispatchGrid() {
         cell: ({ row }) => renderText(row.original.dispatcher),
       },
       {
-        accessorKey: "dispatchDateTime",
-        header: "Dispatch Date & Time",
-        cell: ({ row }) => renderDateTime(row.original.dispatchDateTime),
+        acccessorkey: "collectionType",
+        header: "CollType",
+        cell: ({ row }) => renderText(row.original.collectionType),
+      },
+      {
+        accessorKey: "dispatchStart",
+        header: "Disp.Start",
+        cell: ({ row }) => renderDateTime(row.original.dispatchStart),
+      },
+      {
+        accessorKey: "dispatchEnd",
+        header: "Disp.End",
+        cell: ({ row }) => renderDateTime(row.original.dispatchEnd),
       },
       {
         accessorKey: "durationSeconds",
         header: "Duration",
         cell: ({ row }) =>
-          renderText(formatDuration(row.original.durationSeconds)),
+          renderText(renderDuration(row.original.durationSeconds)),
       },
       {
         accessorKey: "amount",
@@ -159,8 +213,13 @@ export default function DispatchGrid() {
           renderText(
             row.original.amount
               ? `KES ${row.original.amount}`
-              : "—"
+            : "0"
           ),
+      },
+      {
+        accessorkey: "status",
+        header: "Status",
+        cell: ({ row }) => renderStatus(row.original.status),
       },
       {
         accessorKey: "actions",
@@ -171,29 +230,40 @@ export default function DispatchGrid() {
     []
   );
 
-  const totalValue =
-    data?.items?.reduce((acc, cur) => acc + (cur.amount || 0), 0) || 0;
+  const totalValue = displayData.reduce(
+    (sum, cur) => sum + (Number(cur.amount) || 0),
+    0
+  );
+
+  const paginationData = isSearchResult
+    ? {
+        pageNumber: 1,
+        pageSize: data.length || 1,
+        totalItems: data.length || 0,
+        totalPages: 1,
+      }
+    : {
+        pageNumber: savedDispatches?.pageNumber || 1,
+        pageSize: savedDispatches?.pageSize || pageSize,
+        totalItems: savedDispatches?.totalCount || 0,
+        totalPages: savedDispatches?.totalPages || 1,
+      };
 
   return (
     <div className="space-y-4">
       <DataTable
-        data={data?.items || []}
+        data={displayData}
         columns={columns}
         selection
         isLoading={isFetching}
         emptyTitle="No dispatch records found"
         isShowPagination
         onPageChange={setPageNumber}
-        pagination={{
-          pageNumber: data?.pageNumber || 1,
-          pageSize: data?.pageSize || pageSize,
-          totalItems: data?.totalCount || 0,
-          totalPages: data?.totalPages || 1,
-        }}
+        pagination={paginationData}
       />
 
       <div className="flex justify-end space-x-2 border-t pt-2 text-sm font-medium">
-        <span>Total Records: {data?.totalCount || 0}</span>
+        <span>Total Records: {paginationData.totalItems}</span>
         <span>Total Value: KES {totalValue.toLocaleString()}</span>
       </div>
     </div>

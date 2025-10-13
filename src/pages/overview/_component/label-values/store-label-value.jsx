@@ -80,7 +80,7 @@ const StoreLabelValue = () => {
         lg:gap-6
       "
     >
-      <LabelValue status="Store" label="Total" value={invoicesCount} />
+      <LabelValue status="Store" label="Total" value={stats.totalCount || 0} />
       <LabelValue status="Verification" label="Pending" value={stats.pendingCount || 0} />
       <LabelValue status="Delivered" label="In Process" value={stats.inProcessCount || 0} />
       <LabelValue status="Dispatch" label="Processed" value={stats.processedCount || 0} />

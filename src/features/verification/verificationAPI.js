@@ -1,5 +1,6 @@
+ 
 import { apiClient } from "@/app/api-client";
-
+ 
 export const VerificationApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getVerificationInvoices: builder.query({
@@ -9,7 +10,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         params: { pageNumber, pageSize },
       }),
     }),
-
+ 
     getFilteredVerificationInvoices: builder.query({
       query: ({
         pageNumber = 1,
@@ -24,7 +25,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         params: {
           pageNumber,
           pageSize,
-         
+ 
           startDate: startDate
             ? new Date(startDate).toISOString().split("T")[0]
             : undefined,
@@ -37,7 +38,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       providesTags: ["verification_invoices"],
     }),
-
+ 
     searchVerificationInvoices: builder.query({
       query: ({ searchWord }) => ({
         url: "/verification/search",
@@ -46,34 +47,42 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["verification_invoices"],
     }),
-
+ 
     getVerificationTracking: builder.query({
       query: (docNum) => ({
-        url: `/verification/${docNum}/verification-tracking`, 
+        url: `/verification/${docNum}/verification-tracking`,
         method: "GET",
       }),
       providesTags: ["verification_tracking"],
     }),
-
+ 
     startVerificationProcess: builder.mutation({
       query: (docNum) => ({
         url: `/verification/${docNum}/start`,
         method: "POST",
       }),
-      invalidatesTags: ["verification_tracking", "verification_invoices"],
+      invalidatesTags: [
+        "verification_tracking",
+        "verification_invoices",
+        "store_invoices",
+      ],
     }),
-
+ 
     pushVerificationInvoice: builder.mutation({
       query: ({ docNum, totalWeightKg = 0, verificationRemarks = "" }) => ({
         url: `/verification/${docNum}/push`,
         method: "POST",
         body: { docNum, totalWeightKg, verificationRemarks },
       }),
-      invalidatesTags: ["verification_tracking", "verification_invoices"],
+      invalidatesTags: [
+        "verification_tracking",
+        "verification_invoices",
+        "store_invoices",
+      ],
     }),
   }),
 });
-
+ 
 export const {
   useGetVerificationInvoicesQuery,
   useGetFilteredVerificationInvoicesQuery,
@@ -83,3 +92,4 @@ export const {
   useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
 } = VerificationApi;
+ 

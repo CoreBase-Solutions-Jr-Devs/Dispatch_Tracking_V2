@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
-import { useGetSavedDispatchedDetailsQuery } from "@/features/Dispmain/dispatchAPI";
+import { Eye } from "lucide-react";
+import { useGetSavedDispatchedDetailsQuery } from "@/features/dispatch/dispatchAPI";
+import EditStatusDialog from "../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 const renderText = (text) => (
   <span className="text-foreground font-medium">{text ?? "—"}</span>
@@ -99,7 +101,19 @@ export default function DispatchMainPopup({ rowData, onClose }) {
         </TableBody>
       </Table>
 
-      <DialogFooter className="flex justify-end px-3 py-3">
+      <DialogFooter className="flex justify-end gap-2 px-3 py-3">
+        <EditStatusDialog
+          rowData={rowData}
+          view="dispatchedit"
+          onSubmit={(updatedData) =>
+            console.log("Edited collection type:", updatedData)
+          }
+        >
+          <Button variant="apply" onClick={(e) => e.stopPropagation()}>
+            Edit{" "}
+          </Button>
+        </EditStatusDialog>
+
         <Button variant="default" onClick={onClose}>
           Close
         </Button>

@@ -278,10 +278,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     });
   };
 
-  const handleDispute = () => {
-    setDispute(!dispute);
-  };
-
   useEffect(() => {
     setMpesaDetails({
       phonenumber:
@@ -327,7 +323,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
 
         {Boolean(Object.keys(selectedRow).length) && (
           <div className="w-32 flex-1">
-            {dispute ? (
+            {selectedRow.ISDISPUTED ? (
               <Card>
                 <CardHeader>
                   <CardTitle>

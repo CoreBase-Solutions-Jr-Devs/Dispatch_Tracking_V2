@@ -4,13 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Shield, User, Eye, EyeOff } from "lucide-react";
 import { useLoginMutation } from "@/features/auth/authAPI";
-import { setCredentials } from "@/features/auth/authSlice";
-import { useAppDispatch } from "@/app/hook";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
-  const dispatch = useAppDispatch();
+export default function StartPopup({ onClose, onSubmit }) {
   const [login, { isLoading }] = useLoginMutation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,14 +39,14 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
     login({ UserName: username, Password: password })
       .unwrap()
       .then((data) => {
-        dispatch(setCredentials(data));
+        toast.success("Authentication successful");
 
-        onSubmit?.();
+        onSubmit?.(data);
 
         onClose?.();
       })
       .catch((error) => {
-        toast.error("Login failed", {
+        toast.error("Authentication failed", {
           description: error?.data?.message || "Check your credentials",
         });
       });
@@ -70,7 +67,7 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
       <DialogHeader className="flex flex-col items-center justify-center pb-2 text-center">
         <h3 className="text-lg font-medium">Welcome Back</h3>
         <p className="text-sm text-muted-foreground">
-          Please fill in your credentials to login!
+          Set credentials to proceed with operation!
         </p>
       </DialogHeader>
 
@@ -88,7 +85,6 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
             className={`h-12 px-4 text-base placeholder:text-muted-foreground/60 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
               errors.username ? "border-destructive" : ""
             }`}
@@ -112,7 +108,6 @@ export default function StoreStartPopup({ rowData, onClose, onSubmit }) {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
               className={`h-12 px-4 pr-12 text-base placeholder:text-muted-foreground/60 focus:ring-2 focus:ring-primary/20 focus:border-primary ${
                 errors.password ? "border-destructive" : ""
               }`}
