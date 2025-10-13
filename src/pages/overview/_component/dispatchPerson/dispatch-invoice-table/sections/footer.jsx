@@ -59,8 +59,13 @@ export default function DispatchFooter({
     (state) => state.dispatch
   );
 
-  // const dispatch = useDispatch();
-  const dispatch = useAppDispatch();
+  const [
+    startDispatch,
+    { data: startData, isLoading: startLoading, isError: startError },
+  ] = useStartDispatchProcessMutation();
+  const [sendDispatch, { data, isLoading, isError }] =
+    usePushDispatchProcessMutation();
+  // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
   const [
     startDispatch,
