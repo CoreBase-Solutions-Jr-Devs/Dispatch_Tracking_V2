@@ -109,13 +109,8 @@ export default function DispatchMainPopup({ rowData, onClose }) {
             console.log("Edited collection type:", updatedData)
           }
         >
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 w-8 p-0 hover:bg-accent"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Eye className="h-4 w-4 text-muted-foreground" />
+          <Button variant="apply" onClick={(e) => e.stopPropagation()}>
+            Edit{" "}
           </Button>
         </EditStatusDialog>
 

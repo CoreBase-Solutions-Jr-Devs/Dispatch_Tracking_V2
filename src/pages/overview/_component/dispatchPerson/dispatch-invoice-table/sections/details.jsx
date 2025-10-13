@@ -73,45 +73,43 @@ export default function DispatchDetails({
         </Label>
       )}
 
-      {collectionType === "self-collection" && (
-        <section className="flex flex-col w-full justify-between space-x-2">
-          <div className="flex flex-col items-center w-full">
-            <Label className="text-xs font-medium">Client Name</Label>
-            <Input
-              className="w-full h-6 text-xs"
-              value={courierDetails.customerCourierName}
-              name="customerCourierName"
-              onChange={(e) => handleChange("self-collection", e)}
-              disabled={!enabled}
-              // onChange={(e) => dispatch(setCustomerCourierName(e.target.value))}
-            />
-          </div>
-          <div className="flex flex-col items-center w-full">
-            <Label className="text-xs font-medium">ID No</Label>
-            <Input
-              className="w-full h-6 text-xs"
-              value={courierDetails.customerCourierId}
-              name="customerCourierId"
-              onChange={(e) => handleChange("self-collection", e)}
-              disabled={!enabled}
-              // onChange={(e) => dispatch(setCustomerCourierId(e.target.value))}
-            />
-          </div>
-          <div className="flex flex-col items-center w-full">
-            <Label className="text-xs font-medium">Phone No</Label>
-            <Input
-              className="w-full h-6 text-xs"
-              value={courierDetails.customerCourierPhone}
-              name="customerCourierPhone"
-              onChange={(e) => handleChange("self-collection", e)}
-              disabled={!enabled}
-              // onChange={(e) =>
-              //   dispatch(setCustomerCourierPhone(e.target.value))
-              // }
-            />
-          </div>
-        </section>
-      )}
+    {collectionType === "self-collection" && (
+  <section className="flex flex-col w-full space-y-2">
+    <div className="flex items-center w-full justify-between">
+      <Label className="text-xs font-medium w-1/3">Client Name</Label>
+      <Input
+        className="w-2/3 h-6 text-xs"
+        value={courierDetails.customerCourierName}
+        name="customerCourierName"
+        onChange={(e) => handleChange("self-collection", e)}
+        disabled={!enabled}
+      />
+    </div>
+
+    <div className="flex items-center w-full justify-between">
+      <Label className="text-xs font-medium w-1/3">ID No</Label>
+      <Input
+        className="w-2/3 h-6 text-xs"
+        value={courierDetails.customerCourierId}
+        name="customerCourierId"
+        onChange={(e) => handleChange("self-collection", e)}
+        disabled={!enabled}
+      />
+    </div>
+
+    <div className="flex items-center w-full justify-between">
+      <Label className="text-xs font-medium w-1/3">Phone No</Label>
+      <Input
+        className="w-2/3 h-6 text-xs"
+        value={courierDetails.customerCourierPhone}
+        name="customerCourierPhone"
+        onChange={(e) => handleChange("self-collection", e)}
+        disabled={!enabled}
+      />
+    </div>
+  </section>
+)}
+
 
       {collectionType === "delivery" && !deliveryPerson && (
         <>
@@ -191,53 +189,54 @@ export default function DispatchDetails({
         </section>
       )}
 
-      {collectionType === "courier" && (
-        <section className="flex flex-col justify-between space-x-2">
-          <div className="flex flex-col items-center w-full">
-            <Label className="text-xs font-medium">Courier Name</Label>
-            <Input
-              className="w-full h-6 text-xs"
-              value={courierDetails.customerCourierName || ""}
-              name="customerCourierName"
-              onChange={(e) => handleChange("courier", e)}
-              disabled={!enabled}
-              // onChange={(e) => dispatch(setCustomerCourierName(e.target.value))}
-            />
-          </div>
-          <div className="flex flex-col items-center w-full">
-            <Label className="text-xs font-medium">Courier ID</Label>
-            <Input
-              className="w-full h-6 text-xs"
-              value={courierDetails.customerCourierId || ""}
-              name="customerCourierId"
-              onChange={(e) => handleChange("courier", e)}
-              disabled={!enabled}
-              // onChange={(e) => dispatch(setCustomerCourierId(e.target.value))}
-            />
-          </div>
-          <div className="flex flex-col items-center w-full">
-            <Label className="text-xs font-medium">Phone No</Label>
-            <Input
-              className="w-full h-6 text-xs"
-              value={courierDetails.customerCourierPhone}
-              name="customerCourierPhone"
-              onChange={(e) => handleChange("courier", e)}
-              disabled={!enabled}
-              // onChange={(e) => dispatch(setCustomerCourierPhone(e.target.value))}
-            />
-          </div>
-          <div className="flex flex-col items-center w-full">
-            <Label className="text-xs font-medium">Reg No</Label>
-            <Input
-              className="w-full h-6 text-xs"
-              value={courierDetails.customerCourierRegNo}
-              name="customerCourierRegNo"
-              onChange={(e) => handleChange("courier", e)}
-              disabled={!enabled}
-            />
-          </div>
-        </section>
-      )}
+    {collectionType === "courier" && (
+  <section className="flex flex-col w-full space-y-2">
+    <div className="flex items-center w-full justify-between">
+      <Label className="text-xs font-medium w-1/3">Courier Name</Label>
+      <Input
+        className="w-2/3 h-6 text-xs"
+        value={courierDetails.customerCourierName || ""}
+        name="customerCourierName"
+        onChange={(e) => handleChange("courier", e)}
+        disabled={!enabled}
+      />
+    </div>
+
+    <div className="flex items-center w-full justify-between">
+      <Label className="text-xs font-medium w-1/3">Courier ID</Label>
+      <Input
+        className="w-2/3 h-6 text-xs"
+        value={courierDetails.customerCourierId || ""}
+        name="customerCourierId"
+        onChange={(e) => handleChange("courier", e)}
+        disabled={!enabled}
+      />
+    </div>
+
+    <div className="flex items-center w-full justify-between">
+      <Label className="text-xs font-medium w-1/3">Phone No</Label>
+      <Input
+        className="w-2/3 h-6 text-xs"
+        value={courierDetails.customerCourierPhone || ""}
+        name="customerCourierPhone"
+        onChange={(e) => handleChange("courier", e)}
+        disabled={!enabled}
+      />
+    </div>
+
+    <div className="flex items-center w-full justify-between">
+      <Label className="text-xs font-medium w-1/3">Reg No</Label>
+      <Input
+        className="w-2/3 h-6 text-xs"
+        value={courierDetails.customerCourierRegNo || ""}
+        name="customerCourierRegNo"
+        onChange={(e) => handleChange("courier", e)}
+        disabled={!enabled}
+      />
+    </div>
+  </section>
+)}
+
     </div>
   );
 }

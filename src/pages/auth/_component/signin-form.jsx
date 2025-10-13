@@ -31,7 +31,7 @@ import { z } from "zod";
 
 const schema = z.object({
   username: z.string().trim().min(1, "Username is required"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(4, "Password must be at least 6 characters"),
 });
 
 const SignInForm = () => {
@@ -45,13 +45,23 @@ const SignInForm = () => {
     defaultValues: {
       username: "",
       password: "",
+      clientPin: 0,
+      long: "",
+      latt: "",
+      machineCookie: "",
+      ipLocation: "",
     },
   });
 
   const onSubmit = (values) => {
     const payload = {
-        UserName: values.username,
-        Password: values.password,
+      userName: values.username,
+      password: values.password,
+      clientPin: 0,
+      long: "",
+      latt: "",
+      machineCookie: "",
+      ipLocation: "",
     };
     login(payload)
       .unwrap()
@@ -68,7 +78,8 @@ const SignInForm = () => {
       .catch((error) => {
         toast.error("Login Failed", {
           description:
-            error?.data?.message || "Please check your credentials and try again",
+            error?.data?.message ||
+            "Please check your credentials and try again",
           duration: 4000,
         });
       });

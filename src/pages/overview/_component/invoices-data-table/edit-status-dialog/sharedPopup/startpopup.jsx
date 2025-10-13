@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Shield, User, Eye, EyeOff } from "lucide-react";
 import { useLoginMutation } from "@/features/auth/authAPI";
-import { useAppDispatch } from "@/app/hook";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -40,7 +39,6 @@ export default function StartPopup({ onClose, onSubmit }) {
     login({ UserName: username, Password: password })
       .unwrap()
       .then((data) => {
-        // dispatch(setCredentials(data));  ❌ this triggers a global role-based redirect
         toast.success("Authentication successful");
 
         onSubmit?.(data);
