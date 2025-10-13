@@ -67,10 +67,10 @@ export default function DispatchFooter({
     usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const handleStart = async () => {
+  const handleStart = async (username) => {
     const payload = {
       dispatchIds: dispatchIDs,
-      userName: "",
+      userName: username || user?.userName || "",
     };
     try {
       const data = await startDispatch(payload).unwrap();
