@@ -22,7 +22,7 @@ import {
 import {
   usePushDispatchProcessMutation,
   useStartDispatchProcessMutation,
-} from "@/features/Dispmain/dispatchAPI";
+} from "@/features/dispatch/dispatchAPI";
 import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
