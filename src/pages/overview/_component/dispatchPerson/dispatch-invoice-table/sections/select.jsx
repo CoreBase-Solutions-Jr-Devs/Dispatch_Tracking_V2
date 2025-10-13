@@ -9,6 +9,7 @@ export default function DispatchSelect({
   values,
   onChange,
   deliveryGuyOptions = [],
+  routeOptions = [],
   enabled
 }) {
   console.log(values);
@@ -17,6 +18,11 @@ export default function DispatchSelect({
     const found = deliveryGuyOptions.find((item) => item.value === val);
     return found ? found.label : "Select...";
   };
+
+  const routeLabel = (val) => {
+    const found = routeOptions.find((item) => item.value === val);
+    return found ? found.label : "Select...";
+  }
 
   return (
     <div className="flex flex-col justify-between gap-2 text-xs font-medium">
@@ -73,12 +79,24 @@ export default function DispatchSelect({
               onValueChange={(val) => onChange("dispatchRoute", val)}
               disabled={!enabled}
             >
-              <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
-                {values?.dispatchRoute || "Select..."}
+              <SelectTrigger 
+                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate" disabled={!enabled}
+                title={routeLabel(values?.dispatchRoute)}
+              >
+                <span className="truncate">{routeLabel(values?.dispatchRoute)}</span>
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
-                <SelectItem value="route1">Route 1</SelectItem>
-                <SelectItem value="route2">Route 2</SelectItem>
+                {routeOptions.length > 0 ? (
+                  routeOptions.map((item, i) => (
+                    <SelectItem key={`${item.value}_${i}`} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem disabled value="">
+                    No route options
+                  </SelectItem>
+                )}
               </SelectContent>
             </Select>
           </div>
