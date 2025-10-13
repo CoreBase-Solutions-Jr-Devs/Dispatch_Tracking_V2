@@ -181,38 +181,49 @@ export default function DispatchFooter({
   };
 
   return (
-    <div className="flex justify-end gap-2 p-4 border-t">
-      <Button
-        variant="outline"
-        onClick={onClose}
-        className="text-gray-600 border-gray-400"
+    <div className="flex flex-row justify-center w-full">
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleStart}
       >
-        Cancel
-      </Button>
-
-      <Button
-        onClick={handleStart}
-        disabled={startDisabled}
-        className="bg-blue-600 text-white hover:bg-blue-700"
+        <Button
+          variant="apply"
+          // onClick={handleStart}
+          disabled={startDisabled}
+          className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
+        >
+          Start
+        </Button>
+      </EditStatusDialog>
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleSave}
       >
-        Start
-      </Button>
-
-      <Button
-        onClick={handleSave}
-        disabled={!hasCollectionType || saveDisabled}
-        className="bg-green-600 text-white hover:bg-green-700"
+        <Button
+          variant="verification"
+          // onClick={handleSave}
+          disabled={saveDisabled}
+          className="mt-1 mr-2 uppercase text-xs font-medium"
+        >
+          Save
+        </Button>
+      </EditStatusDialog>
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchstart"
+        onSubmit={handleDelivery}
       >
-        Save
-      </Button>
-
-      <Button
-        onClick={handleDelivery}
-        disabled={!hasCollectionType || deliveryDisabled}
-        className="bg-orange-600 text-white hover:bg-orange-700"
-      >
-        Push
-      </Button>
+        <Button
+          variant="apply"
+          // onClick={handleDelivery}
+          disabled={deliveryDisabled || !hasCollectionType}
+          className="mt-1 uppercase text-xs font-medium "
+        >
+          Push
+        </Button>
+      </EditStatusDialog>
     </div>
   );
 }
