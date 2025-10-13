@@ -4,10 +4,9 @@ import {
   useStartStoreProcessMutation,
   usePushStoreInvoiceMutation,
 } from "@/features/store/storeAPI";
- 
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
- 
+
 export default function StoreFooter({
   rowData,
   onSubmit,
@@ -18,91 +17,76 @@ export default function StoreFooter({
   refetchData,
 }) {
   const [startDisabled, setStartDisabled] = useState(
-    rowData?.workflowStatus === "Processed" ||
-      rowData?.storeStartDateTime ||
-      false
+    rowData?.workflowStatus === "Processed" || !!rowData?.storeStartDateTime
   );
- 
+
   const [verificationDisabled, setVerificationDisabled] = useState(
     rowData?.workflowStatus !== "In Process" || !rowData?.storeStartDateTime
   );
- 
-  const [storeStart] = useStartStoreProcessMutation();
-  const [storePush] = usePushStoreInvoiceMutation();
- 
-  const handleStartApi = () => {
-    setStartDisabled(true);
-    setVerificationDisabled(true);
-    console.log("RowData object:", rowData);
-    const docNum = Number(rowData.docNo);
-    console.log("docNum:", docNum);
- 
-    storeStart(docNum)
-      .unwrap()
-      .then(() => {
-        toast.success("Store process started successfully");
-        setVerificationDisabled(false);
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setVerificationDisabled(true);
- 
-        let description = "Please check your credentials and try again.";
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
-        }
- 
-        toast.error("Store start failed", { description, duration: 4000 });
+
+  const [startStore] = useStartStoreProcessMutation();
+  const [pushStore] = usePushStoreInvoiceMutation();
+
+  const handleStartApi = async (credentials) => {
+    const userName = credentials?.userName || credentials?.user?.username;
+    const docNum = Number(rowData?.docNo);
+
+    if (!userName) {
+      toast.error("Username is missing. Cannot start store process.");
+      console.warn("⚠️ Missing userName in credentials:", credentials);
+      return;
+    }
+
+    try {
+      const response = await startStore({ docNum, userName }).unwrap();
+      console.log("✅ Store Start API Response:", response);
+
+      toast.success("Store process started successfully");
+      setStartDisabled(true);
+      refetchData?.();
+    } catch (error) {
+      console.error("❌ Store Start API Error:", error);
+      toast.error("Failed to start store process", {
+        description: error?.data?.message || "Try again.",
       });
+    }
   };
- 
-  const handleVerification = async () => {
-    const isRemarksEmpty = remarks === null || remarks.trim() === "";
-    const fieldErrors = {};
 
-    setErrors({ remarks: fieldErrors.remarks || undefined });
+  const handleVerification = async (credentials) => {
+    const userName = credentials?.userName || credentials?.user?.username;
 
-    setStartDisabled(true);
-    setVerificationDisabled(true);
- 
+    if (!userName) {
+      console.warn("⚠️ Missing userName in credentials:", credentials);
+      toast.error("Username is missing. Cannot push to Verification.");
+      return;
+    }
+
     const payload = {
-      docNum: Number(rowData.docNo),
-      totalWeightKg: rowData.totalWeightKg ?? 0,
+      docNum: Number(rowData?.docNo),
+      userName,
+      totalWeightKg: rowData?.totalWeightKg ?? 0,
       storeRemarks: remarks ?? "",
     };
- 
-    storePush(payload)
-      .unwrap()
-      .then(() => {
-        toast.success("Sent to Verification successfully");
-        setTimeout(() => {
-          setErrors({});
-        }, 50);
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setVerificationDisabled(false);
- 
-        let description = "Please check your credentials and try again.";
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
-        }
- 
-        toast.error("Send to Verification failed", {
-          description,
-          duration: 4000,
-        });
+
+    console.log("📦 Push Store payload:", payload);
+
+    try {
+      const response = await pushStore(payload).unwrap();
+      console.log("✅ Push Store API Response:", response);
+
+      toast.success("Pushed to Verification successfully");
+      setVerificationDisabled(true);
+      refetchData?.();
+    } catch (error) {
+      console.error("❌ Push Store API Error:", error);
+      toast.error("Push failed", {
+        description: error?.data?.message || "Try again.",
       });
+    }
   };
- 
-  const handleClose = () => onClose();
- 
+
+  const handleClose = () => onClose?.();
+
   return (
     <div className="flex flex-row justify-between w-full">
       <EditStatusDialog
@@ -118,7 +102,7 @@ export default function StoreFooter({
           Start
         </Button>
       </EditStatusDialog>
- 
+
       <EditStatusDialog
         view="storepush"
         rowData={rowData}
@@ -132,7 +116,7 @@ export default function StoreFooter({
           Send to Verification
         </Button>
       </EditStatusDialog>
- 
+
       <Button
         variant="destructive"
         onClick={handleClose}
@@ -143,4 +127,3 @@ export default function StoreFooter({
     </div>
   );
 }
- 

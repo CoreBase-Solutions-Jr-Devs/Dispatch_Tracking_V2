@@ -6,11 +6,11 @@ import {
 } from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
-import VerificationRemarks from "./remarks";
 
 export default function VerificationFooter({
   rowData,
   onSubmit,
+  credentials,
   onClose,
   remarks,
   errors,
@@ -19,104 +19,81 @@ export default function VerificationFooter({
   setRemarks,
 }) {
   const [startDisabled, setStartDisabled] = useState(
-    rowData?.workflowStatus === "Verified" ||
-      rowData?.verifyStartDateTime ||
-      false
+    rowData?.workflowStatus === "Verified" || !!rowData?.verifyStartDateTime
   );
-
   const [dispatchDisabled, setDispatchDisabled] = useState(
     rowData?.workflowStatus !== "In Verification" ||
       !rowData?.verifyStartDateTime
   );
 
-  const [verificationStart] = useStartVerificationProcessMutation();
-  const [verificationPush] = usePushVerificationInvoiceMutation();
-  const handleStartApi = () => {
-    setStartDisabled(true);
-    setDispatchDisabled(true);
-    console.log("RowData object:", rowData);
-    const docNum = Number(rowData.docNo);
-    console.log("docNum:", docNum);
+  const [startVerification] = useStartVerificationProcessMutation();
+  const [pushVerification] = usePushVerificationInvoiceMutation();
 
-    verificationStart(docNum)
-      .unwrap()
-      .then(() => {
-        toast.success("Verification process started successfully");
-        setDispatchDisabled(false);
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setDispatchDisabled(true);
+  const handleStartApi = async (credentials) => {
+    const userName =
+      credentials?.userName ||
+      credentials?.UserName ||
+      credentials?.user?.username ||
+      "system";
+    const docNum = Number(rowData?.docNo);
 
-        let description = "Please check your credentials and try again.";
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
-        }
-
-        toast.error("Verification start failed", {
-          description,
-          duration: 4000,
-        });
+    try {
+      const response = await startVerification({ docNum, userName }).unwrap();
+      console.log("✅ Verification Start API Response:", response);
+      toast.success("Verification process started successfully");
+      setStartDisabled(true);
+      setDispatchDisabled(false);
+      refetchData?.();
+    } catch (error) {
+      console.error("❌ Verification Start API Error:", error);
+      toast.error("Failed to start verification process", {
+        description: error?.data?.message || "Try again.",
       });
+    }
   };
-  // ✅ Start Dispatch
-  const handleDispatch = async () => {
-    const isRemarksEmpty = remarks === null || remarks.trim() === "";
-    const fieldErrors = {};
 
-    // (optional validation if you want remarks to be required)
-    // if (isRemarksEmpty) fieldErrors.remarks = "Remarks is required";
+  const handleDispatch = async (credentials) => {
+    const userName =
+      credentials?.userName ||
+      credentials?.UserName ||
+      credentials?.user?.username ||
+      "system";
 
-    setErrors({ remarks: fieldErrors.remarks || undefined });
-
-    // if (isRemarksEmpty) return; // (disabled intentionally)
-
-    setStartDisabled(true);
-    setDispatchDisabled(true);
+    if (!userName) {
+      toast.error("Username is missing. Cannot push to Dispatch.");
+      return;
+    }
 
     const payload = {
-      docNum: Number(rowData.docNo),
-
-      totalWeightKg: rowData.totalWeightKg ?? 0,
+      docNum: Number(rowData?.docNo),
+      userName,
+      totalWeightKg: rowData?.totalWeightKg ?? 0,
       verificationRemarks: remarks ?? "",
     };
 
-    verificationPush(payload)
-      .unwrap()
-      .then(() => {
-        toast.success("Sent to Dispatch successfully");
-        setTimeout(() => {
-          setErrors({});
-        }, 50);
-      })
-      .catch((error) => {
-        setStartDisabled(false);
-        setVerificationDisabled(false);
+    console.log("📦 Push Verification payload:", payload);
 
-        let description = "Please check your credentials and try again.";
-        if (error?.data?.errors) {
-          const errorMessages = Object.values(error.data.errors).flat();
-          if (errorMessages.length > 0) description = errorMessages.join(" ");
-        } else if (error?.data?.message) {
-          description = error.data.message;
-        }
-
-        toast.error("Send to Dispatch failed", {
-          description,
-          duration: 4000,
-        });
+    try {
+      const response = await pushVerification(payload).unwrap();
+      console.log("✅ Push Verification API Response:", response);
+      toast.success("Sent to Dispatch successfully");
+      setDispatchDisabled(true);
+      refetchData?.();
+    } catch (error) {
+      console.error("❌ Push Verification API Error:", error);
+      toast.error("Push failed", {
+        description: error?.data?.message || "Try again.",
       });
+    }
   };
-  const handleClose = () => onClose();
+
+  const handleClose = () => onClose?.();
 
   return (
     <div className="flex flex-row justify-between w-full">
       <EditStatusDialog
-        rowData={rowData}
         view="verificationstart"
+        rowData={rowData}
         onSubmit={handleStartApi}
       >
         <Button
@@ -144,7 +121,7 @@ export default function VerificationFooter({
 
       <Button
         variant="destructive"
-        onClick={onClose}
+        onClick={handleClose}
         className="mt-2 mr-2 uppercase"
       >
         Close

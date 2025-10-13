@@ -1,24 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-// import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import {
   resetDispatchData,
-  setAssignedTo,
-  setCarMake,
-  setCarPlate,
-  setCollectionType,
-  setCustomerCourierId,
-  setCustomerCourierName,
-  setCustomerCourierPhone,
   setDispatch,
-  setDispatchIds,
-  setDriverId,
-  setDriverName,
-  setInvoices,
-  setRouteCode,
-  setRouteName,
 } from "@/features/dispatch/dispatchSlice";
 import {
   usePushDispatchProcessMutation,
@@ -35,65 +21,45 @@ export default function DispatchFooter({
   selectValues,
   onSubmit,
   onClose,
-  onEnableSelection
+  onEnableSelection,
 }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
-  const [collectionType, setCollectionType] = useState("");
-  const [routeCode, setRouteCode] = useState(0);
-  const [routeName, setRouteName] = useState("");
-  const [driverName, setDriverName] = useState("" || null);
-  const [driverId, setDriverId] = useState(0 || null);
-  const [carMake, setCarMake] = useState("" || null);
-  const [carPlate, setCarPlate] = useState("" || null);
-  // const [customerCourierName, setCustomerCourierName] = useState("" || null);
-  // const [customerCourierId, setCustomerCourierId] = useState(0 || null);
-  // const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
   const [dispatchRemarks, setDispatchRemarks] = useState("");
-  const [isPush, setIsPush] = useState(true);
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const { courierDetails, driverDetails, clientDetails } = useSelector(
+  const { courierDetails, driverDetails } = useSelector(
     (state) => state.dispatch
   );
 
-  const [
-    startDispatch,
-    { data: startData, isLoading: startLoading, isError: startError },
-  ] = useStartDispatchProcessMutation();
-  const [sendDispatch, { data, isLoading, isError }] =
-    usePushDispatchProcessMutation();
-  // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
+  const [startDispatch] = useStartDispatchProcessMutation();
+  const [sendDispatch] = usePushDispatchProcessMutation();
 
   const handleStart = async () => {
-    const payload = {
-      dispatchIds: dispatchIDs,
-      userName: "",
-    };
+    const payload = { dispatchIds: dispatchIDs };
+
     try {
       const data = await startDispatch(payload).unwrap();
-      const assignedTo = data?.value?.assignedTo || "—";
-      dispatch(setAssignedTo(assignedTo));
-      console.log(data);
-      // if (refetchData) setTimeout(() => refetchData(), 50);
-      if (onEnableSelection) onEnableSelection();
+      console.log("✅ Dispatch Start Response:", data);
+
+      setStartDisabled(true);
       setDeliveryDisabled(false);
       setSaveDisabled(false);
-      setStartDisabled(true);
-      toast.success("Dispatch started!");
+
+      if (onEnableSelection) onEnableSelection();
+      toast.success("Dispatch started successfully!");
     } catch (error) {
-        toast.error("Dispatch Failed", {
-          description:
-            error?.data?.message || error?.data?.title || "Please try again",
-          duration: 4000,
-        });
+      console.error("❌ Dispatch Start Error:", error);
+      toast.error("Dispatch start failed", {
+        description:
+          error?.data?.message || error?.data?.title || "Please try again.",
+      });
       setDeliveryDisabled(true);
       setSaveDisabled(true);
     }
-    setDeliveryDisabled(false);
-    setSaveDisabled(false);
   };
 
   const handleSave = async () => {
@@ -104,7 +70,6 @@ export default function DispatchFooter({
     const formData = {
       dispatchIds: dispatchIDs,
       collectionType: selectValues.collectionType,
-      // routeCode: 0 || null,
       routeName: selectValues?.dispatchRoute || null,
       driverName: driverDetails?.driverName,
       driverId: driverDetails?.driverId,
@@ -116,42 +81,46 @@ export default function DispatchFooter({
       isPush: false,
     };
 
-    if(selectValues.collectionType === 'delivery'){
-      delete formData.customerCourierId
-      delete formData.customerCourierName
-      delete formData.customerCourierPhone
+    if (selectValues.collectionType === "delivery") {
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
 
-    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
-      delete formData.driverId
-      delete formData.driverName
-      delete formData.routeName
-      delete formData.carMake
-      delete formData.carPlate
+    if (
+      selectValues.collectionType === "self-collection" ||
+      selectValues.collectionType === "courier"
+    ) {
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
 
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
 
-      toast.success("Dispatch saved succesfully!");
-      console.log(data);
+      toast.success("Dispatch saved successfully!");
+      console.log("✅ Dispatch Save Response:", data);
+
       setDeliveryDisabled(false);
       dispatch(resetDispatchData());
       navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
-      let description = "Saving failed. Please try again.";
-
-      toast.error("Dispatching start Failed", {
-        description: error?.data?.message || error?.data?.title || description,
-        duration: 4000,
+      console.error("❌ Dispatch Save Error:", error);
+      toast.error("Saving failed", {
+        description:
+          error?.data?.message ||
+          error?.data?.title ||
+          "Saving failed. Please try again.",
       });
       setSaveDisabled(true);
       setStartDisabled(true);
     }
-    onSubmit(rowData);
-    setSaveDisabled(true);
-    setStartDisabled(true);
+
+    onSubmit?.(rowData);
   };
 
   const handleDelivery = async () => {
@@ -162,8 +131,7 @@ export default function DispatchFooter({
     const formData = {
       dispatchIds: dispatchIDs,
       collectionType: selectValues.collectionType,
-      // routeCode,
-      routeName:selectValues?.dispatchRoute,
+      routeName: selectValues?.dispatchRoute,
       driverName: driverDetails?.driverName,
       driverId: driverDetails?.driverId,
       carMake: driverDetails?.carMake,
@@ -175,89 +143,76 @@ export default function DispatchFooter({
       isPush: true,
     };
 
-    {/* Remove unneccessary values from payload */}
-    if(selectValues.collectionType === 'delivery'){
-      delete formData.customerCourierId
-      delete formData.customerCourierName
-      delete formData.customerCourierPhone
+    if (selectValues.collectionType === "delivery") {
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
 
-    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
-      delete formData.driverId
-      delete formData.driverName
-      delete formData.routeName
-      delete formData.carMake
-      delete formData.carPlate
+    if (
+      selectValues.collectionType === "self-collection" ||
+      selectValues.collectionType === "courier"
+    ) {
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
 
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
-
       toast.success("Dispatch pushed successfully!");
-      console.log(data);
-      navigate(PROTECTED_ROUTES.OVERVIEW);
+      console.log("✅ Dispatch Push Response:", data);
+
       dispatch(resetDispatchData());
+      navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
-      let description = "Saving failed. Please try again.";
-
-      toast.error("Dispatching push Failed", {
-        description: error?.data?.message || error?.data?.title || description,
-        duration: 4000,
+      console.error("❌ Dispatch Push Error:", error);
+      toast.error("Dispatch push failed", {
+        description:
+          error?.data?.message ||
+          error?.data?.title ||
+          "Dispatch push failed. Please try again.",
       });
+      setDeliveryDisabled(true);
     }
-
-    onSubmit(rowData);
-    if (onClose) onClose();
-    setDeliveryDisabled(true);
-    setStartDisabled(false);
-    setSaveDisabled(false);
   };
 
   return (
-    <div className="flex flex-row justify-center w-full">
-      <EditStatusDialog
-        rowData={rowData}
-        view="dispatchstart"
-        onSubmit={handleStart}
+    <div className="flex justify-end gap-2 p-4 border-t">
+      <Button
+        variant="outline"
+        onClick={onClose}
+        className="text-gray-600 border-gray-400"
       >
-        <Button
-          variant="apply"
-          // onClick={handleStart}
-          disabled={startDisabled}
-          className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
-        >
-          Start
-        </Button>
-      </EditStatusDialog>
-      <EditStatusDialog
-        rowData={rowData}
-        view="dispatchstart"
-        onSubmit={handleSave}
+        Cancel
+      </Button>
+
+      <Button
+        onClick={handleStart}
+        disabled={startDisabled}
+        className="bg-blue-600 text-white hover:bg-blue-700"
       >
-        <Button
-          variant="verification"
-          // onClick={handleSave}
-          disabled={saveDisabled}
-          className="mt-1 mr-2 uppercase text-xs font-medium"
-        >
-          Save
-        </Button>
-      </EditStatusDialog>
-      <EditStatusDialog
-        rowData={rowData}
-        view="dispatchstart"
-        onSubmit={handleDelivery}
+        Start
+      </Button>
+
+      <Button
+        onClick={handleSave}
+        disabled={!hasCollectionType || saveDisabled}
+        className="bg-green-600 text-white hover:bg-green-700"
       >
-        <Button
-          variant="apply"
-          // onClick={handleDelivery}
-          disabled={deliveryDisabled || !hasCollectionType}
-          className="mt-1 uppercase text-xs font-medium "
-        >
-          Push
-        </Button>
-      </EditStatusDialog>
+        Save
+      </Button>
+
+      <Button
+        onClick={handleDelivery}
+        disabled={!hasCollectionType || deliveryDisabled}
+        className="bg-orange-600 text-white hover:bg-orange-700"
+      >
+        Push
+      </Button>
     </div>
   );
 }

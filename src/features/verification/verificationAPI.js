@@ -55,10 +55,10 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       providesTags: ["verification_tracking"],
     }),
- 
+ // ✅ Start verification process API
     startVerificationProcess: builder.mutation({
-      query: (docNum) => ({
-        url: `/verification/${docNum}/start`,
+      query: ({ docNum, userName }) => ({
+        url: `/verification/${docNum}/${userName}/start`,
         method: "POST",
       }),
       invalidatesTags: [
@@ -67,12 +67,13 @@ export const VerificationApi = apiClient.injectEndpoints({
         "store_invoices",
       ],
     }),
- 
+
+    // ✅ Push verification invoice to Dispatch stage
     pushVerificationInvoice: builder.mutation({
-      query: ({ docNum, totalWeightKg = 0, verificationRemarks = "" }) => ({
+      query: ({ docNum, userName, totalWeightKg = 0, verificationRemarks = "" }) => ({
         url: `/verification/${docNum}/push`,
         method: "POST",
-        body: { docNum, totalWeightKg, verificationRemarks },
+        body: { docNum, userName, totalWeightKg, verificationRemarks },
       }),
       invalidatesTags: [
         "verification_tracking",
@@ -89,7 +90,7 @@ export const {
   useLazyGetFilteredVerificationInvoicesQuery,
   useSearchVerificationInvoicesQuery,
   useGetVerificationTrackingQuery,
-  useStartVerificationProcessMutation,
+   useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
 } = VerificationApi;
  

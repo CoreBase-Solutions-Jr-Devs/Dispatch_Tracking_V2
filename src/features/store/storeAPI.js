@@ -1,5 +1,5 @@
 import { apiClient } from "@/app/api-client";
- 
+
 export const StoreApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getStoreInvoices: builder.query({
@@ -40,7 +40,7 @@ export const StoreApi = apiClient.injectEndpoints({
       }),
       providesTags: ["store_invoices"],
     }),
- 
+
     searchStoreInvoices: builder.query({
       query: ({ searchWord }) => ({
         url: "/store/search",
@@ -49,7 +49,7 @@ export const StoreApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["store_invoices"],
     }),
- 
+
     getStoreTracking: builder.query({
       query: (docNum) => ({
         url: `/store/${docNum}/store-tracking`,
@@ -57,26 +57,26 @@ export const StoreApi = apiClient.injectEndpoints({
       }),
       providesTags: ["store_tracking"],
     }),
- 
+
     startStoreProcess: builder.mutation({
-      query: (docNum) => ({
-        url: `/store/${docNum}/start`,
+      query: ({ docNum, userName }) => ({
+        url: `/store/${docNum}/${userName}/start`,
         method: "POST",
       }),
       invalidatesTags: ["store_tracking", "store_invoices"],
     }),
- 
+
     pushStoreInvoice: builder.mutation({
-      query: ({ docNum, totalWeightKg, storeRemarks }) => ({
+      query: ({ docNum, userName, totalWeightKg, storeRemarks }) => ({
         url: `/store/${docNum}/push`,
         method: "POST",
-        body: { docNum, totalWeightKg, storeRemarks },
+        body: { docNum, userName, totalWeightKg, storeRemarks },
       }),
       invalidatesTags: ["store_invoices", "store_tracking"],
     }),
   }),
 });
- 
+
 export const {
   useGetStoreInvoicesQuery,
   useGetFilteredStoreInvoicesQuery,
@@ -86,4 +86,3 @@ export const {
   useStartStoreProcessMutation,
   usePushStoreInvoiceMutation,
 } = StoreApi;
- 
