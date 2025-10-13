@@ -47,7 +47,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const [show, setShow] = useState(false);
   const [mpesa, setMpesa] = useState(false);
   const [dispute, setDispute] = useState(false);
-  const [dispute, setDispute] = useState(false);
   const [otp, setOTP] = useState("");
   const [mpesaDetails, setMpesaDetails] = useState({
     phonenumber: "",
@@ -107,7 +106,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
 
   const handleRowCheck = (value, row) => {
     setSelectedRow({});
-
 
     if (value) {
       setCheckedInvoices((prev) => [...prev, row]);
@@ -347,7 +345,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
               handleRowSelection={handleParentSelect}
               handleRowCheck={handleRowCheck}
               checkedInvoices={checkedInvoices}
-              checkedInvoices={checkedInvoices}
             />
           </div>
           {/* <DeliverySummary data={deliveryInvoices} /> */}
@@ -397,14 +394,9 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                       !Boolean(Object.keys(selectedRow).length) ||
                       isGeneratingOTPLoading ||
                       isvalidatingOTPLoading
-                      isLoading ||
-                      !Boolean(Object.keys(selectedRow).length) ||
-                      isGeneratingOTPLoading ||
-                      isvalidatingOTPLoading
                     }
                     generateOTP={handleOTPGenerate}
                     onSubmit={handleCompleteDelivery}
-                    handleDispute={handleDispute}
                     handleDispute={handleDispute}
                   />
                 </CardFooter>
@@ -577,7 +569,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
               />
             </div>
             <Button variant="default" type="submit" className="w-full">
-            <Button variant="default" type="submit" className="w-full">
               Validate
             </Button>
           </form>
@@ -630,7 +621,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
             <Button
               type="submit"
               // onClick={() => setMpesa(false)}
-              disabled={isPayingLoading}
               disabled={isPayingLoading}
               variant="default"
               className="w-full"
