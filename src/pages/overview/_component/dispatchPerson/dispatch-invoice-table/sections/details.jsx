@@ -12,6 +12,7 @@ import {
   setCustomerCourierPhone,
   setDeliveryDetails,
   setDriverDetails,
+  setRouteName,
 } from "@/features/dispatch/dispatchSlice";
 
 export default function DispatchDetails({
@@ -21,7 +22,8 @@ export default function DispatchDetails({
   driverLoading,
   driverError,
   driverApiError,
-  enabled
+  enabled,
+  route
 }) {
   const [courierDetails, setCourierDetailsState] = useState({
     customerCourierName: "",
@@ -31,6 +33,9 @@ export default function DispatchDetails({
   });
 
   const dispatch = useDispatch();
+
+  const deliveryDetails = useSelector((state) => state.dispatch.deliveryDetails);
+
 
   const handleChange = (field, e) => {
     const { name, value } = e.target;
@@ -46,11 +51,21 @@ export default function DispatchDetails({
       return dispatch(setCourierDetails({ ...courierDetails, [name]: value }));
     }
     if (field === "delivery") {
-      return dispatch(setDeliveryDetails({ ...data, [name]: value }));
+      return dispatch(setDeliveryDetails({ ...deliveryDetails, [name]: value }));
+    }
+    if (field === "route") {
+      return dispatch(setRouteName({ ...route, [name]: value }));
     }
 
     return;
   };
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setDeliveryDetails(data));
+    }
+  }, [data, dispatch]);
+
 
 
   return (
@@ -124,7 +139,7 @@ export default function DispatchDetails({
                 className="w-3/5 h-5 text-xs"
                 name="driverId"
                 value=""
-                onChange={(e) => e.handleChange?.(e.target.value)}
+                onChange={(e) => handleChange("delivery", e)}
                 disabled={!enabled}
               />
             </div>
@@ -135,7 +150,7 @@ export default function DispatchDetails({
                 className="w-3/5 h-5 text-xs"
                 name="driverLicense"
                 value=""
-                onChange={(e) => e.handleChange?.(e.target.value)}
+                onChange={(e) => handleChange("delivery", e)}
                 disabled={!enabled}
               />
             </div>
@@ -146,7 +161,7 @@ export default function DispatchDetails({
                 className="w-3/5 h-5 text-xs"
                 name="carMake"
                 value=""
-                onChange={(e) => e.handleChange?.(e.target.value)}
+                onChange={(e) => handleChange("delivery", e)}
                 disabled={!enabled}
               />
             </div>
@@ -157,7 +172,7 @@ export default function DispatchDetails({
                 className="w-3/5 h-5 text-xs"
                 name="regNo"
                 value=""
-                onChange={(e) => e.handleChange?.(e.target.value)}
+                onChange={(e) => handleChange("delivery", e)}
                 disabled={!enabled}
               />
             </div>
@@ -169,15 +184,12 @@ export default function DispatchDetails({
         <section className="flex flex-col w-full h-full gap-2">
           <div className="flex items-center justify-between w-full">
             <Label className="text-xs font-medium w-1/3">DP ID:</Label>
-            {/* <Label className="text-xs font-medium">
-              {data.personalId}
-            </Label> */}
             <Input 
               className="w-2/3 h-6 text-xs"
-              value={data.personalId || ""}
-              name="personalId"
+              value={deliveryDetails.driverId || ""}
+              name="driverId"
               onChange={(e) => handleChange("delivery", e)}
-              disabled={!enabled}
+              disabled={false}
             />
           </div>
 
@@ -188,10 +200,10 @@ export default function DispatchDetails({
             </Label> */}
             <Input 
               className="w-2/3 h-6 text-xs"
-              value={data.driverLicenseNo || ""}
+              value={deliveryDetails.driverLicenseNo || ""}
               name="driverLicenseNo"
               onChange={(e) => handleChange("delivery", e)}
-              disabled={!enabled}
+              disabled={false}
             />
           </div>
 
@@ -200,10 +212,10 @@ export default function DispatchDetails({
             {/* <Label className="text-xs font-medium">{data.carMake}</Label> */}
             <Input 
               className="w-2/3 h-6 text-xs"
-              value={data.carMake || ""}
+              value={deliveryDetails?.carMake || ""}
               name="carMake"
               onChange={(e) => handleChange("delivery", e)}
-              disabled={!enabled}
+              disabled={false}
             />
           </div>
 
@@ -212,10 +224,10 @@ export default function DispatchDetails({
             {/* <Label className="text-xs font-medium">{data.regNo}</Label> */}
             <Input 
               className="w-2/3 h-6 text-xs"
-              value={data.regNo || ""}
+              value={deliveryDetails?.regNo || ""}
               name="regNo"
               onChange={(e) => handleChange("delivery", e)}
-              disabled={!enabled}
+              disabled={false}
             />
           </div>
         </section>
@@ -267,6 +279,19 @@ export default function DispatchDetails({
           />
         </div>
       </section>
+    )}
+
+    {collectionType === "delivery" && route && (
+      <div className="flex justify-between items-center w-full">
+        <Label className="text-xs font-medium w-1/3">Route:</Label>
+        <Input 
+          className="text-xs font-medium !h-6 w-2/3 truncate"
+          title={route}
+          value={route}
+          onChange={(e) => handleChange("route", e)}
+          disabled={!enabled ? true : false}
+        />
+      </div>
     )}
 
     </div>
