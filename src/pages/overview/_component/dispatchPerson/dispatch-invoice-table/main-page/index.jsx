@@ -48,8 +48,20 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     isError: filterError,
   } = useFilterOptionsQuery();
 
-  const deliveryGuyOptions =
-    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
+  const deliveryGuyOptions = (
+    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    value: opt.label,
+  }));
+
+  const routeOptions = (
+    filterOptions?.find((opt) => opt.key === "route")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    value: opt.label,
+  }));
+
 
   // const { data } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
 
@@ -60,33 +72,10 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     collectionType: "",
   });
 
-  //   useEffect(() => {
-  //     saveSelectedDispatches({ pageNumber, pageSize });
-  //   }, [pageNumber, pageSize, saveSelectedDispatches]);
-
-  // useEffect(() => {
-  //   if (rowData) {
-  //     setSelectValues({
-  //       dispatchPerson: rowData.dispatchPerson || "",
-  //       dispatchRoute: rowData.dispatchRoute || "",
-  //       vehicle: rowData.vehicle || "",
-  //       collectionType: rowData.collectionType || "",
-  //     });
-  //   }
-  // }, [rowData]);
-
   const handleSelectChange = (field, value) => {
     console.log(field, value);
 
     setSelectValues((prev) => {
-      // if (field === "collectionType") {
-      //   return {
-      //     ...prev,
-      //     collectionType: value,
-      //     dispatchPerson: value === "delivery" ? prev.dispatchPerson : "",
-      //     dispatchRoute: value === "delivery" ? prev.dispatchRoute : "",
-      //   };
-      // }
       return { ...prev, [field]: value };
     });
   };
@@ -266,6 +255,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 onChange={handleSelectChange}
                 deliveryGuyOptions={deliveryGuyOptions}
                 enabled={startDispatch}
+                routeOptions={routeOptions}
               />
               <DispatchDetails
                 data={driverDetails}
@@ -275,6 +265,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 driverError={driverError}
                 driverApiError={driverApiError}
                 enabled={startDispatch}
+                route={selectValues.dispatchRoute}
               />
               <DispatchRemarks enabled={startDispatch}/>
               <DispatchMeta startDispatch={startDispatch}/>
