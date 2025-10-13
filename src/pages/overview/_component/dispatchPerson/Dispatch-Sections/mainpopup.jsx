@@ -50,6 +50,7 @@ export default function DispatchMainPopup({ rowData, onClose }) {
   );
 
   const rows = details || [];
+  const status = Number(rowData?.status);
 
   return (
     <div className="my-1 overflow-x-auto">
@@ -102,17 +103,19 @@ export default function DispatchMainPopup({ rowData, onClose }) {
       </Table>
 
       <DialogFooter className="flex justify-end gap-2 px-3 py-3">
-        <EditStatusDialog
-          rowData={rowData}
-          view="dispatchedit"
-          onSubmit={(updatedData) =>
-            console.log("Edited collection type:", updatedData)
-          }
-        >
-          <Button variant="apply" onClick={(e) => e.stopPropagation()}>
-            Edit{" "}
-          </Button>
-        </EditStatusDialog>
+        {status === 3 && (
+          <EditStatusDialog
+            rowData={rowData}
+            view="dispatchedit"
+            onSubmit={(updatedData) =>
+              console.log("Edited collection type:", updatedData)
+            }
+          >
+            <Button variant="apply" onClick={(e) => e.stopPropagation()}>
+              Edit
+            </Button>
+          </EditStatusDialog>
+        )}
 
         <Button variant="default" onClick={onClose}>
           Close
