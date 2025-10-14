@@ -203,11 +203,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       .unwrap()
       .then((data) => {
         toast.success("OTP Validated successful");
-        setSelectedRow({});
-        setSelectedRow({});
-        setRemarks("");
-        // setOTP("");
         setShow(false);
+        setOTP("");
+        setRemarks("");
+        // setSelectedRow({});
       })
       .catch((error) => {
         toast.error("OTP Failed", {
@@ -413,69 +412,9 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                     data={selectedRow}
                     handleDispute={handleDispute}
                   />
-                  <DisputedDetails
-                    data={selectedRow}
-                    handleDispute={handleDispute}
-                  />
                 </CardContent>
               </Card>
             )}
-          </div>
-        )}
-
-        {checkedInvoices.length > 0 && (
-          <div className="w-32 flex-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-center">Mpesa Payment</CardTitle>
-                <CardTitle>{checkedInvoices[0]?.CUSNAME}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form
-                  autoComplete="off"
-                  className="space-y-4"
-                  onSubmit={handleMPesaPayment}
-                >
-                  <div>
-                    <Label className="text-sm font-medium">Phone</Label>
-                    <PhoneInput
-                      country={"ke"}
-                      value={mpesaDetails.phonenumber}
-                      inputStyle={{
-                        width: "100%",
-                        fontSize: "12px",
-                        lineHeight: "1.5",
-                        height: " calc(1.5em + 0.5rem + 2px)",
-                      }}
-                      id="phonenumber"
-                      name="phonenumber"
-                      masks={{ ke: "... ... ..." }}
-                      onChange={handlePhone}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-sm font-medium">Amount</Label>
-                    <Input
-                      type="number"
-                      value={mpesaDetails.amount}
-                      name="amount"
-                      onChange={handleChange}
-                      max={data?.BALANCE}
-                      required
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    // onClick={() => setMpesa(false)}
-                    variant="default"
-                    className="w-full"
-                    // className="w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                  >
-                    Pay
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
           </div>
         )}
 
