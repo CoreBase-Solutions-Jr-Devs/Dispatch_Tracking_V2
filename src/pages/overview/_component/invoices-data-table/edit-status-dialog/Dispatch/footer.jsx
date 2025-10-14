@@ -4,6 +4,7 @@ import { useSaveSelectionsMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
 import { setSelectedDipatches } from "@/features/dispatch/dispatchSlice";
 import { useAppDispatch } from "@/app/hook";
+import EditStatusDialog from "../edit-status-dialog";
 
 export default function DispatchFooter({
   rowData,
@@ -26,6 +27,7 @@ export default function DispatchFooter({
 
     const payload = {
       dispatchIds: selectedDocs.map((doc) => doc.dispatchId),
+      userName: "",
     };
     // const payload = {
     //   dispatchIds: [57, 56, 39, 54],
@@ -58,14 +60,20 @@ export default function DispatchFooter({
 
   return (
     <div className="flex flex-row justify-end w-full">
+      <EditStatusDialog
+        rowData={rowData}
+        view="dispatchpick"
+        onSubmit={handleSave}
+      >
       <Button
         variant="apply"
-        onClick={handleSave}
+        // onClick={handleSave}
         disabled={isLoading || !selectedDocs.length}
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
         {isLoading ? "Picking..." : "Pick"}
       </Button>
+      </EditStatusDialog>
       <Button
         variant="destructive"
         onClick={handleClose}
