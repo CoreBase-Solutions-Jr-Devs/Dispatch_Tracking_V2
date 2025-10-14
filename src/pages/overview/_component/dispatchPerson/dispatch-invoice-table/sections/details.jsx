@@ -70,10 +70,9 @@ export default function DispatchDetails({
 
   return (
     <div className="flex flex-col gap-2 text-xs font-medium">
-      <section className="flex justify-between items-center h-full">
+      {/* <section className="flex justify-between items-center h-full">
         <Label className="text-xs font-medium">Dispatch Date & Time:</Label>
-        {/* <Label className="text-xs font-medium">08/20/2025 12:31</Label> */}
-      </section>
+      </section> */}
 
       {/* Loading and error states for filter options */}
       {/* {filterLoading && <Label className="text-xs text-blue-500">Loading delivery options...</Label>}
