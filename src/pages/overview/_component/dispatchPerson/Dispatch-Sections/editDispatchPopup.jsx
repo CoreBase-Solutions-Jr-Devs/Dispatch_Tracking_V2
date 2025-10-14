@@ -23,10 +23,13 @@ import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 
 const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const dispatch = useAppDispatch();
-
   const { updatedDispatches } = useSelector((state) => state.dispatch);
 
-  let dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  const userName = useSelector(
+    (state) => state.auth?.user?.userName || "CoreVerify"
+  );
+
+  const dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
@@ -53,10 +56,8 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     isLoading: driverLoading,
     isError: driverError,
     error: driverApiError,
-  } = useGetDeliveryDriverQuery(editedDispatch.dispatchPerson, {
-    skip:
-      editedDispatch.collectionType !== "delivery" ||
-      !editedDispatch.dispatchPerson,
+  } = useGetDeliveryDriverQuery(userName, {
+    skip: editedDispatch.collectionType !== "delivery",
   });
 
   useEffect(() => {
@@ -65,30 +66,42 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     }
   }, [driverDetails, dispatch]);
 
+  // ✅ Clean payload before submission
   const cleanForm = (formData, type) => {
     if (type === "delivery") {
-      delete formData.CustomerCourierId;
-      delete formData.CustomerCourierName;
-      delete formData.CustomerCourierPhone;
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
     if (["self-collection", "courier"].includes(type)) {
-      delete formData.DriverId;
-      delete formData.DriverName;
-      delete formData.RouteName;
-      delete formData.CarMake;
-      delete formData.CarPlate;
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
   };
 
+  // ✅ Prepare payload according to API schema
   const preparePayload = (isPush = false) => {
+    if (!dispatchIDs?.length) {
+      toast.error("No dispatch IDs found.");
+      return null;
+    }
+
     const payload = {
       dispatchIds: dispatchIDs,
-      collectionType: editedDispatch.collectionType,
+      collectionType:
+        editedDispatch.collectionType?.toUpperCase() || "DELIVERY",
+      userName, // ✅ Include username (required by API)
       routeName: editedDispatch.dispatchRoute || null,
       driverName: driverDetails?.driverName || null,
       driverId: driverDetails?.driverId || null,
       carMake: driverDetails?.carMake || null,
       carPlate: driverDetails?.regNo || null,
+      customerCourierName: editedDispatch.customerCourierName || null,
+      customerCourierId: editedDispatch.customerCourierId || null,
+      customerCourierPhone: editedDispatch.customerCourierPhone || null,
       dispatchRemarks: editedDispatch.remarks || "",
       isPush,
     };
@@ -104,17 +117,20 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     try {
       await pushDispatch(payload).unwrap();
       dispatch(setDispatch(payload));
+
       toast.success(
         isPush
           ? "Dispatch pushed successfully!"
           : "Dispatch updated successfully!"
       );
+
       dispatch(resetDispatchData());
       onClose();
     } catch (error) {
+      console.error("❌ Dispatch Error:", error);
       toast.error(
         isPush ? "Failed to push dispatch" : "Failed to update dispatch",
-        { description: error?.data?.message || "Please try again" }
+        { description: error?.data?.message || "Please try again." }
       );
     }
   };
