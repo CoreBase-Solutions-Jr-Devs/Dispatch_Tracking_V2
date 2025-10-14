@@ -50,8 +50,8 @@ export const dispatchApi = apiClient.injectEndpoints({
       invalidatesTags: ["dispatch_invoices"],
     }),
     getDeliveryDriver: builder.query({
-      query: (userId) => ({
-        url: `/dispatch/delivery-driver?UserId=${userId}`,
+      query: (userName) => ({
+        url: `/dispatch/delivery-driver?UserName=${userName}`,
         method: "GET",
       }),
       providesTags: ["dispatch_driver"],
@@ -89,7 +89,6 @@ export const dispatchApi = apiClient.injectEndpoints({
 });
 
 export const {
-
   useSearchVerifiedOnDispatchQuery,
   useDispatchSearchQuery,
   useGetDeliveryDriverQuery,
