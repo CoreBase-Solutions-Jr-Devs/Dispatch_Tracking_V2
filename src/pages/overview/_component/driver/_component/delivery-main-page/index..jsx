@@ -58,9 +58,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     phonenumber: "",
     amount: 0,
     DISPATCHNUM: "",
-    BCODE: "",
-    CUS_CODE: "",
-    SALEINV_NUM: "",
   });
 
   const [deliveryComplete, { isLoading }] = useDeliveryCompleteMutation();
