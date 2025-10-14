@@ -23,13 +23,11 @@ import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 
 const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const dispatch = useAppDispatch();
+
   const { updatedDispatches } = useSelector((state) => state.dispatch);
-
-  const userName = useSelector(
-    (state) => state.auth?.user?.userName || "CoreVerify"
+  const dispatchIDs = (updatedDispatches || []).map(
+    (item) => item.dispatchId
   );
-
-  const dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
@@ -56,52 +54,49 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     isLoading: driverLoading,
     isError: driverError,
     error: driverApiError,
-  } = useGetDeliveryDriverQuery(userName, {
-    skip: editedDispatch.collectionType !== "delivery",
+  } = useGetDeliveryDriverQuery(editedDispatch.dispatchPerson, {
+    skip:
+      editedDispatch.collectionType !== "delivery" ||
+      !editedDispatch.dispatchPerson,
   });
 
   useEffect(() => {
-    if (driverDetails) {
-      dispatch(setDriverDetails(driverDetails));
-    }
-  }, [driverDetails, dispatch]);
+    if (driverDetails) setLocalDriverDetails(driverDetails);
+  }, [driverDetails]);
 
-  // ✅ Clean payload before submission
+  const handleFieldChange = (field, value) => {
+    setEditedDispatch((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const deliveryGuyOptions =
+    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
+  const routeOptions =
+    filterOptions?.find((opt) => opt.key === "route")?.options || [];
+
   const cleanForm = (formData, type) => {
     if (type === "delivery") {
-      delete formData.customerCourierId;
-      delete formData.customerCourierName;
-      delete formData.customerCourierPhone;
+      delete formData.CustomerCourierId;
+      delete formData.CustomerCourierName;
+      delete formData.CustomerCourierPhone;
     }
     if (["self-collection", "courier"].includes(type)) {
-      delete formData.driverId;
-      delete formData.driverName;
-      delete formData.routeName;
-      delete formData.carMake;
-      delete formData.carPlate;
+      delete formData.DriverId;
+      delete formData.DriverName;
+      delete formData.RouteName;
+      delete formData.CarMake;
+      delete formData.CarPlate;
     }
   };
 
-  // ✅ Prepare payload according to API schema
   const preparePayload = (isPush = false) => {
-    if (!dispatchIDs?.length) {
-      toast.error("No dispatch IDs found.");
-      return null;
-    }
-
     const payload = {
       dispatchIds: dispatchIDs,
-      collectionType:
-        editedDispatch.collectionType?.toUpperCase() || "DELIVERY",
-      userName, // ✅ Include username (required by API)
+      collectionType: editedDispatch.collectionType,
       routeName: editedDispatch.dispatchRoute || null,
-      driverName: driverDetails?.driverName || null,
-      driverId: driverDetails?.driverId || null,
-      carMake: driverDetails?.carMake || null,
-      carPlate: driverDetails?.regNo || null,
-      customerCourierName: editedDispatch.customerCourierName || null,
-      customerCourierId: editedDispatch.customerCourierId || null,
-      customerCourierPhone: editedDispatch.customerCourierPhone || null,
+      driverName: localDriverDetails?.driverName || null,
+      driverId: localDriverDetails?.driverId || null,
+      carMake: localDriverDetails?.carMake || null,
+      carPlate: localDriverDetails?.regNo || null,
       dispatchRemarks: editedDispatch.remarks || "",
       isPush,
     };
@@ -117,20 +112,18 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     try {
       await pushDispatch(payload).unwrap();
       dispatch(setDispatch(payload));
-
+      dispatch(setDriverDetails(localDriverDetails));
       toast.success(
         isPush
           ? "Dispatch pushed successfully!"
           : "Dispatch updated successfully!"
       );
-
       dispatch(resetDispatchData());
       onClose();
     } catch (error) {
-      console.error("❌ Dispatch Error:", error);
       toast.error(
         isPush ? "Failed to push dispatch" : "Failed to update dispatch",
-        { description: error?.data?.message || "Please try again." }
+        { description: error?.data?.message || "Please try again" }
       );
     }
   };

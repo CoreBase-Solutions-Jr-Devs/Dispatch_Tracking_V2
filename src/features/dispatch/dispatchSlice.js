@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  assignedTo: "",
   carMake: "",
   carPlate: "",
   clientName: "",
@@ -37,6 +38,7 @@ const initialState = {
   driverDetails: {},
   courierDetails: {},
   clientDetails: {},
+  deliveryDetails:{},
   //
   updatedDispatches: [],
 };
@@ -66,6 +68,7 @@ const dispatchSlice = createSlice({
       state.driverDetails = {};
       state.courierDetails = {};
       state.clientDetails = {};
+      state.deliveryDetails = {};
       state.collectionType = "";
       state.routeCode = 0;
       state.routeName = "";
@@ -97,6 +100,9 @@ const dispatchSlice = createSlice({
     },
     setCustomerCourierId: (state, action) => {
       state.customerCourierId = action.payload.customerCourierId;
+    },
+    setAssignedTo: (state, action) => {
+      state.assignedTo = action.payload;
     },
     setCustomerCourierPhone: (state, action) => {
       state.customerCourierPhone = action.payload.customerCourierPhone;
@@ -161,6 +167,9 @@ const dispatchSlice = createSlice({
     setClientDetails: (state, action) => {
       state.clientDetails = action.payload;
     },
+    setDeliveryDetails: (state, action) => {
+      state.deliveryDetails = action.payload;
+    },
   },
 });
 
@@ -192,6 +201,8 @@ export const {
   setDriverDetails,
   setCourierDetails,
   setClientDetails,
+  setDeliveryDetails,
+  setAssignedTo,
 } = dispatchSlice.actions;
 
 export default dispatchSlice.reducer;
