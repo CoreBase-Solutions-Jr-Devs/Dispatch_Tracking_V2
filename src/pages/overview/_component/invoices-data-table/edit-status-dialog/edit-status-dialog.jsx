@@ -53,7 +53,8 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
     case "storepush":
     case "verificationstart":
     case "dispatchstart":
-       case "verificationpush":
+    case "verificationpush":
+    case "dispatchpick":
       dialogClass = "sm:max-w-sm";
       break;
     case "dispatch":
