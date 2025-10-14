@@ -35,7 +35,7 @@ export default function DispatchFooter({
   selectValues,
   onSubmit,
   onClose,
-  onEnableSelection
+  onEnableSelection,
 }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
@@ -59,6 +59,8 @@ export default function DispatchFooter({
     (state) => state.dispatch
   );
 
+  const { user } = useSelector((state) => state.auth);
+
   const [
     startDispatch,
     { data: startData, isLoading: startLoading, isError: startError },
@@ -70,7 +72,7 @@ export default function DispatchFooter({
   const handleStart = async (username) => {
     const payload = {
       dispatchIds: dispatchIDs,
-      userName: username || user?.userName || "",
+      userName: user?.username || "",
     };
     try {
       const data = await startDispatch(payload).unwrap();
@@ -84,11 +86,11 @@ export default function DispatchFooter({
       setStartDisabled(true);
       toast.success("Dispatch started!");
     } catch (error) {
-        toast.error("Dispatch Failed", {
-          description:
-            error?.data?.message || error?.data?.title || "Please try again",
-          duration: 4000,
-        });
+      toast.error("Dispatch Failed", {
+        description:
+          error?.data?.message || error?.data?.title || "Please try again",
+        duration: 4000,
+      });
       setDeliveryDisabled(true);
       setSaveDisabled(true);
     }
@@ -114,20 +116,24 @@ export default function DispatchFooter({
       customerCourierId: courierDetails?.customerCourierId,
       customerCourierPhone: courierDetails?.customerCourierPhone,
       isPush: false,
+      userName: user?.username || "",
     };
 
-    if(selectValues.collectionType === 'delivery'){
-      delete formData.customerCourierId
-      delete formData.customerCourierName
-      delete formData.customerCourierPhone
+    if (selectValues.collectionType === "delivery") {
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
 
-    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
-      delete formData.driverId
-      delete formData.driverName
-      delete formData.routeName
-      delete formData.carMake
-      delete formData.carPlate
+    if (
+      selectValues.collectionType === "self-collection" ||
+      selectValues.collectionType === "courier"
+    ) {
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
 
     try {
@@ -162,8 +168,9 @@ export default function DispatchFooter({
     const formData = {
       dispatchIds: dispatchIDs,
       collectionType: selectValues.collectionType,
+      userName: user?.username || "",
       // routeCode,
-      routeName:selectValues?.dispatchRoute,
+      routeName: selectValues?.dispatchRoute,
       driverName: driverDetails?.driverName,
       driverId: driverDetails?.driverId,
       carMake: driverDetails?.carMake,
@@ -175,19 +182,24 @@ export default function DispatchFooter({
       isPush: true,
     };
 
-    {/* Remove unneccessary values from payload */}
-    if(selectValues.collectionType === 'delivery'){
-      delete formData.customerCourierId
-      delete formData.customerCourierName
-      delete formData.customerCourierPhone
+    {
+      /* Remove unneccessary values from payload */
+    }
+    if (selectValues.collectionType === "delivery") {
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
 
-    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
-      delete formData.driverId
-      delete formData.driverName
-      delete formData.routeName
-      delete formData.carMake
-      delete formData.carPlate
+    if (
+      selectValues.collectionType === "self-collection" ||
+      selectValues.collectionType === "courier"
+    ) {
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
 
     try {
