@@ -12,10 +12,8 @@ export default function DispatchSelect({
   deliveryGuyOptions = [],
   routeOptions = [],
   vehicleOptions = [],
-  enabled
+  enabled,
 }) {
-  console.log(values);
-
   const getDeliveryGuyLabel = (val) => {
     const found = deliveryGuyOptions.find((item) => item.value === val);
     return found ? found.label : "Select...";
@@ -24,12 +22,12 @@ export default function DispatchSelect({
   const routeLabel = (val) => {
     const found = routeOptions.find((item) => item.value === val);
     return found ? found.label : "Select...";
-  }
+  };
 
   const vehicleLabel = (val) => {
     const found = vehicleOptions.find((item) => item.value === val);
     return found ? found.label : "Select...";
-  }
+  };
 
   return (
     <div className="flex flex-col justify-between gap-2 text-xs font-medium">
@@ -40,29 +38,34 @@ export default function DispatchSelect({
           onValueChange={(val) => onChange("collectionType", val)}
           // disabled={!enabled}
         >
-          <SelectTrigger 
-            className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" 
+          <SelectTrigger
+            className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium"
             // disabled={!enabled}
           >
-            {collectionTypeOptions.find((opt) => opt.value === values?.collectionType)?.label || "Select..."}
+            {collectionTypeOptions?.find(
+              (opt) => opt.value === values?.collectionType
+            )?.label || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
-            {collectionTypeOptions.length > 0 ? (
-              collectionTypeOptions.map((item, i) => (
-                <SelectItem key={`${item.value}_${i}`} value={item.value}>
-                  {item.label}
-                </SelectItem>
-              ))
-            ) : (
-              <SelectItem disabled value="">
-                No collection options
-              </SelectItem>
-            )}
+            {
+              collectionTypeOptions.length > 0
+                ? collectionTypeOptions.map((item, i) => (
+                    <SelectItem
+                      key={`${item.value}_${i}`}
+                      value={item?.value || 0}
+                    >
+                      {item.label}
+                    </SelectItem>
+                  ))
+                : // <SelectItem disabled value="null">
+                  "No delivery options"
+              // {/* </SelectItem> */}
+            }
           </SelectContent>
         </Select>
       </div>
 
-      {values?.collectionType === "4" && (
+      {values?.collectionType === "OUR DELIVERY" && (
         <>
           <div className="flex justify-between items-center">
             <label className="text-xs font-medium">Delivery Person:</label>
@@ -71,7 +74,8 @@ export default function DispatchSelect({
               onValueChange={(val) => onChange("dispatchPerson", val)}
               // disabled={!enabled}
             >
-              <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" 
+              <SelectTrigger
+                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium"
                 // disabled={!enabled}
               >
                 <span>{getDeliveryGuyLabel(values?.dispatchPerson)}</span>
@@ -79,13 +83,16 @@ export default function DispatchSelect({
               <SelectContent className="bg-gray-200">
                 {deliveryGuyOptions.length > 0 ? (
                   deliveryGuyOptions.map((item, i) => (
-                    <SelectItem key={`${item.value}_${i}`} value={item.value}>
+                    <SelectItem
+                      key={`${item.value}_${i}`}
+                      value={item?.value || 0}
+                    >
                       {item.label}
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem disabled value="">
-                    No delivery options
+                  <SelectItem disabled value="null">
+                    "No delivery options"
                   </SelectItem>
                 )}
               </SelectContent>
@@ -99,17 +106,22 @@ export default function DispatchSelect({
               onValueChange={(val) => onChange("dispatchRoute", val)}
               // disabled={!enabled}
             >
-              <SelectTrigger 
-                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate" 
+              <SelectTrigger
+                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate"
                 // disabled={!enabled}
                 title={routeLabel(values?.dispatchRoute)}
               >
-                <span className="truncate">{routeLabel(values?.dispatchRoute)}</span>
+                <span className="truncate">
+                  {routeLabel(values?.dispatchRoute)}
+                </span>
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
                 {routeOptions.length > 0 ? (
                   routeOptions.map((item, i) => (
-                    <SelectItem key={`${item.value}_${i}`} value={item.value}>
+                    <SelectItem
+                      key={`${item.value}_${i}`}
+                      value={item.value || 0}
+                    >
                       {item.label}
                     </SelectItem>
                   ))
@@ -129,22 +141,27 @@ export default function DispatchSelect({
               onValueChange={(val) => onChange("vehicle", val)}
               // disabled={!enabled}
             >
-              <SelectTrigger 
-                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate" 
+              <SelectTrigger
+                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate"
                 // disabled={!enabled}
                 title={vehicleLabel(values?.vehicle)}
               >
-                <span className="truncate">{vehicleLabel(values?.vehicle)}</span>
+                <span className="truncate">
+                  {vehicleLabel(values?.vehicle)}
+                </span>
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
                 {vehicleOptions.length > 0 ? (
                   vehicleOptions.map((item, i) => (
-                    <SelectItem key={`${item.value}_${i}`} value={item.value}>
+                    <SelectItem
+                      key={`${item.value}_${i}`}
+                      value={item.value || 0}
+                    >
                       {item.label}
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem disabled value="">
+                  <SelectItem disabled value="null">
                     No vehicle options
                   </SelectItem>
                 )}

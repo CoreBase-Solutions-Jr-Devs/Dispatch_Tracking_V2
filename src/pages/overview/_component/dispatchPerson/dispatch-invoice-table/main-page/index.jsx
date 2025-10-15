@@ -57,6 +57,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     filterOptions?.find((opt) => opt.key === "collectionType")?.options || []
   ).map((opt) => ({
     label: opt.label,
+    // value: opt.value,
     value: opt.label,
   }));
 
@@ -71,14 +72,14 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     filterOptions?.find((opt) => opt.key === "route")?.options || []
   ).map((opt) => ({
     label: opt.label,
-    value: opt.label,
+    value: opt.value,
   }));
 
   const vehicleOptions = (
     filterOptions?.find((opt) => opt.key === "transporter")?.options || []
   ).map((opt) => ({
     label: opt.label,
-    value: opt.label,
+    value: opt.value,
   }));
 
   // const { data } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
@@ -106,7 +107,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     error: driverApiError,
   } = useGetDeliveryDriverQuery(selectValues.dispatchPerson, {
     skip:
-      selectValues.collectionType !== "delivery" ||
+      selectValues.collectionType !== "OUR DELIVERY" ||
       !selectValues.dispatchPerson,
   });
 
@@ -279,7 +280,8 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
               />
               <DispatchDetails
                 data={driverDetails}
-                collectionType={collectionTypeOptions}
+                collectionTypeOptions={collectionTypeOptions}
+                collectionType={selectValues.collectionType}
                 deliveryPerson={selectValues.dispatchPerson}
                 driverLoading={driverLoading}
                 driverError={driverError}

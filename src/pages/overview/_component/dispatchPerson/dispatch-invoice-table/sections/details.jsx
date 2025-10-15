@@ -15,12 +15,15 @@ import {
   setRouteName,
 } from "@/features/dispatch/dispatchSlice";
 
-
 const COLLECTION_TYPES = {
-  COURIER: "3",
-  CUSTOMER: "1",
-  OUR_DELIVERY: "4",
-  SALESMAN: "2",
+  // COURIER: "3",
+  // CUSTOMER: "1",
+  // OUR_DELIVERY: "4",
+  // SALESMAN: "2",
+  COURIER: "COURIER",
+  CUSTOMER: "CUSTOMER",
+  OUR_DELIVERY: "OUR DELIVERY",
+  SALESMAN: "SALESMAN",
 };
 
 export default function DispatchDetails({
@@ -31,7 +34,7 @@ export default function DispatchDetails({
   driverError,
   driverApiError,
   enabled,
-  route
+  route,
 }) {
   const [courierDetails, setCourierDetailsState] = useState({
     customerCourierName: "",
@@ -42,8 +45,9 @@ export default function DispatchDetails({
 
   const dispatch = useDispatch();
 
-  const deliveryDetails = useSelector((state) => state.dispatch.deliveryDetails);
-
+  const deliveryDetails = useSelector(
+    (state) => state.dispatch.deliveryDetails
+  );
 
   const handleChange = (field, e) => {
     const { name, value } = e.target;
@@ -77,8 +81,6 @@ export default function DispatchDetails({
     }
   }, [data, dispatch]);
 
-
-
   return (
     <div className="flex flex-col gap-2 text-xs font-medium">
       {/* <section className="flex justify-between items-center h-full">
@@ -102,43 +104,42 @@ export default function DispatchDetails({
         </Label>
       )}
 
-    {collectionType === COLLECTION_TYPES.CUSTOMER && (
-  <section className="flex flex-col w-full space-y-2">
-    <div className="flex items-center w-full justify-between">
-      <Label className="text-xs font-medium w-1/3">Client Name</Label>
-      <Input
-        className="w-2/3 h-6 text-xs"
-        value={courierDetails.customerCourierName}
-        name="customerCourierName"
-        onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
-        disabled={!enabled}
-      />
-    </div>
+      {collectionType === COLLECTION_TYPES.CUSTOMER && (
+        <section className="flex flex-col w-full space-y-2">
+          <div className="flex items-center w-full justify-between">
+            <Label className="text-xs font-medium w-1/3">Client Name</Label>
+            <Input
+              className="w-2/3 h-6 text-xs"
+              value={courierDetails.customerCourierName}
+              name="customerCourierName"
+              onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
+              disabled={!enabled}
+            />
+          </div>
 
-    <div className="flex items-center w-full justify-between">
-      <Label className="text-xs font-medium w-1/3">ID No</Label>
-      <Input
-        className="w-2/3 h-6 text-xs"
-        value={courierDetails.customerCourierId}
-        name="customerCourierId"
-        onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
-        disabled={!enabled}
-      />
-    </div>
+          <div className="flex items-center w-full justify-between">
+            <Label className="text-xs font-medium w-1/3">ID No</Label>
+            <Input
+              className="w-2/3 h-6 text-xs"
+              value={courierDetails.customerCourierId}
+              name="customerCourierId"
+              onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
+              disabled={!enabled}
+            />
+          </div>
 
-    <div className="flex items-center w-full justify-between">
-      <Label className="text-xs font-medium w-1/3">Phone No</Label>
-      <Input
-        className="w-2/3 h-6 text-xs"
-        value={courierDetails.customerCourierPhone}
-        name="customerCourierPhone"
-        onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
-        disabled={!enabled}
-      />
-    </div>
-  </section>
-)}
-
+          <div className="flex items-center w-full justify-between">
+            <Label className="text-xs font-medium w-1/3">Phone No</Label>
+            <Input
+              className="w-2/3 h-6 text-xs"
+              value={courierDetails.customerCourierPhone}
+              name="customerCourierPhone"
+              onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
+              disabled={!enabled}
+            />
+          </div>
+        </section>
+      )}
 
       {collectionType === COLLECTION_TYPES.OUR_DELIVERY && !deliveryPerson && (
         <>
@@ -190,113 +191,114 @@ export default function DispatchDetails({
         </>
       )}
 
-      {collectionType === COLLECTION_TYPES.OUR_DELIVERY && deliveryPerson && data && (
-        <section className="flex flex-col w-full h-full gap-2">
-          {/* <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/3">DP ID:</Label>
-            <Input 
-              className="w-2/3 h-6 text-xs"
-              value={deliveryDetails.driverId || ""}
-              name="driverId"
-              onChange={(e) => handleChange("delivery", e)}
-              disabled={false}
-            />
-          </div> */}
+      {collectionType === COLLECTION_TYPES.OUR_DELIVERY &&
+        deliveryPerson &&
+        data && (
+          <section className="flex flex-col w-full h-full gap-2">
+            <div className="flex items-center justify-between w-full">
+              <Label className="text-xs font-medium w-1/3">DP ID:</Label>
+              <Input
+                className="w-2/3 h-6 text-xs"
+                value={deliveryDetails.driverId || ""}
+                name="driverId"
+                onChange={(e) => handleChange("delivery", e)}
+                disabled={false}
+              />
+            </div>
 
-          {/* <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/3">DP DL:</Label>
-            <Input 
-              className="w-2/3 h-6 text-xs"
-              value={deliveryDetails.driverLicenseNo || ""}
-              name="driverLicenseNo"
-              onChange={(e) => handleChange("delivery", e)}
-              disabled={false}
-            />
-          </div> */}
+            <div className="flex items-center justify-between w-full">
+              <Label className="text-xs font-medium w-1/3">DP DL:</Label>
+              <Input
+                className="w-2/3 h-6 text-xs"
+                value={deliveryDetails.driverLicenseNo || ""}
+                name="driverLicenseNo"
+                onChange={(e) => handleChange("delivery", e)}
+                disabled={false}
+              />
+            </div>
 
-          {/* <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/3">Car Make:</Label>
-            <Input 
-              className="w-2/3 h-6 text-xs"
-              value={deliveryDetails?.carMake || ""}
-              name="carMake"
-              onChange={(e) => handleChange("delivery", e)}
-              disabled={false}
-            />
-          </div> */}
+            <div className="flex items-center justify-between w-full">
+              <Label className="text-xs font-medium w-1/3">Car Make:</Label>
+              <Input
+                className="w-2/3 h-6 text-xs"
+                value={deliveryDetails?.carMake || ""}
+                name="carMake"
+                onChange={(e) => handleChange("delivery", e)}
+                disabled={false}
+              />
+            </div>
 
-          <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/3">Phone No:</Label>
-            <Input 
+            <div className="flex items-center justify-between w-full">
+              <Label className="text-xs font-medium w-1/3">Phone No:</Label>
+              <Input
+                className="w-2/3 h-6 text-xs"
+                value={deliveryDetails?.phoneNo || ""}
+                name="phoneNo"
+                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
+                disabled={false}
+              />
+            </div>
+
+            <div className="flex items-center justify-between w-full">
+              <Label className="text-xs font-medium w-1/3">Reg No:</Label>
+              <Input
+                className="w-2/3 h-6 text-xs"
+                value={deliveryDetails?.regNo || ""}
+                name="regNo"
+                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
+                disabled={false}
+              />
+            </div>
+          </section>
+        )}
+
+      {collectionType === COLLECTION_TYPES.COURIER && (
+        <section className="flex flex-col w-full space-y-2">
+          <div className="flex items-center w-full justify-between">
+            <Label className="text-xs font-medium w-1/3">Courier Name</Label>
+            <Input
               className="w-2/3 h-6 text-xs"
-              value={deliveryDetails?.phoneNo || ""}
-              name="phoneNo"
-              onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
-              disabled={false}
+              value={courierDetails.customerCourierName || ""}
+              name="customerCourierName"
+              onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
+              disabled={!enabled}
             />
           </div>
 
-          <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/3">Reg No:</Label>
-            <Input 
+          <div className="flex items-center w-full justify-between">
+            <Label className="text-xs font-medium w-1/3">Courier ID</Label>
+            <Input
               className="w-2/3 h-6 text-xs"
-              value={deliveryDetails?.regNo || ""}
-              name="regNo"
-              onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
-              disabled={false}
+              value={courierDetails.customerCourierId || ""}
+              name="customerCourierId"
+              onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
+              disabled={!enabled}
+            />
+          </div>
+
+          <div className="flex items-center w-full justify-between">
+            <Label className="text-xs font-medium w-1/3">Phone No</Label>
+            <Input
+              className="w-2/3 h-6 text-xs"
+              value={courierDetails.customerCourierPhone || ""}
+              name="customerCourierPhone"
+              onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
+              disabled={!enabled}
+            />
+          </div>
+
+          <div className="flex items-center w-full justify-between">
+            <Label className="text-xs font-medium w-1/3">Reg No</Label>
+            <Input
+              className="w-2/3 h-6 text-xs"
+              value={courierDetails.customerCourierRegNo || ""}
+              name="customerCourierRegNo"
+              onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
+              disabled={!enabled}
             />
           </div>
         </section>
       )}
-
-    {collectionType === COLLECTION_TYPES.COURIER && (
-      <section className="flex flex-col w-full space-y-2">
-        <div className="flex items-center w-full justify-between">
-          <Label className="text-xs font-medium w-1/3">Courier Name</Label>
-          <Input
-            className="w-2/3 h-6 text-xs"
-            value={courierDetails.customerCourierName || ""}
-            name="customerCourierName"
-            onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
-            disabled={!enabled}
-          />
-        </div>
-
-        <div className="flex items-center w-full justify-between">
-          <Label className="text-xs font-medium w-1/3">Courier ID</Label>
-          <Input
-            className="w-2/3 h-6 text-xs"
-            value={courierDetails.customerCourierId || ""}
-            name="customerCourierId"
-            onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
-            disabled={!enabled}
-          />
-        </div>
-
-        <div className="flex items-center w-full justify-between">
-          <Label className="text-xs font-medium w-1/3">Phone No</Label>
-          <Input
-            className="w-2/3 h-6 text-xs"
-            value={courierDetails.customerCourierPhone || ""}
-            name="customerCourierPhone"
-            onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
-            disabled={!enabled}
-          />
-        </div>
-
-        <div className="flex items-center w-full justify-between">
-          <Label className="text-xs font-medium w-1/3">Reg No</Label>
-          <Input
-            className="w-2/3 h-6 text-xs"
-            value={courierDetails.customerCourierRegNo || ""}
-            name="customerCourierRegNo"
-            onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
-            disabled={!enabled}
-          />
-        </div>
-      </section>
-    )}
-
     </div>
   );
 }
