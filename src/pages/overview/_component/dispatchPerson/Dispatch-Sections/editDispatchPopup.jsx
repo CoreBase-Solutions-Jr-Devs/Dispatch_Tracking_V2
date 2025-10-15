@@ -24,6 +24,7 @@ import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const dispatch = useAppDispatch();
 
+  const { user } = useSelector((state) => state.auth);
   const { updatedDispatches } = useSelector((state) => state.dispatch);
   const dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
 
@@ -96,10 +97,11 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
       collectionType: editedDispatch.collectionType,
       routeName: editedDispatch.dispatchRoute || null,
       driverName: localDriverDetails?.driverName || null,
-      driverId: localDriverDetails?.driverId || null,
+      driverId: Number(localDriverDetails?.driverId.slice(2)) || null,
       carMake: localDriverDetails?.carMake || null,
       carPlate: localDriverDetails?.regNo || null,
       dispatchRemarks: editedDispatch.remarks || "",
+      userName: user?.username || "",
       isPush,
     };
 
@@ -120,8 +122,8 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
           ? "Dispatch pushed successfully!"
           : "Dispatch updated successfully!"
       );
-      dispatch(resetDispatchData());
       onClose();
+      if (isPush) return dispatch(resetDispatchData());
     } catch (error) {
       toast.error(
         isPush ? "Failed to push dispatch" : "Failed to update dispatch",
