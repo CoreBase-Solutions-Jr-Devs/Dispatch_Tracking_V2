@@ -30,10 +30,15 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [startDispatch, setStartDispatch] = useState(false); // Disable Selection before start
+  const [dispatchRemarks, setDispatchRemarks] = useState("");
 
   const handleDispatchStart = () => {
     setStartDispatch(true);
-  }
+  };
+
+  const handleDispatchRemarks = (value) => {
+    setDispatchRemarks(value);
+  };
 
   const dispatch = useAppDispatch();
 
@@ -61,7 +66,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     label: opt.label,
     value: opt.label,
   }));
-
 
   // const { data } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
 
@@ -267,10 +271,14 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 enabled={startDispatch}
                 route={selectValues.dispatchRoute}
               />
-              <DispatchRemarks enabled={startDispatch}/>
-              <DispatchMeta startDispatch={startDispatch}/>
+              <DispatchRemarks
+                enabled={startDispatch}
+                handleDispatchRemarks={handleDispatchRemarks}
+              />
+              <DispatchMeta startDispatch={startDispatch} />
               {/* Footer */}
               <DispatchFooter
+                dispatchRemarks={dispatchRemarks}
                 dispatchIDs={dispatchIDs}
                 rowData={rowData}
                 selectValues={selectValues}
