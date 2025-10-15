@@ -153,7 +153,7 @@ export default function DispatchFooter({
         description: error?.data?.message || error?.data?.title || description,
         duration: 4000,
       });
-      setSaveDisabled(true);
+      setSaveDisabled(false);
       setStartDisabled(true);
     }
     onSubmit(rowData);
