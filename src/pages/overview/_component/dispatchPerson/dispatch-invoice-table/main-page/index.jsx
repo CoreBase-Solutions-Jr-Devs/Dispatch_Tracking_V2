@@ -53,6 +53,13 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     isError: filterError,
   } = useFilterOptionsQuery();
 
+  const collectionTypeOptions = (
+    filterOptions?.find((opt) => opt.key === "collectionType")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    value: opt.label,
+  }));
+
   const deliveryGuyOptions = (
     filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || []
   ).map((opt) => ({
@@ -264,6 +271,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
               <DispatchSelect
                 values={selectValues}
                 onChange={handleSelectChange}
+                collectionTypeOptions={collectionTypeOptions}
                 deliveryGuyOptions={deliveryGuyOptions}
                 enabled={startDispatch}
                 routeOptions={routeOptions}
@@ -271,7 +279,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
               />
               <DispatchDetails
                 data={driverDetails}
-                collectionType={selectValues.collectionType}
+                collectionType={collectionTypeOptions}
                 deliveryPerson={selectValues.dispatchPerson}
                 driverLoading={driverLoading}
                 driverError={driverError}

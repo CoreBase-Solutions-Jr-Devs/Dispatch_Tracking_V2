@@ -15,6 +15,14 @@ import {
   setRouteName,
 } from "@/features/dispatch/dispatchSlice";
 
+
+const COLLECTION_TYPES = {
+  COURIER: "3",
+  CUSTOMER: "1",
+  OUR_DELIVERY: "4",
+  SALESMAN: "2",
+};
+
 export default function DispatchDetails({
   data,
   collectionType,
@@ -44,20 +52,23 @@ export default function DispatchDetails({
       ...prevState,
       [name]: value,
     }));
-    if (field === "self-collection") {
-      return dispatch(setClientDetails({ ...courierDetails, [name]: value }));
-    }
-    if (field === "courier") {
-      return dispatch(setCourierDetails({ ...courierDetails, [name]: value }));
-    }
-    if (field === "delivery") {
-      return dispatch(setDeliveryDetails({ ...deliveryDetails, [name]: value }));
-    }
-    if (field === "route") {
-      return dispatch(setRouteName({ ...route, [name]: value }));
-    }
 
-    return;
+    switch (field) {
+      case COLLECTION_TYPES.CUSTOMER:
+        dispatch(setClientDetails({ ...courierDetails, [name]: value }));
+        break;
+      case COLLECTION_TYPES.COURIER:
+        dispatch(setCourierDetails({ ...courierDetails, [name]: value }));
+        break;
+      case COLLECTION_TYPES.OUR_DELIVERY:
+        dispatch(setDeliveryDetails({ ...deliveryDetails, [name]: value }));
+        break;
+      case "route":
+        dispatch(setRouteName({ ...route, [name]: value }));
+        break;
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
@@ -79,19 +90,19 @@ export default function DispatchDetails({
       {filterError && <Label className="text-xs text-red-500">Error loading delivery options: {filterError?.message || "Unknown error"}</Label>} */}
 
       {/* Loading and error states for driver details */}
-      {collectionType === "delivery" && driverLoading && (
+      {collectionType === COLLECTION_TYPES.OUR_DELIVERY && driverLoading && (
         <Label className="text-xs text-blue-500">
           Loading driver details...
         </Label>
       )}
-      {collectionType === "delivery" && driverError && (
+      {collectionType === COLLECTION_TYPES.OUR_DELIVERY && driverError && (
         <Label className="text-xs text-red-500">
           Error loading driver details:{" "}
           {driverApiError?.message || "Unknown error"}
         </Label>
       )}
 
-    {collectionType === "self-collection" && (
+    {collectionType === COLLECTION_TYPES.CUSTOMER && (
   <section className="flex flex-col w-full space-y-2">
     <div className="flex items-center w-full justify-between">
       <Label className="text-xs font-medium w-1/3">Client Name</Label>
@@ -99,7 +110,7 @@ export default function DispatchDetails({
         className="w-2/3 h-6 text-xs"
         value={courierDetails.customerCourierName}
         name="customerCourierName"
-        onChange={(e) => handleChange("self-collection", e)}
+        onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
         disabled={!enabled}
       />
     </div>
@@ -110,7 +121,7 @@ export default function DispatchDetails({
         className="w-2/3 h-6 text-xs"
         value={courierDetails.customerCourierId}
         name="customerCourierId"
-        onChange={(e) => handleChange("self-collection", e)}
+        onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
         disabled={!enabled}
       />
     </div>
@@ -121,7 +132,7 @@ export default function DispatchDetails({
         className="w-2/3 h-6 text-xs"
         value={courierDetails.customerCourierPhone}
         name="customerCourierPhone"
-        onChange={(e) => handleChange("self-collection", e)}
+        onChange={(e) => handleChange(COLLECTION_TYPES.CUSTOMER, e)}
         disabled={!enabled}
       />
     </div>
@@ -129,7 +140,7 @@ export default function DispatchDetails({
 )}
 
 
-      {collectionType === "delivery" && !deliveryPerson && (
+      {collectionType === COLLECTION_TYPES.OUR_DELIVERY && !deliveryPerson && (
         <>
           <section className="flex flex-col w-full h-full gap-2">
             <div className="flex items-center gap-2 justify-between w-full">
@@ -138,7 +149,7 @@ export default function DispatchDetails({
                 className="w-3/5 h-5 text-xs"
                 name="driverId"
                 value=""
-                onChange={(e) => handleChange("delivery", e)}
+                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
                 disabled={!enabled}
               />
             </div>
@@ -149,7 +160,7 @@ export default function DispatchDetails({
                 className="w-3/5 h-5 text-xs"
                 name="driverLicense"
                 value=""
-                onChange={(e) => handleChange("delivery", e)}
+                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
                 disabled={!enabled}
               />
             </div>
@@ -160,7 +171,7 @@ export default function DispatchDetails({
                 className="w-3/5 h-5 text-xs"
                 name="carMake"
                 value=""
-                onChange={(e) => handleChange("delivery", e)}
+                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
                 disabled={!enabled}
               />
             </div>
@@ -171,7 +182,7 @@ export default function DispatchDetails({
                 className="w-3/5 h-5 text-xs"
                 name="regNo"
                 value=""
-                onChange={(e) => handleChange("delivery", e)}
+                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
                 disabled={!enabled}
               />
             </div>
@@ -179,7 +190,7 @@ export default function DispatchDetails({
         </>
       )}
 
-      {collectionType === "delivery" && deliveryPerson && data && (
+      {collectionType === COLLECTION_TYPES.OUR_DELIVERY && deliveryPerson && data && (
         <section className="flex flex-col w-full h-full gap-2">
           {/* <div className="flex items-center justify-between w-full">
             <Label className="text-xs font-medium w-1/3">DP ID:</Label>
@@ -220,7 +231,7 @@ export default function DispatchDetails({
               className="w-2/3 h-6 text-xs"
               value={deliveryDetails?.phoneNo || ""}
               name="phoneNo"
-              onChange={(e) => handleChange("delivery", e)}
+              onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
               disabled={false}
             />
           </div>
@@ -231,14 +242,14 @@ export default function DispatchDetails({
               className="w-2/3 h-6 text-xs"
               value={deliveryDetails?.regNo || ""}
               name="regNo"
-              onChange={(e) => handleChange("delivery", e)}
+              onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
               disabled={false}
             />
           </div>
         </section>
       )}
 
-    {collectionType === "courier" && (
+    {collectionType === COLLECTION_TYPES.COURIER && (
       <section className="flex flex-col w-full space-y-2">
         <div className="flex items-center w-full justify-between">
           <Label className="text-xs font-medium w-1/3">Courier Name</Label>
@@ -246,7 +257,7 @@ export default function DispatchDetails({
             className="w-2/3 h-6 text-xs"
             value={courierDetails.customerCourierName || ""}
             name="customerCourierName"
-            onChange={(e) => handleChange("courier", e)}
+            onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
             disabled={!enabled}
           />
         </div>
@@ -257,7 +268,7 @@ export default function DispatchDetails({
             className="w-2/3 h-6 text-xs"
             value={courierDetails.customerCourierId || ""}
             name="customerCourierId"
-            onChange={(e) => handleChange("courier", e)}
+            onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
             disabled={!enabled}
           />
         </div>
@@ -268,7 +279,7 @@ export default function DispatchDetails({
             className="w-2/3 h-6 text-xs"
             value={courierDetails.customerCourierPhone || ""}
             name="customerCourierPhone"
-            onChange={(e) => handleChange("courier", e)}
+            onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
             disabled={!enabled}
           />
         </div>
@@ -279,7 +290,7 @@ export default function DispatchDetails({
             className="w-2/3 h-6 text-xs"
             value={courierDetails.customerCourierRegNo || ""}
             name="customerCourierRegNo"
-            onChange={(e) => handleChange("courier", e)}
+            onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
             disabled={!enabled}
           />
         </div>

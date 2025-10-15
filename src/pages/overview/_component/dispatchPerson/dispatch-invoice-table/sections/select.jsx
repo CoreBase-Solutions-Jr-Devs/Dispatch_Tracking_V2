@@ -8,6 +8,7 @@ import {
 export default function DispatchSelect({
   values,
   onChange,
+  collectionTypeOptions = [],
   deliveryGuyOptions = [],
   routeOptions = [],
   vehicleOptions = [],
@@ -37,29 +38,42 @@ export default function DispatchSelect({
         <Select
           value={values?.collectionType}
           onValueChange={(val) => onChange("collectionType", val)}
-          disabled={!enabled}
+          // disabled={!enabled}
         >
-          <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
-            {values?.collectionType || "Select..."}
+          <SelectTrigger 
+            className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" 
+            // disabled={!enabled}
+          >
+            {collectionTypeOptions.find((opt) => opt.value === values?.collectionType)?.label || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
-            <SelectItem value="self-collection">Self-Collection</SelectItem>
-            <SelectItem value="delivery">Delivery</SelectItem>
-            <SelectItem value="courier">Courier</SelectItem>
+            {collectionTypeOptions.length > 0 ? (
+              collectionTypeOptions.map((item, i) => (
+                <SelectItem key={`${item.value}_${i}`} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem disabled value="">
+                No collection options
+              </SelectItem>
+            )}
           </SelectContent>
         </Select>
       </div>
 
-      {values?.collectionType === "delivery" && (
+      {values?.collectionType === "4" && (
         <>
           <div className="flex justify-between items-center">
             <label className="text-xs font-medium">Delivery Person:</label>
             <Select
               value={values?.dispatchPerson || ""}
               onValueChange={(val) => onChange("dispatchPerson", val)}
-              disabled={!enabled}
+              // disabled={!enabled}
             >
-              <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" disabled={!enabled}>
+              <SelectTrigger className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium" 
+                // disabled={!enabled}
+              >
                 <span>{getDeliveryGuyLabel(values?.dispatchPerson)}</span>
               </SelectTrigger>
               <SelectContent className="bg-gray-200">
@@ -83,10 +97,11 @@ export default function DispatchSelect({
             <Select
               value={values?.dispatchRoute || ""}
               onValueChange={(val) => onChange("dispatchRoute", val)}
-              disabled={!enabled}
+              // disabled={!enabled}
             >
               <SelectTrigger 
-                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate" disabled={!enabled}
+                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate" 
+                // disabled={!enabled}
                 title={routeLabel(values?.dispatchRoute)}
               >
                 <span className="truncate">{routeLabel(values?.dispatchRoute)}</span>
@@ -112,10 +127,11 @@ export default function DispatchSelect({
             <Select
               value={values?.vehicle || ""}
               onValueChange={(val) => onChange("vehicle", val)}
-              disabled={!enabled}
+              // disabled={!enabled}
             >
               <SelectTrigger 
-                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate" disabled={!enabled}
+                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate" 
+                // disabled={!enabled}
                 title={vehicleLabel(values?.vehicle)}
               >
                 <span className="truncate">{vehicleLabel(values?.vehicle)}</span>
