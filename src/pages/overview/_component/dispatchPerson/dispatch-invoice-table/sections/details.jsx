@@ -182,7 +182,7 @@ export default function DispatchDetails({
 
       {collectionType === "delivery" && deliveryPerson && data && (
         <section className="flex flex-col w-full h-full gap-2">
-          <div className="flex items-center justify-between w-full">
+          {/* <div className="flex items-center justify-between w-full">
             <Label className="text-xs font-medium w-1/3">DP ID:</Label>
             <Input 
               className="w-2/3 h-6 text-xs"
@@ -191,13 +191,10 @@ export default function DispatchDetails({
               onChange={(e) => handleChange("delivery", e)}
               disabled={false}
             />
-          </div>
+          </div> */}
 
-          <div className="flex items-center justify-between w-full">
+          {/* <div className="flex items-center justify-between w-full">
             <Label className="text-xs font-medium w-1/3">DP DL:</Label>
-            {/* <Label className="text-xs font-medium">
-              {data.driverLicenseNo}
-            </Label> */}
             <Input 
               className="w-2/3 h-6 text-xs"
               value={deliveryDetails.driverLicenseNo || ""}
@@ -205,11 +202,10 @@ export default function DispatchDetails({
               onChange={(e) => handleChange("delivery", e)}
               disabled={false}
             />
-          </div>
+          </div> */}
 
-          <div className="flex items-center justify-between w-full">
+          {/* <div className="flex items-center justify-between w-full">
             <Label className="text-xs font-medium w-1/3">Car Make:</Label>
-            {/* <Label className="text-xs font-medium">{data.carMake}</Label> */}
             <Input 
               className="w-2/3 h-6 text-xs"
               value={deliveryDetails?.carMake || ""}
@@ -217,11 +213,21 @@ export default function DispatchDetails({
               onChange={(e) => handleChange("delivery", e)}
               disabled={false}
             />
+          </div> */}
+
+          <div className="flex items-center justify-between w-full">
+            <Label className="text-xs font-medium w-1/3">Phone No:</Label>
+            <Input 
+              className="w-2/3 h-6 text-xs"
+              value={deliveryDetails?.phoneNo || ""}
+              name="phoneNo"
+              onChange={(e) => handleChange("delivery", e)}
+              disabled={false}
+            />
           </div>
 
           <div className="flex items-center justify-between w-full">
             <Label className="text-xs font-medium w-1/3">Reg No:</Label>
-            {/* <Label className="text-xs font-medium">{data.regNo}</Label> */}
             <Input 
               className="w-2/3 h-6 text-xs"
               value={deliveryDetails?.regNo || ""}
@@ -279,19 +285,6 @@ export default function DispatchDetails({
           />
         </div>
       </section>
-    )}
-
-    {collectionType === "delivery" && route && (
-      <div className="flex justify-between items-center w-full">
-        <Label className="text-xs font-medium w-1/3">Route:</Label>
-        <Input 
-          className="text-xs font-medium !h-6 w-2/3 truncate"
-          title={route}
-          value={route}
-          onChange={(e) => handleChange("route", e)}
-          disabled={!enabled ? true : false}
-        />
-      </div>
     )}
 
     </div>
