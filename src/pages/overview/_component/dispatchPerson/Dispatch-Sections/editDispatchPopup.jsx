@@ -123,7 +123,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
           : "Dispatch updated successfully!"
       );
       onClose();
-      if (isPush) return dispatch(resetDispatchData());
+      // if (isPush) return dispatch(resetDispatchData());
     } catch (error) {
       toast.error(
         isPush ? "Failed to push dispatch" : "Failed to update dispatch",
@@ -135,7 +135,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const isAnyLoading = processing || driverLoading;
 
   return (
-    <div className="my-1 max-h-[90vh] px-2 space-y-4 flex flex-col">
+    <div className="my-1 max-h-[90vh] px-2 space-y-4 flex flex-col overflow-auto">
       <h2 className="text-lg font-semibold text-foreground">
         Edit Dispatch Details
       </h2>
