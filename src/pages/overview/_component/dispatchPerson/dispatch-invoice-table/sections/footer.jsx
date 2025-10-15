@@ -110,7 +110,7 @@ export default function DispatchFooter({
       // routeCode: 0 || null,
       routeName: selectValues?.dispatchRoute || null,
       driverName: driverDetails?.driverName,
-      driverId: driverDetails?.driverId,
+      driverId: Number(driverDetails?.driverId.slice(2)),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
       customerCourierName: courierDetails?.customerCourierName,
