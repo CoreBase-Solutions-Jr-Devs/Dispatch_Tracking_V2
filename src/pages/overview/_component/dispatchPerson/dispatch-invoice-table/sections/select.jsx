@@ -47,20 +47,17 @@ export default function DispatchSelect({
             )?.label || "Select..."}
           </SelectTrigger>
           <SelectContent className="bg-gray-200">
-            {
-              collectionTypeOptions.length > 0
-                ? collectionTypeOptions.map((item, i) => (
-                    <SelectItem
-                      key={`${item.value}_${i}`}
-                      value={item?.value || 0}
-                    >
-                      {item.label}
-                    </SelectItem>
-                  ))
-                : // <SelectItem disabled value="null">
-                  "No delivery options"
-              // {/* </SelectItem> */}
-            }
+            {collectionTypeOptions.length > 0 ? (
+              collectionTypeOptions.map((item, i) => (
+                <SelectItem key={`${item.value}_${i}`} value={item?.value || 0}>
+                  {item.label}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem disabled value="null">
+                "No delivery options"
+              </SelectItem>
+            )}
           </SelectContent>
         </Select>
       </div>

@@ -25,9 +25,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const dispatch = useAppDispatch();
 
   const { updatedDispatches } = useSelector((state) => state.dispatch);
-  const dispatchIDs = (updatedDispatches || []).map(
-    (item) => item.dispatchId
-  );
+  const dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
@@ -55,6 +53,14 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
       editedDispatch.collectionType !== "delivery" ||
       !editedDispatch.dispatchPerson,
   });
+
+  const collectionTypeOptions = (
+    filterOptions?.find((opt) => opt.key === "collectionType")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    // value: opt.value,
+    value: opt.label,
+  }));
 
   useEffect(() => {
     if (driverDetails) setLocalDriverDetails(driverDetails);
@@ -139,6 +145,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
           <DispatchSelect
             values={editedDispatch}
             onChange={handleFieldChange}
+            collectionTypeOptions={collectionTypeOptions}
             deliveryGuyOptions={deliveryGuyOptions.map((opt) => ({
               label: opt.label,
               value: opt.label,
