@@ -108,7 +108,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       setCheckedInvoices((prev) => [...prev, row]);
     } else {
       setCheckedInvoices((prev) =>
-        prev.filter((r) => r.DISPATCHNUMBER !== row.DISPATCHNUMBER)
+        prev.filter((r) => r.DISPATCHNUM !== row.DISPATCHNUM)
       );
     }
   };
