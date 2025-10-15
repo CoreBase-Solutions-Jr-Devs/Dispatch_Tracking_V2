@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 // import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   resetDispatchData,
   setAssignedTo,
@@ -60,6 +60,8 @@ export default function DispatchFooter({
   );
 
   const { user } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
 
   const [
     startDispatch,
@@ -172,7 +174,7 @@ export default function DispatchFooter({
       // routeCode,
       routeName: selectValues?.dispatchRoute,
       driverName: driverDetails?.driverName,
-      driverId: driverDetails?.driverId,
+      driverId: Number(driverDetails?.driverId.slice(2)),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
       customerCourierName: courierDetails?.customerCourierName,
