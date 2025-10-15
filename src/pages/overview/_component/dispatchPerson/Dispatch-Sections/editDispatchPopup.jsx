@@ -50,7 +50,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     error: driverApiError,
   } = useGetDeliveryDriverQuery(editedDispatch.dispatchPerson, {
     skip:
-      editedDispatch.collectionType !== "delivery" ||
+      editedDispatch.collectionType !== "OUR DELIVERY" ||
       !editedDispatch.dispatchPerson,
   });
 
