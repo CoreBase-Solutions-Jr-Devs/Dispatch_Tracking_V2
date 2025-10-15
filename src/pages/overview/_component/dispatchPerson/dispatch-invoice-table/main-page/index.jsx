@@ -67,6 +67,13 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     value: opt.label,
   }));
 
+  const vehicleOptions = (
+    filterOptions?.find((opt) => opt.key === "transporter")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    value: opt.label,
+  }));
+
   // const { data } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
 
   const [selectValues, setSelectValues] = useState({
@@ -260,6 +267,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 deliveryGuyOptions={deliveryGuyOptions}
                 enabled={startDispatch}
                 routeOptions={routeOptions}
+                vehicleOptions={vehicleOptions}
               />
               <DispatchDetails
                 data={driverDetails}

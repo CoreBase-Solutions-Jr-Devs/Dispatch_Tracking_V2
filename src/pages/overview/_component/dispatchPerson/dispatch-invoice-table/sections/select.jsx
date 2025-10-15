@@ -10,6 +10,7 @@ export default function DispatchSelect({
   onChange,
   deliveryGuyOptions = [],
   routeOptions = [],
+  vehicleOptions = [],
   enabled
 }) {
   console.log(values);
@@ -21,6 +22,11 @@ export default function DispatchSelect({
 
   const routeLabel = (val) => {
     const found = routeOptions.find((item) => item.value === val);
+    return found ? found.label : "Select...";
+  }
+
+  const vehicleLabel = (val) => {
+    const found = vehicleOptions.find((item) => item.value === val);
     return found ? found.label : "Select...";
   }
 
@@ -95,6 +101,35 @@ export default function DispatchSelect({
                 ) : (
                   <SelectItem disabled value="">
                     No route options
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <label className="text-xs font-medium">Vehicle:</label>
+            <Select
+              value={values?.vehicle || ""}
+              onValueChange={(val) => onChange("vehicle", val)}
+              disabled={!enabled}
+            >
+              <SelectTrigger 
+                className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate" disabled={!enabled}
+                title={vehicleLabel(values?.vehicle)}
+              >
+                <span className="truncate">{vehicleLabel(values?.vehicle)}</span>
+              </SelectTrigger>
+              <SelectContent className="bg-gray-200">
+                {vehicleOptions.length > 0 ? (
+                  vehicleOptions.map((item, i) => (
+                    <SelectItem key={`${item.value}_${i}`} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem disabled value="">
+                    No vehicle options
                   </SelectItem>
                 )}
               </SelectContent>
