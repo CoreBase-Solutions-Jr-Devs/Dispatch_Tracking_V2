@@ -23,11 +23,12 @@ import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 
 const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const dispatch = useAppDispatch();
-
   const { updatedDispatches } = useSelector((state) => state.dispatch);
-  const dispatchIDs = (updatedDispatches || []).map(
-    (item) => item.dispatchId
+  const userName = useSelector(
+    (state) => state.auth?.user?.userName || "CoreVerify"
   );
+
+  const dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
@@ -49,54 +50,60 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const deliveryGuyOptions =
     filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
 
+  // ✅ Fetch driver details when collectionType = "delivery"
   const {
     data: driverDetails,
     isLoading: driverLoading,
     isError: driverError,
     error: driverApiError,
-  } = useGetDeliveryDriverQuery(editedDispatch.dispatchPerson, {
+  } = useGetDeliveryDriverQuery(userName, {
     skip:
-      editedDispatch.collectionType !== "delivery" ||
-      !editedDispatch.dispatchPerson,
+      !userName || editedDispatch.collectionType?.toLowerCase() !== "delivery",
   });
 
   useEffect(() => {
-    if (driverDetails) setLocalDriverDetails(driverDetails);
-  }, [driverDetails]);
+    if (driverDetails) {
+      dispatch(setDriverDetails(driverDetails));
+    }
+  }, [driverDetails, dispatch]);
 
-  const handleFieldChange = (field, value) => {
-    setEditedDispatch((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const deliveryGuyOptions =
-    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
-  const routeOptions =
-    filterOptions?.find((opt) => opt.key === "route")?.options || [];
-
+  // ✅ Clean payload before submission
   const cleanForm = (formData, type) => {
     if (type === "delivery") {
-      delete formData.CustomerCourierId;
-      delete formData.CustomerCourierName;
-      delete formData.CustomerCourierPhone;
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
+
     if (["self-collection", "courier"].includes(type)) {
-      delete formData.DriverId;
-      delete formData.DriverName;
-      delete formData.RouteName;
-      delete formData.CarMake;
-      delete formData.CarPlate;
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
   };
 
+  // ✅ Prepare payload according to API schema
   const preparePayload = (isPush = false) => {
+    if (!dispatchIDs?.length) {
+      toast.error("No dispatch IDs found.");
+      return null;
+    }
+
     const payload = {
       dispatchIds: dispatchIDs,
-      collectionType: editedDispatch.collectionType,
+      collectionType:
+        editedDispatch.collectionType?.toUpperCase() || "DELIVERY",
+      userName,
       routeName: editedDispatch.dispatchRoute || null,
-      driverName: localDriverDetails?.driverName || null,
-      driverId: localDriverDetails?.driverId || null,
-      carMake: localDriverDetails?.carMake || null,
-      carPlate: localDriverDetails?.regNo || null,
+      driverName: driverDetails?.driverName || null,
+      driverId: driverDetails?.driverId || null,
+      carMake: driverDetails?.carMake || null,
+      carPlate: driverDetails?.regNo || null,
+      customerCourierName: editedDispatch.customerCourierName || null,
+      customerCourierId: editedDispatch.customerCourierId || null,
+      customerCourierPhone: editedDispatch.customerCourierPhone || null,
       dispatchRemarks: editedDispatch.remarks || "",
       isPush,
     };
@@ -105,26 +112,28 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     return payload;
   };
 
-  const handleAction = async (isPush = false) => {
+  // ✅ Handle Save or Push Dispatch (like DispatchFooter)
+  const handleDispatchAction = async (isPush = false) => {
     const payload = preparePayload(isPush);
     if (!payload) return;
 
     try {
       await pushDispatch(payload).unwrap();
       dispatch(setDispatch(payload));
-      dispatch(setDriverDetails(localDriverDetails));
+
       toast.success(
         isPush
           ? "Dispatch pushed successfully!"
-          : "Dispatch updated successfully!"
+          : "Dispatch saved successfully!"
       );
+
       dispatch(resetDispatchData());
       onClose();
     } catch (error) {
-      toast.error(
-        isPush ? "Failed to push dispatch" : "Failed to update dispatch",
-        { description: error?.data?.message || "Please try again" }
-      );
+      console.error("❌ Dispatch Action Error:", error);
+      toast.error(isPush ? "Dispatch push failed" : "Dispatch save failed", {
+        description: error?.data?.message || "Please try again.",
+      });
     }
   };
 
@@ -169,28 +178,26 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
 
       <div className="flex flex-col md:flex-row justify-end md:space-x-3 mt-4 space-y-2 md:space-y-0">
         <Button
-          variant="apply"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleAction(false);
-          }}
+          onClick={() => handleDispatchAction(false)}
           disabled={isAnyLoading}
+          className="bg-green-600 text-white hover:bg-green-700"
         >
-          UPDATE
+          SAVE
         </Button>
 
         <Button
-          variant="apply"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleAction(true);
-          }}
+          onClick={() => handleDispatchAction(true)}
           disabled={isAnyLoading}
+          className="bg-orange-600 text-white hover:bg-orange-700"
         >
           PUSH
         </Button>
 
-        <Button variant="destructive" onClick={onClose}>
+        <Button
+          variant="outline"
+          onClick={onClose}
+          className="text-gray-600 border-gray-400"
+        >
           CLOSE
         </Button>
       </div>
