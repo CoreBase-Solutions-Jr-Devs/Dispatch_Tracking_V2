@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import {
   resetDispatchData,
+  setAssignedTo,
   setCarMake,
   setCarPlate,
   setCollectionType,
@@ -69,9 +70,12 @@ export default function DispatchFooter({
   const handleStart = async () => {
     const payload = {
       dispatchIds: dispatchIDs,
+      userName: username || user?.userName || "",
     };
     try {
       const data = await startDispatch(payload).unwrap();
+      const assignedTo = data?.value?.assignedTo || "—";
+      dispatch(setAssignedTo(assignedTo));
       console.log(data);
       // if (refetchData) setTimeout(() => refetchData(), 50);
       if (onEnableSelection) onEnableSelection();
