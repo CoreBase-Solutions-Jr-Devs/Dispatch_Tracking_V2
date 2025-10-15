@@ -105,7 +105,7 @@ export default function DispatchMainPopup({ rowData, onClose }) {
       <DialogFooter className="flex justify-end gap-2 px-3 py-3">
         {status === 3 && (
           <EditStatusDialog
-            rowData={rowData}
+            rowData={rows}
             view="dispatchedit"
             onSubmit={(updatedData) =>
               console.log("Edited collection type:", updatedData)

@@ -21,12 +21,13 @@ import DispatchDetails from "../dispatch-invoice-table/sections/details";
 import DispatchRemarks from "../dispatch-invoice-table/sections/remarks";
 import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 
-const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
+const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   const dispatch = useAppDispatch();
 
   const { user } = useSelector((state) => state.auth);
-  const { updatedDispatches } = useSelector((state) => state.dispatch);
-  const dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  // const { updatedDispatches } = useSelector((state) => state.dispatch);
+  const dispatchIDs = (rowData || []).map((item) => item.dispatchNum);
+  console.log(rowData);
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
