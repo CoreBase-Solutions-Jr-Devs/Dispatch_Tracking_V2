@@ -36,6 +36,7 @@ export default function DispatchFooter({
   onSubmit,
   onClose,
   onEnableSelection,
+  dispatchRemarks,
 }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
@@ -50,7 +51,6 @@ export default function DispatchFooter({
   // const [customerCourierName, setCustomerCourierName] = useState("" || null);
   // const [customerCourierId, setCustomerCourierId] = useState(0 || null);
   // const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
-  const [dispatchRemarks, setDispatchRemarks] = useState("");
   const [isPush, setIsPush] = useState(true);
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
@@ -78,8 +78,7 @@ export default function DispatchFooter({
     };
     try {
       const data = await startDispatch(payload).unwrap();
-      const assignedTo = data?.value?.assignedTo || "—";
-      dispatch(setAssignedTo(assignedTo));
+      dispatch(setAssignedTo(data?.assignedTo || "—"));
       console.log(data);
       // if (refetchData) setTimeout(() => refetchData(), 50);
       if (onEnableSelection) onEnableSelection();
