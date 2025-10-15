@@ -144,7 +144,7 @@ export default function DispatchFooter({
       toast.success("Dispatch saved succesfully!");
       console.log(data);
       setDeliveryDisabled(false);
-      dispatch(resetDispatchData());
+      // dispatch(resetDispatchData());
       navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
       let description = "Saving failed. Please try again.";
@@ -153,7 +153,7 @@ export default function DispatchFooter({
         description: error?.data?.message || error?.data?.title || description,
         duration: 4000,
       });
-      setSaveDisabled(true);
+      setSaveDisabled(false);
       setStartDisabled(true);
     }
     onSubmit(rowData);
@@ -210,7 +210,7 @@ export default function DispatchFooter({
       toast.success("Dispatch pushed successfully!");
       console.log(data);
       navigate(PROTECTED_ROUTES.OVERVIEW);
-      dispatch(resetDispatchData());
+      // dispatch(resetDispatchData());
     } catch (error) {
       let description = "Saving failed. Please try again.";
 

@@ -53,6 +53,14 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     isError: filterError,
   } = useFilterOptionsQuery();
 
+  const collectionTypeOptions = (
+    filterOptions?.find((opt) => opt.key === "collectionType")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    // value: opt.value,
+    value: opt.label,
+  }));
+
   const deliveryGuyOptions = (
     filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || []
   ).map((opt) => ({
@@ -64,14 +72,14 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     filterOptions?.find((opt) => opt.key === "route")?.options || []
   ).map((opt) => ({
     label: opt.label,
-    value: opt.label,
+    value: opt.value,
   }));
 
   const vehicleOptions = (
     filterOptions?.find((opt) => opt.key === "transporter")?.options || []
   ).map((opt) => ({
     label: opt.label,
-    value: opt.label,
+    value: opt.value,
   }));
 
   // const { data } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
@@ -99,7 +107,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     error: driverApiError,
   } = useGetDeliveryDriverQuery(selectValues.dispatchPerson, {
     skip:
-      selectValues.collectionType !== "delivery" ||
+      selectValues.collectionType !== "OUR DELIVERY" ||
       !selectValues.dispatchPerson,
   });
 
@@ -264,6 +272,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
               <DispatchSelect
                 values={selectValues}
                 onChange={handleSelectChange}
+                collectionTypeOptions={collectionTypeOptions}
                 deliveryGuyOptions={deliveryGuyOptions}
                 enabled={startDispatch}
                 routeOptions={routeOptions}
@@ -271,6 +280,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
               />
               <DispatchDetails
                 data={driverDetails}
+                collectionTypeOptions={collectionTypeOptions}
                 collectionType={selectValues.collectionType}
                 deliveryPerson={selectValues.dispatchPerson}
                 driverLoading={driverLoading}
