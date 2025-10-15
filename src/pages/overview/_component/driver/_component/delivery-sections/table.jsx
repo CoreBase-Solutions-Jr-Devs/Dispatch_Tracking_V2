@@ -86,7 +86,7 @@ export default function DeliveryTable({
                   onCheckedChange={(value) => handleRowCheck(value, row)}
                 />
               </TableCell>
-              <TableCell className="py-1 px-2">{row?.DISPATCHNUMBER}</TableCell>
+              <TableCell className="py-1 px-2">{row?.DISPATCHNUM}</TableCell>
               <TableCell className="py-1 px-2">{row?.SALEINV_NUM}</TableCell>
               <TableCell className="py-1 px-2">{row?.CUS_CODE}</TableCell>
               <TableCell className="py-1 px-2">{row?.CUSNAME}</TableCell>

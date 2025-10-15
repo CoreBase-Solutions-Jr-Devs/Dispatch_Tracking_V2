@@ -56,8 +56,8 @@ export default function DeliveryFooter({
           disabled={
             isLoading ||
             (rowData?.DOCTYPE === "INVOICE   " &&
-              (rowData?.PAYMENT_TERMS === "ONDELIVERY" ||
-                rowData?.PAYMENT_TERMS === "ONORDER") &&
+              (rowData?.PAYMENT_TERMS === "On Delivery" ||
+                rowData?.PAYMENT_TERMS === "On Order") &&
               rowData?.BALANCE > 0)
           }
           className="mt-1  uppercase text-xs font-medium"
