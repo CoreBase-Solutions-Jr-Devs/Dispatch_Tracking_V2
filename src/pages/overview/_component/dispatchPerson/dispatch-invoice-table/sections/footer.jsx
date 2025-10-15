@@ -71,7 +71,7 @@ export default function DispatchFooter({
     usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const handleStart = async (username) => {
+  const handleStart = async () => {
     const payload = {
       dispatchIds: dispatchIDs,
       userName: user?.username || "",

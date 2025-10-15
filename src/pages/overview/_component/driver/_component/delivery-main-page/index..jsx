@@ -55,6 +55,9 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     BCODE: "",
     CUS_CODE: "",
     SALEINV_NUM: "",
+    phonenumber: "",
+    amount: 0,
+    DISPATCHNUM: "",
   });
 
   const [deliveryComplete, { isLoading }] = useDeliveryCompleteMutation();
@@ -105,7 +108,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       setCheckedInvoices((prev) => [...prev, row]);
     } else {
       setCheckedInvoices((prev) =>
-        prev.filter((r) => r.DISPATCHNUMBER !== row.DISPATCHNUMBER)
+        prev.filter((r) => r.DISPATCHNUM !== row.DISPATCHNUM)
       );
     }
   };
@@ -120,9 +123,26 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       dispatchnum: mpesaDetails?.DISPATCHNUM,
       bcode: mpesaDetails?.BCODE,
       cuscode: mpesaDetails?.CUS_CODE,
+      dispatchnum: mpesaDetails?.DISPATCHNUM,
+      bcode: mpesaDetails?.BCODE,
+      cuscode: mpesaDetails?.CUS_CODE,
       phonenumber: `0${mpesaDetails?.phonenumber.slice(3)}`,
       amount: mpesaDetails?.amount,
     };
+    // CUS_CODE
+    if (
+      checkedInvoices.length > 0 &&
+      !checkedInvoices.every(
+        (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
+      )
+    ) {
+      console.log(checkedInvoices);
+      toast.error("Wrong invoice selected", {
+        description: "please select invoices belonging to the same customer",
+        duration: 6000,
+      });
+      return;
+    }
     // CUS_CODE
     if (
       checkedInvoices.length > 0 &&
@@ -147,6 +167,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
         setMpesaDetails({
           phonenumber: "",
           amount: "",
+          DISPATCHNUM: "",
+          BCODE: "",
+          CUS_CODE: "",
+          SALEINV_NUM: "",
           DISPATCHNUM: "",
           BCODE: "",
           CUS_CODE: "",
@@ -176,10 +200,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       .unwrap()
       .then((data) => {
         toast.success("OTP Validated successful");
-        setSelectedRow({});
-        setRemarks("");
-        // setOTP("");
         setShow(false);
+        setOTP("");
+        setRemarks("");
+        // setSelectedRow({});
       })
       .catch((error) => {
         toast.error("OTP Failed", {
@@ -275,7 +299,15 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       BCODE: selectedRow?.BCODE || "",
       CUS_CODE: selectedRow?.CUS_CODE || "",
       SALEINV_NUM: selectedRow?.SALEINV_NUM || "",
+      DISPATCHNUM: selectedRow?.DISPATCHNUM || "",
+      BCODE: selectedRow?.BCODE || "",
+      CUS_CODE: selectedRow?.CUS_CODE || "",
+      SALEINV_NUM: selectedRow?.SALEINV_NUM || "",
     });
+  };
+
+  const handleDispute = () => {
+    setDispute(!dispute);
   };
 
   useEffect(() => {
@@ -312,6 +344,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
             />
           </div>
           {/* <DeliverySummary data={deliveryInvoices} /> */}
+          {/* <DeliverySummary data={deliveryInvoices} /> */}
           <Separator className="my-2" />
           <DeliveryDetails
             data={
@@ -323,7 +356,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
 
         {Boolean(Object.keys(selectedRow).length) && (
           <div className="w-32 flex-1">
-            {selectedRow.ISDISPUTED ? (
+            {dispute ? (
               <Card>
                 <CardHeader>
                   <CardTitle>

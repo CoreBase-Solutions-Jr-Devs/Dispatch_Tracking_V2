@@ -90,7 +90,7 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     GenerateOTPForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
-        url: `/delivery/GetDispatchesForDeliveryHD`,
+        url: `/delivery/GenerateOTPForDeliveredInvoices`,
         method: "POST",
         params: {
           dispatchnum: payload?.dispatchnum,
