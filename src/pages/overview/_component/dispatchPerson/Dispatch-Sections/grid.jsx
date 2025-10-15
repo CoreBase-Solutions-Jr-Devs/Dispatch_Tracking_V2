@@ -131,7 +131,7 @@ const renderDispatchLink = (row) => (
       className="text-sm underline cursor-pointer text-primary font-medium hover:text-primary/80"
       onClick={(e) => e.stopPropagation()}
     >
-      {row.original.dispatchNumber || "—"}
+      {row.original.dispatchNum || "—"}
     </a>
   </EditStatusDialog>
 );
@@ -171,7 +171,7 @@ export default function DispatchGrid({ data = [], isLoading = false, isSearch })
   const columns = useMemo(
     () => [
       {
-        accessorKey: "dispatchNumber",
+        accessorKey: "dispatchNum",
         header: "Dispatch No",
         cell: ({ row }) => renderDispatchLink(row),
       },
