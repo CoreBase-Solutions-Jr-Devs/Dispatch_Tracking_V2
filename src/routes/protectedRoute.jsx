@@ -7,7 +7,9 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
   // let rights = user["userrights"]?.map((item) => item?.moduleCode);
 
-  const role = user?.userrights?.map((item) => item?.moduleArea)[0] || "";
+  const roles = user?.userrights?.map((item) => item?.moduleArea) || [];
+
+  const hasAccess = roles.some((role) => allowedRoles.includes(role));
 
   // Wait until user state is loaded
   if (accessToken === undefined || user === undefined) return null;
@@ -21,7 +23,10 @@ const ProtectedRoute = ({ allowedRoles }) => {
   // if (allowedRoles && !allowedRoles.includes(user.userRole)) {
   //   return <Navigate to="/unauthorized" replace />;
   // }
-  if (allowedRoles && !allowedRoles.join(" ").includes(role)) {
+  // if (allowedRoles && !allowedRoles.join(" ").includes(role)) {
+  //   return <Navigate to="/unauthorized" replace />;
+  // }
+  if (allowedRoles && !hasAccess) {
     return <Navigate to="/unauthorized" replace />;
   }
 
