@@ -34,7 +34,7 @@ export function DataTablePagination({
 
       <div className="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-x-8 lg:space-y-0">
         {/* Rows Per Page Selector */}
-        {/* <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Select
             value={`${pageSize}`}
@@ -48,14 +48,14 @@ export function DataTablePagination({
               <SelectValue placeholder={`${pageSize}`} />
             </SelectTrigger>
             <SelectContent side="top" className="bg-gray-200">
-              {[10, 20, 30, 40, 50].map((size) => (
+              {[5, 10, 20, 30, 40, 50].map((size) => (
                 <SelectItem key={size} value={`${size}`}>
                   {size}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-        </div> */}
+        </div>
 
         {/* Page Info */}
         <div className="flex items-center">
@@ -105,7 +105,7 @@ export function DataTablePagination({
               variant="outline"
               size="sm"
               onClick={() => handlePageChange(pageNumber + 1)}
-              disabled={pageNumber >= totalPages}
+              disabled={pageNumber > totalPages}
             >
               <span className="sr-only">Go to next page</span>
               Next <ChevronRight />

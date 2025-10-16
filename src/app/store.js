@@ -3,6 +3,7 @@ import authReducer from "../features/auth/authSlice";
 import invoiceReducer from "../features/invoices/invoiceSlice";
 import dispatchReducer from "../features/dispatch/dispatchSlice";
 import uiReducer from "../features/ui/uiSlice";
+import dashboardReducer from "../features/dashboard/dashboardSlice";
 import storage from "redux-persist/lib/storage";
 import {
   persistReducer,
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   [apiClient.reducerPath]: apiClient.reducer,
   auth: authReducer,
   invoice: invoiceReducer,
+  dashboard: dashboardReducer,
   dispatch: dispatchReducer,
   ui: uiReducer,
 });
