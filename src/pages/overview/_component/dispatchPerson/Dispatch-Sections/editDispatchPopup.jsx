@@ -21,12 +21,13 @@ import DispatchDetails from "../dispatch-invoice-table/sections/details";
 import DispatchRemarks from "../dispatch-invoice-table/sections/remarks";
 import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 
-const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
+const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   const dispatch = useAppDispatch();
 
   const { user } = useSelector((state) => state.auth);
-  const { updatedDispatches } = useSelector((state) => state.dispatch);
-  const dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  // const { updatedDispatches } = useSelector((state) => state.dispatch);
+  const dispatchIDs = (rowData || []).map((item) => item.dispatchNum);
+  console.log(rowData);
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
@@ -123,7 +124,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
           : "Dispatch updated successfully!"
       );
       onClose();
-      if (isPush) return dispatch(resetDispatchData());
+      // if (isPush) return dispatch(resetDispatchData());
     } catch (error) {
       toast.error(
         isPush ? "Failed to push dispatch" : "Failed to update dispatch",
@@ -135,7 +136,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const isAnyLoading = processing || driverLoading;
 
   return (
-    <div className="my-1 max-h-[90vh] px-2 space-y-4 flex flex-col">
+    <div className="my-1 max-h-[90vh] px-2 space-y-4 flex flex-col overflow-auto">
       <h2 className="text-lg font-semibold text-foreground">
         Edit Dispatch Details
       </h2>
