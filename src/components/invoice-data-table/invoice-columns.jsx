@@ -17,7 +17,7 @@ const statusText = {
   1: "In Store",
   2: "In Verification",
   3: "In Dispatch",
-  4: "Processed",
+  4: "Delivered",
 };
 
 const renderStatus = (status) => {
@@ -45,15 +45,12 @@ const renderStatus = (status) => {
     case "Dispatched":
     case "Verified":
     case "Processed":
+    case "Delivered":
     case 4:
       statusClass = STATUS_STYLES.Delivery;
       break;
 
-    case "Recalled":
-      statusClass = STATUS_STYLES.Store;
-      break;
 
-    case "Delivered":
       statusClass = STATUS_STYLES.Verification;
       break;
 
@@ -408,7 +405,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       cell: ({ row }) =>
         renderText(row.original.dispTime?.split(".")[0] || "00:00:00"),
     },
-    status: {
+    adminStatus: {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => renderStatus(statusText[row.original.status]),
@@ -419,7 +416,6 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
     admin: [
       base.DocNumber,
       base.Account,
-      base.Amount,
       base.DocDate,
       base.DocTime,
       base.Itms,
@@ -430,7 +426,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.VrfTime,
       base.DispDate,
       base.DispTime,
-      base.status,
+      base.adminStatus,
     ],
     store: [
       base.invoiceNo,
