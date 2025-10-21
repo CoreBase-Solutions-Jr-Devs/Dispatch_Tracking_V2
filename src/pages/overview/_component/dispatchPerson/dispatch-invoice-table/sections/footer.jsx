@@ -110,7 +110,7 @@ export default function DispatchFooter({
       // routeCode: 0 || null,
       routeName: selectValues?.dispatchRoute || null,
       driverName: driverDetails?.driverName,
-      driverId: Number(driverDetails?.driverId.slice(2)),
+      driverId: Number(driverDetails?.driverId),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
       customerCourierName: courierDetails?.customerCourierName,
@@ -144,7 +144,7 @@ export default function DispatchFooter({
       toast.success("Dispatch saved succesfully!");
       console.log(data);
       setDeliveryDisabled(false);
-      // dispatch(resetDispatchData());
+      dispatch(resetDispatchData());
       navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
       let description = "Saving failed. Please try again.";
@@ -173,7 +173,7 @@ export default function DispatchFooter({
       // routeCode,
       routeName: selectValues?.dispatchRoute,
       driverName: driverDetails?.driverName,
-      driverId: Number(driverDetails?.driverId.slice(2)),
+      driverId: Number(driverDetails?.driverId),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
       customerCourierName: courierDetails?.customerCourierName,
@@ -210,7 +210,7 @@ export default function DispatchFooter({
       toast.success("Dispatch pushed successfully!");
       console.log(data);
       navigate(PROTECTED_ROUTES.OVERVIEW);
-      // dispatch(resetDispatchData());
+      dispatch(resetDispatchData());
     } catch (error) {
       let description = "Saving failed. Please try again.";
 
