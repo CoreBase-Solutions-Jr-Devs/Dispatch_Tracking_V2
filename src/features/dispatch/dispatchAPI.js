@@ -72,8 +72,8 @@ export const dispatchApi = apiClient.injectEndpoints({
       providesTags: ["saved_dispatched"],
     }),
     getSavedDispatchedDetails: builder.query({
-      query: (dispatchNumber) => ({
-        url: `/dispatch/saved-dispatched-details/${dispatchNumber}`,
+      query: (dispatchNum) => ({
+        url: `/dispatch/saved-dispatched-details/${dispatchNum}`,
         method: "GET",
       }),
       providesTags: ["saved_dispatched_details"],

@@ -5,6 +5,7 @@ import {
   HelpCircle,
   Home,
   Key,
+  LayoutDashboard,
   Menu,
   Monitor,
   Moon,
@@ -41,6 +42,7 @@ const Navbar = () => {
 
   const routes = useMemo(
     () => [
+      { icon: LayoutDashboard, href: PROTECTED_ROUTES.ADMIN, label: "Dashboard"},
       { icon: Home, href: PROTECTED_ROUTES.OVERVIEW, label: "Overview" },
       { icon: Settings, href: PROTECTED_ROUTES.SETTINGS, label: "Settings" },
     ],
@@ -123,14 +125,14 @@ const Navbar = () => {
           </button> */}
 
           {/* Theme Toggle */}
-          <Button
+          {/* <Button
             variant="outline"
             size="icon"
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             aria-label="Toggle theme"
           >
             <ThemeIcon className="h-4 w-4 transition-all" />
-          </Button>
+          </Button> */}
 
           {/* User Menu */}
           <UserNav

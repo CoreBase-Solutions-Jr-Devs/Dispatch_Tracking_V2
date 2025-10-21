@@ -35,25 +35,20 @@ const renderStatus = (statusCode) => {
   let statusClass;
 
   switch (statusLabel) {
-    case "pending":
-    case "in process":
-    case "recalled":
+    case "Recalled":
       statusClass = STATUS_STYLES.Store;
       break;
-    case "processed":
-    case "in verification":
-    case "delivered":
+    case "Delivered":
+    case "In Dispatch":
       statusClass = STATUS_STYLES.Verification;
       break;
-    case "verified":
-    case "in dispatch":
     case "PendingPush":
+    case "Saved":
       statusClass = STATUS_STYLES.Dispatch;
       break;
-    case "return":
+    case "Return":
     case "Dispatched":
-    case "in delivery":
-    case "saved":
+    case "In Delivery":
       statusClass = STATUS_STYLES.Saved;
       break;
     default:
@@ -131,7 +126,7 @@ const renderDispatchLink = (row) => (
       className="text-sm underline cursor-pointer text-primary font-medium hover:text-primary/80"
       onClick={(e) => e.stopPropagation()}
     >
-      {row.original.dispatchNumber || "—"}
+      {row.original.dispatchNum || "—"}
     </a>
   </EditStatusDialog>
 );
@@ -171,7 +166,7 @@ export default function DispatchGrid({ data = [], isLoading = false, isSearch })
   const columns = useMemo(
     () => [
       {
-        accessorKey: "dispatchNumber",
+        accessorKey: "dispatchNum",
         header: "Dispatch No",
         cell: ({ row }) => renderDispatchLink(row),
       },

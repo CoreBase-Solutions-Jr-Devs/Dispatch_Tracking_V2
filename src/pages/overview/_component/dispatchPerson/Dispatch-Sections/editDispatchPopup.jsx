@@ -21,14 +21,13 @@ import DispatchDetails from "../dispatch-invoice-table/sections/details";
 import DispatchRemarks from "../dispatch-invoice-table/sections/remarks";
 import DispatchMeta from "../dispatch-invoice-table/sections/meta";
 
-const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
+const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   const dispatch = useAppDispatch();
-  const { updatedDispatches } = useSelector((state) => state.dispatch);
-  const userName = useSelector(
-    (state) => state.auth?.user?.userName || "CoreVerify"
-  );
 
-  const dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  const { user } = useSelector((state) => state.auth);
+  // const { updatedDispatches } = useSelector((state) => state.dispatch);
+  const dispatchIDs = (rowData || []).map((item) => item.dispatchNum);
+  console.log(rowData);
 
   const [pushDispatch, { isLoading: processing }] =
     usePushDispatchProcessMutation();
@@ -58,8 +57,17 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
     error: driverApiError,
   } = useGetDeliveryDriverQuery(userName, {
     skip:
-      !userName || editedDispatch.collectionType?.toLowerCase() !== "delivery",
+      editedDispatch.collectionType !== "OUR DELIVERY" ||
+      !editedDispatch.dispatchPerson,
   });
+
+  const collectionTypeOptions = (
+    filterOptions?.find((opt) => opt.key === "collectionType")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    // value: opt.value,
+    value: opt.label,
+  }));
 
   useEffect(() => {
     if (driverDetails) {
@@ -97,14 +105,12 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
         editedDispatch.collectionType?.toUpperCase() || "DELIVERY",
       userName,
       routeName: editedDispatch.dispatchRoute || null,
-      driverName: driverDetails?.driverName || null,
-      driverId: driverDetails?.driverId || null,
-      carMake: driverDetails?.carMake || null,
-      carPlate: driverDetails?.regNo || null,
-      customerCourierName: editedDispatch.customerCourierName || null,
-      customerCourierId: editedDispatch.customerCourierId || null,
-      customerCourierPhone: editedDispatch.customerCourierPhone || null,
+      driverName: localDriverDetails?.driverName || null,
+      driverId: Number(localDriverDetails?.driverId.slice(2)) || null,
+      carMake: localDriverDetails?.carMake || null,
+      carPlate: localDriverDetails?.regNo || null,
       dispatchRemarks: editedDispatch.remarks || "",
+      userName: user?.username || "",
       isPush,
     };
 
@@ -126,9 +132,8 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
           ? "Dispatch pushed successfully!"
           : "Dispatch saved successfully!"
       );
-
-      dispatch(resetDispatchData());
       onClose();
+      // if (isPush) return dispatch(resetDispatchData());
     } catch (error) {
       console.error("❌ Dispatch Action Error:", error);
       toast.error(isPush ? "Dispatch push failed" : "Dispatch save failed", {
@@ -140,7 +145,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
   const isAnyLoading = processing || driverLoading;
 
   return (
-    <div className="my-1 max-h-[90vh] px-2 space-y-4 flex flex-col">
+    <div className="my-1 max-h-[90vh] px-2 space-y-4 flex flex-col overflow-auto">
       <h2 className="text-lg font-semibold text-foreground">
         Edit Dispatch Details
       </h2>
@@ -152,7 +157,15 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose }) => {
           <DispatchSelect
             values={editedDispatch}
             onChange={handleFieldChange}
-            deliveryGuyOptions={deliveryGuyOptions}
+            collectionTypeOptions={collectionTypeOptions}
+            deliveryGuyOptions={deliveryGuyOptions.map((opt) => ({
+              label: opt.label,
+              value: opt.label,
+            }))}
+            routeOptions={routeOptions.map((opt) => ({
+              label: opt.label,
+              value: opt.label,
+            }))}
             enabled
           />
 

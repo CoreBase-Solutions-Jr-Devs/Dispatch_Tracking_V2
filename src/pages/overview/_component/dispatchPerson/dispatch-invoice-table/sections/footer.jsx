@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 // import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   resetDispatchData,
   setAssignedTo,
@@ -35,7 +35,8 @@ export default function DispatchFooter({
   selectValues,
   onSubmit,
   onClose,
-  onEnableSelection
+  onEnableSelection,
+  dispatchRemarks,
 }) {
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
@@ -50,7 +51,6 @@ export default function DispatchFooter({
   // const [customerCourierName, setCustomerCourierName] = useState("" || null);
   // const [customerCourierId, setCustomerCourierId] = useState(0 || null);
   // const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
-  const [dispatchRemarks, setDispatchRemarks] = useState("");
   const [isPush, setIsPush] = useState(true);
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
@@ -58,6 +58,10 @@ export default function DispatchFooter({
   const { courierDetails, driverDetails, clientDetails } = useSelector(
     (state) => state.dispatch
   );
+
+  const { user } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
 
   const [
     startDispatch,
@@ -67,15 +71,14 @@ export default function DispatchFooter({
     usePushDispatchProcessMutation();
   // const [saveSelectedDispatches, {data:saveData, isLoading:saveLoading, isError:saveError}] = useSaveSelectedDispatchesMutation();
 
-  const handleStart = async (username) => {
+  const handleStart = async () => {
     const payload = {
       dispatchIds: dispatchIDs,
-      userName: username || user?.userName || "",
+      userName: user?.username || "",
     };
     try {
       const data = await startDispatch(payload).unwrap();
-      const assignedTo = data?.value?.assignedTo || "—";
-      dispatch(setAssignedTo(assignedTo));
+      dispatch(setAssignedTo(data?.assignedTo || "—"));
       console.log(data);
       // if (refetchData) setTimeout(() => refetchData(), 50);
       if (onEnableSelection) onEnableSelection();
@@ -84,11 +87,11 @@ export default function DispatchFooter({
       setStartDisabled(true);
       toast.success("Dispatch started!");
     } catch (error) {
-        toast.error("Dispatch Failed", {
-          description:
-            error?.data?.message || error?.data?.title || "Please try again",
-          duration: 4000,
-        });
+      toast.error("Dispatch Failed", {
+        description:
+          error?.data?.message || error?.data?.title || "Please try again",
+        duration: 4000,
+      });
       setDeliveryDisabled(true);
       setSaveDisabled(true);
     }
@@ -107,27 +110,31 @@ export default function DispatchFooter({
       // routeCode: 0 || null,
       routeName: selectValues?.dispatchRoute || null,
       driverName: driverDetails?.driverName,
-      driverId: driverDetails?.driverId,
+      driverId: Number(driverDetails?.driverId.slice(2)),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
       customerCourierName: courierDetails?.customerCourierName,
       customerCourierId: courierDetails?.customerCourierId,
       customerCourierPhone: courierDetails?.customerCourierPhone,
       isPush: false,
+      userName: user?.username || "",
     };
 
-    if(selectValues.collectionType === 'delivery'){
-      delete formData.customerCourierId
-      delete formData.customerCourierName
-      delete formData.customerCourierPhone
+    if (selectValues.collectionType === "delivery") {
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
 
-    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
-      delete formData.driverId
-      delete formData.driverName
-      delete formData.routeName
-      delete formData.carMake
-      delete formData.carPlate
+    if (
+      selectValues.collectionType === "self-collection" ||
+      selectValues.collectionType === "courier"
+    ) {
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
 
     try {
@@ -137,7 +144,7 @@ export default function DispatchFooter({
       toast.success("Dispatch saved succesfully!");
       console.log(data);
       setDeliveryDisabled(false);
-      dispatch(resetDispatchData());
+      // dispatch(resetDispatchData());
       navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
       let description = "Saving failed. Please try again.";
@@ -146,7 +153,7 @@ export default function DispatchFooter({
         description: error?.data?.message || error?.data?.title || description,
         duration: 4000,
       });
-      setSaveDisabled(true);
+      setSaveDisabled(false);
       setStartDisabled(true);
     }
     onSubmit(rowData);
@@ -162,10 +169,11 @@ export default function DispatchFooter({
     const formData = {
       dispatchIds: dispatchIDs,
       collectionType: selectValues.collectionType,
+      userName: user?.username || "",
       // routeCode,
-      routeName:selectValues?.dispatchRoute,
+      routeName: selectValues?.dispatchRoute,
       driverName: driverDetails?.driverName,
-      driverId: driverDetails?.driverId,
+      driverId: Number(driverDetails?.driverId.slice(2)),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
       customerCourierName: courierDetails?.customerCourierName,
@@ -175,19 +183,24 @@ export default function DispatchFooter({
       isPush: true,
     };
 
-    {/* Remove unneccessary values from payload */}
-    if(selectValues.collectionType === 'delivery'){
-      delete formData.customerCourierId
-      delete formData.customerCourierName
-      delete formData.customerCourierPhone
+    {
+      /* Remove unneccessary values from payload */
+    }
+    if (selectValues.collectionType === "delivery") {
+      delete formData.customerCourierId;
+      delete formData.customerCourierName;
+      delete formData.customerCourierPhone;
     }
 
-    if(selectValues.collectionType === 'self-collection' || selectValues.collectionType === 'courier') {
-      delete formData.driverId
-      delete formData.driverName
-      delete formData.routeName
-      delete formData.carMake
-      delete formData.carPlate
+    if (
+      selectValues.collectionType === "self-collection" ||
+      selectValues.collectionType === "courier"
+    ) {
+      delete formData.driverId;
+      delete formData.driverName;
+      delete formData.routeName;
+      delete formData.carMake;
+      delete formData.carPlate;
     }
 
     try {
@@ -197,7 +210,7 @@ export default function DispatchFooter({
       toast.success("Dispatch pushed successfully!");
       console.log(data);
       navigate(PROTECTED_ROUTES.OVERVIEW);
-      dispatch(resetDispatchData());
+      // dispatch(resetDispatchData());
     } catch (error) {
       let description = "Saving failed. Please try again.";
 

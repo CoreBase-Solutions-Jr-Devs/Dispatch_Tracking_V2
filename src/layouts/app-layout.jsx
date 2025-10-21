@@ -8,9 +8,9 @@ const AppLayout = () => {
 
   return (
     <>
-      <div className="w-full min-h-screen pb-10">
+      <div className="w-full min-h-screen">
         <Navbar />
-        <main className="mx-auto flex min-w-0 max-w-7xl grow flex-col sm:flex-row">
+        <main className="mx-auto flex min-w-0 max-w-full grow flex-col sm:flex-row">
           {/* Sidebar */}
           <SideBar />
 
@@ -18,7 +18,11 @@ const AppLayout = () => {
           <div
             style={{ scrollbarWidth: "none" }}
             className={`flex grow flex-col overflow-y-auto px-4 sm:p-6 transition-all duration-300
-              ${sidebarCollapsed ? "sm:w-[calc(100%-4rem)]" : "sm:w-[calc(100%-14rem)]"}`}
+              ${
+                sidebarCollapsed
+                  ? "sm:w-[calc(100%-4rem)]"
+                  : "sm:w-[calc(100%-14rem)]"
+              }`}
           >
             <Outlet />
           </div>

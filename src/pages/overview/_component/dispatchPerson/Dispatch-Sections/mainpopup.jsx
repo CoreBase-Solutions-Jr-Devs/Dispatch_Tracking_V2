@@ -40,12 +40,12 @@ const renderStatus = (status) => {
 };
 
 export default function DispatchMainPopup({ rowData, onClose }) {
-  const dispatchNumber = rowData?.dispatchNumber;
+  const dispatchNum = rowData?.dispatchNum;
 
   const { data: details, isLoading } = useGetSavedDispatchedDetailsQuery(
-    dispatchNumber,
+    dispatchNum,
     {
-      skip: !dispatchNumber,
+      skip: !dispatchNum,
     }
   );
 
@@ -73,7 +73,7 @@ export default function DispatchMainPopup({ rowData, onClose }) {
           {rows.map((row, index) => (
             <TableRow key={index} className="text-sm font-medium">
               <TableCell className="py-2 px-2">
-                {renderText(row?.dispatchNumber || dispatchNumber)}
+                {renderText(row?.dispatchNum|| dispatchNum)}
               </TableCell>
               <TableCell className="py-1 px-2">
                 {renderText(row?.docNo)}
@@ -105,7 +105,7 @@ export default function DispatchMainPopup({ rowData, onClose }) {
       <DialogFooter className="flex justify-end gap-2 px-3 py-3">
         {status === 3 && (
           <EditStatusDialog
-            rowData={rowData}
+            rowData={rows}
             view="dispatchedit"
             onSubmit={(updatedData) =>
               console.log("Edited collection type:", updatedData)
