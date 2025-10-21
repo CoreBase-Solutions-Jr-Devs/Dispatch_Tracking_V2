@@ -95,7 +95,7 @@ const DashboardLabelValue = () => {
       />
       <LabelValue
         status="Verification"
-        label="Pending"
+        label="In Verification"
         value={summary.inVerificationCount || 0}
       />
       <LabelValue
@@ -105,17 +105,17 @@ const DashboardLabelValue = () => {
       />
       <LabelValue
         status="Dispatch"
-        label="Processed"
+        label="In Store"
         value={summary.inStoreCount || 0}
       />
       <LabelValue
         status="Verification"
-        label="Processed"
+        label="In Dispatch"
         value={summary.inDispatchCount || 0}
       />
       <LabelValue
         status="Dispatch"
-        label="Processed"
+        label="In Delivery"
         value={summary.inDeliveryCount || 0}
       />
       <LabelValue
