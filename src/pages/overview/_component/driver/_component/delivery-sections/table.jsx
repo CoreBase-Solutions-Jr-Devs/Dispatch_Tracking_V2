@@ -76,7 +76,7 @@ export default function DeliveryTable({
                 checkedInvoices.length > 0 ? null : handleRowSelect(row)
               }
               data-state={
-                row.DISPATCHNUM === selectedRow?.DISPATCHNUM ? "selected" : ""
+                row.SALEINV_NUM === selectedRow?.SALEINV_NUM ? "selected" : ""
               }
             >
               <TableCell className="py-1 px-2">

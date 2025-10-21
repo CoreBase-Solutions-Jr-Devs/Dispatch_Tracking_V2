@@ -55,9 +55,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     BCODE: "",
     CUS_CODE: "",
     SALEINV_NUM: "",
-    phonenumber: "",
-    amount: 0,
-    DISPATCHNUM: "",
   });
 
   const [deliveryComplete, { isLoading }] = useDeliveryCompleteMutation();
@@ -108,7 +105,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       setCheckedInvoices((prev) => [...prev, row]);
     } else {
       setCheckedInvoices((prev) =>
-        prev.filter((r) => r.DISPATCHNUM !== row.DISPATCHNUM)
+        prev.filter((r) => r.SALEINV_NUM !== row.SALEINV_NUM)
       );
     }
   };

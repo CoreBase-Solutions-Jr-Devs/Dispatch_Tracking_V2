@@ -9,14 +9,15 @@ import {
 
 const RoleBasedFilters = ({ filters = [], selectedFilters = {}, onChange }) => {
   const safeFilters = Array.isArray(filters) ? filters : [];
-
   return (
     <section className="flex flex-wrap gap-2 items-center">
       {safeFilters.map((filter) => (
         <section key={filter.key} className="min-w-[120px]">
           <Select
             value={selectedFilters[filter.key] || ""}
-            onValueChange={(val) => onChange(filter.key, val)}
+            onValueChange={(val) => {
+              onChange(filter.key, val);
+            }}
           >
             <SelectTrigger className="h-8 text-sm bg-[var(--input)] border border-[var(--border)] text-[var(--foreground)] rounded-md">
               <SelectValue placeholder={filter.label} />

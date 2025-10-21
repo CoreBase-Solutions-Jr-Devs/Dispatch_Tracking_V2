@@ -1,9 +1,12 @@
 // import { useState } from "react";
-import { useAppDispatch } from "@/app/hook";
+import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import { DataTable } from "@/components/data-table";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
-import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
-import { useGetAllGeneralInvoicesQuery } from "@/features/dashboard/dashboardAPI";
+import DashboardToolbar from "@/components/invoice-data-table/dashboard-toolbar";
+import {
+  useGetAllGeneralInvoicesQuery,
+  useQueryInvoiceQuery,
+} from "@/features/dashboard/dashboardAPI";
 import { setSummary } from "@/features/dashboard/dashboardSlice";
 import { roleToView } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -14,18 +17,31 @@ import { useEffect, useState } from "react";
 export default function DashboardTable() {
   const dispatch = useAppDispatch();
 
+  const { queryFilter } = useTypedSelector((state) => state.dashboard);
+
   const [filter, setFilter] = useState({
     pageNumber: 1,
-    pageSize: 20,
+    pageSize: 50,
   });
 
-  const { data, isLoading, isSuccess } = useGetAllGeneralInvoicesQuery({
-    ...filter,
-  });
+  const [searchValue, setSearchValue] = useState("");
 
-  let invoices = data?.invoices || [];
-  let pagination = data?.pagination || {};
-  let summary = data?.summary || [];
+  const { data, isLoading, isSuccess, isError, error } =
+    useGetAllGeneralInvoicesQuery({
+      ...filter,
+      ...queryFilter,
+    });
+  const { data: queriedData, isLoading: isQueryLoading } = useQueryInvoiceQuery(
+    searchValue,
+    {
+      skip: !searchValue,
+    }
+  );
+
+  let invoices = searchValue ? queriedData?.invoices : data?.invoices || [];
+  // let pagination = data?.pagination || {};
+  let summary = data?.stats || {};
+  let totalInvoices = summary?.totalCount || 0;
 
   // const view = roleToView("View All Stages");
   const view = roleToView("SuperAdmin");
@@ -39,93 +55,39 @@ export default function DashboardTable() {
     setFilter((prev) => ({ ...prev, pageSize }));
   };
 
+  const handleSearchValue = (value) => {
+    console.log(value);
+    setSearchValue(value);
+  };
+
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(setSummary(summary));
     }
   }, [isSuccess, data, dispatch]);
 
+  if (isError) {
+    return (
+      <div className="text-center text-red-500">
+        {error?.data?.message ||
+          error?.data?.title ||
+          "Failed to load store tracking details."}
+      </div>
+    );
+  }
+
   return (
-    // <div className="overflow-x-auto">
-    //   <Table>
-    //     <TableBody>
-    //       {/* Header Row */}
-    //       <TableRow className="bg-gray-100 text-xs font-medium">
-    //         <TableCell className="py-1 px-2">DocNumber</TableCell>
-    //         <TableCell className="py-1 px-2">Account</TableCell>
-    //         <TableCell className="py-1 px-2">Amount</TableCell>
-    //         <TableCell className="py-1 px-2">DocDate</TableCell>
-    //         <TableCell className="py-1 px-2">DocTime</TableCell>
-    //         <TableCell className="py-1 px-2">Itms</TableCell>
-    //         <TableCell className="py-1 px-2">PrintC</TableCell>
-    //         {/* <TableCell className="py-1 px-2">Store</TableCell> */}
-    //         <TableCell className="py-1 px-2">StoreDate</TableCell>
-    //         <TableCell className="py-1 px-2">StoreTime</TableCell>
-    //         {/* <TableCell className="py-1 px-2">Vrf1</TableCell> */}
-    //         <TableCell className="py-1 px-2">VrfDate</TableCell>
-    //         <TableCell className="py-1 px-2">VrfTime</TableCell>
-    //         {/* <TableCell className="py-1 px-2">Vrf2</TableCell> */}
-    //         {/* <TableCell className="py-1 px-2">Vrf2Date</TableCell>
-    //         <TableCell className="py-1 px-2">Vrf2Time</TableCell> */}
-    //         {/* <TableCell className="py-1 px-2">Disp</TableCell> */}
-    //         <TableCell className="py-1 px-2">DispDate</TableCell>
-    //         <TableCell className="py-1 px-2">DispTime</TableCell>
-    //       </TableRow>
-
-    //       {/* Dynamic Rows */}
-    //       {data.map((row, index) => (
-    //         <TableRow key={index} className={"text-xs font-medium"}>
-    //           <TableCell className="py-1 px-2">{row?.docNo}</TableCell>
-    //           <TableCell className="py-1 px-2">{row?.account}</TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {new Intl.NumberFormat("en-GB").format(row?.amount)}
-    //           </TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {new Intl.DateTimeFormat("en-GB").format(
-    //               new Date(row?.docDate)
-    //             )}
-    //           </TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {row?.docTime?.split(".")[0]}
-    //           </TableCell>
-    //           <TableCell className="py-1 px-2">{row?.items}</TableCell>
-    //           <TableCell className="py-1 px-2">{row?.printCopy}</TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {new Intl.DateTimeFormat("en-GB").format(
-    //               new Date(row?.storeDate)
-    //             )}
-    //           </TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {row?.storeTime?.split("T")[1]?.split(".")[0]}
-    //           </TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {new Intl.DateTimeFormat("en-GB").format(new Date(row?.vfDate))}
-    //           </TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {row?.vfTime?.split("T")[1]?.split(".")[0]}
-    //           </TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {new Intl.DateTimeFormat("en-GB").format(
-    //               new Date(row?.dispDate)
-    //             )}
-    //           </TableCell>
-    //           <TableCell className="py-1 px-2">
-    //             {row?.dispTime?.split(".")[0]}
-    //           </TableCell>
-    //         </TableRow>
-    //       ))}
-    //     </TableBody>
-    //   </Table>
-    // </div>
-
     <div className="space-y-4">
-      {/* <InvoiceToolbar role={view} /> */}
+      <DashboardToolbar
+        searchValue={searchValue}
+        setSearchValue={handleSearchValue}
+      />
 
       <DataTable
         data={invoices}
         columns={columns}
         selection={false}
-        isLoading={isLoading}
+        isLoading={isLoading || isQueryLoading}
         emptyTitle="No invoices found"
         isShowPagination={true}
         onPageSizeChange={handlePageSizeChange}
@@ -134,7 +96,10 @@ export default function DashboardTable() {
           pageNumber: filter?.pageNumber,
           pageSize: filter?.pageSize,
           totalItems: invoices.length,
-          totalPages: Math.ceil(invoices.length / pagination?.pageSize),
+          totalPages:
+            Math.ceil(totalInvoices / filter?.pageSize) ||
+            Math.ceil(invoices.length / filter?.pageSize),
+          // totalPages: Math.ceil(invoices.length / pagination?.pageSize),
           // totalPages: pagination?.totalPages || 1,
         }}
       />
