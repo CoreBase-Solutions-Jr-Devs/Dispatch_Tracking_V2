@@ -1,5 +1,5 @@
 export const AUTH_ROUTES = {
-  SIGN_IN: "/"
+  SIGN_IN: "/",
 };
 
 export const PROTECTED_ROUTES = {
@@ -7,7 +7,8 @@ export const PROTECTED_ROUTES = {
   REPORTS: "/reports",
   INVOICES: "/invoices",
   SETTINGS: "/settings",
-  NEWDISPATCH: "/newdispatch"
+  NEWDISPATCH: "/newdispatch",
+  ADMIN: "/dashboard",
 };
 
 export const isAuthRoute = (pathname) => {

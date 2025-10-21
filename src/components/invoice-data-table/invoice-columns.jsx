@@ -13,33 +13,47 @@ const STATUS_STYLES = {
   Muted: "bg-muted text-muted-foreground border-border",
 };
 
+const statusText = {
+  1: "In Store",
+  2: "In Verification",
+  3: "In Dispatch",
+  4: "Delivered",
+};
+
 const renderStatus = (status) => {
   let statusClass;
   switch (status) {
     case "Pending":
+    case "In Store":
+    case 1:
       statusClass = STATUS_STYLES.Store;
       break;
 
     case "In Process":
     case "In Verification":
+    case 2:
       statusClass = STATUS_STYLES.Verification;
       break;
+
     case "In Delivery":
     case "In Dispatch":
+    case 3:
       statusClass = STATUS_STYLES.Dispatch;
       break;
+
     case "Return":
     case "Dispatched":
     case "Verified":
     case "Processed":
+    case "Delivered":
+    case 4:
       statusClass = STATUS_STYLES.Delivery;
       break;
-    case "Recalled":
-      statusClass = STATUS_STYLES.Store;
-      break;
-    case "Delivered":
+
+
       statusClass = STATUS_STYLES.Verification;
       break;
+
     default:
       statusClass = STATUS_STYLES.Muted;
       break;
@@ -54,8 +68,47 @@ const renderStatus = (status) => {
   );
 };
 
+// const renderAdminStatus = (status) => {
+//   let statusClass;
+//   switch (status) {
+//     case 1:
+//       statusClass = STATUS_STYLES.Store;
+//       break;
+
+//     case 2:
+//       statusClass = STATUS_STYLES.Verification;
+//       break;
+
+//     case 3:
+//       statusClass = STATUS_STYLES.Dispatch;
+//       break;
+
+//     case 4:
+//       statusClass = STATUS_STYLES.Delivery;
+//       break;
+
+//     default:
+//       statusClass = STATUS_STYLES.Muted;
+//       break;
+//   }
+//   return (
+//     <Badge
+//       variant="outline"
+//       className={`${statusClass} w-28 justify-center rounded-md text-xs px-3 py-1 font-medium border dark:bg-gray-400 dark: text-black`}
+//     >
+//       {status}
+//     </Badge>
+//   );
+// };
+
 const renderText = (text) => (
-  <span className="text-foreground  font-medium">{text || "—"}</span>
+  <span className="text-foreground font-medium">{text || "—"}</span>
+);
+
+const renderNumber = (text) => (
+  <span className="text-foreground font-medium">
+    {new Intl.NumberFormat("en-GB").format(text) || ""}
+  </span>
 );
 
 const formatUKDateTime = (date) => {
@@ -200,7 +253,6 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
         return renderStatus(value);
       },
     },
-
     items: {
       accessorKey: "items",
       header: "Items ",
@@ -218,7 +270,6 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       cell: ({ row }) =>
         renderDateTime(row.original.processedDateTime, 1, "text-red-600"),
     },
-
     verificationDateTime: {
       accessorKey: "verificationDateTime",
       header: "Verification Date & Time",
@@ -279,17 +330,103 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       enableSorting: false,
       enableHiding: false,
     },
+    // ADMIN PAGE
+    DocNumber: {
+      accessorKey: "docNo",
+      header: "DocNumber",
+      cell: ({ row }) => renderText(row.original.docNo),
+    },
+    Account: {
+      accessorKey: "account",
+      header: "Account",
+      cell: ({ row }) => renderText(row.original.account),
+    },
+    Amount: {
+      accessorKey: "amount",
+      header: "Amount",
+      cell: ({ row }) => renderNumber(row.original.amount),
+    },
+    DocDate: {
+      accessorKey: "docDate",
+      header: "DocDate",
+      cell: ({ row }) => renderText(row.original.docDate?.split("T")[0] || ""),
+    },
+    DocTime: {
+      accessorKey: "docTime",
+      header: "DocTime",
+      cell: ({ row }) =>
+        renderText(row.original.docTime?.split(".")[0] || "00:00:00"),
+    },
+    Itms: {
+      accessorKey: "items",
+      header: "Items",
+      cell: ({ row }) => renderText(row.original.items),
+    },
+    printCopy: {
+      accessorKey: "printCopy",
+      header: "printCopy",
+      cell: ({ row }) => renderText(row.original.printCopy),
+    },
+    StoreDate: {
+      accessorKey: "storeDate",
+      header: "StoreDate",
+      cell: ({ row }) =>
+        renderText(row.original.storeDate?.split("T")[0] || ""),
+    },
+    StoreTime: {
+      accessorKey: "storeTime",
+      header: "StoreTime",
+      cell: ({ row }) =>
+        renderText(
+          row.original.storeTime?.split("T")[1]?.split(".")[0] || "00:00:00"
+        ),
+    },
+    VrfDate: {
+      accessorKey: "vfDate",
+      header: "VrfDate",
+      cell: ({ row }) => renderText(row.original.vfDate?.split("T")[0] || ""),
+    },
+    VrfTime: {
+      accessorKey: "vfTime",
+      header: "VrfTime",
+      cell: ({ row }) =>
+        renderText(
+          row.original.vfTime?.split("T")[1]?.split(".")[0] || "00:00:00"
+        ),
+    },
+    DispDate: {
+      accessorKey: "dispDate",
+      header: "DispDate",
+      cell: ({ row }) => renderText(row.original.dispDate?.split("T")[0]),
+    },
+    DispTime: {
+      accessorKey: "dispTime",
+      header: "DispTime",
+      cell: ({ row }) =>
+        renderText(row.original.dispTime?.split(".")[0] || "00:00:00"),
+    },
+    adminStatus: {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => renderStatus(statusText[row.original.status]),
+    },
   };
 
   const views = {
     admin: [
-      base.docType,
-      base.branchName,
-      base.account,
-      base.paymentTerms,
-      base.printCopies,
-      base.docDateTime,
-      base.status,
+      base.DocNumber,
+      base.Account,
+      base.DocDate,
+      base.DocTime,
+      base.Itms,
+      base.printCopy,
+      base.StoreDate,
+      base.StoreTime,
+      base.VrfDate,
+      base.VrfTime,
+      base.DispDate,
+      base.DispTime,
+      base.adminStatus,
     ],
     store: [
       base.invoiceNo,
