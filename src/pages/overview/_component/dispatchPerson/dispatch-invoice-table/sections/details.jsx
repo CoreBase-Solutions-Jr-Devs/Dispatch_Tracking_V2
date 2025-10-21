@@ -144,7 +144,7 @@ export default function DispatchDetails({
       {collectionType === COLLECTION_TYPES.OUR_DELIVERY && !deliveryPerson && (
         <>
           <section className="flex flex-col w-full h-full gap-2">
-            <div className="flex items-center gap-2 justify-between w-full">
+            {/* <div className="flex items-center gap-2 justify-between w-full">
               <Label className="text-xs font-medium w-2/5">DP ID:</Label>
               <Input
                 className="w-3/5 h-5 text-xs"
@@ -164,7 +164,7 @@ export default function DispatchDetails({
                 onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
                 disabled={!enabled}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center gap-2 justify-between w-full">
               <Label className="text-xs font-medium w-2/5">Car Make:</Label>
@@ -195,7 +195,7 @@ export default function DispatchDetails({
         deliveryPerson &&
         data && (
           <section className="flex flex-col w-full h-full gap-2">
-            <div className="flex items-center justify-between w-full">
+            {/* <div className="flex items-center justify-between w-full">
               <Label className="text-xs font-medium w-1/3">DP ID:</Label>
               <Input
                 className="w-2/3 h-6 text-xs"
@@ -215,7 +215,7 @@ export default function DispatchDetails({
                 onChange={(e) => handleChange("delivery", e)}
                 disabled={false}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center justify-between w-full">
               <Label className="text-xs font-medium w-1/3">Car Make:</Label>
