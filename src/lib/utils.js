@@ -59,19 +59,19 @@ export function rightsToView(rights = []) {
   };
 
   if (rights.some((r) => VIEW_RIGHTS.store.includes(r))) return "store";
-  if (rights.some((r) => VIEW_RIGHTS.verification.includes(r))) return "verification";
+  if (rights.some((r) => VIEW_RIGHTS.verification.includes(r)))
+    return "verification";
   if (rights.some((r) => VIEW_RIGHTS.dispatch.includes(r))) return "dispatch";
   if (rights.some((r) => VIEW_RIGHTS.delivery.includes(r))) return "delivery";
 
   return "user";
 }
 
-
 /**
  * View metadata (title + subtitle) per role/view
  */
 export const viewMeta = {
-  admin: {
+  "view all stages": {
     title: "Admin Overview",
     subtitle: "All invoices across the system.",
   },

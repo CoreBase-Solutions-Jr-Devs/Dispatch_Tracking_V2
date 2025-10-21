@@ -5,7 +5,8 @@ export const LAYOUT_VIEW = Object.freeze({
 
 export const ROLES = Object.freeze({
   SUPER_ADMIN: "SuperAdmin",
-  ADMIN: "Admin",
+  // ADMIN: "Admin",
+  ADMIN: "View All Stages",
   USER: "User",
   STORE_CONTROLLER: "StoreController",
   STORE_PERSON: "StorePerson",
