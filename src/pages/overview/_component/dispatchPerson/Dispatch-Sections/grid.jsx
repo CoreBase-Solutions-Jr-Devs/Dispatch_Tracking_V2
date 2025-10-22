@@ -28,7 +28,7 @@ const getStatusLabel = (statusCode) => {
     4: "Dispatched",
   };
   return statusMap[Number(statusCode)] || "Unknown";
-}
+};
 
 const renderStatus = (statusCode) => {
   const statusLabel = getStatusLabel(statusCode);
@@ -64,6 +64,11 @@ const renderStatus = (statusCode) => {
     </Badge>
   );
 };
+
+const formatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
 const formatUKDateTime = (date) => {
   if (!date) return "—";
@@ -148,20 +153,23 @@ const renderActions = (row) => (
   </EditStatusDialog>
 );
 
-export default function DispatchGrid({ data = [], isLoading = false, isSearch }) {
+export default function DispatchGrid({
+  data = [],
+  isLoading = false,
+  isSearch,
+}) {
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 50;
 
-  const { data: savedDispatches, isFetching } = useGetSavedDispatchedInvoicesQuery(
+  const { data: savedDispatches, isFetching } =
+    useGetSavedDispatchedInvoicesQuery(
       { pageNumber, pageSize },
       { skip: data?.length > 0 }
-  );
+    );
 
   const isSearchResult = data?.length > 0;
 
-  const displayData = isSearchResult
-    ? data
-    : savedDispatches?.items || [];
+  const displayData = isSearchResult ? data : savedDispatches?.items || [];
 
   const columns = useMemo(
     () => [
@@ -179,6 +187,11 @@ export default function DispatchGrid({ data = [], isLoading = false, isSearch })
         accessorKey: "dispatcher",
         header: "Dispatcher",
         cell: ({ row }) => renderText(row.original.dispatcher),
+      },
+      {
+        accessorKey: "driver",
+        header: "Driver",
+        cell: ({ row }) => renderText(row.original.driver),
       },
       {
         acccessorkey: "collectionType",
@@ -203,16 +216,16 @@ export default function DispatchGrid({ data = [], isLoading = false, isSearch })
       },
       {
         accessorKey: "amount",
-        header: "Amount",
-        cell: ({ row }) =>
-          renderText(
-            row.original.amount
-              ? `KES ${row.original.amount}`
-            : "0"
-          ),
+        header: "Balance",
+        cell: ({ row }) => {
+          const amount = row.original.amount || 0;
+          const formattedAmount = ` ${formatter.format(amount)}`;
+
+          return renderText(formattedAmount);
+        },
       },
       {
-        accessorkey: "status",
+        accessorKey: "status",
         header: "Status",
         cell: ({ row }) => renderStatus(row.original.status),
       },

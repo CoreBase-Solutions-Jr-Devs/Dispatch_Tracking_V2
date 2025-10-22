@@ -116,7 +116,13 @@ export default function StoreFooter({
           Send to Verification
         </Button>
       </EditStatusDialog>
-
+  <Button
+        variant="destructive"
+        onClick={handleClose}
+        className="mt-2 mr-2 uppercase"
+      >
+        Recall
+      </Button>
       <Button
         variant="destructive"
         onClick={handleClose}

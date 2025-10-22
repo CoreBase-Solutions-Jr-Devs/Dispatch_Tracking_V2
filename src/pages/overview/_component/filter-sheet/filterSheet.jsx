@@ -19,6 +19,7 @@ import {
   setDateRange,
   setEndDate,
   setInvoices,
+  setStatsStore,
   setStartDate,
 } from "@/features/invoices/invoiceSlice";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
@@ -152,10 +153,12 @@ export default function FilterSheet() {
     if (data) {
       dispatch(
         setInvoices({
-          invoices: data.invoices,
-          pagination: data.pagination,
+          invoices: data?.invoices,
+          pagination: data?.pagination,
+          stats: { ...(data?.stats || {}), role },
         })
       );
+      // dispatch(setStatsStore(data?.stats || {}));
     }
   }, [data, dispatch]);
 

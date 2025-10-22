@@ -40,6 +40,11 @@ const renderStatus = (status) => {
   );
 };
 
+const formatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 const formatUKDateTime = (date) => {
   if (!date) return "—";
   const d = new Date(date);
@@ -100,7 +105,7 @@ export default function DispatchTable({
             <TableCell className="py-1 px-2">Terms</TableCell>
             <TableCell className="py-1 px-2">Ver. Date</TableCell>
             <TableCell className="py-1 px-2">Duration</TableCell>
-            <TableCell className="py-1 px-2">Amount</TableCell>
+            <TableCell className="py-1 px-2">Balance</TableCell>
           </TableRow>
 
           {/* Skeleton Loading State */}
@@ -173,12 +178,16 @@ export default function DispatchTable({
                     {renderText(row?.payTerms || row?.paymentTerms)}
                   </TableCell>
                   <TableCell className="py-1 px-2">
-                    {renderDateTime(row?.verifiedDateTime || row?.verificationDateTime)}
+                    {renderDateTime(
+                      row?.verifiedDateTime || row?.verificationDateTime
+                    )}
                   </TableCell>
                   <TableCell className="py-1 px-2">
                     {renderText(formatDuration(row?.durationSeconds))}
                   </TableCell>
-                  <TableCell className="py-1 px-2">{row?.amount}</TableCell>
+                  <TableCell className="py-1 px-2">
+                    {formatter.format(row?.amount || 0)}
+                  </TableCell>
                 </TableRow>
               );
             })}
