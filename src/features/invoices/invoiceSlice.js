@@ -1,16 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  invoices: [],            // holds all invoices regardless of role
+  invoices: [], // holds all invoices regardless of role
   pagination: {
     totalCount: 0,
     pageNumber: 1,
     pageSize: 50,
   },
+  stats: {
+    totalCount: 0,
+    pendingCount: 0,
+    inProcessCount: 0,
+    processedCount: 0,
+    averageDurationSeconds: 0,
+    inVerificationCount: 0,
+    verifiedCount: 0,
+  },
   startDate: new Date().toISOString(),
   endDate: new Date().toISOString(),
   dateRange: "TODAY",
-  selectedFilters: {},     // status or other filters
+  selectedFilters: {}, // status or other filters
 };
 
 const invoiceSlice = createSlice({
@@ -23,6 +32,38 @@ const invoiceSlice = createSlice({
         totalCount: 0,
         pageNumber: 1,
         pageSize: 50,
+      };
+      state.stats = {
+        totalCount: action.payload.stats?.totalCount || 0,
+        pendingCount:
+          action.payload.stats?.pendingCount === "store"
+            ? action.payload.stats?.pendingCount || 0
+            : 0,
+        inProcessCount:
+          action.payload.stats?.pendingCount === "store"
+            ? action.payload.stats?.inProcessCount || 0
+            : 0,
+        processedCount: action.payload.stats?.processedCount || 0,
+        averageDurationSeconds:
+          action.payload.stats?.averageDurationSeconds || 0,
+        inVerificationCount:
+          action.payload.stats?.pendingCount !== "store"
+            ? action.payload.stats?.inVerificationCount || 0
+            : 0,
+        verifiedCount:
+          action.payload.stats?.pendingCount !== "store"
+            ? action.payload.stats?.verifiedCount || 0
+            : 0,
+      };
+      // store
+    },
+    setStatsStore: (state, action) => {
+      state.stats = {
+        totalCount: action.payload?.totalCount || 0,
+        pendingCount: action.payload?.pendingCount || 0,
+        inProcessCount: action.payload?.inProcessCount || 0,
+        processedCount: action.payload?.processedCount || 0,
+        averageDurationSeconds: action.payload?.averageDurationSeconds || 0,
       };
     },
     setStartDate: (state, action) => {
@@ -49,6 +90,7 @@ const invoiceSlice = createSlice({
 export const {
   setInvoices,
   setStartDate,
+  setStatsStore,
   setEndDate,
   setDateRange,
   setSelectedFilters,

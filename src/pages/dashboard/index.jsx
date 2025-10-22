@@ -1,7 +1,7 @@
 import { useTypedSelector } from "@/app/hook";
 import PageLayout from "@/components/page-layout";
 import { viewMeta } from "@/lib/utils";
-// import FilterSheet from "../overview/_component/filter-sheet/filterSheet";
+import FilterSheet from "../overview/_component/filter-sheet/filterSheet_v2";
 import { DasboardLabelValue } from "../overview/_component/label-values";
 import DashboardTable from "./_component/dashboard-section/table";
 
@@ -12,9 +12,9 @@ const Dashboard = () => {
   //   const pageMeta = viewMeta[moduleArea[1]?.toLowerCase() || ""];
   const pageMeta = viewMeta["view all stages"];
 
-  //   const renderFilterSheet = () => {
-  //     return <FilterSheet />;
-  //   };
+  const renderFilterSheet = () => {
+    return <FilterSheet />;
+  };
 
   const renderLabelValues = () => {
     return <DasboardLabelValue />;
@@ -34,10 +34,9 @@ const Dashboard = () => {
         </div>
       }
       rightAction={
-        // <div className="flex items-center gap-2 text-sm">
-        //   {renderFilterSheet()}
-        // </div>
-        null
+        <div className="flex items-center gap-2 text-sm">
+          {renderFilterSheet()}
+        </div>
       }
       noPadding
       className="flex flex-col flex-1"
