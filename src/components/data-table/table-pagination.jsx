@@ -105,7 +105,7 @@ export function DataTablePagination({
               variant="outline"
               size="sm"
               onClick={() => handlePageChange(pageNumber + 1)}
-              disabled={pageNumber > totalPages}
+              disabled={pageNumber >= totalPages}
             >
               <span className="sr-only">Go to next page</span>
               Next <ChevronRight />

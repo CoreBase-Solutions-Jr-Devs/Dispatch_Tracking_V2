@@ -105,7 +105,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       setCheckedInvoices((prev) => [...prev, row]);
     } else {
       setCheckedInvoices((prev) =>
-        prev.filter((r) => r.DISPATCHNUM !== row.DISPATCHNUM)
+        prev.filter((r) => r.SALEINV_NUM !== row.SALEINV_NUM)
       );
     }
   };
@@ -117,6 +117,9 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const handleMPesaPayment = (e) => {
     e.preventDefault();
     const payload = {
+      dispatchnum: mpesaDetails?.DISPATCHNUM,
+      bcode: mpesaDetails?.BCODE,
+      cuscode: mpesaDetails?.CUS_CODE,
       dispatchnum: mpesaDetails?.DISPATCHNUM,
       bcode: mpesaDetails?.BCODE,
       cuscode: mpesaDetails?.CUS_CODE,
@@ -161,6 +164,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
         setMpesaDetails({
           phonenumber: "",
           amount: "",
+          DISPATCHNUM: "",
+          BCODE: "",
+          CUS_CODE: "",
+          SALEINV_NUM: "",
           DISPATCHNUM: "",
           BCODE: "",
           CUS_CODE: "",
@@ -285,6 +292,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
           ? `254${selectedRow?.OTPPHONENUMBER.slice(1)}`
           : selectedRow?.OTPPHONENUMBER || "",
       amount: selectedRow?.BALANCE || 0,
+      DISPATCHNUM: selectedRow?.DISPATCHNUM || "",
+      BCODE: selectedRow?.BCODE || "",
+      CUS_CODE: selectedRow?.CUS_CODE || "",
+      SALEINV_NUM: selectedRow?.SALEINV_NUM || "",
       DISPATCHNUM: selectedRow?.DISPATCHNUM || "",
       BCODE: selectedRow?.BCODE || "",
       CUS_CODE: selectedRow?.CUS_CODE || "",

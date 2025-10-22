@@ -71,8 +71,8 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const routeOptions = (
     filterOptions?.find((opt) => opt.key === "route")?.options || []
   ).map((opt) => ({
-    label: opt.label,
-    value: opt.value,
+    label: opt.label, // Label for display
+    value: opt.label, // Passed value as label to match API
   }));
 
   const vehicleOptions = (

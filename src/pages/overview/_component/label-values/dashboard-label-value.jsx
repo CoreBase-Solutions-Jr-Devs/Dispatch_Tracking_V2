@@ -15,9 +15,9 @@ const STATUS_STYLES = {
 };
 
 const DashboardLabelValue = () => {
-  const { summary = [] } = useTypedSelector((state) => state.dashboard);
+  const { summary = {} } = useTypedSelector((state) => state.dashboard);
 
-  if (summary.legth === 0) {
+  if (Object.keys(summary).length === 0) {
     return (
       <div className="flex flex-wrap justify-center gap-4">
         <Skeleton className="h-5 w-20" />
@@ -60,14 +60,14 @@ const DashboardLabelValue = () => {
         lg:gap-6
       "
     >
-      {summary.map((item, i) => (
+      {/* {summary.map((item, i) => (
         <LabelValue
           status={STATUS_STYLES[item?.stage]}
           key={i}
           label={item?.stage}
           value={item?.count || 0}
         />
-      ))}
+      ))} */}
       {/* <LabelValue
         status="Pending"
         label="InStore"
@@ -88,6 +88,48 @@ const DashboardLabelValue = () => {
         label="InDelivery"
         value={summary["InDelivery"]?.count || 0}
       /> */}
+      <LabelValue
+        status="Store"
+        label="Total"
+        value={summary.totalCount || 0}
+      />
+      <LabelValue
+        status="Verification"
+        label="In Verification"
+        value={summary.inVerificationCount || 0}
+      />
+      <LabelValue
+        status="Delivered"
+        label="In Process"
+        value={summary.inProcessCount || 0}
+      />
+      <LabelValue
+        status="Dispatch"
+        label="In Store"
+        value={summary.inStoreCount || 0}
+      />
+      <LabelValue
+        status="Verification"
+        label="In Dispatch"
+        value={summary.inDispatchCount || 0}
+      />
+      <LabelValue
+        status="Dispatch"
+        label="In Delivery"
+        value={summary.inDeliveryCount || 0}
+      />
+      <LabelValue
+        status="Delivered"
+        label="Avg. Processing Time"
+        value={
+          summary.averageDurationSeconds !== undefined
+            ? renderDuration(
+                summary.averageDurationSeconds,
+                summary.averageDurationSeconds
+              )
+            : "N/A"
+        }
+      />
     </div>
   );
 };

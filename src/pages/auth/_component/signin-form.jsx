@@ -90,7 +90,7 @@ const SignInForm = () => {
   }, []);
 
   return (
-    <div className="flex min-h-svh items-center justify-center bg-background px-6 py-12">
+    <div className="flex min-h-svh items-center justify-center bg-background px-5 py-12">
       <div className="w-full max-w-md space-y-6">
         <Card className="shadow-md">
           <CardHeader className="text-center pb-2">
@@ -254,10 +254,11 @@ const SignInForm = () => {
           >
             <span>Powered by</span>
             <img
-              src="/images/corebaseLogo.png"
+              src="/src/assets/images/corebase.png"
               alt="Company Logo"
               className="h-4 w-auto object-contain"
             />
+            <span>Corebase Solutions</span>
           </a>
           <div>
             &copy; {new Date().getFullYear()} CoreBase Solutions. All rights
