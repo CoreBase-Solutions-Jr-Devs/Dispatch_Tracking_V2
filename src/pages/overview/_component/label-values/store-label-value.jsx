@@ -1,56 +1,23 @@
-import React, { useEffect } from "react";
-import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
+import React from "react";
+import { useTypedSelector } from "@/app/hook";
 import { Skeleton } from "@/components/ui/skeleton";
 import LabelValue from "./shared-label-value";
-import { useTypedSelector } from "@/app/hook";
-import { toast } from "sonner";
 import { renderDuration } from "@/components/invoice-data-table/invoice-columns";
 
+const STATUS_STYLES = {
+  Total: "Store",
+  Pending: "Verification",
+  "In Process": "Dispatch",
+  Processed: "Delivered",
+  "Avg. Processing Time": "Delivered",
+};
+
 const StoreLabelValue = () => {
-  const { startDate, endDate, dateRange } = useTypedSelector(
-    (state) => state.invoice
-  );
+  const { stats } = useTypedSelector((state) => state.invoice);
 
-  const { data, isLoading, isError, error, refetch } =
-    useGetFilteredStoreInvoicesQuery(
-      {
-        startDate: new Date(startDate).toISOString(),
-        endDate: new Date(endDate).toISOString(),
-        dateRange,
-        search: "",
-        status: {},
-        pageNumber: 1,
-        pageSize: 50,
-      },
-      { skip: !startDate || !endDate }
-    );
+  console.log(stats)
 
-  const handleApplyFilter = async () => {
-    try {
-      await refetch();
-    } catch (err) {
-      handleError(err);
-    }
-  };
-
-  const handleError = (err) => {
-    let description = "Error occurred. Please try again.";
-    if (err?.data?.errors) {
-      const errorMessages = Object.values(err.data.errors).flat();
-      if (errorMessages.length > 0) description = errorMessages.join(" ");
-    } else if (err?.data?.message) {
-      description = err.data.message;
-    }
-    toast.error("Invoices Failed", { description, duration: 4000 });
-  };
-
-  useEffect(() => {
-    if (isError) {
-      handleError(error);
-    }
-  }, [isError, error]);
-
-  if (isLoading) {
+  if (!stats || Object.keys(stats).length === 0) {
     return (
       <div className="flex flex-wrap justify-center gap-4">
         <Skeleton className="h-5 w-20" />
@@ -61,15 +28,21 @@ const StoreLabelValue = () => {
     );
   }
 
-  // If error → fallback to 0 stats instead of breaking UI
-  const stats = !isError && data?.stats ? data.stats : {
-    pendingCount: 0,
-    inProcessCount: 0,
-    processedCount: 0,
-    averageDurationSeconds: undefined,
-  };
-
-  const invoicesCount = !isError && data?.invoices ? data.invoices.length : 0;
+  const storeSummary = [
+    { label: "Total", value: stats.totalCount || 0 },
+    { label: "Pending", value: stats.pendingCount || 0 },
+    { label: "In Process", value: stats.inProcessCount || 0 },
+    { label: "Processed", value: stats.processedCount || 0 },
+    {
+      label: "Avg. Processing Time",
+      value: stats.averageDurationSeconds
+        ? renderDuration(
+            stats.averageDurationSeconds,
+            stats.averageDurationSeconds
+          )
+        : "N/A",
+    },
+  ];
 
   return (
     <div
@@ -80,19 +53,14 @@ const StoreLabelValue = () => {
         lg:gap-6
       "
     >
-      <LabelValue status="Store" label="Total" value={stats.totalCount || 0} />
-      <LabelValue status="Verification" label="Pending" value={stats.pendingCount || 0} />
-      <LabelValue status="Delivered" label="In Process" value={stats.inProcessCount || 0} />
-      <LabelValue status="Dispatch" label="Processed" value={stats.processedCount || 0} />
-      <LabelValue
-        status="Delivered"
-        label="Avg. Processing Time"
-        value={
-          stats.averageDurationSeconds !== undefined
-            ? renderDuration(stats.averageDurationSeconds, stats.averageDurationSeconds)
-            : "N/A"
-        }
-      />
+      {storeSummary.map((item, index) => (
+        <LabelValue
+          key={index}
+          status={STATUS_STYLES[item.label]}
+          label={item.label}
+          value={item.value}
+        />
+      ))}
     </div>
   );
 };
