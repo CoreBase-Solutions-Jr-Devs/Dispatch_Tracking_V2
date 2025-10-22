@@ -43,7 +43,7 @@ export default function DeliveryFooter({
           variant="default"
           onClick={generateOTP}
           disabled={isLoading || !rowData?.CUS_CODE}
-          className="mt-1  uppercase text-xs font-medium"
+          className="mt-1 uppercase text-xs font-medium"
         >
           Generate OTP
         </Button>
@@ -60,7 +60,7 @@ export default function DeliveryFooter({
                 rowData?.PAYMENT_TERMS === "On Order") &&
               rowData?.BALANCE > 0)
           }
-          className="mt-1  uppercase text-xs font-medium"
+          className="mt-1 uppercase text-xs font-medium"
         >
           Complete
         </Button>
