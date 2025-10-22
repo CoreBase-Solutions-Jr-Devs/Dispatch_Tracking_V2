@@ -120,54 +120,31 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       dispatchnum: mpesaDetails?.DISPATCHNUM,
       bcode: mpesaDetails?.BCODE,
       cuscode: mpesaDetails?.CUS_CODE,
-      dispatchnum: mpesaDetails?.DISPATCHNUM,
-      bcode: mpesaDetails?.BCODE,
-      cuscode: mpesaDetails?.CUS_CODE,
       phonenumber: `0${mpesaDetails?.phonenumber.slice(3)}`,
       amount: mpesaDetails?.amount,
     };
-    // CUS_CODE
+
     if (
       checkedInvoices.length > 0 &&
       !checkedInvoices.every(
         (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
       )
     ) {
-      console.log(checkedInvoices);
       toast.error("Wrong invoice selected", {
-        description: "please select invoices belonging to the same customer",
+        description: "Please select invoices belonging to the same customer",
         duration: 6000,
       });
       return;
     }
-    // CUS_CODE
-    if (
-      checkedInvoices.length > 0 &&
-      !checkedInvoices.every(
-        (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
-      )
-    ) {
-      console.log(checkedInvoices);
-      toast.error("Wrong invoice selected", {
-        description: "please select invoices belonging to the same customer",
-        duration: 6000,
-      });
-      return;
-    }
-    console.log(payload);
+
     MakeMpesaSTKPushForDeliveredInvoices(payload)
       .unwrap()
       .then((data) => {
         toast.success("Mpesa payment successful");
-        // setSelectedRow({});
         setMpesa(false);
         setMpesaDetails({
           phonenumber: "",
           amount: "",
-          DISPATCHNUM: "",
-          BCODE: "",
-          CUS_CODE: "",
-          SALEINV_NUM: "",
           DISPATCHNUM: "",
           BCODE: "",
           CUS_CODE: "",
@@ -286,16 +263,12 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   };
   const handleMpesaPopup = () => {
     setMpesa(true);
-    setMpesaDetails({
+    ssetMpesaDetails({
       phonenumber:
         selectedRow?.OTPPHONENUMBER[0] === "0"
           ? `254${selectedRow?.OTPPHONENUMBER.slice(1)}`
           : selectedRow?.OTPPHONENUMBER || "",
       amount: selectedRow?.BALANCE || 0,
-      DISPATCHNUM: selectedRow?.DISPATCHNUM || "",
-      BCODE: selectedRow?.BCODE || "",
-      CUS_CODE: selectedRow?.CUS_CODE || "",
-      SALEINV_NUM: selectedRow?.SALEINV_NUM || "",
       DISPATCHNUM: selectedRow?.DISPATCHNUM || "",
       BCODE: selectedRow?.BCODE || "",
       CUS_CODE: selectedRow?.CUS_CODE || "",
