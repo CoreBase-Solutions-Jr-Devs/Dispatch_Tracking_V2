@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
+  useRecallDocumentMutation,
 } from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
@@ -28,6 +29,7 @@ export default function VerificationFooter({
 
   const [startVerification] = useStartVerificationProcessMutation();
   const [pushVerification] = usePushVerificationInvoiceMutation();
+  const [recallDocument] = useRecallDocumentMutation(); // 👈 added recall mutation
 
   const handleStartApi = async (credentials) => {
     const userName =
@@ -78,11 +80,36 @@ export default function VerificationFooter({
       console.log("✅ Push Verification API Response:", response);
       toast.success("Sent to Dispatch successfully");
       setDispatchDisabled(true);
-      refetchData?.();
+      
     } catch (error) {
       console.error("❌ Push Verification API Error:", error);
       toast.error("Push failed", {
         description: error?.data?.message || "Try again.",
+      });
+    }
+  };
+
+  const handleRecall = async () => {
+    
+    const payload = {
+      docNo: Number(rowData?.docNo),
+      currentStage: "Verification",
+      targetStage: "Store",
+      targetStatus: "Pending_Store",
+    };
+
+    console.log("🔁 Recall Document Payload:", payload);
+
+    try {
+      const response = await recallDocument(payload).unwrap();
+      console.log("✅ Recall Document API Response:", response);
+      toast.success("Document recalled successfully");
+      refetchData?.();
+    } catch (error) {
+      console.error("❌ Recall Document API Error:", error);
+      toast.error("Recall failed", {
+        description:
+          error?.data?.message || "User not authenticated or invalid request.",
       });
     }
   };
@@ -120,11 +147,12 @@ export default function VerificationFooter({
       </EditStatusDialog>
       <Button
         variant="destructive"
-        onClick={handleClose}
+        onClick={handleRecall}
         className="mt-2 mr-2 uppercase"
       >
         Recall
       </Button>
+
       <Button
         variant="destructive"
         onClick={handleClose}

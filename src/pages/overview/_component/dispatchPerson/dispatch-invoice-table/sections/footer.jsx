@@ -23,6 +23,7 @@ import {
 import {
   usePushDispatchProcessMutation,
   useStartDispatchProcessMutation,
+  useRecallDocumentMutation,
 } from "@/features/dispatch/dispatchAPI";
 import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 import { useNavigate } from "react-router-dom";
@@ -55,13 +56,14 @@ export default function DispatchFooter({
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
 
-  const { courierDetails, driverDetails, clientDetails } = useSelector(
-    (state) => state.dispatch
-  );
+  const { courierDetails, driverDetails, clientDetails, updatedDispatches } =
+    useSelector((state) => state.dispatch);
 
   const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+
+  const [recallDocument] = useRecallDocumentMutation(); // 👈 added recall mutation
 
   const [
     startDispatch,
@@ -227,6 +229,34 @@ export default function DispatchFooter({
     setSaveDisabled(false);
   };
 
+  const handleRecall = async () => {
+    const docNo =
+      rowData?.docNo ||
+      updatedDispatches?.[0]?.docNo || // ✅ from Redux state
+      rowData?.updatedDispatches?.[0]?.docNo;
+    const payload = {
+      docNo: Number(docNo),
+      currentStage: "Dispatch",
+      targetStage: "Verification",
+      targetStatus: "Pending_Verification",
+    };
+
+    console.log("🔁 Recall Document Payload:", payload);
+
+    try {
+      const response = await recallDocument(payload).unwrap();
+
+      console.log("✅ Recall Document API Response:", response);
+      toast.success("Document recalled successfully");
+    } catch (error) {
+      console.error("❌ Recall Document API Error:", error);
+      toast.error("Recall failed", {
+        description:
+          error?.data?.message || "User not authenticated or invalid request.",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-row justify-center w-full">
       <EditStatusDialog
@@ -271,6 +301,13 @@ export default function DispatchFooter({
           Push
         </Button>
       </EditStatusDialog>
+      <Button
+        variant="destructive"
+        onClick={handleRecall}
+        className="mt-2 mr-2 uppercase"
+      >
+        Recall
+      </Button>
     </div>
   );
 }

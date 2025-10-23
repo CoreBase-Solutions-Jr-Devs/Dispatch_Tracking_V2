@@ -1,6 +1,5 @@
- 
 import { apiClient } from "@/app/api-client";
- 
+
 export const VerificationApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getVerificationInvoices: builder.query({
@@ -10,7 +9,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         params: { pageNumber, pageSize },
       }),
     }),
- 
+
     getFilteredVerificationInvoices: builder.query({
       query: ({
         pageNumber = 1,
@@ -25,7 +24,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         params: {
           pageNumber,
           pageSize,
- 
+
           startDate: startDate
             ? new Date(startDate).toISOString().split("T")[0]
             : undefined,
@@ -38,7 +37,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       providesTags: ["verification_invoices"],
     }),
- 
+
     searchVerificationInvoices: builder.query({
       query: ({ searchWord }) => ({
         url: "/verification/search",
@@ -47,7 +46,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["verification_invoices"],
     }),
- 
+
     getVerificationTracking: builder.query({
       query: (docNum) => ({
         url: `/verification/${docNum}/verification-tracking`,
@@ -55,7 +54,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       providesTags: ["verification_tracking"],
     }),
- // ✅ Start verification process API
+    // ✅ Start verification process API
     startVerificationProcess: builder.mutation({
       query: ({ docNum, userName }) => ({
         url: `/verification/${docNum}/${userName}/start`,
@@ -70,7 +69,12 @@ export const VerificationApi = apiClient.injectEndpoints({
 
     // ✅ Push verification invoice to Dispatch stage
     pushVerificationInvoice: builder.mutation({
-      query: ({ docNum, userName, totalWeightKg = 0, verificationRemarks = "" }) => ({
+      query: ({
+        docNum,
+        userName,
+        totalWeightKg = 0,
+        verificationRemarks = "",
+      }) => ({
         url: `/verification/${docNum}/push`,
         method: "POST",
         body: { docNum, userName, totalWeightKg, verificationRemarks },
@@ -81,16 +85,33 @@ export const VerificationApi = apiClient.injectEndpoints({
         "store_invoices",
       ],
     }),
+    recallDocument: builder.mutation({
+      query: ({
+        docNo,
+        currentStage = "Verification",
+        targetStage = "Store",
+        targetStatus = "Pending_Store",
+      }) => ({
+        url: "/general/recall-doc",
+        method: "POST",
+        body: { docNo, currentStage, targetStage, targetStatus },
+      }),
+      invalidatesTags: [
+        "verification_invoices",
+        "verification_tracking",
+        "store_invoices",
+      ],
+    }),
   }),
 });
- 
+
 export const {
   useGetVerificationInvoicesQuery,
   useGetFilteredVerificationInvoicesQuery,
   useLazyGetFilteredVerificationInvoicesQuery,
   useSearchVerificationInvoicesQuery,
   useGetVerificationTrackingQuery,
-   useStartVerificationProcessMutation,
+  useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
+  useRecallDocumentMutation,
 } = VerificationApi;
- 
