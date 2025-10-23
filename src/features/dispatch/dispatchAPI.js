@@ -39,7 +39,7 @@ export const dispatchApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["dispatch_invoices"],
+      invalidatesTags: ["dispatch_invoices", "selected_invoices"],
     }),
     startDispatchProcess: builder.mutation({
       query: (payload) => ({
@@ -85,6 +85,21 @@ export const dispatchApi = apiClient.injectEndpoints({
       }),
       providesTags: ["saved_dispatched"],
     }),
+    getSelectedInvoices: builder.query({
+      query: (query) => ({
+        url: `/dispatch/get-selected-invoices?${query}`,
+        method: "GET",
+      }),
+      providesTags: ["selected_invoices"],
+    }),
+    removeSelectedInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/dispatch/remove-selections`,
+        method: "DELETE",
+        body: payload,
+      }),
+      invalidatesTags: ["selected_invoices"],
+    }),
   }),
 });
 
@@ -99,4 +114,6 @@ export const {
   useGetSavedDispatchedInvoicesQuery,
   useGetSavedDispatchedDetailsQuery,
   useGetAggregateDispatchesQuery,
+  useGetSelectedInvoicesQuery,
+  useRemoveSelectedInvoicesMutation,
 } = dispatchApi;

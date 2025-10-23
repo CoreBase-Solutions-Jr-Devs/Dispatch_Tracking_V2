@@ -2,27 +2,57 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search as SearchIcon } from "lucide-react";
-import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog"; 
+import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useNavigate } from "react-router-dom";
+import { useRemoveSelectedInvoicesMutation } from "@/features/dispatch/dispatchAPI";
+import { useTypedSelector } from "@/app/hook";
+import { toast } from "sonner";
 
 export default function DispatchSearch({
-    value,
-    onChange,
-    placeholder = "Invoice No",
-    rowData, 
-    onSubmit, 
+  value,
+  onChange,
+  placeholder = "Invoice No",
+  rowData,
+  onSubmit,
+  checkedInvoices = [],
+  resetCheckedInvoice,
 }) {
+  const navigate = useNavigate();
+  const backToMainPage = () => {
+    navigate(PROTECTED_ROUTES.OVERVIEW);
+  };
 
-    const navigate = useNavigate();
-    const backToMainPage = () => {
-        navigate(PROTECTED_ROUTES.OVERVIEW);
+  const { user } = useTypedSelector((state) => state.auth);
+
+  const [removeSelectedInvoices, { isLoading }] =
+    useRemoveSelectedInvoicesMutation();
+
+  const handleRecall = async () => {
+    const payload = {
+      dispatchIds: checkedInvoices.map((inv) => inv?.dispatchId) || [0],
+      dispatchNum: checkedInvoices[0]?.dispatchNumber || 0,
+      userName: user?.username || "",
     };
 
-    return (
-        <section className="flex justify-between items-center w-full">
-            <div className="relative w-1/2 max-w-sm">
-                {/* <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+    try {
+      const data = await removeSelectedInvoices(payload).unwrap();
+      toast.success("Invoice recalled successfully!");
+      resetCheckedInvoice();
+      console.log(data);
+    } catch (error) {
+      let description = "Recall failed. Please try again.";
+      toast.error("Recall Failed", {
+        description: error?.data?.message || error?.data?.title || description,
+        duration: 4000,
+      });
+    }
+  };
+
+  return (
+    <section className="flex justify-between items-center w-full">
+      <div className="relative w-1/2 max-w-sm">
+        {/* <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                     type="text"
                     value={value}
@@ -30,26 +60,32 @@ export default function DispatchSearch({
                     placeholder={placeholder}
                     className="w-50 pl-9 pr-3 py-2 bg-gray-100"
                 /> */}
-            </div>
+      </div>
 
-            <div className="relative w-1/2 max-w-sm flex flex-row space-x-2 justify-end">
-                <EditStatusDialog rowData={rowData} view="dispatch" onSubmit={onSubmit}>
-                    <Button 
-                        className="uppercase text-xs font-medium"
-                        variant="apply"
-                    >
-                        Pick Invoice
-                    </Button>
-                </EditStatusDialog>
-                <Button
-                    className="uppercase text-xs font-medium"
-                    variant="destructive"
-                    onClick={backToMainPage}
-                >
-                    Cancel
-                </Button>
-            </div>
+      <div className="relative w-1/2 max-w-sm flex flex-row space-x-2 justify-end">
+        <EditStatusDialog rowData={rowData} view="dispatch" onSubmit={onSubmit}>
+          <Button className="uppercase text-xs font-medium" variant="apply">
+            Pick Invoice
+          </Button>
+        </EditStatusDialog>
 
-        </section>
-    );
+        <Button
+          variant="destructive"
+          onClick={handleRecall}
+          disabled={checkedInvoices.length === 0 || isLoading}
+          className="uppercase text-xs font-medium"
+        >
+          Recall
+        </Button>
+
+        <Button
+          className="uppercase text-xs font-medium"
+          variant="ghost"
+          onClick={backToMainPage}
+        >
+          Cancel
+        </Button>
+      </div>
+    </section>
+  );
 }
