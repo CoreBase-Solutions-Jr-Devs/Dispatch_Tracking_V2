@@ -82,14 +82,7 @@ export default function DispatchFooter({
       >
         Close
       </Button>
-        <Button
-        variant="destructive"
-        onClick={handleClose}
-        disabled={cancelDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
-      >
-        Recall
-      </Button>
+     
     </div>
   );
 }
