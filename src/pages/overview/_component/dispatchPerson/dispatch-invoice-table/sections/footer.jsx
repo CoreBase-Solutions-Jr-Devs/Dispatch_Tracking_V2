@@ -41,17 +41,17 @@ export default function DispatchFooter({
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
-  const [collectionType, setCollectionType] = useState("");
-  const [routeCode, setRouteCode] = useState(0);
-  const [routeName, setRouteName] = useState("");
-  const [driverName, setDriverName] = useState("" || null);
-  const [driverId, setDriverId] = useState(0 || null);
-  const [carMake, setCarMake] = useState("" || null);
-  const [carPlate, setCarPlate] = useState("" || null);
+  // const [collectionType, setCollectionType] = useState("");
+  // const [routeCode, setRouteCode] = useState(0);
+  // const [routeName, setRouteName] = useState("");
+  // const [driverName, setDriverName] = useState("" || null);
+  // const [driverId, setDriverId] = useState(0 || null);
+  // const [carMake, setCarMake] = useState("" || null);
+  // const [carPlate, setCarPlate] = useState("" || null);
   // const [customerCourierName, setCustomerCourierName] = useState("" || null);
   // const [customerCourierId, setCustomerCourierId] = useState(0 || null);
   // const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
-  const [isPush, setIsPush] = useState(true);
+  // const [isPush, setIsPush] = useState(true);
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
 
@@ -108,7 +108,7 @@ export default function DispatchFooter({
       dispatchIds: dispatchIDs,
       collectionType: selectValues.collectionType,
       // routeCode: 0 || null,
-      routeName: selectValues?.dispatchRoute || null,
+      // routeName: selectValues?.dispatchRoute || null,
       driverName: driverDetails?.driverName,
       driverId: Number(driverDetails?.driverId),
       carMake: driverDetails?.carMake,
@@ -171,7 +171,7 @@ export default function DispatchFooter({
       collectionType: selectValues.collectionType,
       userName: user?.username || "",
       // routeCode,
-      routeName: selectValues?.dispatchRoute,
+      // routeName: selectValues?.dispatchRoute,
       driverName: driverDetails?.driverName,
       driverId: Number(driverDetails?.driverId),
       carMake: driverDetails?.carMake,
@@ -238,7 +238,7 @@ export default function DispatchFooter({
           variant="apply"
           // onClick={handleStart}
           disabled={startDisabled}
-          className="mt-1 mr-2 uppercase text-xs font-medium border border-green-400"
+          className="mt-1 mr-2 uppercase text-xs font-medium"
         >
           Start
         </Button>
@@ -249,7 +249,7 @@ export default function DispatchFooter({
         onSubmit={handleSave}
       >
         <Button
-          variant="verification"
+          variant="store"
           // onClick={handleSave}
           disabled={saveDisabled}
           className="mt-1 mr-2 uppercase text-xs font-medium"
@@ -263,7 +263,7 @@ export default function DispatchFooter({
         onSubmit={handleDelivery}
       >
         <Button
-          variant="apply"
+          variant="default"
           // onClick={handleDelivery}
           disabled={deliveryDisabled || !hasCollectionType}
           className="mt-1 uppercase text-xs font-medium "
