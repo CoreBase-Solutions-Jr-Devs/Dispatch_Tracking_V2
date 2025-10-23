@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useSaveSelectionsMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
 import { setSelectedDipatches } from "@/features/dispatch/dispatchSlice";
-import { useAppDispatch } from "@/app/hook";
+import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import EditStatusDialog from "../edit-status-dialog";
 
 export default function DispatchFooter({
@@ -17,6 +17,8 @@ export default function DispatchFooter({
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [cancelDisabled, setCancelDisabled] = useState(false);
 
+  const { user } = useTypedSelector((state) => state.auth);
+
   const dispatch = useAppDispatch();
 
   const [saveSelections, { data, isLoading, isError }] =
@@ -27,11 +29,8 @@ export default function DispatchFooter({
 
     const payload = {
       dispatchIds: selectedDocs.map((doc) => doc.dispatchId),
-      userName: "",
+      userName: user?.username || "",
     };
-    // const payload = {
-    //   dispatchIds: [57, 56, 39, 54],
-    // };
 
     try {
       const res = await saveSelections(payload).unwrap();
@@ -65,14 +64,14 @@ export default function DispatchFooter({
         view="dispatchpick"
         onSubmit={handleSave}
       >
-      <Button
-        variant="apply"
-        // onClick={handleSave}
-        disabled={isLoading || !selectedDocs.length}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
-      >
-        {isLoading ? "Picking..." : "Pick"}
-      </Button>
+        <Button
+          variant="apply"
+          // onClick={handleSave}
+          disabled={isLoading || !selectedDocs.length}
+          className="mt-1 mr-2 uppercase text-xs font-medium"
+        >
+          {isLoading ? "Picking..." : "Pick"}
+        </Button>
       </EditStatusDialog>
       <Button
         variant="destructive"
@@ -81,14 +80,6 @@ export default function DispatchFooter({
         className="mt-1 mr-2 uppercase text-xs font-medium"
       >
         Close
-      </Button>
-        <Button
-        variant="destructive"
-        onClick={handleClose}
-        disabled={cancelDisabled}
-        className="mt-1 mr-2 uppercase text-xs font-medium"
-      >
-        Recall
       </Button>
     </div>
   );
