@@ -24,6 +24,7 @@ import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import { logout } from "@/features/auth/authSlice";
 import { useTheme } from "@/context/theme-provider";
 import { SetupsDropdown } from "./setups-dropdown";
+import { resetDispatchData } from "@/features/dispatch/dispatchSlice";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -42,7 +43,11 @@ const Navbar = () => {
 
   const routes = useMemo(
     () => [
-      { icon: LayoutDashboard, href: PROTECTED_ROUTES.ADMIN, label: "Dashboard"},
+      {
+        icon: LayoutDashboard,
+        href: PROTECTED_ROUTES.ADMIN,
+        label: "Dashboard",
+      },
       { icon: Home, href: PROTECTED_ROUTES.OVERVIEW, label: "Overview" },
       { icon: Settings, href: PROTECTED_ROUTES.SETTINGS, label: "Settings" },
     ],
@@ -53,6 +58,7 @@ const Navbar = () => {
 
   const handleLogout = useCallback(() => {
     dispatch(logout());
+    dispatch(resetDispatchData());
   }, [dispatch]);
 
   const ThemeIcon = useMemo(() => {
