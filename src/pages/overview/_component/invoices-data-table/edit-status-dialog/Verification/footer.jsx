@@ -80,7 +80,6 @@ export default function VerificationFooter({
       console.log("✅ Push Verification API Response:", response);
       toast.success("Sent to Dispatch successfully");
       setDispatchDisabled(true);
-      
     } catch (error) {
       console.error("❌ Push Verification API Error:", error);
       toast.error("Push failed", {
@@ -89,13 +88,19 @@ export default function VerificationFooter({
     }
   };
 
-  const handleRecall = async () => {
-    
+  const handleRecall = async (credentials) => {
+    const recalledBy =
+      credentials?.userName ||
+      credentials?.UserName ||
+      credentials?.user?.username ||
+      "system";
+
     const payload = {
       docNo: Number(rowData?.docNo),
       currentStage: "Verification",
       targetStage: "Store",
       targetStatus: "Pending_Store",
+      recalledBy,
     };
 
     console.log("🔁 Recall Document Payload:", payload);
@@ -145,13 +150,15 @@ export default function VerificationFooter({
           Send to Dispatch
         </Button>
       </EditStatusDialog>
-      <Button
-        variant="destructive"
-        onClick={handleRecall}
-        className="mt-2 mr-2 uppercase"
+      <EditStatusDialog
+        view="verificationrecall"
+        rowData={rowData}
+        onSubmit={handleRecall}
       >
-        Recall
-      </Button>
+        <Button variant="destructive" className="mt-2 mr-2 uppercase">
+          Recall
+        </Button>
+      </EditStatusDialog>
 
       <Button
         variant="destructive"
