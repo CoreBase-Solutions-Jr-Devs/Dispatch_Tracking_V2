@@ -1,7 +1,7 @@
 import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 
-function DispatchSummaryTable({ data = [], handleRowCheck }) {
+function DispatchSummaryTable({ data = [], selected, handleRowCheck }) {
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -17,28 +17,34 @@ function DispatchSummaryTable({ data = [], handleRowCheck }) {
             <TableCell className="py-1 px-2">Terms</TableCell>
             <TableCell className="py-1 px-2">Balance</TableCell>
           </TableRow>
-          {data.map((row, index) => (
-            <TableRow key={index} className={"text-xs font-medium"}>
-              <TableCell className="py-1 px-2">
-                <Checkbox
-                  className="border border-gray-400"
-                  onCheckedChange={(value) => handleRowCheck(value, row)}
-                />
-              </TableCell>
-              <TableCell className="py-1 px-2">{row?.docNo}</TableCell>
-              <TableCell className="py-1 px-2">{row?.customerCode}</TableCell>
-              <TableCell className="py-1 px-2">{row?.customerName}</TableCell>
-              <TableCell className="py-1 px-2">{row?.route}</TableCell>
-              <TableCell className="py-1 px-2">{row?.items}</TableCell>
-              <TableCell className="py-1 px-2">{row?.docType}</TableCell>
-              <TableCell className="py-1 px-2">{row?.paymentTerms}</TableCell>
-              <TableCell className="py-1 px-2">
-                {Number(
-                  new Intl.NumberFormat("en-GB").format(row?.amount)
-                ).toFixed(2)}
-              </TableCell>
-            </TableRow>
-          ))}
+          {data.map((row, index) => {
+            const isChecked = selected.some(
+              (d) => d.dispatchId === row.dispatchId
+            );
+            return (
+              <TableRow key={index} className={"text-xs font-medium"}>
+                <TableCell className="py-1 px-2">
+                  <Checkbox
+                    className="border border-gray-400"
+                    checked={isChecked}
+                    onCheckedChange={(value) => handleRowCheck(value, row)}
+                  />
+                </TableCell>
+                <TableCell className="py-1 px-2">{row?.docNo}</TableCell>
+                <TableCell className="py-1 px-2">{row?.customerCode}</TableCell>
+                <TableCell className="py-1 px-2">{row?.customerName}</TableCell>
+                <TableCell className="py-1 px-2">{row?.route}</TableCell>
+                <TableCell className="py-1 px-2">{row?.items}</TableCell>
+                <TableCell className="py-1 px-2">{row?.docType}</TableCell>
+                <TableCell className="py-1 px-2">{row?.paymentTerms}</TableCell>
+                <TableCell className="py-1 px-2">
+                  {Number(
+                    new Intl.NumberFormat("en-GB").format(row?.amount)
+                  ).toFixed(2)}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
