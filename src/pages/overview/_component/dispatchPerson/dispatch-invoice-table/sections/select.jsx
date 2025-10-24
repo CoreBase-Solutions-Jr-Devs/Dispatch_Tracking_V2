@@ -96,7 +96,7 @@ export default function DispatchSelect({
             </Select>
           </div>
 
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
   <label className="text-xs font-medium">Delivery Route:</label>
   <Select
     value={values?.dispatchRoute || ""}
@@ -127,8 +127,7 @@ export default function DispatchSelect({
       )}
     </SelectContent>
   </Select>
-</div>
-
+</div> */}
 
           <div className="flex justify-between items-center">
             <label className="text-xs font-medium">Vehicle:</label>

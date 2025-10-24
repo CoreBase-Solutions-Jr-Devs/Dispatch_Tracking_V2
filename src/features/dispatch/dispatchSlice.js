@@ -38,9 +38,12 @@ const initialState = {
   driverDetails: {},
   courierDetails: {},
   clientDetails: {},
-  deliveryDetails:{},
+  deliveryDetails: {},
   //
-  updatedDispatches: [],
+  updatedDispatches: {
+    dispatchNumber: 0,
+    dispatchIds: [],
+  },
 };
 
 const dispatchSlice = createSlice({
@@ -63,7 +66,10 @@ const dispatchSlice = createSlice({
       state.isPush = action.payload.isPush;
     },
     resetDispatchData: (state) => {
-      state.updatedDispatches = [];
+      state.updatedDispatches = {
+        dispatchNumber: 0,
+        dispatchIds: [],
+      };
       state.dispatchIds = [];
       state.driverDetails = {};
       state.courierDetails = {};
@@ -159,7 +165,28 @@ const dispatchSlice = createSlice({
       // state.regNo = action.payload?.regNo;
     },
     setSelectedDipatches: (state, action) => {
-      state.updatedDispatches = action.payload;
+      state.updatedDispatches = {
+        dispatchNumber: action.payload.dispatchNumber,
+        dispatchIds: [
+          ...state.updatedDispatches.dispatchIds,
+          ...action.payload.dispatchIds,
+        ],
+      };
+    },
+    removeDispatchIds: (state, action) => {
+      // dispatchIds
+      let remainingIDs = [...state.updatedDispatches.dispatchIds].filter(
+        (id) => !action.payload.includes(id)
+      );
+
+      if (remainingIDs?.length === 0) {
+        state.updatedDispatches = { dispatchNumber: 0, dispatchIds: [] };
+      } else {
+        state.updatedDispatches = {
+          ...state.updatedDispatches,
+          dispatchIds: remainingIDs,
+        };
+      }
     },
     setCourierDetails: (state, action) => {
       state.courierDetails = action.payload;
@@ -198,6 +225,7 @@ export const {
   resetDispatchData,
   //
   setSelectedDipatches,
+  removeDispatchIds,
   setDriverDetails,
   setCourierDetails,
   setClientDetails,

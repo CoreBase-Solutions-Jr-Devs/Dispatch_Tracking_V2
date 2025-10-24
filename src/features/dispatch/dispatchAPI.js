@@ -14,6 +14,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       },
       providesTags: ["verified_invoices"],
     }),
+
     dispatchSearch: builder.query({
       query: (query) => {
         let params = { searchWord: query };
@@ -26,6 +27,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       },
       providesTags: ["saved_dispatched"],
     }),
+
     getVerifiedOnDispatch: builder.query({
       query: ({ pageNumber = 1, pageSize = 20 }) => ({
         url: `/dispatch/verified?pageNumber=${pageNumber}&pageSize=${pageSize}`,
@@ -33,22 +35,25 @@ export const dispatchApi = apiClient.injectEndpoints({
       }),
       providesTags: ["verified_invoices"],
     }),
+
     saveSelections: builder.mutation({
       query: (formData) => ({
         url: `/dispatch/save-selections`,
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["dispatch_invoices"],
+      invalidatesTags: ["selected_invoices"],
     }),
+
     startDispatchProcess: builder.mutation({
       query: (payload) => ({
         url: `/dispatch/start`,
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["dispatch_invoices"],
+      // invalidatesTags: ["dispatch_invoices"],
     }),
+
     getDeliveryDriver: builder.query({
       query: (userName) => ({
         url: `/dispatch/delivery-driver?UserName=${userName}`,
@@ -56,14 +61,19 @@ export const dispatchApi = apiClient.injectEndpoints({
       }),
       providesTags: ["dispatch_driver"],
     }),
+
     pushDispatchProcess: builder.mutation({
       query: (formData) => ({
         url: "/dispatch/save-push",
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["dispatch_invoices", "dispatch_driver"],
+      invalidatesTags: [
+        // "dispatch_invoices",
+        "dispatch_driver",
+      ],
     }),
+
     getSavedDispatchedInvoices: builder.query({
       query: ({ pageNumber = 1, pageSize = 50 }) => ({
         url: `/dispatch/saved-dispatched?pageNumber=${pageNumber}&pageSize=${pageSize}`,
@@ -71,6 +81,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       }),
       providesTags: ["saved_dispatched"],
     }),
+
     getSavedDispatchedDetails: builder.query({
       query: (dispatchNum) => ({
         url: `/dispatch/saved-dispatched-details/${dispatchNum}`,
@@ -78,12 +89,47 @@ export const dispatchApi = apiClient.injectEndpoints({
       }),
       providesTags: ["saved_dispatched_details"],
     }),
+
     getAggregateDispatches: builder.query({
       query: () => ({
         url: `/dispatch/aggregate`,
         method: "GET",
       }),
       providesTags: ["saved_dispatched"],
+    }),
+    getSelectedInvoices: builder.query({
+      query: (query) => ({
+        url: `/dispatch/get-selected-invoices?${query}`,
+        method: "GET",
+      }),
+      providesTags: ["selected_invoices"],
+    }),
+    removeSelectedInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/dispatch/remove-selections`,
+        method: "DELETE",
+        body: payload,
+      }),
+      invalidatesTags: ["selected_invoices"],
+    }),
+    recallInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/general/recall-doc`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["verified_invoices"],
+    }),
+    createDispatches: builder.mutation({
+      query: (payload) => ({
+        url: `/dispatch/CreateDispatches`,
+        method: "POST",
+        params: {
+          username: payload?.userName,
+        },
+        body: payload,
+      }),
+      invalidatesTags: ["verified_invoices", "selected_invoices"],
     }),
   }),
 });
@@ -99,4 +145,8 @@ export const {
   useGetSavedDispatchedInvoicesQuery,
   useGetSavedDispatchedDetailsQuery,
   useGetAggregateDispatchesQuery,
+  useGetSelectedInvoicesQuery,
+  useRemoveSelectedInvoicesMutation,
+  useRecallInvoicesMutation,
+  useCreateDispatchesMutation,
 } = dispatchApi;
