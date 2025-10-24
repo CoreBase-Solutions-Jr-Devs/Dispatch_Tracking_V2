@@ -39,7 +39,7 @@ export const dispatchApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["dispatch_invoices"],
+      invalidatesTags: ["selected_invoices"],
     }),
     startDispatchProcess: builder.mutation({
       query: (payload) => ({
@@ -47,7 +47,7 @@ export const dispatchApi = apiClient.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["dispatch_invoices"],
+      // invalidatesTags: ["dispatch_invoices"],
     }),
     getDeliveryDriver: builder.query({
       query: (userName) => ({
@@ -62,7 +62,10 @@ export const dispatchApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["dispatch_invoices", "dispatch_driver"],
+      invalidatesTags: [
+        // "dispatch_invoices",
+        "dispatch_driver",
+      ],
     }),
     getSavedDispatchedInvoices: builder.query({
       query: ({ pageNumber = 1, pageSize = 50 }) => ({
@@ -85,6 +88,40 @@ export const dispatchApi = apiClient.injectEndpoints({
       }),
       providesTags: ["saved_dispatched"],
     }),
+    getSelectedInvoices: builder.query({
+      query: (query) => ({
+        url: `/dispatch/get-selected-invoices?${query}`,
+        method: "GET",
+      }),
+      providesTags: ["selected_invoices"],
+    }),
+    removeSelectedInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/dispatch/remove-selections`,
+        method: "DELETE",
+        body: payload,
+      }),
+      invalidatesTags: ["selected_invoices"],
+    }),
+    recallInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/general/recall-doc`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["verified_invoices"],
+    }),
+    createDispatches: builder.mutation({
+      query: (payload) => ({
+        url: `/dispatch/CreateDispatches`,
+        method: "POST",
+        params: {
+          username: payload?.userName,
+        },
+        body: payload,
+      }),
+      invalidatesTags: ["verified_invoices", "selected_invoices"],
+    }),
   }),
 });
 
@@ -99,4 +136,8 @@ export const {
   useGetSavedDispatchedInvoicesQuery,
   useGetSavedDispatchedDetailsQuery,
   useGetAggregateDispatchesQuery,
+  useGetSelectedInvoicesQuery,
+  useRemoveSelectedInvoicesMutation,
+  useRecallInvoicesMutation,
+  useCreateDispatchesMutation,
 } = dispatchApi;
