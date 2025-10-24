@@ -91,15 +91,17 @@ export const VerificationApi = apiClient.injectEndpoints({
         currentStage = "Verification",
         targetStage = "Store",
         targetStatus = "Pending_Store",
+        recalledBy ,
       }) => ({
         url: "/general/recall-doc",
         method: "POST",
-        body: { docNo, currentStage, targetStage, targetStatus },
+        body: { docNo, currentStage, targetStage, targetStatus, recalledBy },
       }),
       invalidatesTags: [
         "verification_invoices",
         "verification_tracking",
         "store_invoices",
+        "store_tracking", 
       ],
     }),
   }),
