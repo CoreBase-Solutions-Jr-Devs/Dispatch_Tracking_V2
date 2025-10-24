@@ -48,11 +48,16 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const dispatch = useAppDispatch();
 
   const { updatedDispatches } = useSelector((state) => state.dispatch);
-  let dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  // let dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  let dispatchIDs = updatedDispatches?.dispatchIds || [];
 
-  const queryIDs = dispatchIDs.map((id) => `dispatchIds=${id}`).join("&");
+  const queryIDs =
+    dispatchIDs.map((id) => `dispatchIds=${id}`).join("&") || "dispatchIds=0";
 
-  const { data: selectedInvoices = [] } = useGetSelectedInvoicesQuery(queryIDs);
+  const { data: selectedInvoices = [] } = useGetSelectedInvoicesQuery(
+    queryIDs
+    // { skip: !queryIDs }
+  );
 
   // Fetch filter options to get delivery guy ID
   const {
@@ -285,6 +290,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
             /> */}
             <DispatchSummaryTable
               data={selectedInvoices || []}
+              selected={checkedInvoices || []}
               handleRowCheck={handleRowCheck}
             />
           </div>
