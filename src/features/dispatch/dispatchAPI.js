@@ -42,7 +42,7 @@ export const dispatchApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["dispatch_invoices"],
+      invalidatesTags: ["selected_invoices"],
     }),
 
     startDispatchProcess: builder.mutation({
@@ -51,7 +51,7 @@ export const dispatchApi = apiClient.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["dispatch_invoices"],
+      // invalidatesTags: ["dispatch_invoices"],
     }),
 
     getDeliveryDriver: builder.query({
@@ -68,7 +68,10 @@ export const dispatchApi = apiClient.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["dispatch_invoices", "dispatch_driver"],
+      invalidatesTags: [
+        // "dispatch_invoices",
+        "dispatch_driver",
+      ],
     }),
 
     getSavedDispatchedInvoices: builder.query({
@@ -94,24 +97,39 @@ export const dispatchApi = apiClient.injectEndpoints({
       }),
       providesTags: ["saved_dispatched"],
     }),
-
-      recallDocument: builder.mutation({
-      query: ({
-        docNo,
-        currentStage = "Dispatch",
-        targetStage = "Verification",
-        targetStatus = "Pending_Verification",
-      }) => ({
-        url: "/general/recall-doc",
-        method: "POST",
-        body: { docNo, currentStage, targetStage, targetStatus },
+    getSelectedInvoices: builder.query({
+      query: (query) => ({
+        url: `/dispatch/get-selected-invoices?${query}`,
+        method: "GET",
       }),
-      invalidatesTags: [
-        "verification_invoices",
-        "saved_dispatched",
-        "saved_dispatched_details",
-        
-      ],
+      providesTags: ["selected_invoices"],
+    }),
+    removeSelectedInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/dispatch/remove-selections`,
+        method: "DELETE",
+        body: payload,
+      }),
+      invalidatesTags: ["selected_invoices"],
+    }),
+    recallInvoices: builder.mutation({
+      query: (payload) => ({
+        url: `/general/recall-doc`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["verified_invoices"],
+    }),
+    createDispatches: builder.mutation({
+      query: (payload) => ({
+        url: `/dispatch/CreateDispatches`,
+        method: "POST",
+        params: {
+          username: payload?.userName,
+        },
+        body: payload,
+      }),
+      invalidatesTags: ["verified_invoices", "selected_invoices"],
     }),
   }),
 });
@@ -127,6 +145,8 @@ export const {
   useGetSavedDispatchedInvoicesQuery,
   useGetSavedDispatchedDetailsQuery,
   useGetAggregateDispatchesQuery,
-    useRecallDocumentMutation,
-  
+  useGetSelectedInvoicesQuery,
+  useRemoveSelectedInvoicesMutation,
+  useRecallInvoicesMutation,
+  useCreateDispatchesMutation,
 } = dispatchApi;

@@ -62,7 +62,14 @@ export default function DeliveryTable({
             <TableCell className="py-1 px-2">Items</TableCell>
             <TableCell className="py-1 px-2">Amount</TableCell> */}
           </TableRow>
+          {/* DeliveryStatus
+:
+"Delivered" */}
+          {/* IsCollected
+:
+true */}
 
+          {/* line-through */}
           {/* Dynamic Rows */}
           {data.map((row, index) => (
             <TableRow
@@ -70,6 +77,9 @@ export default function DeliveryTable({
               className={
                 row.ISDISPUTED === true
                   ? "text-red-700 text-xs font-medium"
+                  : row.DeliveryStatus === "Delivered" &&
+                    row.IsCollected === true
+                  ? "text-green-700 text-xs font-medium line-through"
                   : "text-xs font-medium"
               }
               onClick={() =>
@@ -83,6 +93,10 @@ export default function DeliveryTable({
                 <Checkbox
                   className="border border-gray-400"
                   // checked={checked}
+                  disabled={
+                    row.DeliveryStatus === "Delivered" &&
+                    row.IsCollected === true
+                  }
                   onCheckedChange={(value) => handleRowCheck(value, row)}
                 />
               </TableCell>

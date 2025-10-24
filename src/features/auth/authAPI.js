@@ -9,7 +9,14 @@ export const authApi = apiClient.injectEndpoints({
         body: credentials,
       }),
     }),
+    authTransaction: builder.mutation({
+      query: (formData) => ({
+        url: "/auth/AuthTransaction",
+        method: "POST",
+        body: formData,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useAuthTransactionMutation } = authApi;

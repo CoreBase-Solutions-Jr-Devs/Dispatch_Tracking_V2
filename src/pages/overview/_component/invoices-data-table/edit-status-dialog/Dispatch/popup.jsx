@@ -11,7 +11,10 @@ import DispatchTable from "./table";
 import DispatchFooter from "./footer";
 import DispatchSelect from "./select";
 import DispatchSearch from "./search";
-import { useGetVerifiedOnDispatchQuery, useSearchVerifiedOnDispatchQuery } from "@/features/dispatch/dispatchAPI";
+import {
+  useGetVerifiedOnDispatchQuery,
+  useSearchVerifiedOnDispatchQuery,
+} from "@/features/dispatch/dispatchAPI";
 
 export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +24,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [savedInvoices, setSavedInvoices] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+  const [selectedRow, setSelectedRow] = useState({});
 
   // Handle row toggle
   const handleToggleRow = (doc) => {
@@ -43,7 +47,11 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const shouldSearch = debounced && debounced.trim().length > 0;
 
   // Fetch verified dispatch data
-  const { data: verifiedData, isLoading: verifiedLoading, isError: verifiedError } = useGetVerifiedOnDispatchQuery({
+  const {
+    data: verifiedData,
+    isLoading: verifiedLoading,
+    isError: verifiedError,
+  } = useGetVerifiedOnDispatchQuery({
     pageNumber,
     pageSize,
   });
@@ -60,7 +68,6 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const dispatchData = shouldSearch
     ? searchData?.invoices || []
     : verifiedData?.invoices || [];
-
 
   // Return only Pending dispatches
   const filteredDispatchData = useMemo(() => {
@@ -88,6 +95,10 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
 
   const handleDialogClose = () => setIsOpen(false);
 
+  const handleRowSelect = (row) => {
+    setSelectedRow(row);
+  };
+
   return (
     <>
       <div className="my-1 overflow-y-auto max-h-[80vh] px-2">
@@ -100,7 +111,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
         <DispatchSearch
           value={query}
           onChange={setQuery}
-          placeholder="Doc.No/Cus.Name"
+          placeholder="Cus.Name/Route"
           selectedCount={selectedDocs.length}
         />
 
@@ -116,12 +127,15 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
             pagination={{
               pageNumber: verifiedData?.pageNumber || pageNumber,
               pageSize: verifiedData?.pageSize || pageSize,
-              totalItems: verifiedData?.totalCount || 0 || filteredDispatchData.length,
+              totalItems:
+                verifiedData?.totalCount || 0 || filteredDispatchData.length,
               totalPages:
                 verifiedData?.totalPages ||
                 1 ||
                 Math.ceil(filteredDispatchData.length / pageSize),
             }}
+            handleRowSelect={handleRowSelect}
+            selectedRow={selectedRow}
             onPageChange={setPageNumber}
             onPageSizeChange={setPageSize}
           />
@@ -132,10 +146,12 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
         <DialogFooter>
           <DispatchFooter
             rowData={rowData}
+            selectedRow={selectedRow}
             selectValues={selectValues}
             selectedDocs={selectedDocs}
             onSubmit={handleSave}
             onClose={onClose}
+            handleRowSelect={handleRowSelect}
           />
         </DialogFooter>
       </div>

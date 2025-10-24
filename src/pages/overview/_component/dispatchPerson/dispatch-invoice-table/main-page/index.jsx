@@ -20,9 +20,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
 // import { useGetDispatchDriverQuery } from "@/features/Dispmain/dispatchAPI";
-import { useGetDeliveryDriverQuery } from "@/features/dispatch/dispatchAPI";
+import {
+  useGetDeliveryDriverQuery,
+  useGetSelectedInvoicesQuery,
+} from "@/features/dispatch/dispatchAPI";
 import { setDriverDetails } from "@/features/dispatch/dispatchSlice";
 import { useAppDispatch } from "@/app/hook";
+import DispatchSummaryTable from "../sections/table";
 
 export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const [query, setQuery] = useState("");
@@ -31,6 +35,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const [pageSize, setPageSize] = useState(20);
   const [startDispatch, setStartDispatch] = useState(false); // Disable Selection before start
   const [dispatchRemarks, setDispatchRemarks] = useState("");
+  const [checkedInvoices, setCheckedInvoices] = useState([]);
 
   const handleDispatchStart = () => {
     setStartDispatch(true);
@@ -43,8 +48,16 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const dispatch = useAppDispatch();
 
   const { updatedDispatches } = useSelector((state) => state.dispatch);
+  // let dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  let dispatchIDs = updatedDispatches?.dispatchIds || [];
 
-  let dispatchIDs = (updatedDispatches || []).map((item) => item.dispatchId);
+  const queryIDs =
+    dispatchIDs.map((id) => `dispatchIds=${id}`).join("&") || "dispatchIds=0";
+
+  const { data: selectedInvoices = [] } = useGetSelectedInvoicesQuery(
+    queryIDs
+    // { skip: !queryIDs }
+  );
 
   // Fetch filter options to get delivery guy ID
   const {
@@ -228,6 +241,18 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     ];
   }, []);
 
+  const handleRowCheck = (value, row) => {
+    if (value) {
+      setCheckedInvoices((prev) => [...prev, row]);
+    } else {
+      setCheckedInvoices((prev) => prev.filter((r) => r.docNo !== row.docNo));
+    }
+  };
+
+  const resetCheckedInvoice = () => {
+    setCheckedInvoices([]);
+  };
+
   return (
     <div className="my-1 max-h-[90vh] px-2">
       {/* Header */}
@@ -241,6 +266,8 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
         onChange={setQuery}
         data={rowData}
         placeholder="CusName/Doc.No"
+        checkedInvoices={checkedInvoices}
+        resetCheckedInvoice={resetCheckedInvoice}
       />
 
       <Separator className={"my-2"} />
@@ -249,8 +276,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
         <div className="w-3/4">
           {/* Table + Summary */}
           <div className="space-y-4">
-            <DataTable
-              //   data={dispatchInvoices}
+            {/* <DataTable
               data={updatedDispatches || []}
               columns={columns}
               selection={true}
@@ -266,8 +292,12 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 totalPages:
                   Math.ceil(updatedDispatches?.length / pageSize) || 1,
               }}
+            /> */}
+            <DispatchSummaryTable
+              data={selectedInvoices || []}
+              selected={checkedInvoices || []}
+              handleRowCheck={handleRowCheck}
             />
-            {/* <DispatchSummary data={updatedDispatches} /> */}
           </div>
         </div>
         {/* Dispatch Selections*/}
@@ -302,7 +332,9 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
               {/* Footer */}
               <DispatchFooter
                 dispatchRemarks={dispatchRemarks}
-                dispatchIDs={dispatchIDs}
+                dispatchIDs={
+                  selectedInvoices?.map((inv) => inv?.dispatchId) || []
+                }
                 rowData={rowData}
                 selectValues={selectValues}
                 onSubmit={onSubmit}
