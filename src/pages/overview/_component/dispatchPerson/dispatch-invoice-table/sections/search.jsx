@@ -6,8 +6,9 @@ import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/ed
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useNavigate } from "react-router-dom";
 import { useRemoveSelectedInvoicesMutation } from "@/features/dispatch/dispatchAPI";
-import { useTypedSelector } from "@/app/hook";
+import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import { toast } from "sonner";
+import { removeDispatchIds } from "@/features/dispatch/dispatchSlice";
 
 export default function DispatchSearch({
   value,
@@ -18,6 +19,7 @@ export default function DispatchSearch({
   checkedInvoices = [],
   resetCheckedInvoice,
 }) {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const backToMainPage = () => {
     navigate(PROTECTED_ROUTES.OVERVIEW);
@@ -39,6 +41,8 @@ export default function DispatchSearch({
       const data = await removeSelectedInvoices(payload).unwrap();
       toast.success("Invoice recalled successfully!");
       resetCheckedInvoice();
+      let selected = checkedInvoices.map((inv) => inv?.dispatchId);
+      dispatch(removeDispatchIds(selected || [0]));
       console.log(data);
     } catch (error) {
       let description = "Recall failed. Please try again.";
@@ -75,7 +79,7 @@ export default function DispatchSearch({
           disabled={checkedInvoices.length === 0 || isLoading}
           className="uppercase text-xs font-medium"
         >
-          Recall
+          Un-Pick Invoice
         </Button>
 
         <Button
