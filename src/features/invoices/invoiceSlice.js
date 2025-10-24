@@ -28,32 +28,22 @@ const invoiceSlice = createSlice({
   reducers: {
     setInvoices: (state, action) => {
       state.invoices = action.payload.invoices || [];
+      const role = action.payload.role || "store";
+      const stats = action.payload.stats || {};
       state.pagination = action.payload.pagination || {
         totalCount: 0,
         pageNumber: 1,
         pageSize: 50,
       };
       state.stats = {
-        totalCount: action.payload.stats?.totalCount || 0,
-        pendingCount:
-          action.payload.stats?.pendingCount === "store"
-            ? action.payload.stats?.pendingCount || 0
-            : 0,
-        inProcessCount:
-          action.payload.stats?.pendingCount === "store"
-            ? action.payload.stats?.inProcessCount || 0
-            : 0,
-        processedCount: action.payload.stats?.processedCount || 0,
-        averageDurationSeconds:
-          action.payload.stats?.averageDurationSeconds || 0,
+        totalCount: stats.totalCount || 0,
+        pendingCount: role === "store" ? stats.pendingCount || 0 : 0,
+        inProcessCount: role === "store" ? stats.inProcessCount || 0 : 0,
+        processedCount: stats.processedCount || 0,
+        averageDurationSeconds: stats.averageDurationSeconds || 0,
         inVerificationCount:
-          action.payload.stats?.pendingCount !== "store"
-            ? action.payload.stats?.inVerificationCount || 0
-            : 0,
-        verifiedCount:
-          action.payload.stats?.pendingCount !== "store"
-            ? action.payload.stats?.verifiedCount || 0
-            : 0,
+          role !== "store" ? stats.inVerificationCount || 0 : 0,
+        verifiedCount: role !== "store" ? stats.verifiedCount || 0 : 0,
       };
       // store
     },
@@ -65,6 +55,7 @@ const invoiceSlice = createSlice({
         processedCount: action.payload?.processedCount || 0,
         averageDurationSeconds: action.payload?.averageDurationSeconds || 0,
       };
+      console.log("Stats updated:", state.stats);
     },
     setStartDate: (state, action) => {
       state.startDate = action.payload || new Date().toISOString();
