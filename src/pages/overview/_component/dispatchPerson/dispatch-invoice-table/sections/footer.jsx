@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 // import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
@@ -30,7 +30,7 @@ import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useAppDispatch } from "@/app/hook";
 
 export default function DispatchFooter({
-  dispatchIDs,
+  dispatchIDs = [],
   rowData,
   selectValues,
   onSubmit,
@@ -237,7 +237,7 @@ export default function DispatchFooter({
         <Button
           variant="apply"
           // onClick={handleStart}
-          disabled={startDisabled}
+          disabled={startDisabled || !dispatchIDs.length}
           className="mt-1 mr-2 uppercase text-xs font-medium"
         >
           Start
