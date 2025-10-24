@@ -3,15 +3,24 @@ import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Shield, User, Eye, EyeOff } from "lucide-react";
-import { useLoginMutation } from "@/features/auth/authAPI";
+import {
+  useAuthTransactionMutation,
+  useLoginMutation,
+} from "@/features/auth/authAPI";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTypedSelector } from "@/app/hook";
 
 export default function StartPopup({ onClose, onSubmit }) {
-  const [login, { isLoading }] = useLoginMutation();
+  // const [login, { isLoading }] = useLoginMutation();
+  const [authTransaction, { isLoading }] = useAuthTransactionMutation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const { user } = useTypedSelector((state) => state.auth);
+
+  let right = user["userrights"]?.map((item) => item?.moduleCode)[0];
 
   const [errors, setErrors] = useState({ username: "", password: "" });
 
@@ -36,7 +45,7 @@ export default function StartPopup({ onClose, onSubmit }) {
     setErrors(newErrors);
     if (hasError) return;
 
-    login({ UserName: username, Password: password })
+    authTransaction({ UserName: username, Password: password, moduleId: right })
       .unwrap()
       .then((data) => {
         toast.success("Authentication successful");
