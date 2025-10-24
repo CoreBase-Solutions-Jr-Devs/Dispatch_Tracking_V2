@@ -146,6 +146,11 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     <span className="text-foreground font-medium">{text || "-"}</span>;
   };
 
+  const formatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
   const formatDuration = (seconds) => {
     if (!seconds) return "—";
     const h = Math.floor(seconds / 3600);
@@ -215,9 +220,9 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
       // },
       {
         accessorKey: "amount",
-        header: "Amount",
+        header: "Balance",
         cell: ({ row }) => {
-          return row.original.amount ?? "-";
+          return formatter.format(row.original.amount ?? "-");
         },
       },
     ];
