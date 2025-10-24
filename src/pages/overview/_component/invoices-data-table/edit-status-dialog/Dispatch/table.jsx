@@ -86,6 +86,8 @@ export default function DispatchTable({
   isError,
   selected = [],
   onToggle,
+  handleRowSelect,
+  selectedRow,
 }) {
   const dispatch = useDispatch();
 
@@ -155,6 +157,10 @@ export default function DispatchTable({
                 <TableRow
                   key={index}
                   className="text-xs font-medium dark:bg-gray-700"
+                  onClick={() => handleRowSelect(row)}
+                  data-state={
+                    row.docNo === selectedRow?.docNo ? "selected" : ""
+                  }
                 >
                   <TableCell className="py-1 px-2">
                     <Checkbox

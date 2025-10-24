@@ -24,6 +24,7 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
   const [savedInvoices, setSavedInvoices] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+  const [selectedRow, setSelectedRow] = useState({});
 
   // Handle row toggle
   const handleToggleRow = (doc) => {
@@ -94,6 +95,10 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
 
   const handleDialogClose = () => setIsOpen(false);
 
+  const handleRowSelect = (row) => {
+    setSelectedRow(row);
+  };
+
   return (
     <>
       <div className="my-1 overflow-y-auto max-h-[80vh] px-2">
@@ -129,6 +134,8 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
                 1 ||
                 Math.ceil(filteredDispatchData.length / pageSize),
             }}
+            handleRowSelect={handleRowSelect}
+            selectedRow={selectedRow}
             onPageChange={setPageNumber}
             onPageSizeChange={setPageSize}
           />
@@ -139,10 +146,12 @@ export default function DispatchPopup({ rowData, onSubmit, onClose }) {
         <DialogFooter>
           <DispatchFooter
             rowData={rowData}
+            selectedRow={selectedRow}
             selectValues={selectValues}
             selectedDocs={selectedDocs}
             onSubmit={handleSave}
             onClose={onClose}
+            handleRowSelect={handleRowSelect}
           />
         </DialogFooter>
       </div>
