@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  invoices: [], // holds all invoices regardless of role
+  invoices: [],
   pagination: {
     totalCount: 0,
     pageNumber: 1,
@@ -19,7 +19,7 @@ const initialState = {
   startDate: new Date().toISOString(),
   endDate: new Date().toISOString(),
   dateRange: "TODAY",
-  selectedFilters: {}, // status or other filters
+  selectedFilters: {},
 };
 
 const invoiceSlice = createSlice({
@@ -42,10 +42,14 @@ const invoiceSlice = createSlice({
         processedCount: stats.processedCount || 0,
         averageDurationSeconds: stats.averageDurationSeconds || 0,
         inVerificationCount:
-          role !== "store" ? stats.inVerificationCount || 0 : 0,
-        verifiedCount: role !== "store" ? stats.verifiedCount || 0 : 0,
+          action.payload.stats?.pendingCount !== "store"
+            ? action.payload.stats?.inVerificationCount || 0
+            : 0,
+        verifiedCount:
+          action.payload.stats?.pendingCount !== "store"
+            ? action.payload.stats?.verifiedCount || 0
+            : 0,
       };
-      // store
     },
     setStatsStore: (state, action) => {
       state.stats = {
