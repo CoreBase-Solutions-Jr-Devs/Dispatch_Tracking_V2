@@ -29,7 +29,7 @@ export default function VerificationFooter({
 
   const [startVerification] = useStartVerificationProcessMutation();
   const [pushVerification] = usePushVerificationInvoiceMutation();
-  const [recallDocument] = useRecallDocumentMutation(); // 👈 added recall mutation
+  const [recallDocument] = useRecallDocumentMutation(); 
 
   const handleStartApi = async (credentials) => {
     const userName =

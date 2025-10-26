@@ -54,7 +54,6 @@ export const VerificationApi = apiClient.injectEndpoints({
       }),
       providesTags: ["verification_tracking"],
     }),
-    // ✅ Start verification process API
     startVerificationProcess: builder.mutation({
       query: ({ docNum, userName }) => ({
         url: `/verification/${docNum}/${userName}/start`,
@@ -67,7 +66,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       ],
     }),
 
-    // ✅ Push verification invoice to Dispatch stage
+   
     pushVerificationInvoice: builder.mutation({
       query: ({
         docNum,

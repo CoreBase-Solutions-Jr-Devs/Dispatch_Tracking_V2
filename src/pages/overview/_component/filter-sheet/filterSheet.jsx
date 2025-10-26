@@ -35,7 +35,7 @@ export default function FilterSheet() {
     (state) => state.invoice
   );
   const [selectedFilters, setSelectedFilters] = useState({});
-  const [isOpen, setIsOpen] = useState(false); // control sheet
+  const [isOpen, setIsOpen] = useState(false); 
   const [applyLoading, setApplyLoading] = useState(false);
   const [clearLoading, setClearLoading] = useState(false);
 
@@ -71,7 +71,7 @@ export default function FilterSheet() {
     { skip: !startDate || !endDate }
   );
 
-  // Always store ISO in Redux
+
   useEffect(() => {
     const today = new Date();
     let start, end;
@@ -129,7 +129,7 @@ export default function FilterSheet() {
           pagination: data.pagination,
         })
       );
-      setIsOpen(false); // close the sheet
+      setIsOpen(false); 
     } catch (error) {
       let description = "Please check your credentials and try again.";
       if (error?.data?.errors) {
@@ -148,7 +148,7 @@ export default function FilterSheet() {
     setIsOpen(false);
   };
 
-  // Load initial filters once
+
   useEffect(() => {
     if (data) {
       dispatch(
@@ -182,7 +182,7 @@ export default function FilterSheet() {
           <SheetTitle>Filter Options</SheetTitle>
         </SheetHeader>
 
-        {/* Date Range Dropdown */}
+        
         <section className="mb-4">
           <Label className="text-xs text-muted">Date Range</Label>
           <DateRangeDropdown
@@ -194,7 +194,6 @@ export default function FilterSheet() {
           />
         </section>
 
-        {/* Start/End Date Pickers */}
         <section className="flex gap-4 mb-4">
           <div
             className={`flex-1 flex flex-col ${
@@ -227,7 +226,7 @@ export default function FilterSheet() {
           </div>
         </section>
 
-        {/* Search + Role Filters */}
+       
         <section className="flex gap-2 mb-4 items-end">
           <div className="flex-1 flex flex-col justify-end">
             <Label className="text-xs text-muted-foreground">
@@ -243,7 +242,7 @@ export default function FilterSheet() {
           </div>
         </section>
 
-        {/* Footer */}
+       
         <SheetFooter className="border-t border-border flex justify-between items-center gap-x-4">
           <div className="flex gap-2">
             <Button
