@@ -113,23 +113,20 @@ export default function DispatchFooter({
       driverId: Number(driverDetails?.driverId),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
-      customerCourierName: courierDetails?.customerCourierName,
-      customerCourierId: courierDetails?.customerCourierId,
-      customerCourierPhone: courierDetails?.customerCourierPhone,
+      customerCourierName: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierName: courierDetails?.customerCourierName,
+      customerCourierId: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierId: courierDetails?.customerCourierId,
+      customerCourierPhone: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierPhone : courierDetails?.customerCourierPhone,
       isPush: false,
       userName: user?.username || "",
     };
 
-    if (selectValues.collectionType === "delivery") {
+    if (selectValues.collectionType === "OUR DELIVERY") {
       delete formData.customerCourierId;
       delete formData.customerCourierName;
       delete formData.customerCourierPhone;
     }
 
-    if (
-      selectValues.collectionType === "self-collection" ||
-      selectValues.collectionType === "courier"
-    ) {
+    if (selectValues.collectionType === "CUSTOMER" || selectValues.collectionType === "COURIER") {
       delete formData.driverId;
       delete formData.driverName;
       delete formData.routeName;
@@ -137,11 +134,13 @@ export default function DispatchFooter({
       delete formData.carPlate;
     }
 
+    console.log(formData);
+
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
 
-      toast.success("Dispatch saved succesfully!");
+      toast.success("Dispatch saved successfully!");
       console.log(data);
       setDeliveryDisabled(false);
       dispatch(resetDispatchData());
@@ -149,7 +148,7 @@ export default function DispatchFooter({
     } catch (error) {
       let description = "Saving failed. Please try again.";
 
-      toast.error("Dispatching start Failed", {
+      toast.error("Dispatching save failed!", {
         description: error?.data?.message || error?.data?.title || description,
         duration: 4000,
       });
@@ -176,9 +175,9 @@ export default function DispatchFooter({
       driverId: Number(driverDetails?.driverId),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
-      customerCourierName: courierDetails?.customerCourierName,
-      customerCourierId: courierDetails?.customerCourierId,
-      customerCourierPhone: courierDetails?.customerCourierPhone,
+      customerCourierName: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierName: courierDetails?.customerCourierName,
+      customerCourierId: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierId: courierDetails?.customerCourierId,
+      customerCourierPhone: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierPhone : courierDetails?.customerCourierPhone,
       dispatchRemarks,
       isPush: true,
     };
@@ -186,23 +185,20 @@ export default function DispatchFooter({
     {
       /* Remove unneccessary values from payload */
     }
-    if (selectValues.collectionType === "delivery") {
+    if (selectValues.collectionType === "OUR DELIVERY") {
       delete formData.customerCourierId;
       delete formData.customerCourierName;
       delete formData.customerCourierPhone;
     }
 
-    if (
-      selectValues.collectionType === "self-collection" ||
-      selectValues.collectionType === "courier"
-    ) {
+    if (selectValues.collectionType === "CUSTOMER" || selectValues.collectionType === "COURIER") {
       delete formData.driverId;
       delete formData.driverName;
       delete formData.routeName;
       delete formData.carMake;
       delete formData.carPlate;
     }
-
+    console.log(clientDetails);
     try {
       const data = await sendDispatch(formData).unwrap();
       dispatch(setDispatch(formData));
