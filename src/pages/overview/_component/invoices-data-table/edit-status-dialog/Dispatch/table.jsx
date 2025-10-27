@@ -128,9 +128,6 @@ export default function DispatchTable({
                   <Skeleton className="h-4 w-24" />
                 </TableCell>
                 <TableCell className="py-1 px-2">
-                  <Skeleton className="h-4 w-12" />
-                </TableCell>
-                <TableCell className="py-1 px-2">
                   <Skeleton className="h-4 w-20" />
                 </TableCell>
                 <TableCell className="py-1 px-2">

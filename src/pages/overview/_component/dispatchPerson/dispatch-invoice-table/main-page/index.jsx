@@ -95,6 +95,13 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     value: opt.value,
   }));
 
+  const courierOptions = (
+    filterOptions?.find((opt) => opt.key === "courier")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    value: opt.value,
+  }));
+
   // const { data } = useGetVerifiedOnDispatchQuery({ pageNumber, pageSize });
 
   const [selectValues, setSelectValues] = useState({
@@ -108,6 +115,18 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     console.log(field, value);
 
     setSelectValues((prev) => {
+      // If user changes collectionType, reset dependent fields
+      if (field === "collectionType") {
+        return {
+          ...prev,
+          collectionType: value,
+          dispatchPerson: "",
+          dispatchRoute: "",
+          vehicle: "",
+        };
+      }
+
+      // Otherwise, just update the specific field
       return { ...prev, [field]: value };
     });
   };
@@ -158,6 +177,11 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const renderText = (text) => {
     <span className="text-foreground font-medium">{text || "-"}</span>;
   };
+
+  const formatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
   const formatDuration = (seconds) => {
     if (!seconds) return "—";
@@ -230,7 +254,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
         accessorKey: "amount",
         header: "Balance",
         cell: ({ row }) => {
-          return row.original.amount ?? "-";
+          return formatter.format(row.original.amount ?? "-");
         },
       },
     ];
@@ -318,6 +342,7 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                 driverApiError={driverApiError}
                 enabled={startDispatch}
                 route={selectValues.dispatchRoute}
+                courierOptions={courierOptions}
               />
               <DispatchRemarks
                 enabled={startDispatch}

@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import {
   useStartVerificationProcessMutation,
   usePushVerificationInvoiceMutation,
+  useRecallDocumentMutation,
 } from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
-
+import {  useTypedSelector } from "@/app/hook";
 export default function VerificationFooter({
   rowData,
   onSubmit,
@@ -18,6 +19,8 @@ export default function VerificationFooter({
   refetchData,
   setRemarks,
 }) {
+  const { user } = useTypedSelector((state) => state.auth);
+
   const [startDisabled, setStartDisabled] = useState(
     rowData?.workflowStatus === "Verified" || !!rowData?.verifyStartDateTime
   );
@@ -28,13 +31,11 @@ export default function VerificationFooter({
 
   const [startVerification] = useStartVerificationProcessMutation();
   const [pushVerification] = usePushVerificationInvoiceMutation();
+  const [recallDocument] = useRecallDocumentMutation();
+  
 
-  const handleStartApi = async (credentials) => {
-    const userName =
-      credentials?.userName ||
-      credentials?.UserName ||
-      credentials?.user?.username ||
-      "system";
+  const handleStartApi = async () => {
+    const userName = user?.username || "";
     const docNum = Number(rowData?.docNo);
 
     try {
@@ -52,12 +53,8 @@ export default function VerificationFooter({
     }
   };
 
-  const handleDispatch = async (credentials) => {
-    const userName =
-      credentials?.userName ||
-      credentials?.UserName ||
-      credentials?.user?.username ||
-      "system";
+  const handleDispatch = async () => {
+    const userName = user?.username || "";
 
     if (!userName) {
       toast.error("Username is missing. Cannot push to Dispatch.");
@@ -78,11 +75,37 @@ export default function VerificationFooter({
       console.log("✅ Push Verification API Response:", response);
       toast.success("Sent to Dispatch successfully");
       setDispatchDisabled(true);
-      refetchData?.();
     } catch (error) {
       console.error("❌ Push Verification API Error:", error);
       toast.error("Push failed", {
         description: error?.data?.message || "Try again.",
+      });
+    }
+  };
+
+  const handleRecall = async () => {
+    const recalledBy = user?.username || "";
+
+    const payload = {
+      docNo: Number(rowData?.docNo),
+      currentStage: "Verification",
+      targetStage: "Store",
+      targetStatus: "Pending_Store",
+      recalledBy,
+    };
+
+    console.log("🔁 Recall Document Payload:", payload);
+
+    try {
+      const response = await recallDocument(payload).unwrap();
+      console.log("✅ Recall Document API Response:", response);
+      toast.success("Document recalled successfully");
+      refetchData?.();
+    } catch (error) {
+      console.error("❌ Recall Document API Error:", error);
+      toast.error("Recall failed", {
+        description:
+          error?.data?.message || "User not authenticated or invalid request.",
       });
     }
   };
@@ -118,13 +141,16 @@ export default function VerificationFooter({
           Send to Dispatch
         </Button>
       </EditStatusDialog>
-      <Button
-        variant="destructive"
-        onClick={handleClose}
-        className="mt-2 mr-2 uppercase"
+      <EditStatusDialog
+        view="verificationrecall"
+        rowData={rowData}
+        onSubmit={handleRecall}
       >
-        Recall
-      </Button>
+        <Button variant="destructive" className="mt-2 mr-2 uppercase">
+          Recall
+        </Button>
+      </EditStatusDialog>
+
       <Button
         variant="destructive"
         onClick={handleClose}

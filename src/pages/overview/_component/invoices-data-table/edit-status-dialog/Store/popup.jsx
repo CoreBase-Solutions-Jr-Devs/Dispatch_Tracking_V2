@@ -62,7 +62,7 @@ export default function StorePopup({ rowData, onSubmit, onClose }) {
         data={data}
         readOnly={readOnly}
         // handleWeightChange={handleWeightChange}
-        // error={errors.weight} // only show weight errors here
+        // error={errors.weight} 
         // weight={weight}
       />
       <StoreRemarks

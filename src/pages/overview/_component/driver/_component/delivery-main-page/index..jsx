@@ -123,40 +123,24 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
       phonenumber: `0${mpesaDetails?.phonenumber.slice(3)}`,
       amount: mpesaDetails?.amount,
     };
-    // CUS_CODE
+
     if (
       checkedInvoices.length > 0 &&
       !checkedInvoices.every(
         (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
       )
     ) {
-      console.log(checkedInvoices);
       toast.error("Wrong invoice selected", {
-        description: "please select invoices belonging to the same customer",
+        description: "Please select invoices belonging to the same customer",
         duration: 6000,
       });
       return;
     }
-    // CUS_CODE
-    if (
-      checkedInvoices.length > 0 &&
-      !checkedInvoices.every(
-        (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
-      )
-    ) {
-      console.log(checkedInvoices);
-      toast.error("Wrong invoice selected", {
-        description: "please select invoices belonging to the same customer",
-        duration: 6000,
-      });
-      return;
-    }
-    console.log(payload);
+
     MakeMpesaSTKPushForDeliveredInvoices(payload)
       .unwrap()
       .then((data) => {
         toast.success("Mpesa payment successful");
-        // setSelectedRow({});
         setMpesa(false);
         setMpesaDetails({
           phonenumber: "",
@@ -279,7 +263,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   };
   const handleMpesaPopup = () => {
     setMpesa(true);
-    setMpesaDetails({
+    ssetMpesaDetails({
       phonenumber:
         selectedRow?.OTPPHONENUMBER[0] === "0"
           ? `254${selectedRow?.OTPPHONENUMBER.slice(1)}`
