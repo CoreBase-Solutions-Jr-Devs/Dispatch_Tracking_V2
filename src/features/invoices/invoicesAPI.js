@@ -150,9 +150,9 @@ export const invoicesApi = apiClient.injectEndpoints({
       invalidatesTags: ["store_invoices1"],
     }),
 
-    // VERIFICATION TRACKING
+    
     filterVerificationInvoices: builder.mutation({
-    // DISPATCH TRACKING
+ 
     filterDispatchInvoices: builder.mutation({
       query: (formData) => ({
         url: "/invoices/dispatch-filter",
@@ -170,7 +170,7 @@ export const invoicesApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["verification_invoices1"],
     }),
-    // COLLECTION TRACKING
+    
     getCollectionTrackingDetails: builder.query({
       query: ({ docNum } = {}) => ({
         url: `/invoices/${docNum}/collection-tracking`,
