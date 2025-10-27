@@ -115,6 +115,18 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     console.log(field, value);
 
     setSelectValues((prev) => {
+      // If user changes collectionType, reset dependent fields
+      if (field === "collectionType") {
+        return {
+          ...prev,
+          collectionType: value,
+          dispatchPerson: "",
+          dispatchRoute: "",
+          vehicle: "",
+        };
+      }
+
+      // Otherwise, just update the specific field
       return { ...prev, [field]: value };
     });
   };

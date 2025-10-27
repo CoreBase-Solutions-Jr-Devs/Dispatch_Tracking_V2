@@ -42,8 +42,15 @@ export default function DispatchDetails({
     customerCourierName: "",
     customerCourierId: "",
     customerCourierPhone: "",
-    customerCourierRegNo: "",
   });
+
+  useEffect(() => {
+    setCourierDetailsState({
+      customerCourierName: "",
+      customerCourierId: "",
+      customerCourierPhone: "",
+    });
+  }, [collectionType]); // Reset when collectionType changes
 
   const dispatch = useDispatch();
 
@@ -57,17 +64,18 @@ export default function DispatchDetails({
 
     if (!name) return; 
 
-    setCourierDetailsState((prevState) => ({
-      ...prevState,
+    const updatedState = {
+      ...courierDetails,
       [name]: value,
-    }));
+    };
+    setCourierDetailsState(updatedState); // Update local state
 
     switch (field) {
       case COLLECTION_TYPES.CUSTOMER:
-        dispatch(setClientDetails({ ...courierDetails, [name]: value }));
+        dispatch(setClientDetails(updatedState));
         break;
       case COLLECTION_TYPES.COURIER:
-        dispatch(setCourierDetails({ ...courierDetails, [name]: value }));
+        dispatch(setCourierDetails(updatedState));
         break;
       case COLLECTION_TYPES.OUR_DELIVERY:
         dispatch(setDeliveryDetails({ ...deliveryDetails, [name]: value }));
@@ -265,7 +273,7 @@ export default function DispatchDetails({
               value={courierDetails.customerCourierName}
               onValueChange={(value) =>
                 handleChange(COLLECTION_TYPES.COURIER, value, "customerCourierName")}
-              // disabled={!enabled}
+                disabled={!enabled}
             >
               <SelectTrigger className="w-2/3 h-6 text-xs">
                 <SelectValue placeholder="Select courier name" />
@@ -280,25 +288,15 @@ export default function DispatchDetails({
             </Select>
           </div>
 
-          <div className="flex items-center justify-between w-full">
-            <Label className="text-xs font-medium w-1/3">Courier ID</Label>
-            <Select
-              value={courierDetails.customerCourierId}
-              onValueChange={(value) =>
-                handleChange(COLLECTION_TYPES.COURIER, value, "customerCourierId")}
-              // disabled={!enabled}
-            >
-              <SelectTrigger className="w-2/3 h-6 text-xs">
-                <SelectValue placeholder="Select courier ID" />
-              </SelectTrigger>
-              <SelectContent className="bg-gray-300">
-                {courierOptions.map((courier) => (
-                  <SelectItem key={courier.value} value={courier.value}>
-                    {courier.value}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex items-center w-full justify-between">
+            <Label className="text-xs font-medium w-1/3">ID No</Label>
+            <Input
+              className="w-2/3 h-6 text-xs"
+              value={courierDetails.customerCourierId || ""}
+              name="customerCourierId"
+              onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
+              disabled={!enabled}
+            />
           </div>
 
           <div className="flex items-center w-full justify-between">
@@ -312,7 +310,7 @@ export default function DispatchDetails({
             />
           </div>
 
-          <div className="flex items-center w-full justify-between">
+          {/* <div className="flex items-center w-full justify-between">
             <Label className="text-xs font-medium w-1/3">Reg No</Label>
             <Input
               className="w-2/3 h-6 text-xs"
@@ -321,7 +319,7 @@ export default function DispatchDetails({
               onChange={(e) => handleChange(COLLECTION_TYPES.COURIER, e)}
               disabled={!enabled}
             />
-          </div>
+          </div> */}
         </section>
       )}
     </div>
