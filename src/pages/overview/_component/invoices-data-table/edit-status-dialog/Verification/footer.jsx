@@ -7,7 +7,7 @@ import {
 } from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
-
+import {  useTypedSelector } from "@/app/hook";
 export default function VerificationFooter({
   rowData,
   onSubmit,
@@ -19,6 +19,8 @@ export default function VerificationFooter({
   refetchData,
   setRemarks,
 }) {
+  const { user } = useTypedSelector((state) => state.auth);
+
   const [startDisabled, setStartDisabled] = useState(
     rowData?.workflowStatus === "Verified" || !!rowData?.verifyStartDateTime
   );
@@ -32,7 +34,7 @@ export default function VerificationFooter({
   const [recallDocument] = useRecallDocumentMutation();
 
   const handleStartApi = async (credentials) => {
-    const userName = credentials?.userName || credentials?.user?.username;
+    const userName = user?.username || "";
     const docNum = Number(rowData?.docNo);
 
     try {
@@ -51,7 +53,7 @@ export default function VerificationFooter({
   };
 
   const handleDispatch = async (credentials) => {
-    const userName = credentials?.userName || credentials?.user?.username;
+    const userName = user?.username || "";
 
     if (!userName) {
       toast.error("Username is missing. Cannot push to Dispatch.");
@@ -81,7 +83,7 @@ export default function VerificationFooter({
   };
 
   const handleRecall = async (credentials) => {
-    const recalledBy = credentials?.userName || credentials?.user?.username;
+    const recalledBy = user?.username || "";
 
     const payload = {
       docNo: Number(rowData?.docNo),
