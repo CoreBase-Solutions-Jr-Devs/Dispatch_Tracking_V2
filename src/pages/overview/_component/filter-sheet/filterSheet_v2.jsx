@@ -17,17 +17,28 @@ import {
   setQueryFilter,
   clearQueryFilter,
 } from "@/features/dashboard/dashboardSlice";
+import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
 
 function FilterSheet() {
   const dispatch = useAppDispatch();
-  const [isOpen, setIsOpen] = useState(false); // control sheet
+  const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState({
     startDate: new Date(),
     endDate: new Date(),
     dateRange: "TODAY",
     status: "",
-  }); // control sheet
+  });
+  const [selectedFilters, setSelectedFilters] = useState({});
 
+  const {
+    data: filterOptions = [],
+    isLoading: filtersLoading,
+    isError: filtersError,
+  } = useFilterOptionsQuery();
+
+  const statusOptions = filterOptions?.find(
+    (item) => item?.key === "allStatus"
+  );
   const dateRanges = [
     {
       label: "Today",
@@ -59,30 +70,30 @@ function FilterSheet() {
     },
   ];
 
-  const status = [
-    {
-      key: "status",
-      label: "Filter by Status",
-      options: [
-        {
-          label: "InStore",
-          value: "InStore",
-        },
-        {
-          label: "InVerification",
-          value: "InVerification",
-        },
-        {
-          label: "InDispatch",
-          value: "InDispatch",
-        },
-        {
-          label: "InDelivery",
-          value: "InDelivery",
-        },
-      ],
-    },
-  ];
+  // const status = [
+  //   {
+  //     key: "status",
+  //     label: "Filter by Status",
+  //     options: [
+  //       {
+  //         label: "InStore",
+  //         value: "InStore",
+  //       },
+  //       {
+  //         label: "InVerification",
+  //         value: "InVerification",
+  //       },
+  //       {
+  //         label: "InDispatch",
+  //         value: "InDispatch",
+  //       },
+  //       {
+  //         label: "InDelivery",
+  //         value: "InDelivery",
+  //       },
+  //     ],
+  //   },
+  // ];
 
   const handleDateRange = (dateRange) => {
     const today = new Date();
@@ -150,6 +161,7 @@ function FilterSheet() {
         ...filter,
         startDate: new Date(filter.startDate).toISOString(),
         endDate: new Date(filter.endDate).toISOString(),
+        status: selectedFilters["allStatus"] ?? "",
       })
     );
 
@@ -246,12 +258,21 @@ function FilterSheet() {
             <Label className="text-xs text-muted-foreground">
               Filter by Status
             </Label>
-            <RoleBasedFilters
-              filters={status}
+            {/* <RoleBasedFilters
+              // filters={status}
+              filters={statusOptions}
               selectedFilters={filter.status}
               onChange={(key, val) => {
                 setFilter((prev) => ({ ...prev, status: val }));
               }}
+            /> */}
+
+            <RoleBasedFilters
+              filters={[statusOptions]}
+              selectedFilters={selectedFilters}
+              onChange={(key, val) =>
+                setSelectedFilters((prev) => ({ ...prev, [key]: val }))
+              }
             />
           </div>
         </section>
