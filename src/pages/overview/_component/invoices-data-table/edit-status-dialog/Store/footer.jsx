@@ -33,12 +33,6 @@ export default function StoreFooter({
     const userName = user?.username || "";
     const docNum = Number(rowData?.docNo);
 
-    if (!userName) {
-      toast.error("Username is missing. Cannot start store process.");
-      console.warn("⚠️ Missing userName in credentials:", credentials);
-      return;
-    }
-
     try {
       const response = await startStore({ docNum, userName }).unwrap();
       console.log("✅ Store Start API Response:", response);
@@ -118,7 +112,7 @@ export default function StoreFooter({
           Send to Verification
         </Button>
       </EditStatusDialog>
- 
+
       <Button
         variant="destructive"
         onClick={handleClose}
