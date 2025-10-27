@@ -6,7 +6,7 @@ import {
 } from "@/features/store/storeAPI";
 import { toast } from "sonner";
 import EditStatusDialog from "../edit-status-dialog";
-import {  useTypedSelector } from "@/app/hook";
+import { useTypedSelector } from "@/app/hook";
 export default function StoreFooter({
   rowData,
   onSubmit,
@@ -16,7 +16,7 @@ export default function StoreFooter({
   setErrors,
   refetchData,
 }) {
-   const { user } = useTypedSelector((state) => state.auth);
+  const { user } = useTypedSelector((state) => state.auth);
 
   const [startDisabled, setStartDisabled] = useState(
     rowData?.workflowStatus === "Processed" || !!rowData?.storeStartDateTime
@@ -29,7 +29,7 @@ export default function StoreFooter({
   const [startStore] = useStartStoreProcessMutation();
   const [pushStore] = usePushStoreInvoiceMutation();
 
-  const handleStartApi = async (credentials) => {
+  const handleStartApi = async () => {
     const userName = user?.username || "";
     const docNum = Number(rowData?.docNo);
 
@@ -48,7 +48,7 @@ export default function StoreFooter({
     }
   };
 
-  const handleVerification = async (credentials) => {
+  const handleVerification = async () => {
     const userName = user?.username || "";
 
     if (!userName) {

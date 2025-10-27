@@ -32,8 +32,9 @@ export default function VerificationFooter({
   const [startVerification] = useStartVerificationProcessMutation();
   const [pushVerification] = usePushVerificationInvoiceMutation();
   const [recallDocument] = useRecallDocumentMutation();
+  
 
-  const handleStartApi = async (credentials) => {
+  const handleStartApi = async () => {
     const userName = user?.username || "";
     const docNum = Number(rowData?.docNo);
 
@@ -52,7 +53,7 @@ export default function VerificationFooter({
     }
   };
 
-  const handleDispatch = async (credentials) => {
+  const handleDispatch = async () => {
     const userName = user?.username || "";
 
     if (!userName) {
@@ -82,7 +83,7 @@ export default function VerificationFooter({
     }
   };
 
-  const handleRecall = async (credentials) => {
+  const handleRecall = async () => {
     const recalledBy = user?.username || "";
 
     const payload = {
