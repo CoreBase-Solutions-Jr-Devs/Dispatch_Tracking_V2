@@ -103,6 +103,7 @@ export default function DispatchTable({
             <TableCell className="py-1 px-2">Doc. No</TableCell>
             <TableCell className="py-1 px-2">CusCode</TableCell>
             <TableCell className="py-1 px-2">CusName</TableCell>
+            <TableCell className="py-1 px-2">Route</TableCell>
             <TableCell className="py-1 px-2">Items</TableCell>
             <TableCell className="py-1 px-2">Terms</TableCell>
             <TableCell className="py-1 px-2">Ver. Date</TableCell>
@@ -173,6 +174,9 @@ export default function DispatchTable({
                   </TableCell>
                   <TableCell className="py-1 px-2">
                     {renderText(row?.customerName)}
+                  </TableCell>
+                  <TableCell className="py-1 px-2">
+                    {renderText(row?.route)}
                   </TableCell>
                   <TableCell className="py-1 px-2">
                     {renderText(row?.items)}
