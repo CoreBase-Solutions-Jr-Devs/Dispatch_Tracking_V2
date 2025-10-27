@@ -50,7 +50,7 @@ export default function StartPopup({ onClose, onSubmit }) {
       .then((data) => {
         toast.success("Authentication successful");
 
-          onSubmit?.({ ...data, userName: username });
+          onSubmit?.(data);
 
         onClose?.();
       })

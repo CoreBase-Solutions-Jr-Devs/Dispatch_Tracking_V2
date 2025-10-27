@@ -25,7 +25,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   const dispatch = useAppDispatch();
 
   const { user } = useSelector((state) => state.auth);
-  // const { updatedDispatches } = useSelector((state) => state.dispatch);
   const dispatchIDs = (rowData || []).map((item) => item.dispatchNum);
   console.log(rowData);
 
@@ -49,7 +48,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   const deliveryGuyOptions =
     filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
 
-  // ✅ Fetch driver details when collectionType = "delivery"
   const {
     data: driverDetails,
     isLoading: driverLoading,
@@ -65,7 +63,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
     filterOptions?.find((opt) => opt.key === "collectionType")?.options || []
   ).map((opt) => ({
     label: opt.label,
-    // value: opt.value,
     value: opt.label,
   }));
 
@@ -75,7 +72,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
     }
   }, [driverDetails, dispatch]);
 
-  // ✅ Clean payload before submission
   const cleanForm = (formData, type) => {
     if (type === "delivery") {
       delete formData.customerCourierId;
@@ -92,7 +88,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
     }
   };
 
-  // ✅ Prepare payload according to API schema
   const preparePayload = (isPush = false) => {
     if (!dispatchIDs?.length) {
       toast.error("No dispatch IDs found.");
@@ -110,7 +105,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
       carMake: localDriverDetails?.carMake || null,
       carPlate: localDriverDetails?.regNo || null,
       dispatchRemarks: editedDispatch.remarks || "",
-      userName: user?.username || "",
       isPush,
     };
 
