@@ -3,7 +3,7 @@ import { Input } from "../ui/input";
 import { Search as SearchIcon } from "lucide-react";
 import { useSelector } from "react-redux";
 
-export default function InvoiceToolbar({
+export default function DashboardToolbar({
   role = "admin",
   placeholder = "Invoice No,Cust Name",
   searchValue,
@@ -11,9 +11,9 @@ export default function InvoiceToolbar({
 }) {
   const [debounced, setDebounced] = useState(searchValue);
 
-  const {
-    queryFilter: { startDate, endDate },
-  } = useSelector((state) => state.dashboard);
+const queryFilter = useSelector((state) => state.dashboard?.queryFilter) ?? {};
+const { startDate, endDate } = queryFilter;
+
 
   // Debounce search input
   useEffect(() => {
