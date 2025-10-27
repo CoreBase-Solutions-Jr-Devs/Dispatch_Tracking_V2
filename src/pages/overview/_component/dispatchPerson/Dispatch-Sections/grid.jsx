@@ -179,11 +179,6 @@ export default function DispatchGrid({
         cell: ({ row }) => renderDispatchLink(row),
       },
       {
-        accessorKey: "route",
-        header: "Route",
-        cell: ({ row }) => renderText(row.original.route),
-      },
-      {
         accessorKey: "dispatcher",
         header: "Dispatcher",
         cell: ({ row }) => renderText(row.original.dispatcher),

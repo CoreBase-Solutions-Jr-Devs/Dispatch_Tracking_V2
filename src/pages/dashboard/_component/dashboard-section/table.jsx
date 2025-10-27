@@ -38,10 +38,12 @@ export default function DashboardTable() {
     }
   );
 
-  let invoices = searchValue ? queriedData?.invoices : data?.invoices || [];
+  let invoices = searchValue 
+  ? queriedData?.invoices ?? []
+  : data?.invoices ?? [];
   // let pagination = data?.pagination || {};
-  let summary = data?.stats || {};
-  let totalInvoices = summary?.totalCount || 0;
+  let summary = data?.stats ?? {};
+  let totalInvoices = summary?.totalCount ?? 0;
 
   // const view = roleToView("View All Stages");
   const view = roleToView("SuperAdmin");
@@ -95,10 +97,10 @@ export default function DashboardTable() {
         pagination={{
           pageNumber: filter?.pageNumber,
           pageSize: filter?.pageSize,
-          totalItems: invoices.length,
+          totalItems: invoices.length ?? 0,
           totalPages:
-            Math.ceil(totalInvoices / filter?.pageSize) ||
-            Math.ceil(invoices.length / filter?.pageSize),
+            Math.ceil(totalInvoices / (filter?.pageSize || 1)) ||
+            Math.ceil(invoices?.length / (filter?.pageSize || 20)),
           // totalPages: Math.ceil(invoices.length / pagination?.pageSize),
           // totalPages: pagination?.totalPages || 1,
         }}
