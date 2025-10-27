@@ -28,14 +28,10 @@ export default function StoreFooter({
   const [pushStore] = usePushStoreInvoiceMutation();
 
   const handleStartApi = async (credentials) => {
+    
     const userName = credentials?.userName || credentials?.user?.username;
-    const docNum = Number(rowData?.docNo);
 
-    if (!userName) {
-      toast.error("Username is missing. Cannot start store process.");
-      console.warn("⚠️ Missing userName in credentials:", credentials);
-      return;
-    }
+    const docNum = Number(rowData?.docNo);
 
     try {
       const response = await startStore({ docNum, userName }).unwrap();
@@ -116,7 +112,7 @@ export default function StoreFooter({
           Send to Verification
         </Button>
       </EditStatusDialog>
- 
+
       <Button
         variant="destructive"
         onClick={handleClose}
