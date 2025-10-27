@@ -29,14 +29,10 @@ export default function VerificationFooter({
 
   const [startVerification] = useStartVerificationProcessMutation();
   const [pushVerification] = usePushVerificationInvoiceMutation();
-  const [recallDocument] = useRecallDocumentMutation(); 
+  const [recallDocument] = useRecallDocumentMutation();
 
   const handleStartApi = async (credentials) => {
-    const userName =
-      credentials?.userName ||
-      credentials?.UserName ||
-      credentials?.user?.username ||
-      "system";
+    const userName = credentials?.userName || credentials?.user?.username;
     const docNum = Number(rowData?.docNo);
 
     try {
@@ -55,11 +51,7 @@ export default function VerificationFooter({
   };
 
   const handleDispatch = async (credentials) => {
-    const userName =
-      credentials?.userName ||
-      credentials?.UserName ||
-      credentials?.user?.username ||
-      "system";
+    const userName = credentials?.userName || credentials?.user?.username;
 
     if (!userName) {
       toast.error("Username is missing. Cannot push to Dispatch.");
@@ -89,11 +81,7 @@ export default function VerificationFooter({
   };
 
   const handleRecall = async (credentials) => {
-    const recalledBy =
-      credentials?.userName ||
-      credentials?.UserName ||
-      credentials?.user?.username ||
-      "system";
+    const recalledBy = credentials?.userName || credentials?.user?.username;
 
     const payload = {
       docNo: Number(rowData?.docNo),
