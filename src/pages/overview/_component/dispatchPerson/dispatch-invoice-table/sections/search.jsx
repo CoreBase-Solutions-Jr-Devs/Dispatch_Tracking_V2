@@ -5,7 +5,10 @@ import { Search as SearchIcon } from "lucide-react";
 import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { useNavigate } from "react-router-dom";
-import { useRemoveSelectedInvoicesMutation } from "@/features/dispatch/dispatchAPI";
+import {
+  useDeleteDispatchInvoiceMutation,
+  useRemoveSelectedInvoicesMutation,
+} from "@/features/dispatch/dispatchAPI";
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import { toast } from "sonner";
 import { removeDispatchIds } from "@/features/dispatch/dispatchSlice";
@@ -29,6 +32,8 @@ export default function DispatchSearch({
 
   const [removeSelectedInvoices, { isLoading }] =
     useRemoveSelectedInvoicesMutation();
+  const [DeleteDispatchInvoice, { isLoading: isDeletingLoading }] =
+    useDeleteDispatchInvoiceMutation();
 
   const handleRecall = async () => {
     const payload = {
@@ -43,6 +48,27 @@ export default function DispatchSearch({
       resetCheckedInvoice();
       let selected = checkedInvoices.map((inv) => inv?.dispatchId);
       dispatch(removeDispatchIds(selected || [0]));
+      console.log(data);
+    } catch (error) {
+      let description = "Recall failed. Please try again.";
+      toast.error("Recall Failed", {
+        description: error?.data?.message || error?.data?.title || description,
+        duration: 4000,
+      });
+    }
+  };
+
+  const handleDispatchDelete = async () => {
+    const payload = {
+      dispatchIds: checkedInvoices.map((inv) => inv?.dispatchId) || [0],
+      dispatchNum: checkedInvoices[0]?.dispatchNumber || 0,
+      userName: user?.username || "",
+    };
+
+    try {
+      const data = await DeleteDispatchInvoice(payload).unwrap();
+      toast.success("Dispatch deleted successfully!");
+      resetCheckedInvoice();
       console.log(data);
     } catch (error) {
       let description = "Recall failed. Please try again.";
@@ -74,12 +100,25 @@ export default function DispatchSearch({
         </EditStatusDialog>
 
         <Button
-          variant="destructive"
+          variant="store"
           onClick={handleRecall}
-          disabled={checkedInvoices.length === 0 || isLoading}
+          disabled={
+            checkedInvoices.length === 0 || isLoading || isDeletingLoading
+          }
           className="uppercase text-xs font-medium"
         >
-          Un-Pick Invoice
+          Remove Invoice
+        </Button>
+
+        <Button
+          variant="destructive"
+          onClick={handleDispatchDelete}
+          disabled={
+            checkedInvoices.length === 0 || isLoading || isDeletingLoading
+          }
+          className="uppercase text-xs font-medium"
+        >
+          Delete
         </Button>
 
         <Button

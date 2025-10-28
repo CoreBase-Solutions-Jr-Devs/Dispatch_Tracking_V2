@@ -8,11 +8,16 @@ import { toast } from "sonner";
 
 function DisputedDetails({ data, handleDispute }) {
   const [disputeDetails, setDisputeDetails] = useState({
-    dispatchnum: data?.DISPATCHNUM || 0,
-    bcode: data?.BCODE || 0,
-    disputedamount: data?.DISPUTEDAMT || 0,
-    saleinv_num: data?.SALEINV_NUM || 0,
+    // dispatchnum: data?.DispatchNo || 0,
+    // bcode: data?.BCode || 0,
+    // disputedamount: data?.DISPUTEDAMT || 0,
+    // saleinv_num: data?.DocNo || 0,
     // comments: data?.DISPUTEDComments || "",
+    //
+    // dispatchnum: data?.DispatchNo || 0,
+    // bcode: data?.BCode || 0,
+    disputedamount: 0,
+    // saleinv_num: data?.DocNo || 0,
     comments: "",
   });
 
@@ -30,17 +35,25 @@ function DisputedDetails({ data, handleDispute }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const payload = {
+      dispatchnum: data?.DispatchNo || 0,
+      bcode: data?.BCode || 0,
+      disputedamount: disputeDetails?.disputedamount || 0,
+      saleinv_num: data?.DocNo || 0,
+      comments: disputeDetails?.comments || "",
+    };
+
     if (
-      !disputeDetails.dispatchnum ||
-      !disputeDetails.bcode ||
-      !disputeDetails.disputedamount ||
-      !disputeDetails.saleinv_num ||
-      !disputeDetails.comments
+      !payload.dispatchnum ||
+      !payload.bcode ||
+      !payload.disputedamount ||
+      !payload.saleinv_num ||
+      !payload.comments
     ) {
       return;
     }
 
-    DisputedAmountsInvoices(disputeDetails)
+    DisputedAmountsInvoices(payload)
       .unwrap()
       .then((data) => {
         toast.success("Dispute resolved successful");
@@ -62,7 +75,7 @@ function DisputedDetails({ data, handleDispute }) {
         <Label className="text-xs font-medium ">Dispatch Num:</Label>
         <Input
           type={"number"}
-          value={disputeDetails.dispatchnum}
+          value={data?.DispatchNo}
           name="dispatchnum"
           required
           disabled
@@ -72,7 +85,7 @@ function DisputedDetails({ data, handleDispute }) {
         <Label className="text-xs font-medium ">Salesinv Num:</Label>
         <Input
           type={"number"}
-          value={disputeDetails.saleinv_num}
+          value={data?.DocNo}
           name="saleinv_num"
           required
           disabled
@@ -107,7 +120,7 @@ function DisputedDetails({ data, handleDispute }) {
           disabled={isLoading}
           className="text-xs font-medium"
         >
-          Resolve
+          Submit
         </Button>
         <Button
           variant="destructive"

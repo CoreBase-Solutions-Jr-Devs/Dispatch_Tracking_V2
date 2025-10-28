@@ -129,7 +129,17 @@ export const dispatchApi = apiClient.injectEndpoints({
         },
         body: payload,
       }),
-      invalidatesTags: ["verified_invoices", "selected_invoices"],
+      invalidatesTags: ["selected_invoices"],
+    }),
+    DeleteDispatchInvoice: builder.mutation({
+      query: (dispatchdetnum) => ({
+        url: `/dispatch/DeleteDispatchInvoice`,
+        method: "DELETE",
+        params: {
+          dispatchdetnum,
+        },
+      }),
+      invalidatesTags: ["selected_invoices"],
     }),
   }),
 });
@@ -149,4 +159,5 @@ export const {
   useRemoveSelectedInvoicesMutation,
   useRecallInvoicesMutation,
   useCreateDispatchesMutation,
+  useDeleteDispatchInvoiceMutation,
 } = dispatchApi;
