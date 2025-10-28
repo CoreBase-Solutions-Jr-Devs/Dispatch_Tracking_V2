@@ -28,7 +28,7 @@ export default function DeliveryFooter({
 
   return (
     <div className="flex flex-row justify-end max-w-full gap-5">
-      {!rowData?.ISDISPUTED && (
+      {!rowData?.Disputed && (
         <Button
           variant="destructive"
           onClick={handleDispute}
@@ -42,7 +42,7 @@ export default function DeliveryFooter({
         <Button
           variant="default"
           onClick={generateOTP}
-          disabled={isLoading || !rowData?.CUS_CODE}
+          disabled={isLoading || !rowData?.CustomerID}
           className="mt-1 uppercase text-xs font-medium"
         >
           Generate OTP
@@ -55,10 +55,10 @@ export default function DeliveryFooter({
           onClick={handleDelivery}
           disabled={
             isLoading ||
-            (rowData?.DOCTYPE === "INVOICE   " &&
-              (rowData?.PAYMENT_TERMS === "On Delivery" ||
-                rowData?.PAYMENT_TERMS === "On Order") &&
-              rowData?.BALANCE > 0)
+            (rowData?.DocType === "INVOICE   " &&
+              (rowData?.Terms === "On Delivery" ||
+                rowData?.Terms === "On Order") &&
+              rowData?.Balance > 0)
           }
           className="mt-1 uppercase text-xs font-medium"
         >
