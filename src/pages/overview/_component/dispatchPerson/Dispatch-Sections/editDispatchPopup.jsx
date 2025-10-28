@@ -68,6 +68,8 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
     filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
   const routeOptions =
     filterOptions?.find((opt) => opt.key === "route")?.options || [];
+  const vehicleOptions =
+    filterOptions?.find((opt) => opt.key === "transporter")?.options || [];
 
   // useEffect(() => {
   //   if (driverDetails) {
@@ -202,6 +204,10 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
               value: opt.label,
             }))}
             routeOptions={routeOptions.map((opt) => ({
+              label: opt.label,
+              value: opt.label,
+            }))}
+            vehicleOptions={vehicleOptions.map((opt) => ({
               label: opt.label,
               value: opt.label,
             }))}
