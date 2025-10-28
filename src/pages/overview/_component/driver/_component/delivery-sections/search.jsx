@@ -35,7 +35,7 @@ export default function DeliverySearch({ isLoading, handleSearchInput }) {
           type="text"
           value={customerCode}
           onChange={handleInput}
-          placeholder="Enter Customer Code"
+          placeholder="Search..."
           className="w-full pl-9 pr-3 py-2 bg-gray-100"
         />
       </div>
