@@ -53,7 +53,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
     isLoading: driverLoading,
     isError: driverError,
     error: driverApiError,
-  } = useGetDeliveryDriverQuery(userName, {
+  } = useGetDeliveryDriverQuery(user?.username || "", {
     skip:
       editedDispatch.collectionType !== "OUR DELIVERY" ||
       !editedDispatch.dispatchPerson,
@@ -98,7 +98,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
       dispatchIds: dispatchIDs,
       collectionType:
         editedDispatch.collectionType?.toUpperCase() || "DELIVERY",
-      userName,
+      userName: user?.username || "",
       routeName: editedDispatch.dispatchRoute || null,
       driverName: localDriverDetails?.driverName || null,
       driverId: Number(localDriverDetails?.driverId.slice(2)) || null,
