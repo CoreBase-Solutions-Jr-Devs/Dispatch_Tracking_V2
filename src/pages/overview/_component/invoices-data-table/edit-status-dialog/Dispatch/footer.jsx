@@ -101,12 +101,12 @@ export default function DispatchFooter({
   //     const res = await createDispatches(payload).unwrap();
   //     toast.success("Successfully saved invoices!");
   //     // dispatch(setSelectedDipatches(res?.updatedDispatches || []));
-  // handleRowSelect({});
+  //     handleRowSelect({});
   //     console.log(res);
   //     if (onSubmit) {
   //       onSubmit(selectedDocs, selectValues);
   //     }
-  //     // if (onClose) onClose();
+  //     if (onClose) onClose();
   //   } catch (error) {
   //     let description = "Error saving invoices. Please try again.";
   //     if (error?.data?.errors) {
@@ -153,7 +153,7 @@ export default function DispatchFooter({
 
   return (
     <div className="flex flex-row justify-end w-full">
-      <EditStatusDialog
+      {/* <EditStatusDialog
         rowData={rowData}
         view="dispatchpick"
         onSubmit={handleSave}
@@ -166,7 +166,15 @@ export default function DispatchFooter({
         >
           {isLoading ? "Picking..." : "Pick"}
         </Button>
-      </EditStatusDialog>
+      </EditStatusDialog> */}
+      <Button
+        variant="apply"
+        onClick={handleSave}
+        disabled={isLoading || !selectedDocs.length}
+        className="mt-1 mr-2 uppercase text-xs font-medium"
+      >
+        {isLoading ? "Picking..." : "Pick"}
+      </Button>
       <Button
         variant="destructive"
         onClick={handleRecall}
