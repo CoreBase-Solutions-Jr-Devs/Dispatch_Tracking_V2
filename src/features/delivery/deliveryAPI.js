@@ -68,14 +68,23 @@ export const deliveryApi = apiClient.injectEndpoints({
     }),
     // V2 API
     GetDispatchesForDeliveryHD: builder.query({
-      query: () => ({
+      query: (searchtext) => ({
         url: "/delivery/GetDispatchesForDeliveryHD",
         method: "GET",
         params: {
           bcode: 0,
+          searchtext,
         },
       }),
       providesTags: ["dipatch_deliveries"],
+    }),
+    GetDispatchesForDeliveryDT: builder.query({
+      query: (params) => ({
+        url: "/delivery/GetDispatchesForDeliveryDT",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["dipatch_deliveries_details"],
     }),
     deliveryComplete: builder.mutation({
       query: (payload) => ({
@@ -86,7 +95,7 @@ export const deliveryApi = apiClient.injectEndpoints({
         },
         body: payload,
       }),
-      invalidatesTags: ["dipatch_deliveries"],
+      invalidatesTags: ["dipatch_deliveries", "dipatch_deliveries_details"],
     }),
     GenerateOTPForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
@@ -99,6 +108,7 @@ export const deliveryApi = apiClient.injectEndpoints({
         },
         body: {},
       }),
+      invalidatesTags: ["dipatch_deliveries", "dipatch_deliveries_details"],
     }),
     ValidateOTPForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
@@ -112,7 +122,7 @@ export const deliveryApi = apiClient.injectEndpoints({
         },
         body: {},
       }),
-      invalidatesTags: ["dipatch_deliveries"],
+      invalidatesTags: ["dipatch_deliveries", "dipatch_deliveries_details"],
     }),
     MakeMpesaSTKPushForDeliveredInvoices: builder.mutation({
       query: (payload) => ({
@@ -127,7 +137,7 @@ export const deliveryApi = apiClient.injectEndpoints({
         },
         body: {},
       }),
-      invalidatesTags: ["dipatch_deliveries"],
+      invalidatesTags: ["dipatch_deliveries", "dipatch_deliveries_details"],
     }),
     DisputedAmountsInvoices: builder.mutation({
       query: (payload) => ({
@@ -135,7 +145,7 @@ export const deliveryApi = apiClient.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["dipatch_deliveries"],
+      invalidatesTags: ["dipatch_deliveries", "dipatch_deliveries_details"],
     }),
   }),
 });
@@ -152,6 +162,7 @@ export const {
   useDeliveryStartMutation,
   // V2 API
   useGetDispatchesForDeliveryHDQuery,
+  useGetDispatchesForDeliveryDTQuery,
   useDeliveryCompleteMutation,
   useGenerateOTPForDeliveredInvoicesMutation,
   useValidateOTPForDeliveredInvoicesMutation,

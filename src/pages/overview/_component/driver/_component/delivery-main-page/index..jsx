@@ -15,6 +15,7 @@ import {
   useGenerateOTPForDeliveredInvoicesMutation,
   useValidateOTPForDeliveredInvoicesMutation,
   useMakeMpesaSTKPushForDeliveredInvoicesMutation,
+  useGetDispatchesForDeliveryDTQuery,
 } from "@/features/delivery/deliveryAPI";
 import {
   Card,
@@ -56,42 +57,41 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     CUS_CODE: "",
     SALEINV_NUM: "",
   });
+  const [searchText, setSearchText] = useState("");
+  const [debouncedCode, setDebouncedCode] = useState(searchText);
 
   const [deliveryComplete, { isLoading }] = useDeliveryCompleteMutation();
   const [
     GenerateOTPForDeliveredInvoices,
     { isLoading: isGeneratingOTPLoading },
   ] = useGenerateOTPForDeliveredInvoicesMutation();
+
   const [
     ValidateOTPForDeliveredInvoices,
     { isLoading: isvalidatingOTPLoading },
   ] = useValidateOTPForDeliveredInvoicesMutation();
+
   const [MakeMpesaSTKPushForDeliveredInvoices, { isLoading: isPayingLoading }] =
     useMakeMpesaSTKPushForDeliveredInvoicesMutation();
 
-  // const { data, isError } = useGetDeliveryInvoicesQuery({
-  //   pageNumber: 1,
-  //   pageSize: 20,
+  const {
+    data: deliveryInvoices,
+    isError,
+    error,
+    isLoading: isGettingIvoice,
+  } = useGetDispatchesForDeliveryHDQuery(debouncedCode);
+
+  // let deliveryInvoices = data;
+
+  // const {
+  //   data: invoiceDetails,
+  //   isError: isDTError,
+  //   isLoading: isGettingIvoiceDetails,
+  // } = useGetDispatchesForDeliveryDTQuery({
+  //   dispatchnum: selectedRow?.DISPATCHNUM || 0,
+  //   bcode: selectedRow?.BCODE || 0,
   // });
-
-  // let deliveryInvoices = data?.items;
-
-  const { data } = useGetDispatchesForDeliveryHDQuery();
-  let deliveryInvoices = data;
-  // let deliveryInvoices2 = data?.map((invoice) => {
-  //   return convertToNull(invoice);
-  // });
-
-  // function convertToNull(obj) {
-  //   for (let [key, value] of Object.entries(obj)) {
-  //     if (typeof value === "object") {
-  //       obj[key] = null;
-  //     }
-  //   }
-  //   return obj;
-  // }
-
-  // console.log(deliveryInvoices);
+  // console.log(invoiceDetails);
 
   const handleParentSelect = (selected) => {
     setCheckedInvoices([]);
@@ -104,9 +104,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     if (value) {
       setCheckedInvoices((prev) => [...prev, row]);
     } else {
-      setCheckedInvoices((prev) =>
-        prev.filter((r) => r.SALEINV_NUM !== row.SALEINV_NUM)
-      );
+      setCheckedInvoices((prev) => prev.filter((r) => r.DocNo !== row.DocNo));
     }
   };
 
@@ -165,9 +163,9 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const handleValidateOTP = (e) => {
     e.preventDefault();
     const payload = {
-      dispatchnum: selectedRow?.DISPATCHNUM,
-      bcode: selectedRow?.BCODE,
-      saleinv_num: selectedRow?.SALEINV_NUM,
+      dispatchnum: selectedRow?.DispatchNo,
+      bcode: selectedRow?.BCode,
+      saleinv_num: selectedRow?.DocNo,
       otp,
     };
     ValidateOTPForDeliveredInvoices(payload)
@@ -177,7 +175,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
         setShow(false);
         setOTP("");
         setRemarks("");
-        // setSelectedRow({});
       })
       .catch((error) => {
         toast.error("OTP Failed", {
@@ -192,15 +189,14 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
 
   const handleOTPGenerate = () => {
     const payload = {
-      dispatchnum: selectedRow?.DISPATCHNUM,
-      bcode: selectedRow?.BCODE,
-      saleinv_num: selectedRow?.SALEINV_NUM,
+      dispatchnum: selectedRow?.DispatchNo,
+      bcode: selectedRow?.BCode,
+      saleinv_num: selectedRow?.DocNo,
     };
     GenerateOTPForDeliveredInvoices(payload)
       .unwrap()
       .then((data) => {
         toast.success("OTP sent successful");
-        // setSelectedRow({});
         setRemarks("");
         setOTP("");
         setShow(true);
@@ -222,12 +218,13 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const handleCompleteDelivery = () => {
     const payload = {
       remarks,
-      dispatchnum: selectedRow?.DISPATCHNUM,
-      bcode: selectedRow?.BCODE,
+      dispatchnum: selectedRow?.DispatchNo,
+      bcode: selectedRow?.BCode,
       invoices: [
         {
-          cus_code: selectedRow?.CUS_CODE,
-          saleinv_num: selectedRow?.SALEINV_NUM,
+          cus_code: selectedRow?.CustomerID,
+          saleinv_num: selectedRow?.DocNo,
+          doctype: selectedRow?.DocType,
         },
       ],
     };
@@ -263,16 +260,16 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   };
   const handleMpesaPopup = () => {
     setMpesa(true);
-    ssetMpesaDetails({
+    setMpesaDetails({
       phonenumber:
-        selectedRow?.OTPPHONENUMBER[0] === "0"
-          ? `254${selectedRow?.OTPPHONENUMBER.slice(1)}`
-          : selectedRow?.OTPPHONENUMBER || "",
-      amount: selectedRow?.BALANCE || 0,
-      DISPATCHNUM: selectedRow?.DISPATCHNUM || "",
-      BCODE: selectedRow?.BCODE || "",
-      CUS_CODE: selectedRow?.CUS_CODE || "",
-      SALEINV_NUM: selectedRow?.SALEINV_NUM || "",
+        selectedRow?.OTPPhoneNumber[0] === "0"
+          ? `254${selectedRow?.OTPPhoneNumber.slice(1)}`
+          : selectedRow?.OTPPhoneNumber || "",
+      amount: Math.ceil(selectedRow?.Balance) || 0,
+      DISPATCHNUM: selectedRow?.DispatchNo || "",
+      BCODE: selectedRow?.BCode || "",
+      CUS_CODE: selectedRow?.CustomerID || "",
+      SALEINV_NUM: selectedRow?.DocNo || "",
     });
   };
 
@@ -280,29 +277,59 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     setDispute(!dispute);
   };
 
+  const handleSearchInput = (data) => {
+    setSearchText(data);
+  };
+
   useEffect(() => {
     setMpesaDetails({
       phonenumber:
-        checkedInvoices[0]?.OTPPHONENUMBER[0] === "0"
-          ? `254${checkedInvoices[0]?.OTPPHONENUMBER.slice(1)}`
-          : checkedInvoices[0]?.OTPPHONENUMBER || "",
-      amount: checkedInvoices?.reduce((acc, curr) => acc + curr?.BALANCE, 0),
-      DISPATCHNUM: checkedInvoices[0]?.DISPATCHNUM,
-      BCODE: checkedInvoices[0]?.BCODE,
-      CUS_CODE: checkedInvoices[0]?.CUS_CODE,
-      SALEINV_NUM: checkedInvoices[0]?.SALEINV_NUM,
+        checkedInvoices[0]?.OTPPhoneNumber[0] === "0"
+          ? `254${checkedInvoices[0]?.OTPPhoneNumber.slice(1)}`
+          : checkedInvoices[0]?.OTPPhoneNumber || "",
+      amount: checkedInvoices?.reduce((acc, curr) => acc + curr?.Balance, 0),
+      DISPATCHNUM: checkedInvoices[0]?.DispatchNo,
+      BCODE: checkedInvoices[0]?.BCode,
+      CUS_CODE: checkedInvoices[0]?.CustomerID,
+      SALEINV_NUM: checkedInvoices[0]?.DocNo,
     });
     // setSelectedRow(checkedInvoices[0]);
   }, [checkedInvoices]);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedCode(searchText);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchText]);
+
+  // useEffect(() => {
+  //   if (isError) {
+  //     toast.error("Delivery Invoice failed", {
+  //       description:
+  //         error?.data?.errors && Object?.keys(error?.data?.errors)
+  //           ? Object.values(error?.data?.errors).join("/n")
+  //           : error?.data?.message ||
+  //             error?.data?.title ||
+  //             "Please try paying again",
+  //       duration: 4000,
+  //     });
+  //   }
+  //   // setSelectedRow(checkedInvoices[0]);
+  // }, [isError]);
+
   return (
     <div className="overflow-y-auto max-h-[90vh] px-2">
-      {/* <DeliverySearch
-        value={query}
-        onChange={setQuery}
-        data={rowData}
+      <DeliverySearch
+        // value={query}
+        isLoading={isGettingIvoice}
+        data={selectedRow}
         placeholder="invoice No..."
-      /> */}
+        handleSearchInput={handleSearchInput}
+      />
       <div className="flex flex-wrap py-2 gap-5">
         <div className="flex-auto">
           <div className="min-h-[300px]">
@@ -311,9 +338,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
               handleRowSelection={handleParentSelect}
               handleRowCheck={handleRowCheck}
               checkedInvoices={checkedInvoices}
+              isLoading={isGettingIvoice}
+              isError={isError}
             />
           </div>
-          {/* <DeliverySummary data={deliveryInvoices} /> */}
           {/* <DeliverySummary data={deliveryInvoices} /> */}
           <Separator className="my-2" />
           <DeliveryDetails
@@ -321,16 +349,15 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
               checkedInvoices.length > 0 ? checkedInvoices : deliveryInvoices
             }
           />
-          {/* <DeliveryPagination data={rowData} /> */}
         </div>
 
-        {Boolean(Object.keys(selectedRow).length) && (
+        {Boolean(Object.keys(selectedRow)?.length) && (
           <div className="w-32 flex-1">
-            {dispute ? (
+            {dispute || selectedRow?.Disputed ? (
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {selectedRow?.SALEINV_NUM} | {selectedRow?.CUSNAME}
+                    {selectedRow?.DocNo} | {selectedRow?.CustomerName}
                   </CardTitle>
                 </CardHeader>
                 {/* <DisputedDetails data={selectedRow} /> */}
@@ -341,7 +368,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                       <Button
                         variant="store"
                         onClick={handleMpesaPopup}
-                        disabled={!selectedRow?.CUS_CODE}
+                        disabled={!selectedRow?.CustomerID}
                         className="mt-1  uppercase text-xs font-medium"
                       >
                         Pay
@@ -357,7 +384,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                     rowData={selectedRow}
                     isLoading={
                       isLoading ||
-                      !Boolean(Object.keys(selectedRow).length) ||
+                      !Boolean(Object.keys(selectedRow)?.length) ||
                       isGeneratingOTPLoading ||
                       isvalidatingOTPLoading
                     }
@@ -371,7 +398,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {selectedRow?.SALEINV_NUM} | {selectedRow?.CUSNAME}
+                    {selectedRow?.DocNo} | {selectedRow?.CustomerName}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -390,7 +417,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-center">Mpesa Payment</CardTitle>
-                <CardTitle>{checkedInvoices[0]?.CUSNAME}</CardTitle>
+                <CardTitle>{checkedInvoices[0]?.CustomerName}</CardTitle>
               </CardHeader>
               <CardContent>
                 <form
@@ -422,7 +449,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                       value={mpesaDetails.amount}
                       name="amount"
                       onChange={handleChange}
-                      max={data?.BALANCE}
+                      max={deliveryInvoices?.BALANCE}
                       required
                     />
                   </div>
@@ -441,15 +468,6 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
           </div>
         )}
       </div>
-
-      {/* <Separator className="my-2" /> */}
-
-      {/* <div className=" py-1">
-        <DeliveryRemarks />
-      </div> */}
-
-      {/* <DeliveryMeta /> */}
-      {/* <DeliveryFooter rowData={rowData} onSubmit={onSubmit} /> */}
 
       <Dialog open={show} onOpenChange={() => setShow(!show)}>
         <DialogTrigger onClick={() => setShow(!show)} />
@@ -520,17 +538,15 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                 value={mpesaDetails.amount}
                 name="amount"
                 onChange={handleChange}
-                max={data?.BALANCE}
+                max={deliveryInvoices?.BALANCE}
                 required
               />
             </div>
             <Button
               type="submit"
-              // onClick={() => setMpesa(false)}
               disabled={isPayingLoading}
               variant="default"
               className="w-full"
-              // className="w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             >
               Pay
             </Button>
