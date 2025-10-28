@@ -80,13 +80,13 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   }, [driverDetails]);
 
   const cleanForm = (formData, type) => {
-    if (type === "delivery") {
+    if (type === "delivery" || type === "OUR DELIVERY") {
       delete formData.customerCourierId;
       delete formData.customerCourierName;
       delete formData.customerCourierPhone;
     }
 
-    if (["self-collection", "courier"].includes(type)) {
+    if (["self-collection", "COURIER", "CUSTOMER"].includes(type)) {
       delete formData.driverId;
       delete formData.driverName;
       delete formData.routeName;
@@ -108,12 +108,26 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
       userName: user?.username || "",
       routeName: editedDispatch.dispatchRoute || null,
       driverName: localDriverDetails?.driverName || null,
-      driverId: Number(localDriverDetails?.driverId.slice(2)) || null,
+      driverId: Number(localDriverDetails?.driverId) || 0,
       carMake: localDriverDetails?.carMake || null,
       carPlate: localDriverDetails?.regNo || null,
       dispatchRemarks: editedDispatch.remarks || "",
       isPush,
     };
+
+    console.log("payload", {
+      dispatchIds: dispatchIDs,
+      collectionType:
+        editedDispatch.collectionType?.toUpperCase() || "DELIVERY",
+      userName: user?.username || "",
+      routeName: editedDispatch.dispatchRoute || null,
+      driverName: localDriverDetails?.driverName || null,
+      driverId: Number(localDriverDetails?.driverId) || 0,
+      carMake: localDriverDetails?.carMake || null,
+      carPlate: localDriverDetails?.regNo || null,
+      dispatchRemarks: editedDispatch.remarks || "",
+      isPush,
+    });
 
     cleanForm(payload, editedDispatch.collectionType);
     return payload;
