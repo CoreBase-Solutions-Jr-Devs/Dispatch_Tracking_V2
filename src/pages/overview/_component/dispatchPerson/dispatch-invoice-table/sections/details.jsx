@@ -236,7 +236,7 @@ export default function DispatchDetails({
                 className="w-2/3 h-6 text-xs"
                 value={deliveryDetails?.carMake || ""}
                 name="carMake"
-                onChange={(e) => handleChange("delivery", e)}
+                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
                 disabled={false}
               />
             </div>
