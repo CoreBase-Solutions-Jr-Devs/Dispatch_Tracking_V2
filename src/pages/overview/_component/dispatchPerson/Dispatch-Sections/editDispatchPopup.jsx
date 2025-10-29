@@ -9,6 +9,9 @@ import {
   setDispatch,
   resetDispatchData,
   setDriverDetails,
+  setDeliveryDetails,
+  setCourierDetails,
+  setClientDetails,
 } from "@/features/dispatch/dispatchSlice";
 import {
   usePushDispatchProcessMutation,
@@ -25,27 +28,108 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   const dispatch = useAppDispatch();
 
   const { user } = useSelector((state) => state.auth);
+  const {
+    deliveryDetails,
+    courierDetails,
+    clientDetails,
+    updatedDispatches,
+  } = useSelector((state) => state.dispatch);
   const dispatchIDs = (rowData || []).map((item) => item.dispatchNum);
   console.log(rowData);
 
-  const [pushDispatch, { isLoading: processing }] =
+  const [pushDispatch, { isLoading: isProcessing }] =
     usePushDispatchProcessMutation();
+  const { data: filterOptions } = useFilterOptionsQuery();
+
+  const collectionTypeOptions = (
+    filterOptions?.find((opt) => opt.key === "collectionType")?.options || []
+  ).map((opt) => ({
+    label: opt.label,
+    value: opt.label,
+  }));  
+  const deliveryGuyOptions =
+    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
+  const vehicleOptions =
+    filterOptions?.find((opt) => opt.key === "transporter")?.options || [];
 
   const [editedDispatch, setEditedDispatch] = useState({
     dispatchPerson: "",
-    dispatchRoute: "",
     vehicle: "",
     collectionType: "",
     remarks: "",
-    ...selectedDispatch,
   });
+
+useEffect(() => {
+  if (!rowData || !Array.isArray(rowData) || !rowData.length) return;
+ 
+  const row = rowData[0];
+
+  const savedDispatch = Array.isArray(updatedDispatches)
+    ? updatedDispatches.find(d => d.dispatchNumber === rowData.dispatchNum)
+    : null;
+ 
+    console.log("Prefilled row:", row);
+ 
+  const payload = {
+    dispatchPerson: savedDispatch?.deliveryPerson || row.deliveryPerson || "",
+    vehicle: savedDispatch?.vehicle || row.vehicle || "",
+    collectionType: savedDispatch?.collectionType || row.collectionType || "",
+    remarks: savedDispatch?.remarks || row.remarks || "",
+    // dispatchRoute: savedDispatch?.route || row.route || "",
+    carMake: savedDispatch?.carMake || row.carMake || "",
+    regNo: savedDispatch?.regNo || row.regNo || "",
+    customerName: savedDispatch?.customerName || row.customerName || "",
+    amount: savedDispatch?.amount || row.amount || 0,
+    docNo: savedDispatch?.docNo || row.docNo || "",
+    items: savedDispatch?.items || row.items || "",
+    ...savedDispatch,
+    ...row,
+  };
+ 
+  setEditedDispatch(payload);
+ 
+  if (payload.collectionType === "OUR DELIVERY") {
+    dispatch(
+      setDeliveryDetails({
+        carMake: payload.carMake || row.carMake || "",
+        regNo: payload.regNo || row.regNo || "",
+        phoneNo: savedDispatch?.phoneNo || row.collectorPhoneNo || "",
+      })
+    );
+  } else if (payload.collectionType === "COURIER") {
+    dispatch(
+      setCourierDetails({
+        customerCourierName: row.collectedBy || "",
+        customerCourierId: row.collectorIdNo || "",
+        customerCourierPhone: row.collectorPhoneNo || "",
+      })
+    );
+  } else if (payload.collectionType === "CUSTOMER") {
+    dispatch(
+      setClientDetails({
+        clientName: row.customerName || "",
+        clientId: row.collectorIdNo || "",
+      })
+    );
+  }
+
+  if (row.deliveryPerson) {
+    dispatch(
+      setDriverDetails({
+        driverName: row.deliveryPerson,
+        carMake: row.carMake,
+        regNo: row.regNo,
+        routeName: row.route,
+      })
+    );
+  }
+}, [rowData, dispatch, updatedDispatches]);
 
   const handleFieldChange = (field, value) => {
     setEditedDispatch((prev) => ({ ...prev, [field]: value }));
   };
 
   const [localDriverDetails, setLocalDriverDetails] = useState(null);
-  const { data: filterOptions } = useFilterOptionsQuery();
 
   const {
     data: driverDetails,
@@ -58,18 +142,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
       !editedDispatch.dispatchPerson,
   });
 
-  const collectionTypeOptions = (
-    filterOptions?.find((opt) => opt.key === "collectionType")?.options || []
-  ).map((opt) => ({
-    label: opt.label,
-    value: opt.label,
-  }));
-  const deliveryGuyOptions =
-    filterOptions?.find((opt) => opt.key === "deliveryGuy")?.options || [];
-  const routeOptions =
-    filterOptions?.find((opt) => opt.key === "route")?.options || [];
-  const vehicleOptions =
-    filterOptions?.find((opt) => opt.key === "transporter")?.options || [];
 
   // useEffect(() => {
   //   if (driverDetails) {
@@ -183,7 +255,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
     }
   };
 
-  const isAnyLoading = processing || driverLoading;
+  const isAnyLoading = isProcessing || driverLoading;
 
   return (
     <div className="my-1 max-h-[90vh] px-2 space-y-4 flex flex-col overflow-auto">
@@ -200,10 +272,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
             onChange={handleFieldChange}
             collectionTypeOptions={collectionTypeOptions}
             deliveryGuyOptions={deliveryGuyOptions.map((opt) => ({
-              label: opt.label,
-              value: opt.label,
-            }))}
-            routeOptions={routeOptions.map((opt) => ({
               label: opt.label,
               value: opt.label,
             }))}
