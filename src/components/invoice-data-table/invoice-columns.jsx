@@ -50,7 +50,6 @@ const renderStatus = (status) => {
       statusClass = STATUS_STYLES.Delivery;
       break;
 
-
       statusClass = STATUS_STYLES.Verification;
       break;
 
@@ -426,6 +425,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.VrfTime,
       base.DispDate,
       base.DispTime,
+      base.deliveryGuy,
       base.adminStatus,
     ],
     store: [
