@@ -409,11 +409,6 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       header: "Status",
       cell: ({ row }) => renderStatus(statusText[row.original.status]),
     },
-    deliveryGuy: {
-      accessorKey: "deliveryGuy",
-      header: "Driver",
-      cell: ({ row }) => renderText(row.original.deliveryGuy),
-    },
   };
 
   const views = {
