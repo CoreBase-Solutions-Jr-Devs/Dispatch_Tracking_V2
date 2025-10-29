@@ -50,7 +50,6 @@ const renderStatus = (status) => {
       statusClass = STATUS_STYLES.Delivery;
       break;
 
-
       statusClass = STATUS_STYLES.Verification;
       break;
 
@@ -410,6 +409,11 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       header: "Status",
       cell: ({ row }) => renderStatus(statusText[row.original.status]),
     },
+    deliveryGuy: {
+      accessorKey: "deliveryGuy",
+      header: "Driver",
+      cell: ({ row }) => renderText(row.original.deliveryGuy),
+    },
   };
 
   const views = {
@@ -426,6 +430,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.VrfTime,
       base.DispDate,
       base.DispTime,
+      base.deliveryGuy,
       base.adminStatus,
     ],
     store: [
