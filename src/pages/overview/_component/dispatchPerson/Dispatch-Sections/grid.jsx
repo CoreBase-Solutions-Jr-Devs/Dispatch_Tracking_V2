@@ -184,9 +184,9 @@ export default function DispatchGrid({
         cell: ({ row }) => renderText(row.original.dispatcher),
       },
       {
-        accessorKey: "driver",
+        accessorKey: "deliveryGuy",
         header: "Driver",
-        cell: ({ row }) => renderText(row.original.driver),
+        cell: ({ row }) => renderText(row.original.deliveryGuy),
       },
       {
         acccessorkey: "collectionType",
