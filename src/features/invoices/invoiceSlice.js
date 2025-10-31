@@ -20,6 +20,13 @@ const initialState = {
   endDate: new Date().toISOString(),
   dateRange: "TODAY",
   selectedFilters: {},
+  //
+  queryFilter: {
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
+    dateRange: "TODAY",
+    status: "",
+  },
 };
 
 const invoiceSlice = createSlice({
@@ -79,6 +86,40 @@ const invoiceSlice = createSlice({
     setPageSize: (state, action) => {
       state.pagination.pageSize = action.payload || 50;
     },
+    //
+    saveInvoices: (state, action) => {
+      state.invoices = action.payload.invoices || [];
+    },
+    setQueryFilter: (state, action) => {
+      state.queryFilter = {
+        startDate: new Date(action.payload.startDate).toISOString(),
+        endDate: new Date(action.payload.endDate).toISOString(),
+        dateRange: action.payload.dateRange,
+        status: action.payload.status,
+      };
+    },
+    clearQueryFilter: (state, action) => {
+      state.queryFilter = {
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+        dateRange: "TODAY",
+        status: "",
+      };
+    },
+    setSummary: (state, action) => {
+      const role = action.payload.role || "store";
+      const stats = action.payload || {};
+      state.stats = {
+        totalCount: stats.totalCount || 0,
+        // pendingCount: role === "store" ? stats.pendingCount || 0 : 0,
+        pendingCount: stats.pendingCount,
+        inProcessCount: role === "store" ? stats.inProcessCount || 0 : 0,
+        processedCount: stats.processedCount || 0,
+        averageDurationSeconds: stats.averageDurationSeconds || 0,
+        inVerificationCount: stats?.inVerificationCount || 0,
+        verifiedCount: stats?.verifiedCount || 0,
+      };
+    },
   },
 });
 
@@ -91,6 +132,11 @@ export const {
   setSelectedFilters,
   setPageNumber,
   setPageSize,
+  //
+  saveInvoices,
+  setQueryFilter,
+  clearQueryFilter,
+  setSummary,
 } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;

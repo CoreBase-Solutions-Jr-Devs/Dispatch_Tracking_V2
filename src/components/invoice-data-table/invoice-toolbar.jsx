@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Search as SearchIcon } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useTypedSelector } from "@/app/hook";
 
 export default function InvoiceToolbar({
   role = "admin",
@@ -11,7 +11,7 @@ export default function InvoiceToolbar({
 }) {
   const [debounced, setDebounced] = useState(searchValue);
 
-  const { startDate, endDate } = useSelector((state) => state.invoice);
+  const { queryFilter } = useTypedSelector((state) => state.invoice);
 
   // Debounce search input
   useEffect(() => {
@@ -39,9 +39,11 @@ export default function InvoiceToolbar({
       {/* Date range */}
       <div className="flex items-center gap-2 text-sm font-medium px-2">
         <span className="text-red-600">From:</span>
-        <span>{formatDate(startDate)}</span>
+        <span>{formatDate(queryFilter?.startDate)}</span>
         <span className="text-red-600">To:</span>
-        <span>{formatDate(endDate)}</span>
+        <span>{formatDate(queryFilter?.endDate)}</span>
+        <span className="text-red-600">Status:</span>
+        <span>{queryFilter?.status}</span>
       </div>
     </div>
   );
