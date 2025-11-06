@@ -100,7 +100,8 @@ export default function DispatchSearch({
         </EditStatusDialog>
 
         <Button
-          variant="store"
+          // variant="store"
+          variant="destructive"
           onClick={handleRecall}
           disabled={
             checkedInvoices.length === 0 || isLoading || isDeletingLoading
@@ -110,7 +111,7 @@ export default function DispatchSearch({
           Remove Invoice
         </Button>
 
-        <Button
+        {/* <Button
           variant="destructive"
           onClick={handleDispatchDelete}
           disabled={
@@ -119,7 +120,7 @@ export default function DispatchSearch({
           className="uppercase text-xs font-medium"
         >
           Delete
-        </Button>
+        </Button> */}
 
         <Button
           className="uppercase text-xs font-medium"

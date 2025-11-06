@@ -360,10 +360,11 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
                     {selectedRow?.DocNo} | {selectedRow?.CustomerName}
                   </CardTitle>
                 </CardHeader>
-                {/* <DisputedDetails data={selectedRow} /> */}
+                {/* <DisputedDetails data={selectedRow} />
+                 */}
                 <CardContent>
                   <DetailAmount data={selectedRow} />
-                  {selectedRow?.OTPValidated && (
+                  {selectedRow?.OTPValidated && selectedRow?.Balance && (
                     <div className="flex items-center gap-3 mt-6">
                       <Button
                         variant="store"
