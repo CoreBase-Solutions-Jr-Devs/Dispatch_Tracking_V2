@@ -6,7 +6,7 @@ import Settings from "@/pages/settings";
 import Invoices from "@/pages/invoices";
 import Reports from "@/pages/reports";
 import { ROLES } from "@/constant";
-import DispatchInvoice from "@/pages/overview/_component/dispatchPerson/dispatch-invoice-table/main-page";
+import DispatchInvoice from "@/pages/dispatch/_component/invoices";
 import {
   Home,
   Folder,
