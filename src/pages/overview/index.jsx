@@ -82,7 +82,7 @@ const Overview = () => {
     if (rights?.includes(5145) || rights?.includes(5146))
       return <FilterSheet />;
 
-    return null;
+    return;
   };
 
   const renderLabelValues = () => {
