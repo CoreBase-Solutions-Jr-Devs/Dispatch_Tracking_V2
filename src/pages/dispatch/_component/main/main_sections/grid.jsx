@@ -3,9 +3,8 @@ import { DataTable } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-// import { useGetSavedDispatchedQuery } from "@/features/Dispmain/dispatchAPI";
 import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatchAPI";
-import EditStatusDialog from "../../invoices-data-table/edit-status-dialog/edit-status-dialog";
+import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog";
 
 const renderText = (text) => (
   <span className="text-foreground  font-medium">{text || "—"}</span>

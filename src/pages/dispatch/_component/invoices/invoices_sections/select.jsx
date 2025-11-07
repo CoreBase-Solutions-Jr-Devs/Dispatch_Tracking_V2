@@ -36,11 +36,11 @@ export default function DispatchSelect({
         <Select
           value={values?.collectionType}
           onValueChange={(val) => onChange("collectionType", val)}
-          // disabled={!enabled}
+          disabled={!enabled}
         >
           <SelectTrigger
             className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium"
-            // disabled={!enabled}
+            disabled={!enabled}
           >
             {collectionTypeOptions?.find(
               (opt) => opt.value === values?.collectionType
@@ -69,11 +69,11 @@ export default function DispatchSelect({
             <Select
               value={values?.dispatchPerson || ""}
               onValueChange={(val) => onChange("dispatchPerson", val)}
-              // disabled={!enabled}
+              disabled={!enabled}
             >
               <SelectTrigger
                 className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium"
-                // disabled={!enabled}
+                disabled={!enabled}
               >
                 <span>{getDeliveryGuyLabel(values?.dispatchPerson)}</span>
               </SelectTrigger>
@@ -96,49 +96,16 @@ export default function DispatchSelect({
             </Select>
           </div>
 
-          {/* <div className="flex justify-between items-center">
-  <label className="text-xs font-medium">Delivery Route:</label>
-  <Select
-    value={values?.dispatchRoute || ""}
-    onValueChange={(val) => {
-      const selected = routeOptions.find((item) => item.value === val);
-      onChange("dispatchRoute", selected?.label || "");
-    }}
-    // disabled={!enabled}
-  >
-    <SelectTrigger
-      className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate"
-      // disabled={!enabled}
-      title={values?.dispatchRoute || "Select..."}
-    >
-      <span className="truncate">{values?.dispatchRoute || "Select..."}</span>
-    </SelectTrigger>
-    <SelectContent className="bg-gray-200">
-      {routeOptions.length > 0 ? (
-        routeOptions.map((item, i) => (
-          <SelectItem key={`${item.value}_${i}`} value={item.value || ""}>
-            {item.label}
-          </SelectItem>
-        ))
-      ) : (
-        <SelectItem disabled value="">
-          No route options
-        </SelectItem>
-      )}
-    </SelectContent>
-  </Select>
-</div> */}
-
           <div className="flex justify-between items-center">
             <label className="text-xs font-medium">Vehicle:</label>
             <Select
               value={values?.vehicle || ""}
               onValueChange={(val) => onChange("vehicle", val)}
-              // disabled={!enabled}
+              disabled={!enabled}
             >
               <SelectTrigger
                 className="w-28 !h-6 border border-gray-300 rounded-md px-1 ml-1 text-xs font-medium truncate"
-                // disabled={!enabled}
+                disabled={!enabled}
                 title={vehicleLabel(values?.vehicle)}
               >
                 <span className="truncate">

@@ -18,11 +18,10 @@ import {
   useGetDeliveryDriverQuery,
 } from "@/features/dispatch/dispatchAPI";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
-
-import DispatchSelect from "../dispatch-invoice-table/sections/select";
-import DispatchDetails from "../dispatch-invoice-table/sections/details";
-import DispatchRemarks from "../dispatch-invoice-table/sections/remarks";
-import DispatchMeta from "../dispatch-invoice-table/sections/meta";
+import DispatchSelect from "../../invoices/invoices_sections/select";
+import DispatchDetails from "../../invoices/invoices_sections/details";
+import DispatchRemarks from "../../invoices/invoices_sections/remarks";
+import DispatchMeta from "../../invoices/invoices_sections/meta";
 
 const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   const dispatch = useAppDispatch();

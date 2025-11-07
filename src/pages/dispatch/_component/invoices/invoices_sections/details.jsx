@@ -7,11 +7,7 @@ import { useEffect, useState } from "react";
 import {
   setClientDetails,
   setCourierDetails,
-  setCustomerCourierId,
-  setCustomerCourierName,
-  setCustomerCourierPhone,
   setDeliveryDetails,
-  setDriverDetails,
   setRouteName,
 } from "@/features/dispatch/dispatchSlice";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -96,13 +92,6 @@ export default function DispatchDetails({
 
   return (
     <div className="flex flex-col gap-2 text-xs font-medium">
-      {/* <section className="flex justify-between items-center h-full">
-        <Label className="text-xs font-medium">Dispatch Date & Time:</Label>
-      </section> */}
-
-      {/* Loading and error states for filter options */}
-      {/* {filterLoading && <Label className="text-xs text-blue-500">Loading delivery options...</Label>}
-      {filterError && <Label className="text-xs text-red-500">Error loading delivery options: {filterError?.message || "Unknown error"}</Label>} */}
 
       {/* Loading and error states for driver details */}
       {collectionType === COLLECTION_TYPES.OUR_DELIVERY && driverLoading && (
@@ -157,27 +146,6 @@ export default function DispatchDetails({
       {collectionType === COLLECTION_TYPES.OUR_DELIVERY && !deliveryPerson && (
         <>
           <section className="flex flex-col w-full h-full gap-2">
-            {/* <div className="flex items-center gap-2 justify-between w-full">
-              <Label className="text-xs font-medium w-2/5">DP ID:</Label>
-              <Input
-                className="w-3/5 h-5 text-xs"
-                name="driverId"
-                value=""
-                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
-                disabled={!enabled}
-              />
-            </div>
-
-            <div className="flex items-center gap-2 justify-between w-full">
-              <Label className="text-xs font-medium w-2/5">DP DL:</Label>
-              <Input
-                className="w-3/5 h-5 text-xs"
-                name="driverLicense"
-                value=""
-                onChange={(e) => handleChange(COLLECTION_TYPES.OUR_DELIVERY, e)}
-                disabled={!enabled}
-              />
-            </div> */}
 
             <div className="flex items-center gap-2 justify-between w-full">
               <Label className="text-xs font-medium w-2/5">Car Make:</Label>
@@ -208,27 +176,6 @@ export default function DispatchDetails({
         deliveryPerson &&
         data && (
           <section className="flex flex-col w-full h-full gap-2">
-            {/* <div className="flex items-center justify-between w-full">
-              <Label className="text-xs font-medium w-1/3">DP ID:</Label>
-              <Input
-                className="w-2/3 h-6 text-xs"
-                value={deliveryDetails.driverId || ""}
-                name="driverId"
-                onChange={(e) => handleChange("delivery", e)}
-                disabled={false}
-              />
-            </div>
-
-            <div className="flex items-center justify-between w-full">
-              <Label className="text-xs font-medium w-1/3">DP DL:</Label>
-              <Input
-                className="w-2/3 h-6 text-xs"
-                value={deliveryDetails.driverLicenseNo || ""}
-                name="driverLicenseNo"
-                onChange={(e) => handleChange("delivery", e)}
-                disabled={false}
-              />
-            </div> */}
 
             <div className="flex items-center justify-between w-full">
               <Label className="text-xs font-medium w-1/3">Car Make:</Label>

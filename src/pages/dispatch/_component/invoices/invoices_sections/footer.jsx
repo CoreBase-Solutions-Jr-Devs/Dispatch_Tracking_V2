@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 // import { useSaveSelectedDispatchesMutation } from "@/features/dispatch/dispatchAPI";
 import { toast } from "sonner";
@@ -6,28 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   resetDispatchData,
   setAssignedTo,
-  setCarMake,
-  setCarPlate,
-  setCollectionType,
-  setCustomerCourierId,
-  setCustomerCourierName,
-  setCustomerCourierPhone,
   setDispatch,
-  setDispatchIds,
-  setDriverId,
-  setDriverName,
-  setInvoices,
-  setRouteCode,
-  setRouteName,
 } from "@/features/dispatch/dispatchSlice";
 import {
   usePushDispatchProcessMutation,
   useStartDispatchProcessMutation,
 } from "@/features/dispatch/dispatchAPI";
-import EditStatusDialog from "../../../invoices-data-table/edit-status-dialog/edit-status-dialog";
+import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
-import { useAppDispatch } from "@/app/hook";
+
 
 export default function DispatchFooter({
   dispatchIDs = [],
@@ -41,17 +29,6 @@ export default function DispatchFooter({
   const [startDisabled, setStartDisabled] = useState(false);
   const [deliveryDisabled, setDeliveryDisabled] = useState(true);
   const [saveDisabled, setSaveDisabled] = useState(true);
-  // const [collectionType, setCollectionType] = useState("");
-  // const [routeCode, setRouteCode] = useState(0);
-  // const [routeName, setRouteName] = useState("");
-  // const [driverName, setDriverName] = useState("" || null);
-  // const [driverId, setDriverId] = useState(0 || null);
-  // const [carMake, setCarMake] = useState("" || null);
-  // const [carPlate, setCarPlate] = useState("" || null);
-  // const [customerCourierName, setCustomerCourierName] = useState("" || null);
-  // const [customerCourierId, setCustomerCourierId] = useState(0 || null);
-  // const [customerCourierPhone, setCustomerCourierPhone] = useState("" || null);
-  // const [isPush, setIsPush] = useState(true);
   const hasCollectionType = Boolean(selectValues?.collectionType);
   const navigate = useNavigate();
 

@@ -3,10 +3,10 @@ import { useState } from "react";
 
 import StorePopup from "./Store/popup.jsx";
 import VerificationPopup from "./Verification/popup.jsx";
-import DispatchPopup from "./Dispatch/popup.jsx";
+import DispatchPopup from "../../../../dispatch/_component/Dispatch_Dialog/popup.jsx";
 import DeliveryPopup from "./Delivery/popup.jsx";
 import DispatchMainPopup from "../../dispatchPerson/Dispatch-Sections/mainpopup.jsx";
-import StartPopup from "./sharedPopup/startpopup";
+import StartPopup from "../../../../shared/startpopup.jsx";
 import EditDispatchPopup from "../../dispatchPerson/Dispatch-Sections/editDispatchPopup.jsx";
 
 const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
