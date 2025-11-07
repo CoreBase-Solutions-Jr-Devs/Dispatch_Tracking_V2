@@ -12,7 +12,7 @@ import {
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import { toast } from "sonner";
 import { removeDispatchIds } from "@/features/dispatch/dispatchSlice";
-import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog";
+import EditStatusDialog from "@/pages/shared/edit-status-dialog";
 
 export default function DispatchSearch({
   value,

@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 // import { useFilterDispatchInvoicesMutation } from "@/features/invoices/invoicesAPI";
 import React, { useEffect } from "react";
-import LabelValue from "./shared-label-value";
+import LabelValue from "../../../shared/label-values/shared-label-value";
 import { useTypedSelector } from "@/app/hook";
 import { toast } from "sonner";
 import { useGetAggregateDispatchesQuery } from "@/features/dispatch/dispatchAPI";

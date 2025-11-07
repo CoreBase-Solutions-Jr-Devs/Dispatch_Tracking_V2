@@ -1,21 +1,19 @@
 import React from "react";
 import { useTypedSelector } from "@/app/hook";
 import { Skeleton } from "@/components/ui/skeleton";
-import LabelValue from "./shared-label-value";
 import { renderDuration } from "@/components/invoice-data-table/invoice-columns";
+import LabelValue from "../shared/label-values/shared-label-value";
 
 const STATUS_STYLES = {
   Total: "Store",
   Pending: "Verification",
-  "In Process": "Dispatch",
-  Processed: "Delivered",
+  "In Verification": "Dispatch",
+  Verified: "Delivered",
   "Avg. Processing Time": "Delivered",
 };
 
-const StoreLabelValue = () => {
+const VerificationLabelValue = () => {
   const { stats } = useTypedSelector((state) => state.invoice);
-
-  console.log(stats)
 
   if (!stats || Object.keys(stats).length === 0) {
     return (
@@ -31,8 +29,8 @@ const StoreLabelValue = () => {
   const storeSummary = [
     { label: "Total", value: stats.totalCount || 0 },
     { label: "Pending", value: stats.pendingCount || 0 },
-    { label: "In Process", value: stats.inProcessCount || 0 },
-    { label: "Processed", value: stats.processedCount || 0 },
+    { label: "In Verification", value: stats.inVerificationCount || 0 },
+    { label: "Verified", value: stats.verifiedCount || 0 },
     {
       label: "Avg. Processing Time",
       value: stats.averageDurationSeconds
@@ -46,9 +44,9 @@ const StoreLabelValue = () => {
 
   return (
     <div
-      className="z
-        flex flex-col gap-2 
-        sm:flex-row sm:flex-wrap sm:justify-center 
+      className="
+        flex flex-col gap-2
+        sm:flex-row sm:flex-wrap sm:justify-center
         md:gap-4
         lg:gap-6
       "
@@ -65,4 +63,4 @@ const StoreLabelValue = () => {
   );
 };
 
-export default StoreLabelValue;
+export default VerificationLabelValue;

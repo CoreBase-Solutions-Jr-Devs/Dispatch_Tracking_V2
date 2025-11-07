@@ -8,7 +8,7 @@ import {
 import { toast } from "sonner";
 import { setSelectedDipatches } from "@/features/dispatch/dispatchSlice";
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
-import EditStatusDialog from "../../../overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog";
+import EditStatusDialog from "../../../shared/edit-status-dialog";
 
 export default function DispatchFooter({
   rowData,

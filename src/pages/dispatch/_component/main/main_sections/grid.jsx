@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { useGetSavedDispatchedInvoicesQuery } from "@/features/dispatch/dispatchAPI";
-import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog";
+import EditStatusDialog from "@/pages/shared/edit-status-dialog";
 
 const renderText = (text) => (
   <span className="text-foreground  font-medium">{text || "—"}</span>

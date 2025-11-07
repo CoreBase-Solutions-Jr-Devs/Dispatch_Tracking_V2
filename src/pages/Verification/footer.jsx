@@ -6,7 +6,7 @@ import {
   useRecallDocumentMutation,
 } from "@/features/verification/verificationAPI";
 import { toast } from "sonner";
-import EditStatusDialog from "../edit-status-dialog";
+import EditStatusDialog from "../shared/edit-status-dialog";
 import {  useTypedSelector } from "@/app/hook";
 export default function VerificationFooter({
   rowData,

@@ -1,13 +1,12 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 
-import StorePopup from "./Store/popup.jsx";
-import VerificationPopup from "./Verification/popup.jsx";
-import DispatchPopup from "../../../../dispatch/_component/Dispatch_Dialog/popup.jsx";
-import DeliveryPopup from "./Delivery/popup.jsx";
-import DispatchMainPopup from "../../dispatchPerson/Dispatch-Sections/mainpopup.jsx";
-import StartPopup from "../../../../shared/startpopup.jsx";
-import EditDispatchPopup from "../../dispatchPerson/Dispatch-Sections/editDispatchPopup.jsx";
+import StorePopup from "../Store/popup.jsx";
+import VerificationPopup from "../Verification/popup.jsx";
+import StartPopup from "./startpopup.jsx";
+import DispatchMainPopup from "@/pages/dispatch/_component/main/main_sections/mainpopup.jsx";
+import DispatchPopup from "@/pages/dispatch/_component/Dispatch_Dialog/popup.jsx";
+import EditDispatchPopup from "@/pages/dispatch/_component/main/main_sections/editDispatchPopup.jsx";
 
 const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,8 +24,6 @@ const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
         return DispatchPopup;
       case "dispatchmain":
         return DispatchMainPopup;
-      case "delivery":
-        return DeliveryPopup;
       case "storestart":
       case "verificationstart":
       case "dispatchstart":

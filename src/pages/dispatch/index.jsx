@@ -1,7 +1,7 @@
 import { useTypedSelector } from "@/app/hook";
 import PageLayout from "@/components/page-layout";
 import { viewMeta } from "@/lib/utils";
-import { DispatchLabelValue } from "../overview/_component/label-values";
+import { DispatchLabelValue } from "../shared/label-values";
 import DispatchMain from "./_component/main";
 
 const Dispatch = () => {

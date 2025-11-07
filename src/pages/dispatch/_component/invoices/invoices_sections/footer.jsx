@@ -12,7 +12,7 @@ import {
   usePushDispatchProcessMutation,
   useStartDispatchProcessMutation,
 } from "@/features/dispatch/dispatchAPI";
-import EditStatusDialog from "@/pages/overview/_component/invoices-data-table/edit-status-dialog/edit-status-dialog";
+import EditStatusDialog from "@/pages/shared/edit-status-dialog";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 
