@@ -15,8 +15,6 @@ const STATUS_STYLES = {
 const VerificationLabelValue = () => {
   const { stats } = useTypedSelector((state) => state.invoice);
 
-  console.log(stats);
-
   if (!stats || Object.keys(stats).length === 0) {
     return (
       <div className="flex flex-wrap justify-center gap-4">
@@ -47,8 +45,8 @@ const VerificationLabelValue = () => {
   return (
     <div
       className="
-        flex flex-col gap-2 
-        sm:flex-row sm:flex-wrap sm:justify-center 
+        flex flex-col gap-2
+        sm:flex-row sm:flex-wrap sm:justify-center
         md:gap-4
         lg:gap-6
       "
