@@ -1,21 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import PageLayout from "@/components/page-layout";
-import {
-  StoreLabelValue,
-  // AdminLabelValue,
-  VerificationLabelValue,
-  DispatchLabelValue,
-  // DeliveryLabelValue,
-} from "./_component/label-values";
-import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
+import InvoicesDataTable from "../shared/shared-invoice-data-table";
 import { roleToView, viewMeta } from "@/lib/utils";
-import FilterSheet from "./_component/filter-sheet/filterSheet";
+import FilterSheet from "../shared/filter-sheet/filterSheet";
 import DeliveryInvoice from "./_component/driver/_component/delivery-main-page/index.";
-import DispatchInvoice from "./_component/dispatchPerson/dispatch-invoice-table/main-page";
-import DispatchMain from "./_component/dispatchPerson/dispatch-main-page";
-import StorePage from "./_component/invoices-data-table/Store-invoicedatatable";
-import VerificationPage from "./_component/invoices-data-table/Verif-invoices";
+import StorePage from "../Store/Store-invoicedatatable";
+import VerificationPage from "../Verification/Verif-invoices";
+import DispatchMain from "../dispatch/_component/main";
+import StoreLabelValue from "../Store/store-label-value";
+import VerificationLabelValue from "../Verification/verification-label-value";
+import { DispatchLabelValue } from "../shared/label-values";
 // import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
 
 const Overview = () => {

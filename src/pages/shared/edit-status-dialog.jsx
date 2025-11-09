@@ -1,0 +1,80 @@
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
+
+import StorePopup from "../Store/popup.jsx";
+import VerificationPopup from "../Verification/popup.jsx";
+import StartPopup from "./startpopup.jsx";
+import DispatchMainPopup from "@/pages/dispatch/_component/main/main_sections/mainpopup.jsx";
+import DispatchPopup from "@/pages/dispatch/_component/Dispatch_Dialog/popup.jsx";
+import EditDispatchPopup from "@/pages/dispatch/_component/main/main_sections/editDispatchPopup.jsx";
+
+const EditStatusDialog = ({ children, rowData, view, onSubmit }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClose = () => setIsOpen(false);
+  const handleOpenChange = (open) => setIsOpen(open);
+
+  const getForm = () => {
+    switch (view?.toLowerCase()) {
+      case "store":
+        return StorePopup;
+      case "verification":
+        return VerificationPopup;
+      case "dispatch":
+        return DispatchPopup;
+      case "dispatchmain":
+        return DispatchMainPopup;
+      case "storestart":
+      case "verificationstart":
+      case "dispatchstart":
+      case "dispatchpick":
+      case "storepush":
+      case "verificationpush":
+        case "verificationrecall":
+        return StartPopup;
+      case "dispatchedit":
+        return EditDispatchPopup;
+      default:
+        return () => (
+          <div className="p-4 text-muted-foreground">
+            No form defined for <strong>{view}</strong>
+          </div>
+        );
+    }
+  };
+
+  const FormComponent = getForm();
+
+  let dialogClass = "";
+  switch (view?.toLowerCase()) {
+    case "storestart":
+    case "storepush":
+    case "verificationstart":
+    case "dispatchstart":
+    case "verificationpush":
+    case "verificationrecall":
+    case "dispatchpick":
+      dialogClass = "sm:max-w-sm";
+      break;
+    case "dispatch":
+      dialogClass = "w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl";
+      break;
+    default:
+      dialogClass = "sm:max-w-xl md:max-w-2xl lg:max-w-3xl";
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className={dialogClass}>
+        <FormComponent
+          rowData={rowData}
+          onSubmit={onSubmit}
+          onClose={handleClose}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default EditStatusDialog;

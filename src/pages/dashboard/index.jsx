@@ -1,8 +1,8 @@
 import { useTypedSelector } from "@/app/hook";
 import PageLayout from "@/components/page-layout";
 import { viewMeta } from "@/lib/utils";
-import FilterSheet from "../overview/_component/filter-sheet/filterSheet_v2";
-import { DasboardLabelValue } from "../overview/_component/label-values";
+import FilterSheet from "../shared/filter-sheet/filterSheet_v2";
+import { DasboardLabelValue } from "../shared/label-values";
 import DashboardTable from "./_component/dashboard-section/table";
 
 const Dashboard = () => {

@@ -2,7 +2,7 @@ import PageLayout from '@/components/page-layout'
 import { roleToView, viewMeta } from '@/lib/utils'
 import React from 'react'
 import { useSelector } from 'react-redux';
-import SharedInvoiceDataTable from './../invoices-data-table/shared-invoice-data-table';
+import SharedInvoiceDataTable from '../../../shared/shared-invoice-data-table';
 
 export default function DriverOverview() {
     const user = useSelector((state) => state.auth);
