@@ -5,8 +5,9 @@ import {
   usePushStoreInvoiceMutation,
 } from "@/features/store/storeAPI";
 import { toast } from "sonner";
-import EditStatusDialog from "../shared/edit-status-dialog";
+// import EditStatusDialog from "../shared/edit-status-dialog";
 import { useTypedSelector } from "@/app/hook";
+import EditStatusDialog from "@/pages/shared/edit-status-dialog";
 export default function StoreFooter({
   rowData,
   onSubmit,
