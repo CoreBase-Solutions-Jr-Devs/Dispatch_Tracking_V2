@@ -34,7 +34,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
     updatedDispatches,
   } = useSelector((state) => state.dispatch);
   const dispatchIDs = (rowData || []).map((item) => item.dispatchNum);
-  console.log(rowData);
 
   const [pushDispatch, { isLoading: isProcessing }] =
     usePushDispatchProcessMutation();
@@ -66,9 +65,7 @@ useEffect(() => {
   const savedDispatch = Array.isArray(updatedDispatches)
     ? updatedDispatches.find(d => d.dispatchNumber === rowData.dispatchNum)
     : null;
- 
-    console.log("Prefilled row:", row);
- 
+  
   const payload = {
     dispatchPerson: savedDispatch?.deliveryPerson || row.deliveryPerson || "",
     vehicle: savedDispatch?.vehicle || row.vehicle || "",
@@ -128,6 +125,10 @@ useEffect(() => {
     setEditedDispatch((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleDispatchRemarks = (value) => {
+    setEditedDispatch((prev) => ({ ...prev, remarks: value }));
+  };
+
   const [localDriverDetails, setLocalDriverDetails] = useState(null);
 
   const {
@@ -149,7 +150,9 @@ useEffect(() => {
   // }, [driverDetails, dispatch]);
 
   useEffect(() => {
-    if (driverDetails) setLocalDriverDetails(driverDetails);
+    if (driverDetails) {
+      setLocalDriverDetails(driverDetails)
+    };
   }, [driverDetails]);
 
   const cleanForm = (formData, type) => {
@@ -182,8 +185,8 @@ useEffect(() => {
       routeName: editedDispatch.dispatchRoute || null,
       driverName: localDriverDetails?.driverName || null,
       driverId: Number(localDriverDetails?.driverId) || 0,
-      carMake: localDriverDetails?.carMake || null,
-      carPlate: localDriverDetails?.regNo || null,
+      carMake: deliveryDetails?.carMake || null,
+      carPlate: deliveryDetails?.regNo || null,
       dispatchRemarks: editedDispatch.remarks || "",
       isPush,
     };
@@ -238,10 +241,9 @@ useEffect(() => {
       await pushDispatch(payload).unwrap();
       dispatch(setDispatch(payload));
       dispatch(setDriverDetails(localDriverDetails));
-      toast.success(
-        isPush
-          ? "Dispatch pushed successfully!"
-          : "Dispatch updated successfully!"
+      toast.success(isPush
+        ? "Dispatch pushed successfully!"
+        : "Dispatch updated successfully!"
       );
       dispatch(resetDispatchData());
       onClose();
@@ -294,9 +296,8 @@ useEffect(() => {
           />
 
           <DispatchRemarks
-            data={editedDispatch}
-            onChange={handleFieldChange}
-            enabled
+            enabled={true}
+            handleDispatchRemarks={handleDispatchRemarks}
           />
 
           <DispatchMeta data={editedDispatch} enabled />
