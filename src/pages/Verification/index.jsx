@@ -1,31 +1,32 @@
 import { useTypedSelector } from "@/app/hook";
 import PageLayout from "@/components/page-layout";
 import { viewMeta } from "@/lib/utils";
-import FilterSheet from "../shared/filter-sheet/filterSheet_v2";
-import { DasboardLabelValue } from "../shared/label-values";
-import DashboardTable from "./_component/dashboard-section/table";
+import FilterSheet from "@/pages/shared/filter-sheet/filterSheet";
+import VerificationLabelValue from "./_component/main/verification-label-value";
+import VerificationPage from "./_component/main/Verif-invoices";
 
-const Dashboard = () => {
+
+const Verification = () => {
   const { user } = useTypedSelector((state) => state.auth);
 
   let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
   //   const pageMeta = viewMeta[moduleArea[1]?.toLowerCase() || ""];
-  const pageMeta = viewMeta["view all stages"];
+  const pageMeta = viewMeta["dispatch"];
 
   const renderFilterSheet = () => {
     return <FilterSheet />;
   };
 
-  const renderLabelValues = () => {
-    return <DasboardLabelValue />;
-  };
+    const renderLabelValues = () => {
+        return <VerificationLabelValue />;
+    };
 
-  const renderMainContent = () => {
-    return <DashboardTable />;
-  };
+    const renderMainContent = () => {
+        return <VerificationPage />;
+    };
 
-  return (
-    <PageLayout
+    return (
+   <PageLayout
       title={pageMeta?.title}
       subtitle={pageMeta?.subtitle}
       middleAction={
@@ -45,7 +46,7 @@ const Dashboard = () => {
         {renderMainContent()}
       </div>
     </PageLayout>
-  );
+    );
 };
 
-export default Dashboard;
+export default Verification;

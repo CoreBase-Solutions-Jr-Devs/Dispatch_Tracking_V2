@@ -1,22 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import PageLayout from "@/components/page-layout";
-import {
-  StoreLabelValue,
-  // AdminLabelValue,
-  VerificationLabelValue,
-  DispatchLabelValue,
-  // DeliveryLabelValue,
-} from "./_component/label-values";
-import InvoicesDataTable from "./_component/invoices-data-table/shared-invoice-data-table";
+import InvoicesDataTable from "../shared/shared-invoice-data-table";
 import { roleToView, viewMeta } from "@/lib/utils";
-import FilterSheet from "./_component/filter-sheet/filterSheet";
+import FilterSheet from "../shared/filter-sheet/filterSheet";
 import DeliveryInvoice from "./_component/driver/_component/delivery-main-page/index.";
-import DispatchInvoice from "./_component/dispatchPerson/dispatch-invoice-table/main-page";
-import DispatchMain from "./_component/dispatchPerson/dispatch-main-page";
-import StorePage from "./_component/invoices-data-table/Store-invoicedatatable";
-import VerificationPage from "./_component/invoices-data-table/Verif-invoices";
-// import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
+import DispatchMain from "../dispatch/_component/main";
+import { DispatchLabelValue } from "../shared/label-values";
+import StorePage from "../Store/_component/main/Store-invoicedatatable";
+import StoreLabelValue from "../Store/_component/main/store-label-value";
+import VerificationLabelValue from "../Verification/_component/main/verification-label-value";
+import VerificationPage from "../Verification/_component/main/Verif-invoices";
 
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
