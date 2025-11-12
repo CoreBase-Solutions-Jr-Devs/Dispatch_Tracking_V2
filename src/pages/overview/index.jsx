@@ -20,7 +20,10 @@ const Overview = () => {
   //   ?.filter((right) => right !== 5149);
   let rights = user["userrights"]
     ?.map((item) => item?.moduleCode)
-    ?.filter((right) => right === 5145 || right === 5146 || right === 5147);
+    ?.filter(
+      (right) =>
+        right === 5145 || right === 5146 || right === 5147 || right === 5148
+    );
 
   let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
 

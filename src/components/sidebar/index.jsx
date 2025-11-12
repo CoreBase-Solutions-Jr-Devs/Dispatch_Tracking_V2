@@ -13,7 +13,10 @@ const SideBar = () => {
   const dispatch = useDispatch();
   let rights = user["userrights"]
     ?.map((item) => item?.moduleCode)
-    ?.filter((right) => right === 5145 || right === 5146 || right === 5147);
+    ?.filter(
+      (right) =>
+        right === 5145 || right === 5146 || right === 5147 || right === 5148
+    );
   // const role = user["userrights"]?.map((item) => item?.moduleArea)[0] || "";
   const role = user["userrights"]?.map((item) => item?.moduleArea) || [];
 
