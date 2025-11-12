@@ -9,6 +9,10 @@ export const PROTECTED_ROUTES = {
   SETTINGS: "/settings",
   NEWDISPATCH: "/newdispatch",
   ADMIN: "/dashboard",
+  //
+  STORE: "/store",
+  VERIFICATION: "/verification",
+  DISPATCH: "/dispatch",
 };
 
 export const isAuthRoute = (pathname) => {
