@@ -21,19 +21,19 @@ import VerificationPage from "./_component/invoices-data-table/Verif-invoices";
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
 
-  // let rights = user["userrights"]?.map((item) => {
-  //   return {
-  //     modul: item?.modul,
-  //     moduleArea: item?.moduleArea,
-  //     moduleCode: item?.moduleCode,
-  //   };
-  // });
-  let rights = user["userrights"]?.map((item) => item?.moduleCode);
+  // let rights = user["userrights"]
+  //   ?.map((item) => item?.moduleCode)
+  //   ?.filter((right) => right !== 5149);
+  let rights = user["userrights"]
+    ?.map((item) => item?.moduleCode)
+    ?.filter((right) => right === 5145 || right === 5146 || right === 5147);
+
   let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
 
   // const view = roleToView(user?.userRole);
   const pageMeta = viewMeta[moduleArea[0]?.toLowerCase() || ""];
 
+  console.log("pageMeta", pageMeta);
   // const renderFilterSheet = () => {
   //   switch (user?.userRole) {
   //     case "StorePerson":
