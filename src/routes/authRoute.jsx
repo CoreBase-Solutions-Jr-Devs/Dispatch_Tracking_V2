@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { PROTECTED_ROUTES } from "./common/routePath";
+import { AUTH_ROUTES, PROTECTED_ROUTES } from "./common/routePath";
 import { useSelector } from "react-redux";
 
 const AuthRoute = () => {
@@ -14,7 +14,8 @@ const AuthRoute = () => {
   }
 
   // Otherwise redirect to overview
-  return <Navigate to={PROTECTED_ROUTES.OVERVIEW} replace />;
+  // return <Navigate to={PROTECTED_ROUTES.OVERVIEW} replace />;
+  return <Navigate to={AUTH_ROUTES.AUTH_BRANCH} replace />;
 };
 
 export default AuthRoute;

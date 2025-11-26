@@ -1,14 +1,15 @@
 export const AUTH_ROUTES = {
   SIGN_IN: "/",
+  AUTH_BRANCH: "/auth-branch",
 };
 
 export const PROTECTED_ROUTES = {
+  ADMIN: "/dashboard",
   OVERVIEW: "/overview",
   REPORTS: "/reports",
   INVOICES: "/invoices",
   SETTINGS: "/settings",
   NEWDISPATCH: "/newdispatch",
-  ADMIN: "/dashboard",
   //
   STORE: "/store",
   VERIFICATION: "/verification",

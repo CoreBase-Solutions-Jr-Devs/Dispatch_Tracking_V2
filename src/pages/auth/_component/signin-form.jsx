@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/features/auth/authAPI";
 import { setCredentials } from "@/features/auth/authSlice";
 import { cn } from "@/lib/utils";
-import { PROTECTED_ROUTES } from "@/routes/common/routePath";
+import { AUTH_ROUTES, PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader, Shield, User } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -72,7 +72,8 @@ const SignInForm = () => {
           duration: 2000,
         });
         setTimeout(() => {
-          navigate(PROTECTED_ROUTES.OVERVIEW);
+          // navigate(PROTECTED_ROUTES.OVERVIEW);
+          navigate(AUTH_ROUTES.AUTH_BRANCH);
         }, 1000);
       })
       .catch((error) => {

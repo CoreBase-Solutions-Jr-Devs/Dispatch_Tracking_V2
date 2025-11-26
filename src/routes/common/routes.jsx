@@ -2,6 +2,7 @@ import { AUTH_ROUTES, PROTECTED_ROUTES } from "./routePath";
 import SignIn from "@/pages/auth/sign-in";
 import Overview from "@/pages/overview";
 import Dashboard from "@/pages/dashboard";
+import AuthBranch from "@/pages/branches";
 import Settings from "@/pages/settings";
 import Invoices from "@/pages/invoices";
 import Reports from "@/pages/reports";
@@ -21,6 +22,7 @@ import {
 
 export const authenticationRoutePaths = [
   { path: AUTH_ROUTES.SIGN_IN, element: <SignIn /> },
+  { path: AUTH_ROUTES.AUTH_BRANCH, element: <AuthBranch /> },
 ];
 
 export const protectedRoutePaths = [
@@ -52,38 +54,38 @@ export const protectedRoutePaths = [
   //   menuLabel: "Reports",
   //   icon: FileStackIcon,
   // },
-  // {
-  //   path: PROTECTED_ROUTES.NEWDISPATCH,
-  //   element: <DispatchInvoice />,
-  //   roles: [ROLES.DISPATCH_PERSON],
-  //   menuLabel: "New Dispatch",
-  //   icon: Plus,
-  // },
+  {
+    path: PROTECTED_ROUTES.NEWDISPATCH,
+    element: <DispatchInvoice />,
+    roles: [ROLES.DISPATCH_PERSON],
+    menuLabel: "New Dispatch",
+    icon: Plus,
+  },
   //NEW ROUTES
-  {
-    path: PROTECTED_ROUTES.STORE,
-    element: <h1>Store, Greatness awaits </h1>,
-    // element: <Overview role={"Store"} />,
-    roles: Object.values(ROLES),
-    menuLabel: "Store",
-    icon: Store,
-  },
-  {
-    path: PROTECTED_ROUTES.VERIFICATION,
-    element: <h1>Verification, Greatness awaits </h1>,
-    // element: <Overview role={"Verification"} />,
-    roles: Object.values(ROLES),
-    menuLabel: "Verification",
-    icon: PackageCheck,
-  },
-  {
-    path: PROTECTED_ROUTES.DISPATCH,
-    element: <h1>Dispatch, Greatness awaits </h1>,
-    // element: <Overview role={"Dispatch"} />,
-    roles: Object.values(ROLES),
-    menuLabel: "Dispatch",
-    icon: Split,
-  },
+  // {
+  //   path: PROTECTED_ROUTES.STORE,
+  //   element: <h1>Store, Greatness awaits </h1>,
+  //   // element: <Overview role={"Store"} />,
+  //   roles: Object.values(ROLES),
+  //   menuLabel: "Store",
+  //   icon: Store,
+  // },
+  // {
+  //   path: PROTECTED_ROUTES.VERIFICATION,
+  //   element: <h1>Verification, Greatness awaits </h1>,
+  //   // element: <Overview role={"Verification"} />,
+  //   roles: Object.values(ROLES),
+  //   menuLabel: "Verification",
+  //   icon: PackageCheck,
+  // },
+  // {
+  //   path: PROTECTED_ROUTES.DISPATCH,
+  //   element: <h1>Dispatch, Greatness awaits </h1>,
+  //   // element: <Overview role={"Dispatch"} />,
+  //   roles: Object.values(ROLES),
+  //   menuLabel: "Dispatch",
+  //   icon: Split,
+  // },
   //
   {
     path: PROTECTED_ROUTES.SETTINGS,
