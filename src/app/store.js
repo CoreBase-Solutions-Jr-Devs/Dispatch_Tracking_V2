@@ -22,6 +22,7 @@ const persistConfig = {
   key: "root",
   storage,
   blacklist: [apiClient.reducerPath], // Do not persist RTK Query cache
+  whitelist: ["auth"],
   // Uncomment below to enable encryption
   // transforms: [
   //   encryptTransform({

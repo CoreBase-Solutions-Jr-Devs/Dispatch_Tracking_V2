@@ -4,27 +4,36 @@ import Overview from "@/pages/overview";
 import Dashboard from "@/pages/dashboard";
 import AuthBranch from "@/pages/branches";
 import Settings from "@/pages/settings";
-import Invoices from "@/pages/invoices";
-import Reports from "@/pages/reports";
 import { ROLES } from "@/constant";
 import DispatchInvoice from "@/pages/dispatch/_component/invoices";
 import {
   Home,
-  Folder,
-  FileStackIcon,
   Settings as SettingsIcon,
   Plus,
   LayoutDashboard,
-  Store,
-  PackageCheck,
-  Split,
 } from "lucide-react";
+import BranchRoute from "../branchRoute";
 
+// Auth routes - only for unauthenticated users
 export const authenticationRoutePaths = [
   { path: AUTH_ROUTES.SIGN_IN, element: <SignIn /> },
-  { path: AUTH_ROUTES.AUTH_BRANCH, element: <AuthBranch /> },
 ];
 
+// Branch selection route - requires authentication but not branch selection
+export const branchRoutePath = [
+  {
+    path: AUTH_ROUTES.AUTH_BRANCH,
+    element: <BranchRoute />,
+    children: [
+      {
+        index: true,
+        element: <AuthBranch />,
+      },
+    ],
+  }
+];
+
+// Protected routes - requires both authentication AND branch selection
 export const protectedRoutePaths = [
   {
     path: PROTECTED_ROUTES.ADMIN,
