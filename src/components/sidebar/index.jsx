@@ -11,8 +11,14 @@ const SideBar = () => {
   const { user } = useSelector((state) => state.auth);
   const { sidebarCollapsed } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
-
-  const role = user["userrights"]?.map((item) => item?.moduleArea)[0] || "";
+  let rights = user["userrights"]
+    ?.map((item) => item?.moduleCode)
+    ?.filter(
+      (right) =>
+        right === 5145 || right === 5146 || right === 5147 || right === 5148
+    );
+  // const role = user["userrights"]?.map((item) => item?.moduleArea)[0] || "";
+  const role = user["userrights"]?.map((item) => item?.moduleArea) || [];
 
   if (!user) return null;
 
@@ -21,7 +27,8 @@ const SideBar = () => {
   //   route.roles.includes(role)
   // );
   const allowedRoutes = protectedRoutePaths.filter((route) =>
-    route.roles.join(" ").includes(role)
+    // route.roles.join(" ").includes(role)
+    route.roles.filter((item) => role.includes(item))
   );
 
   // Global hotkey listener: Ctrl + C
