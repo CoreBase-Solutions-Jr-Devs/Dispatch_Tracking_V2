@@ -12,12 +12,9 @@ import StoreLabelValue from "../Store/_component/main/store-label-value";
 import VerificationLabelValue from "../Verification/_component/main/verification-label-value";
 import VerificationPage from "../Verification/_component/main/Verif-invoices";
 
-const Overview = () => {
+const Overview = ({ role = "" }) => {
   const { user } = useSelector((state) => state.auth);
 
-  // let rights = user["userrights"]
-  //   ?.map((item) => item?.moduleCode)
-  //   ?.filter((right) => right !== 5149);
   let rights = user["userrights"]
     ?.map((item) => item?.moduleCode)
     ?.filter(
@@ -25,12 +22,15 @@ const Overview = () => {
         right === 5145 || right === 5146 || right === 5147 || right === 5148
     );
 
-  let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
-
+  // let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
+  let moduleArea = user["userrights"]?.filter((item) => rights.includes(item));
   // const view = roleToView(user?.userRole);
-  const pageMeta = viewMeta[moduleArea[0]?.toLowerCase() || ""];
+  const pageMeta =
+    viewMeta[role?.toLowerCase() ?? moduleArea[0]?.toLowerCase()];
 
   console.log("pageMeta", pageMeta);
+  console.log("role", role?.toLowerCase(), rights);
+
   // const renderFilterSheet = () => {
   //   switch (user?.userRole) {
   //     case "StorePerson":
@@ -96,7 +96,8 @@ const Overview = () => {
     if (rights?.includes(5145)) return <StorePage />;
     if (rights?.includes(5146)) return <VerificationPage />;
 
-    return <InvoicesDataTable />;
+    return <h1>Headed to Greatness</h1>;
+    // return <InvoicesDataTable />;
   };
 
   return (

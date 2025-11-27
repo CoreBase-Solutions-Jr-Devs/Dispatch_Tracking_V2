@@ -14,6 +14,7 @@ export const PROTECTED_ROUTES = {
   STORE: "/store",
   VERIFICATION: "/verification",
   DISPATCH: "/dispatch",
+  DELIVERY: "/Delivery",
 };
 
 export const isAuthRoute = (pathname) => {

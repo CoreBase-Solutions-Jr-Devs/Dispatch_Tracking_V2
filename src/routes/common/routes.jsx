@@ -18,6 +18,7 @@ import {
   Store,
   PackageCheck,
   Split,
+  Truck,
 } from "lucide-react";
 
 export const authenticationRoutePaths = [
@@ -62,30 +63,38 @@ export const protectedRoutePaths = [
     icon: Plus,
   },
   //NEW ROUTES
-  // {
-  //   path: PROTECTED_ROUTES.STORE,
-  //   element: <h1>Store, Greatness awaits </h1>,
-  //   // element: <Overview role={"Store"} />,
-  //   roles: Object.values(ROLES),
-  //   menuLabel: "Store",
-  //   icon: Store,
-  // },
-  // {
-  //   path: PROTECTED_ROUTES.VERIFICATION,
-  //   element: <h1>Verification, Greatness awaits </h1>,
-  //   // element: <Overview role={"Verification"} />,
-  //   roles: Object.values(ROLES),
-  //   menuLabel: "Verification",
-  //   icon: PackageCheck,
-  // },
-  // {
-  //   path: PROTECTED_ROUTES.DISPATCH,
-  //   element: <h1>Dispatch, Greatness awaits </h1>,
-  //   // element: <Overview role={"Dispatch"} />,
-  //   roles: Object.values(ROLES),
-  //   menuLabel: "Dispatch",
-  //   icon: Split,
-  // },
+  {
+    path: PROTECTED_ROUTES.STORE,
+    // element: <h1>Store, Greatness awaits </h1>,
+    element: <Overview role={"Store"} />,
+    roles: Object.values(ROLES),
+    menuLabel: "Store",
+    icon: Store,
+  },
+  {
+    path: PROTECTED_ROUTES.VERIFICATION,
+    // element: <h1>Verification, Greatness awaits </h1>,
+    element: <Overview role={"Verification"} />,
+    roles: Object.values(ROLES),
+    menuLabel: "Verification",
+    icon: PackageCheck,
+  },
+  {
+    path: PROTECTED_ROUTES.DISPATCH,
+    // element: <h1>Dispatch, Greatness awaits </h1>,
+    element: <Overview role={"Dispatch"} />,
+    roles: Object.values(ROLES),
+    menuLabel: "Dispatch",
+    icon: Split,
+  },
+  {
+    path: PROTECTED_ROUTES.DELIVERY,
+    // element: <h1>Dispatch, Greatness awaits </h1>,
+    element: <Overview role={"Delivery"} />,
+    roles: Object.values(ROLES),
+    menuLabel: "Delivery",
+    icon: Truck,
+  },
   //
   {
     path: PROTECTED_ROUTES.SETTINGS,
