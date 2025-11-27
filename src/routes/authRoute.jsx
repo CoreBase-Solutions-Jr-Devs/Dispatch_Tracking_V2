@@ -14,8 +14,7 @@ const AuthRoute = () => {
   }
 
   // Otherwise redirect to overview
-  // return <Navigate to={PROTECTED_ROUTES.OVERVIEW} replace />;
-  return <Navigate to={AUTH_ROUTES.AUTH_BRANCH} replace />;
+  return <Navigate to={PROTECTED_ROUTES.OVERVIEW} replace />;
 };
 
 export default AuthRoute;
