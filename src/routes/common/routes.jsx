@@ -11,13 +11,10 @@ import {
   Settings as SettingsIcon,
   Plus,
   LayoutDashboard,
-<<<<<<< HEAD
   Store,
   PackageCheck,
   Split,
   Truck,
-=======
->>>>>>> 42a6fd5089b5e907e19968257b2e395a962e06d4
 } from "lucide-react";
 import BranchRoute from "../branchRoute";
 
@@ -37,7 +34,7 @@ export const branchRoutePath = [
         element: <AuthBranch />,
       },
     ],
-  }
+  },
 ];
 
 // Protected routes - requires both authentication AND branch selection
