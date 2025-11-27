@@ -67,13 +67,6 @@ export const protectedRoutePaths = [
   //   menuLabel: "Reports",
   //   icon: FileStackIcon,
   // },
-  {
-    path: PROTECTED_ROUTES.NEWDISPATCH,
-    element: <DispatchInvoice />,
-    roles: [ROLES.DISPATCH_PERSON],
-    menuLabel: "New Dispatch",
-    icon: Plus,
-  },
   //NEW ROUTES
   {
     path: PROTECTED_ROUTES.STORE,
@@ -100,6 +93,13 @@ export const protectedRoutePaths = [
     icon: Split,
   },
   {
+    path: PROTECTED_ROUTES.NEWDISPATCH,
+    element: <DispatchInvoice />,
+    roles: Object.values(ROLES),
+    menuLabel: "New Dispatch",
+    icon: Plus,
+  },
+  {
     path: PROTECTED_ROUTES.DELIVERY,
     // element: <h1>Dispatch, Greatness awaits </h1>,
     element: <Overview role={"Delivery"} />,
@@ -108,11 +108,11 @@ export const protectedRoutePaths = [
     icon: Truck,
   },
   //
-  {
-    path: PROTECTED_ROUTES.SETTINGS,
-    element: <Settings />,
-    roles: Object.values(ROLES),
-    menuLabel: "Settings",
-    icon: SettingsIcon,
-  },
+  // {
+  //   path: PROTECTED_ROUTES.SETTINGS,
+  //   element: <Settings />,
+  //   roles: Object.values(ROLES),
+  //   menuLabel: "Settings",
+  //   icon: SettingsIcon,
+  // },
 ];
