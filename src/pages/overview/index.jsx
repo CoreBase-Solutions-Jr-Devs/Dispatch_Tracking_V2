@@ -22,14 +22,14 @@ const Overview = ({ role = "" }) => {
         right === 5145 || right === 5146 || right === 5147 || right === 5148
     );
 
-  // let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
-  let moduleArea = user["userrights"]?.filter((item) => rights.includes(item));
+  let moduleArea = rights.map((right) => {
+    const item = user["userrights"].find((m) => m.moduleCode === right);
+    return item.moduleArea;
+  });
   // const view = roleToView(user?.userRole);
-  const pageMeta =
-    viewMeta[role?.toLowerCase() ?? moduleArea[0]?.toLowerCase()];
-
-  console.log("pageMeta", pageMeta);
-  console.log("role", role?.toLowerCase(), rights);
+  const pageMeta = role
+    ? viewMeta[role.toLowerCase()]
+    : viewMeta[moduleArea[0]?.toLowerCase()];
 
   // const renderFilterSheet = () => {
   //   switch (user?.userRole) {
@@ -76,6 +76,16 @@ const Overview = ({ role = "" }) => {
   // };
 
   const renderFilterSheet = () => {
+    const roleToComponent = {
+      store: <FilterSheet />,
+      verification: <FilterSheet />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+      if (component) return component;
+    }
+
     if (rights?.includes(5145) || rights?.includes(5146))
       return <FilterSheet />;
 
@@ -83,6 +93,17 @@ const Overview = ({ role = "" }) => {
   };
 
   const renderLabelValues = () => {
+    const roleToComponent = {
+      dispatch: <DispatchLabelValue />,
+      store: <StoreLabelValue />,
+      verification: <VerificationLabelValue />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+      if (component) return component;
+    }
+
     if (rights?.includes(5147)) return <DispatchLabelValue />;
     if (rights?.includes(5145)) return <StoreLabelValue />;
     if (rights?.includes(5146)) return <VerificationLabelValue />;
@@ -91,13 +112,24 @@ const Overview = ({ role = "" }) => {
   };
 
   const renderMainContent = () => {
+    const roleToComponent = {
+      dispatch: <DispatchMain />,
+      store: <StorePage />,
+      verification: <VerificationPage />,
+      delivery: <DeliveryInvoice />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+      if (component) return component;
+    }
+
     if (rights?.includes(5148)) return <DeliveryInvoice />;
     if (rights?.includes(5147)) return <DispatchMain />;
     if (rights?.includes(5145)) return <StorePage />;
     if (rights?.includes(5146)) return <VerificationPage />;
 
-    return <h1>Headed to Greatness</h1>;
-    // return <InvoicesDataTable />;
+    return <InvoicesDataTable />;
   };
 
   return (
