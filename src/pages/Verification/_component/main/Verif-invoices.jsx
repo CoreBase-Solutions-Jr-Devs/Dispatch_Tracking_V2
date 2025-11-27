@@ -23,9 +23,15 @@ export default function VerificationPage() {
     pageSize: 50,
   });
 
-  const rights = user["userrights"]?.map((item) => item?.moduleCode) || [];
+  // const rights = user["userrights"]?.map((item) => item?.moduleCode) || [];
+  const rights =
+    user["userrights"]
+      ?.filter((item) => item?.moduleCode === 5146)
+      ?.map((item) => item?.moduleCode) || [];
   const view = rightsToView(rights);
   const columns = getInvoiceColumns(view);
+
+  console.log(rights);
 
   const { data, isLoading, isFetching, isError, isSuccess } =
     useGetFilteredStoreInvoicesQuery({
