@@ -15,18 +15,3 @@ export const ROLES = Object.freeze({
   SALES_PERSON: "SalesPerson",
   CUSTOMER: "Customer",
 });
-
-// export const ROLES = Object.freeze({
-//   SUPER_ADMIN: "SuperAdmin",
-//   ADMIN: "Admin",
-//   USER: "User",
-//   STORE_CONTROLLER: 333,
-//   STORE_PERSON: 333,
-//   VERIFICATION_CONTROLLER: 334,
-//   VERIFICATION_PERSON: 334,
-//   DISPATCH_CONTROLLER: 335,
-//   DISPATCH_PERSON: 335,
-//   DRIVER: 336,
-//   SALES_PERSON: "SalesPerson",
-//   CUSTOMER: "Customer",
-// });
