@@ -104,7 +104,7 @@ const Navbar = () => {
         {/* Center: Company Name */}
         <div className="flex-1 text-center">
           <h1 className="text-base font-semibold text-primary">
-            COREBASE SOLUTIONS LTD
+            {user?.companyName || "COREBASE SOLUTIONS LTD"}
           </h1>
         </div>
 
