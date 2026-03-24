@@ -52,7 +52,6 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
 
   const [editedDispatch, setEditedDispatch] = useState({
     dispatchPerson: "",
-    vehicle: "",
     collectionType: "",
     remarks: "",
   });

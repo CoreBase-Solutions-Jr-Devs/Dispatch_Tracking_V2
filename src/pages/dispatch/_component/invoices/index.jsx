@@ -79,13 +79,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
     value: opt.label, // Passed value as label to match API
   }));
 
-  const vehicleOptions = (
-    filterOptions?.find((opt) => opt.key === "transporter")?.options || []
-  ).map((opt) => ({
-    label: opt.label,
-    value: opt.value,
-  }));
-
   const courierOptions = (
     filterOptions?.find((opt) => opt.key === "courier")?.options || []
   ).map((opt) => ({
@@ -98,7 +91,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
   const [selectValues, setSelectValues] = useState({
     dispatchPerson: "",
     dispatchRoute: "",
-    vehicle: "",
     collectionType: "",
   });
 
@@ -113,7 +105,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
           collectionType: value,
           dispatchPerson: "",
           dispatchRoute: "",
-          vehicle: "",
         };
       }
 
@@ -306,7 +297,6 @@ export default function DispatchInvoice({ rowData, onSubmit, onClose }) {
                               deliveryGuyOptions={deliveryGuyOptions}
                               enabled={startDispatch}
                               routeOptions={routeOptions}
-                              vehicleOptions={vehicleOptions}
                           />
                           <DispatchDetails
                               data={driverDetails}
