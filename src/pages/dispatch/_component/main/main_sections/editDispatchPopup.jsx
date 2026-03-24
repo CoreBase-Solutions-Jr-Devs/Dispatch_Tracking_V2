@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "@/app/hook";
+import { useGetSavedDispatchedDetailsQuery } from "@/features/dispatch/dispatchAPI";
 import {
   setDispatch,
   resetDispatchData,
@@ -34,6 +35,13 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
     updatedDispatches,
   } = useSelector((state) => state.dispatch);
   const dispatchIDs = (rowData || []).map((item) => item.dispatchNum);
+  const dispatchNum = rowData?.[0]?.dispatchNum || rowData?.dispatchNum;
+
+  const { data: details, isLoading } = useGetSavedDispatchedDetailsQuery(
+    dispatchNum,
+    { skip: !dispatchNum }
+  );
+  console.log("Saved Details:", details);
 
   const [pushDispatch, { isLoading: isProcessing }] =
     usePushDispatchProcessMutation();
