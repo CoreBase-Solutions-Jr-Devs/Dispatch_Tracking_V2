@@ -19,7 +19,7 @@ const Overview = ({ role = "" }) => {
     ?.map((item) => item?.moduleCode)
     ?.filter(
       (right) =>
-        right === 5145 || right === 5146 || right === 5147 || right === 5148
+        right === 5145 || right === 5146 || right === 5147 || right === 5148,
     );
 
   let moduleArea = rights.map((right) => {
