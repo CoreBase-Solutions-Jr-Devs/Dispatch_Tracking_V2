@@ -123,7 +123,7 @@ const Overview = ({ role = "" }) => {
 
     if (role) {
       const component = roleToComponent[role.toLowerCase()];
-      console.log(role.toLowerCase());
+
       if (component) return component;
     }
 
