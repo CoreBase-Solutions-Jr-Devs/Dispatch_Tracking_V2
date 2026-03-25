@@ -5,29 +5,31 @@ import InvoicesDataTable from "../shared/shared-invoice-data-table";
 import { roleToView, viewMeta } from "@/lib/utils";
 import FilterSheet from "../shared/filter-sheet/filterSheet";
 import DeliveryInvoice from "./_component/driver/_component/delivery-main-page/index.";
-import StorePage from "../Store/Store-invoicedatatable";
-import VerificationPage from "../Verification/Verif-invoices";
 import DispatchMain from "../dispatch/_component/main";
-import StoreLabelValue from "../Store/store-label-value";
-import VerificationLabelValue from "../Verification/verification-label-value";
 import { DispatchLabelValue } from "../shared/label-values";
-// import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
+import StorePage from "../Store/_component/main/Store-invoicedatatable";
+import StoreLabelValue from "../Store/_component/main/store-label-value";
+import VerificationLabelValue from "../Verification/_component/main/verification-label-value";
+import VerificationPage from "../Verification/_component/main/Verif-invoices";
 
-const Overview = () => {
+const Overview = ({ role = "" }) => {
   const { user } = useSelector((state) => state.auth);
 
-  // let rights = user["userrights"]?.map((item) => {
-  //   return {
-  //     modul: item?.modul,
-  //     moduleArea: item?.moduleArea,
-  //     moduleCode: item?.moduleCode,
-  //   };
-  // });
-  let rights = user["userrights"]?.map((item) => item?.moduleCode);
-  let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
+  let rights = user["userrights"]
+    ?.map((item) => item?.moduleCode)
+    ?.filter(
+      (right) =>
+        right === 5145 || right === 5146 || right === 5147 || right === 5148
+    );
 
+  let moduleArea = rights.map((right) => {
+    const item = user["userrights"].find((m) => m.moduleCode === right);
+    return item.moduleArea;
+  });
   // const view = roleToView(user?.userRole);
-  const pageMeta = viewMeta[moduleArea[0]?.toLowerCase() || ""];
+  const pageMeta = role
+    ? viewMeta[role.toLowerCase()]
+    : viewMeta[moduleArea[0]?.toLowerCase()];
 
   // const renderFilterSheet = () => {
   //   switch (user?.userRole) {
@@ -74,6 +76,16 @@ const Overview = () => {
   // };
 
   const renderFilterSheet = () => {
+    const roleToComponent = {
+      store: <FilterSheet />,
+      verification: <FilterSheet />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+      if (component) return component;
+    }
+
     if (rights?.includes(5145) || rights?.includes(5146))
       return <FilterSheet />;
 
@@ -81,6 +93,17 @@ const Overview = () => {
   };
 
   const renderLabelValues = () => {
+    const roleToComponent = {
+      dispatch: <DispatchLabelValue />,
+      store: <StoreLabelValue />,
+      verification: <VerificationLabelValue />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+      if (component) return component;
+    }
+
     if (rights?.includes(5147)) return <DispatchLabelValue />;
     if (rights?.includes(5145)) return <StoreLabelValue />;
     if (rights?.includes(5146)) return <VerificationLabelValue />;
@@ -89,6 +112,18 @@ const Overview = () => {
   };
 
   const renderMainContent = () => {
+    const roleToComponent = {
+      dispatch: <DispatchMain />,
+      store: <StorePage />,
+      verification: <VerificationPage />,
+      delivery: <DeliveryInvoice />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+      if (component) return component;
+    }
+
     if (rights?.includes(5148)) return <DeliveryInvoice />;
     if (rights?.includes(5147)) return <DispatchMain />;
     if (rights?.includes(5145)) return <StorePage />;

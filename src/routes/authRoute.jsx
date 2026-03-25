@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { PROTECTED_ROUTES } from "./common/routePath";
+import { AUTH_ROUTES, PROTECTED_ROUTES } from "./common/routePath";
 import { useSelector } from "react-redux";
 
 const AuthRoute = () => {

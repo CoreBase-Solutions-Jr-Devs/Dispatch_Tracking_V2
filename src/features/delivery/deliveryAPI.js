@@ -1,5 +1,8 @@
 import { apiClient } from "@/app/api-client";
+import { store } from "@/app/store";
 
+let { auth } = store.getState();
+console.log();
 export const deliveryApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     // DELIVERY TRACKING
@@ -72,7 +75,7 @@ export const deliveryApi = apiClient.injectEndpoints({
         url: "/delivery/GetDispatchesForDeliveryHD",
         method: "GET",
         params: {
-          bcode: 0,
+          bcode: auth.bcode || 0,
           searchtext,
         },
       }),
