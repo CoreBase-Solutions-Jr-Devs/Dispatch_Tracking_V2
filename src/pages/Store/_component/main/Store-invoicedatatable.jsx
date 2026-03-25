@@ -28,7 +28,11 @@ export default function StorePage() {
     pageSize: 50,
   });
 
-  const rights = user?.userrights?.map((item) => item?.moduleCode) || [];
+  // const rights = user?.userrights?.map((item) => item?.moduleCode) || [];
+  const rights =
+    user["userrights"]
+      ?.filter((item) => item?.moduleCode === 5145)
+      ?.map((item) => item?.moduleCode) || [];
   const view = rightsToView(rights);
   const columns = getInvoiceColumns(view);
 

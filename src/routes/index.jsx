@@ -1,14 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { 
-  authenticationRoutePaths, 
-  branchRoutePath, 
-  protectedRoutePaths 
+import {
+  authenticationRoutePaths,
+  branchRoutePath,
+  protectedRoutePaths,
 } from "./common/routes";
 import AppLayout from "@/layouts/app-layout";
 import BaseLayout from "@/layouts/base-layout";
 import AuthRoute from "./authRoute";
 import BranchRoute from "./branchRoute";
 import ProtectedRoute from "./protectedRoute";
+import UnAuthorized from "@/pages/unAuthorized";
 
 function AppRoutes() {
   return (
@@ -29,11 +30,7 @@ function AppRoutes() {
 
         {/* Branch Selection Route - requires auth but not branch selection */}
         {branchRoutePath.map((route) => (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={route.element}
-          >
+          <Route key={route.path} path={route.path} element={route.element}>
             {route.children?.map((child, index) => (
               <Route
                 key={child.path || index}
@@ -58,7 +55,7 @@ function AppRoutes() {
         ))}
 
         {/* Catch-all for undefined routes */}
-        <Route path="*" element={<>404</>} />
+        <Route path="*" element={<UnAuthorized />} />
       </Routes>
     </BrowserRouter>
   );

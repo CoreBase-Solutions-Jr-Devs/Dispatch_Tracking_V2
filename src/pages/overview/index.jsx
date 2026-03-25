@@ -19,7 +19,7 @@ const Overview = ({ role = "" }) => {
     ?.map((item) => item?.moduleCode)
     ?.filter(
       (right) =>
-        right === 5145 || right === 5146 || right === 5147 || right === 5148
+        right === 5145 || right === 5146 || right === 5147 || right === 5148,
     );
 
   let moduleArea = rights.map((right) => {
@@ -86,6 +86,8 @@ const Overview = ({ role = "" }) => {
       if (component) return component;
     }
 
+    if (role === "Dispatch") return null;
+
     if (rights?.includes(5145) || rights?.includes(5146))
       return <FilterSheet />;
 
@@ -94,9 +96,9 @@ const Overview = ({ role = "" }) => {
 
   const renderLabelValues = () => {
     const roleToComponent = {
-      dispatch: <DispatchLabelValue />,
       store: <StoreLabelValue />,
       verification: <VerificationLabelValue />,
+      dispatch: <DispatchLabelValue />,
     };
 
     if (role) {
@@ -104,30 +106,31 @@ const Overview = ({ role = "" }) => {
       if (component) return component;
     }
 
-    if (rights?.includes(5147)) return <DispatchLabelValue />;
     if (rights?.includes(5145)) return <StoreLabelValue />;
     if (rights?.includes(5146)) return <VerificationLabelValue />;
+    if (rights?.includes(5147)) return <DispatchLabelValue />;
 
     return null;
   };
 
   const renderMainContent = () => {
     const roleToComponent = {
-      dispatch: <DispatchMain />,
       store: <StorePage />,
       verification: <VerificationPage />,
       delivery: <DeliveryInvoice />,
+      dispatch: <DispatchMain />,
     };
 
     if (role) {
       const component = roleToComponent[role.toLowerCase()];
+
       if (component) return component;
     }
 
-    if (rights?.includes(5148)) return <DeliveryInvoice />;
-    if (rights?.includes(5147)) return <DispatchMain />;
     if (rights?.includes(5145)) return <StorePage />;
     if (rights?.includes(5146)) return <VerificationPage />;
+    if (rights?.includes(5147)) return <DispatchMain />;
+    if (rights?.includes(5148)) return <DeliveryInvoice />;
 
     return <InvoicesDataTable />;
   };
