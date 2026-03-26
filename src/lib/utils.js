@@ -15,13 +15,16 @@ import {
 } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
-import { store } from "@/app/store";
+// import { store } from "@/app/store";
 
-const state = store.getState();
+// const state = store.getState();
 
-const { user = {} } = state.auth;
+// const { user = {} } = state.auth;
 
-const { userrights = [] } = user;
+// const { userrights = [] } = user ?? {};
+
+let userrights =
+  JSON.parse(localStorage.getItem("authState"))?.user?.userrights ?? [];
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -145,5 +148,6 @@ export const dateDefineds = {
 
 export const checkRight = (code) => {
   let moduleCode = userrights.map((item) => item.moduleCode);
+  console.log(moduleCode);
   return moduleCode.includes(code);
 };
