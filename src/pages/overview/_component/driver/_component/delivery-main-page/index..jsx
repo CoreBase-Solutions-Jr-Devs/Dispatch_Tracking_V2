@@ -1,0 +1,559 @@
+import React, { useState, useEffect } from "react";
+import { Separator } from "@/components/ui/separator";
+import DeliverySearch from "../delivery-sections/search";
+import DeliveryTable from "../delivery-sections/table";
+import DeliverySummary from "../delivery-sections/summary";
+import DeliveryDetails from "../delivery-sections/details";
+import DeliveryMeta from "../delivery-sections/meta";
+import DeliveryRemarks from "../delivery-sections/remarks";
+import DeliveryFooter from "../delivery-sections/footer";
+import DeliveryPagination from "../delivery-sections/pagination";
+import {
+  useGetDeliveryInvoicesQuery,
+  useGetDispatchesForDeliveryHDQuery,
+  useDeliveryCompleteMutation,
+  useGenerateOTPForDeliveredInvoicesMutation,
+  useValidateOTPForDeliveredInvoicesMutation,
+  useMakeMpesaSTKPushForDeliveredInvoicesMutation,
+  useGetDispatchesForDeliveryDTQuery,
+} from "@/features/delivery/deliveryAPI";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import PhoneInput from "react-phone-input-2";
+import DisputedDetails from "../delivery-sections/disputed";
+import DetailAmount from "../delivery-sections/detailAmount";
+
+export default function DeliveryInvoice({ rowData, onSubmit }) {
+  const [selectedRow, setSelectedRow] = useState({});
+  const [checkedInvoices, setCheckedInvoices] = useState([]);
+  const [remarks, setRemarks] = useState("");
+  const [show, setShow] = useState(false);
+  const [mpesa, setMpesa] = useState(false);
+  const [dispute, setDispute] = useState(false);
+  const [otp, setOTP] = useState("");
+  const [mpesaDetails, setMpesaDetails] = useState({
+    phonenumber: "",
+    amount: 0,
+    DISPATCHNUM: "",
+    BCODE: "",
+    CUS_CODE: "",
+    SALEINV_NUM: "",
+  });
+  const [searchText, setSearchText] = useState("");
+  const [debouncedCode, setDebouncedCode] = useState(searchText);
+
+  const [deliveryComplete, { isLoading }] = useDeliveryCompleteMutation();
+  const [
+    GenerateOTPForDeliveredInvoices,
+    { isLoading: isGeneratingOTPLoading },
+  ] = useGenerateOTPForDeliveredInvoicesMutation();
+
+  const [
+    ValidateOTPForDeliveredInvoices,
+    { isLoading: isvalidatingOTPLoading },
+  ] = useValidateOTPForDeliveredInvoicesMutation();
+
+  const [MakeMpesaSTKPushForDeliveredInvoices, { isLoading: isPayingLoading }] =
+    useMakeMpesaSTKPushForDeliveredInvoicesMutation();
+
+  const {
+    data: deliveryInvoices,
+    isError,
+    error,
+    isLoading: isGettingIvoice,
+  } = useGetDispatchesForDeliveryHDQuery(debouncedCode);
+
+  // let deliveryInvoices = data;
+
+  // const {
+  //   data: invoiceDetails,
+  //   isError: isDTError,
+  //   isLoading: isGettingIvoiceDetails,
+  // } = useGetDispatchesForDeliveryDTQuery({
+  //   dispatchnum: selectedRow?.DISPATCHNUM || 0,
+  //   bcode: selectedRow?.BCODE || 0,
+  // });
+  // console.log(invoiceDetails);
+
+  const handleParentSelect = (selected) => {
+    setCheckedInvoices([]);
+    setSelectedRow(selected);
+  };
+
+  const handleRowCheck = (value, row) => {
+    setSelectedRow({});
+
+    if (value) {
+      setCheckedInvoices((prev) => [...prev, row]);
+    } else {
+      setCheckedInvoices((prev) => prev.filter((r) => r.DocNo !== row.DocNo));
+    }
+  };
+
+  const handleParentRemarks = (value) => {
+    setRemarks(value);
+  };
+
+  const handleMPesaPayment = (e) => {
+    e.preventDefault();
+    const payload = {
+      dispatchnum: mpesaDetails?.DISPATCHNUM,
+      bcode: mpesaDetails?.BCODE,
+      cuscode: mpesaDetails?.CUS_CODE,
+      phonenumber: `0${mpesaDetails?.phonenumber.slice(3)}`,
+      amount: mpesaDetails?.amount,
+    };
+
+    if (
+      checkedInvoices.length > 0 &&
+      !checkedInvoices.every(
+        (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
+      )
+    ) {
+      toast.error("Wrong invoice selected", {
+        description: "Please select invoices belonging to the same customer",
+        duration: 6000,
+      });
+      return;
+    }
+
+    MakeMpesaSTKPushForDeliveredInvoices(payload)
+      .unwrap()
+      .then((data) => {
+        toast.success("Mpesa payment successful");
+        setMpesa(false);
+        setMpesaDetails({
+          phonenumber: "",
+          amount: "",
+          DISPATCHNUM: "",
+          BCODE: "",
+          CUS_CODE: "",
+          SALEINV_NUM: "",
+        });
+      })
+      .catch((error) => {
+        toast.error("Mpesa payment Failed", {
+          description:
+            error?.data?.message ||
+            error?.data?.title ||
+            "Please try paying again",
+          duration: 4000,
+        });
+      });
+  };
+
+  const handleValidateOTP = (e) => {
+    e.preventDefault();
+    const payload = {
+      dispatchnum: selectedRow?.DispatchNo,
+      bcode: selectedRow?.BCode,
+      saleinv_num: selectedRow?.DocNo,
+      otp,
+    };
+    ValidateOTPForDeliveredInvoices(payload)
+      .unwrap()
+      .then((data) => {
+        toast.success("OTP Validated successful");
+        setShow(false);
+        setOTP("");
+        setRemarks("");
+      })
+      .catch((error) => {
+        toast.error("OTP Failed", {
+          description:
+            error?.data?.message ||
+            error?.data?.title ||
+            "Please request anothers and try again",
+          duration: 4000,
+        });
+      });
+  };
+
+  const handleOTPGenerate = () => {
+    const payload = {
+      dispatchnum: selectedRow?.DispatchNo,
+      bcode: selectedRow?.BCode,
+      saleinv_num: selectedRow?.DocNo,
+    };
+    GenerateOTPForDeliveredInvoices(payload)
+      .unwrap()
+      .then((data) => {
+        toast.success("OTP sent successful");
+        setRemarks("");
+        setOTP("");
+        setShow(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setOTP("");
+        setShow(
+          String(error?.data?.message).toLowerCase().includes("generated")
+        );
+        toast.error("OTP Failed", {
+          description:
+            error?.data?.message || error?.data?.title || "Please  try again",
+          duration: 4000,
+        });
+      });
+  };
+
+  const handleCompleteDelivery = () => {
+    const payload = {
+      remarks,
+      dispatchnum: selectedRow?.DispatchNo,
+      bcode: selectedRow?.BCode,
+      invoices: [
+        {
+          cus_code: selectedRow?.CustomerID,
+          saleinv_num: selectedRow?.DocNo,
+          doctype: selectedRow?.DocType,
+        },
+      ],
+    };
+    deliveryComplete(payload)
+      .unwrap()
+      .then((data) => {
+        toast.success("Delivery successful");
+        setSelectedRow({});
+        setRemarks("");
+      })
+      .catch((error) => {
+        toast.error("Delivery Failed", {
+          description:
+            error?.data?.message || error?.data?.title || "Please try again",
+          duration: 4000,
+        });
+      });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setMpesaDetails((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const handlePhone = (value, country, e, formattedValue) => {
+    const { name } = e.target;
+    setMpesaDetails((prevState) => ({
+      ...prevState,
+      phonenumber: value,
+    }));
+  };
+  const handleMpesaPopup = () => {
+    setMpesa(true);
+    setMpesaDetails({
+      phonenumber:
+        selectedRow?.OTPPhoneNumber[0] === "0"
+          ? `254${selectedRow?.OTPPhoneNumber.slice(1)}`
+          : selectedRow?.OTPPhoneNumber || "",
+      amount: Math.ceil(selectedRow?.Balance) || 0,
+      DISPATCHNUM: selectedRow?.DispatchNo || "",
+      BCODE: selectedRow?.BCode || "",
+      CUS_CODE: selectedRow?.CustomerID || "",
+      SALEINV_NUM: selectedRow?.DocNo || "",
+    });
+  };
+
+  const handleDispute = () => {
+    setDispute(!dispute);
+  };
+
+  const handleSearchInput = (data) => {
+    setSearchText(data);
+  };
+
+  useEffect(() => {
+    setMpesaDetails({
+      phonenumber:
+        checkedInvoices[0]?.OTPPhoneNumber[0] === "0"
+          ? `254${checkedInvoices[0]?.OTPPhoneNumber.slice(1)}`
+          : checkedInvoices[0]?.OTPPhoneNumber || "",
+      amount: checkedInvoices?.reduce((acc, curr) => acc + curr?.Balance, 0),
+      DISPATCHNUM: checkedInvoices[0]?.DispatchNo,
+      BCODE: checkedInvoices[0]?.BCode,
+      CUS_CODE: checkedInvoices[0]?.CustomerID,
+      SALEINV_NUM: checkedInvoices[0]?.DocNo,
+    });
+    // setSelectedRow(checkedInvoices[0]);
+  }, [checkedInvoices]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedCode(searchText);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchText]);
+
+  // useEffect(() => {
+  //   if (isError) {
+  //     toast.error("Delivery Invoice failed", {
+  //       description:
+  //         error?.data?.errors && Object?.keys(error?.data?.errors)
+  //           ? Object.values(error?.data?.errors).join("/n")
+  //           : error?.data?.message ||
+  //             error?.data?.title ||
+  //             "Please try paying again",
+  //       duration: 4000,
+  //     });
+  //   }
+  //   // setSelectedRow(checkedInvoices[0]);
+  // }, [isError]);
+
+  return (
+    <div className="overflow-y-auto max-h-[90vh] px-2">
+      <DeliverySearch
+        // value={query}
+        isLoading={isGettingIvoice}
+        data={selectedRow}
+        placeholder="invoice No..."
+        handleSearchInput={handleSearchInput}
+      />
+      <div className="flex flex-wrap py-2 gap-5">
+        <div className="flex-auto">
+          <div className="min-h-[300px]">
+            <DeliveryTable
+              data={deliveryInvoices}
+              handleRowSelection={handleParentSelect}
+              handleRowCheck={handleRowCheck}
+              checkedInvoices={checkedInvoices}
+              isLoading={isGettingIvoice}
+              isError={isError}
+            />
+          </div>
+          {/* <DeliverySummary data={deliveryInvoices} /> */}
+          <Separator className="my-2" />
+          <DeliveryDetails
+            data={
+              checkedInvoices.length > 0 ? checkedInvoices : deliveryInvoices
+            }
+          />
+        </div>
+
+        {Boolean(Object.keys(selectedRow)?.length) && (
+          <div className="w-32 flex-1">
+            {dispute || selectedRow?.Disputed ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    {selectedRow?.DocNo} | {selectedRow?.CustomerName}
+                  </CardTitle>
+                </CardHeader>
+                {/* <DisputedDetails data={selectedRow} />
+                 */}
+                <CardContent>
+                  <DetailAmount data={selectedRow} />
+                  {selectedRow?.OTPValidated && selectedRow?.Balance && (
+                    <div className="flex items-center gap-3 mt-6">
+                      <Button
+                        variant="store"
+                        onClick={handleMpesaPopup}
+                        disabled={!selectedRow?.CustomerID}
+                        className="mt-1  uppercase text-xs font-medium"
+                      >
+                        Pay
+                      </Button>
+                    </div>
+                  )}
+
+                  <Separator className="my-2" />
+                  <DeliveryRemarks handleParentRemarks={handleParentRemarks} />
+                </CardContent>
+                <CardFooter>
+                  <DeliveryFooter
+                    rowData={selectedRow}
+                    isLoading={
+                      isLoading ||
+                      !Boolean(Object.keys(selectedRow)?.length) ||
+                      isGeneratingOTPLoading ||
+                      isvalidatingOTPLoading
+                    }
+                    generateOTP={handleOTPGenerate}
+                    onSubmit={handleCompleteDelivery}
+                    handleDispute={handleDispute}
+                  />
+                </CardFooter>
+              </Card>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    {selectedRow?.DocNo} | {selectedRow?.CustomerName}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <DisputedDetails
+                    data={selectedRow}
+                    handleDispute={handleDispute}
+                  />
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+
+        {checkedInvoices.length > 0 && (
+          <div className="w-32 flex-1">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-center">Mpesa Payment</CardTitle>
+                <CardTitle>{checkedInvoices[0]?.CustomerName}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form
+                  autoComplete="off"
+                  className="space-y-4"
+                  onSubmit={handleMPesaPayment}
+                >
+                  <div>
+                    <Label className="text-sm font-medium">Phone</Label>
+                    <PhoneInput
+                      country={"ke"}
+                      value={mpesaDetails.phonenumber}
+                      inputStyle={{
+                        width: "100%",
+                        fontSize: "12px",
+                        lineHeight: "1.5",
+                        height: " calc(1.5em + 0.5rem + 2px)",
+                      }}
+                      id="phonenumber"
+                      name="phonenumber"
+                      masks={{ ke: "... ... ..." }}
+                      onChange={handlePhone}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium">Amount</Label>
+                    <Input
+                      type="number"
+                      value={mpesaDetails.amount}
+                      name="amount"
+                      onChange={handleChange}
+                      max={deliveryInvoices?.BALANCE}
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    // onClick={() => setMpesa(false)}
+                    variant="default"
+                    className="w-full"
+                    // className="w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                  >
+                    Pay
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
+
+      <Dialog open={show} onOpenChange={() => setShow(!show)}>
+        <DialogTrigger onClick={() => setShow(!show)} />
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Validate OTP</DialogTitle>
+            <DialogDescription>
+              Please enter the OTP provided.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form
+            autoComplete="off"
+            className="space-y-4"
+            onSubmit={handleValidateOTP}
+          >
+            <div>
+              <Label className="text-sm font-medium">OTP</Label>
+              <Input
+                value={otp}
+                onChange={(e) => setOTP(e.target.value)}
+                required
+              />
+            </div>
+            <Button variant="default" type="submit" className="w-full">
+              Validate
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={mpesa} onOpenChange={() => setMpesa(!mpesa)}>
+        <DialogTrigger onClick={() => setMpesa(!mpesa)} />
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Mpesa Payment</DialogTitle>
+            <DialogDescription>
+              Please enter the OTP provided.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form
+            autoComplete="off"
+            className="space-y-4"
+            onSubmit={handleMPesaPayment}
+          >
+            <div>
+              <Label className="text-sm font-medium">Phone</Label>
+              <PhoneInput
+                country={"ke"}
+                value={mpesaDetails.phonenumber}
+                inputStyle={{
+                  width: "100%",
+                  fontSize: "12px",
+                  lineHeight: "1.5",
+                  height: " calc(1.5em + 0.5rem + 2px)",
+                }}
+                id="phonenumber"
+                name="phonenumber"
+                masks={{ ke: "... ... ..." }}
+                onChange={handlePhone}
+              />
+            </div>
+            <div>
+              <Label className="text-sm font-medium">Amount</Label>
+              <Input
+                type="number"
+                value={mpesaDetails.amount}
+                name="amount"
+                onChange={handleChange}
+                max={deliveryInvoices?.BALANCE}
+                required
+              />
+            </div>
+            <Button
+              type="submit"
+              disabled={isPayingLoading}
+              variant="default"
+              className="w-full"
+            >
+              Pay
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

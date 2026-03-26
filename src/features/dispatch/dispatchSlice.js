@@ -1,0 +1,279 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  assignedTo: "",
+  carMake: "",
+  carPlate: "",
+  clientName: "",
+  clientId: "",
+  collectedBy: "",
+  collectorIdNo: "",
+  collectorPhoneNo: "",
+  collectionType: "",
+  customerCourierName: "",
+  customerCourierId: 0,
+  customerCourierPhone: "",
+  dispatchId: 0,
+  dispatchIds: [],
+  dispatchRemarks: "",
+  deliveryDriver: null,
+  driverName: "",
+  driverId: 0,
+  driverLicenseNo: "",
+  email: "",
+  invoiceNo: 0,
+  invoices: [],
+  isPush: true,
+  isSelected: true,
+  pageNumber: 0,
+  pageSize: 0,
+  pagination: {
+    totalCount: 0,
+    pageNumber: 1,
+    pageSize: 50,
+  },
+  personalId: "",
+  phoneNo: "",
+  regNo: "",
+  routeCode: 0,
+  routeName: "",
+  //
+  driverDetails: {},
+  courierDetails: {},
+  clientDetails: {},
+  deliveryDetails: {},
+  //
+  updatedDispatches: {
+    dispatchNumber: 0,
+    dispatchIds: [],
+  },
+};
+
+const dispatchSlice = createSlice({
+  name: "dispatch",
+  initialState,
+  reducers: {
+    setDispatch: (state, action) => {
+      state.dispatchIds = action.payload.dispatchIds;
+      state.collectionType = action.payload.collectionType;
+      state.collectedBy = action.payload.collectedBy;
+      state.collectorIdNo = action.payload.collectorIdNo;
+      state.collectorPhoneNo = action.payload.collectorPhoneNo;
+      state.routeCode = action.payload.routeCode;
+      state.routeName = action.payload.routeName;
+      state.driverName = action.payload.driverName;
+      state.driverId = action.payload.driverId;
+      state.carMake = action.payload.carMake;
+      state.carPlate = action.payload.carPlate;
+      state.customerCourierName = action.payload.customerCourierName;
+      state.customerCourierId = action.payload.customerCourierId;
+      state.customerCourierPhone = action.payload.customerCourierPhone;
+      state.dispatchRemarks = action.payload.dispatchRemarks;
+      state.isPush = action.payload.isPush;
+    },
+    resetDispatchData: (state) => {
+      state.updatedDispatches = {
+        dispatchNumber: 0,
+        dispatchIds: [],
+      };
+      state.dispatchIds = [];
+      state.driverDetails = {};
+      state.courierDetails = {};
+      state.clientDetails = {};
+      state.deliveryDetails = {};
+      state.collectionType = "";
+      state.collectedBy = "";
+      state.collectorIdNo = "";
+      state.collectorPhoneNo = "";
+      state.routeCode = 0;
+      state.routeName = "";
+      state.driverName = "";
+      state.driverId = 0;
+      state.carMake = "";
+      state.carPlate = "";
+      state.customerCourierName = "";
+      state.customerCourierId = 0;
+      state.customerCourierPhone = "";
+      state.dispatchRemarks = "";
+      state.isPush = true;
+    },
+    setInvoices: (state, action) => {
+      state.invoices = action.payload.invoices;
+      state.pagination = action.payload.pagination;
+    },
+    setCarMake: (state, action) => {
+      state.carMake = action.payload.carMake;
+    },
+    setCarPlate: (state, action) => {
+      state.carPlate = action.payload.carPlate;
+    },
+    setCollectionType: (state, action) => {
+      state.collectionType = action.payload.collectionType;
+    },
+    setCollectedBy: (state, action) => {
+      state.collectedBy = action.payload.collectedBy;
+    },
+    setCollectorIdNo: (state, action) => {
+      state.collectorIdNo = action.payload.collectorIdNo;
+    },
+    setCollectorPhoneNo: (state, action) => {
+      state.collectorPhoneNo = action.payload.collectorPhoneNo;
+    },
+    setCustomerCourierName: (state, action) => {
+      state.customerCourierName = action.payload.customerCourierName;
+    },
+    setCustomerCourierId: (state, action) => {
+      state.customerCourierId = action.payload.customerCourierId;
+    },
+    setAssignedTo: (state, action) => {
+      state.assignedTo = action.payload;
+    },
+    setCustomerCourierPhone: (state, action) => {
+      state.customerCourierPhone = action.payload.customerCourierPhone;
+    },
+    setDeliveryDriver: (state, action) => {
+      state.deliveryDriver = action.payload.deliveryDriver;
+    },
+    setDispatchId: (state, action) => {
+      state.dispatchId = action.payload.dispatchId;
+    },
+    setDispatchIds: (state, action) => {
+      state.dispatchIds = action.payload.dispatchIds;
+    },
+    setDispatchRemarks: (state, action) => {
+      state.dispatchRemarks = action.payload.dispatchRemarks;
+    },
+    setDriverName: (state, action) => {
+      state.driverName = action.payload.driverName;
+    },
+    setDriverId: (state, action) => {
+      state.driverId = action.payload.driverId;
+    },
+    setInvoiceNo: (state, action) => {
+      state.invoiceNo = action.payload.invoiceNo;
+    },
+    setIsPush: (state, action) => {
+      state.isPush = action.payload.isPush;
+    },
+    setIsSelected: (state, action) => {
+      state.isSelected = action.payload.isSelected;
+    },
+    setPageNumber: (state, action) => {
+      state.pageNumber = action.payload.pageNumber;
+    },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload.pageSize;
+    },
+    setRouteCode: (state, action) => {
+      state.routeCode = action.payload.routeCode;
+    },
+    setRouteName: (state, action) => {
+      state.routeName = action.payload.routeName;
+    },
+    //
+    setDriverDetails: (state, action) => {
+      state.driverDetails = action.payload;
+      // state.driverId = action.payload?.driverId;
+      // state.driverName = action.payload?.driverName;
+      // state.personalId = action.payload?.personalId;
+      // state.driverLicenseNo = action.payload?.driverLicenseNo;
+      // state.phoneNo = action.payload?.phoneNo;
+      // state.email = action.payload?.email;
+      // state.carMake = action.payload?.carMake;
+      // state.regNo = action.payload?.regNo;
+    },
+    setSelectedDipatches: (state, action) => {
+      state.updatedDispatches = {
+        dispatchNumber: action.payload.dispatchNumber,
+        dispatchIds: [
+          ...state.updatedDispatches.dispatchIds,
+          ...action.payload.dispatchIds,
+        ],
+      };
+    },
+    removeDispatchIds: (state, action) => {
+      // dispatchIds
+      let remainingIDs = [...state.updatedDispatches.dispatchIds].filter(
+        (id) => !action.payload.includes(id)
+      );
+
+      if (remainingIDs?.length === 0) {
+        state.updatedDispatches = { dispatchNumber: 0, dispatchIds: [] };
+      } else {
+        state.updatedDispatches = {
+          ...state.updatedDispatches,
+          dispatchIds: remainingIDs,
+        };
+      }
+    },
+    setCourierDetails: (state, action) => {
+      state.courierDetails = action.payload;
+      state.collectionType = action.payload?.collectionType;
+      state.collectedBy = action.payload?.collectedBy;
+      state.collectorIdNo = action.payload?.collectorIdNo;
+      state.collectorPhoneNo = action.payload?.collectorPhoneNo;
+      state.customerCourierName = action.payload?.customerCourierName;
+      state.customerCourierId = action.payload?.customerCourierId;
+      state.customerCourierPhone = action.payload?.customerCourierPhone;
+      state.dispatchRemarks = action.payload?.dispatchRemarks;
+      state.assignedTo = action.payload?.assignedTo;
+    },
+    setClientDetails: (state, action) => {
+      state.clientDetails = action.payload;
+      state.collectionType = action.payload?.collectionType;
+      state.collectedBy = action.payload?.collectedBy;
+      state.clientName = action.payload?.clientName;
+      state.phoneNo = action.payload?.phoneNo;
+      state.collectorIdNo = action.payload?.collectorIdNo;
+      state.collectorPhoneNo = action.payload?.collectorPhoneNo;
+      state.dispatchRemarks = action.payload?.dispatchRemarks;
+      state.assignedTo = action.payload?.assignedTo;
+    },
+    setDeliveryDetails: (state, action) => {
+      state.deliveryDetails = action.payload;
+      state.collectionType = action.payload?.collectionType;
+      state.deliveryDriver = action.payload.deliveryDriver;
+      state.collectorPhoneNo = action.payload?.collectorPhoneNo;
+      state.carMake = action.payload?.carMake;
+      state.regNo = action.payload?.regNo;
+      state.dispatchRemarks = action.payload?.dispatchRemarks;
+      state.assignedTo = action.payload?.assignedTo;
+    },
+  },
+});
+
+export const {
+  setInvoices,
+  setCarMake,
+  setCarPlate,
+  setCollectedBy,
+  setCollectionType,
+  setCustomerCourierName,
+  setCustomerCourierId,
+  setCustomerCourierPhone,
+  setDeliveryDriver,
+  setDispatchId,
+  setDispatchIds,
+  setDispatchRemarks,
+  setDriverName,
+  setDriverId,
+  setInvoiceNo,
+  setIsPush,
+  setIsSelected,
+  setPageNumber,
+  setPageSize,
+  setRouteCode,
+  setRouteName,
+  setDispatch,
+  resetDispatchData,
+  //
+  setSelectedDipatches,
+  removeDispatchIds,
+  setDriverDetails,
+  setCourierDetails,
+  setClientDetails,
+  setDeliveryDetails,
+  setAssignedTo,
+} = dispatchSlice.actions;
+
+export default dispatchSlice.reducer;

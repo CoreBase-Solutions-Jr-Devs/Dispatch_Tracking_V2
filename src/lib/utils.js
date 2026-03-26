@@ -1,0 +1,194 @@
+import { ROLES } from "@/constant";
+import clsx from "clsx";
+import {
+  endOfWeek,
+  startOfWeek,
+  startOfDay,
+  endOfYear,
+  startOfYear,
+  endOfMonth,
+  addDays,
+  endOfDay,
+  startOfMonth,
+  addYears,
+  addMonths,
+} from "date-fns";
+import { twMerge } from "tailwind-merge";
+
+/**
+ * Tailwind class merge helper
+ */
+export function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+/**
+ * Role → View mapping
+ */
+export function roleToView(role) {
+  if (!role) return "user";
+
+  switch (role) {
+    case ROLES.SUPER_ADMIN:
+    case ROLES.ADMIN:
+      return "admin";
+
+    case ROLES.STORE_CONTROLLER:
+    case ROLES.STORE_PERSON:
+      return "store";
+
+    case ROLES.VERIFICATION_CONTROLLER:
+    case ROLES.VERIFICATION_PERSON:
+      return "verification";
+
+    case ROLES.DISPATCH_CONTROLLER:
+    case ROLES.DISPATCH_PERSON:
+      return "dispatch";
+
+    case ROLES.DRIVER:
+      return "delivery";
+
+    default:
+      return "user";
+  }
+}
+
+/**
+ * Extract rights codes safely
+ */
+export const getUserRightCodes = (user) => {
+  if (!Array.isArray(user?.userrights)) return [];
+  return user.userrights
+    .map((item) => item?.moduleCode)
+    .filter(Boolean);
+};
+
+/**
+ * Extract module areas / roles safely
+ */
+export const getUserModuleAreas = (user) => {
+  if (!Array.isArray(user?.userrights)) return [];
+  return user.userrights
+    .map((item) => item?.moduleArea)
+    .filter(Boolean);
+};
+
+/**
+ * Check if user has a specific right code
+ */
+export const checkRight = (code, userrights = []) => {
+  if (!Array.isArray(userrights)) return false;
+
+  return userrights
+    .map((item) => item?.moduleCode)
+    .filter(Boolean)
+    .includes(code);
+};
+
+/**
+ * Check using already extracted right codes
+ */
+export const hasRightCode = (code, rightCodes = []) => {
+  if (!Array.isArray(rightCodes)) return false;
+  return rightCodes.includes(code);
+};
+
+/**
+ * Check if user has at least one allowed role
+ */
+export const hasAllowedRole = (allowedRoles = [], userAreas = []) => {
+  if (!Array.isArray(allowedRoles) || !Array.isArray(userAreas)) return false;
+  if (allowedRoles.length === 0) return true;
+  return allowedRoles.some((role) => userAreas.includes(role));
+};
+
+/**
+ * Rights → View mapping
+ */
+export function rightsToView(rights = []) {
+  if (!Array.isArray(rights)) return "user";
+
+  const VIEW_RIGHTS = {
+    store: [5145],
+    verification: [5146],
+    dispatch: [5147],
+    delivery: [5148],
+  };
+
+  if (rights.some((r) => VIEW_RIGHTS.store.includes(r))) return "store";
+  if (rights.some((r) => VIEW_RIGHTS.verification.includes(r))) {
+    return "verification";
+  }
+  if (rights.some((r) => VIEW_RIGHTS.dispatch.includes(r))) return "dispatch";
+  if (rights.some((r) => VIEW_RIGHTS.delivery.includes(r))) return "delivery";
+
+  return "user";
+}
+
+/**
+ * View metadata (title + subtitle)
+ */
+export const viewMeta = {
+  "view all stages": {
+    title: "Admin Overview",
+    subtitle: "All invoices across the system.",
+  },
+  store: {
+    title: "Store Overview",
+    subtitle: "Invoices that are in the store pipeline.",
+  },
+  verification: {
+    title: "Verifier Overview",
+    subtitle: "Invoices pending or completed verification.",
+  },
+  dispatch: {
+    title: "Dispatcher Overview",
+    subtitle: "Invoices ready or assigned for dispatch.",
+  },
+  delivery: {
+    title: "Delivery Overview",
+    subtitle: "Invoices you are responsible for delivering.",
+  },
+  user: {
+    title: "Overview",
+    subtitle: "System invoices overview.",
+  },
+};
+
+/**
+ * Date ranges
+ */
+export const ranges = [
+  "Today",
+  "Yesterday",
+  "This Week",
+  "Last Week",
+  "This Month",
+  "Last Month",
+  "Month To Date",
+  "This Year",
+  "Last Year",
+  "Year To Date",
+  "Custom Range",
+];
+
+export const dateDefineds = {
+  startOfWeek: startOfWeek(new Date()),
+  endOfWeek: endOfWeek(new Date()),
+  startOfLastWeek: startOfWeek(addDays(new Date(), -7)),
+  endOfLastWeek: endOfWeek(addDays(new Date(), -7)),
+  startOfToday: startOfDay(new Date()),
+  endOfToday: endOfDay(new Date()),
+  startOfYesterday: startOfDay(addDays(new Date(), -1)),
+  endOfYesterday: endOfDay(addDays(new Date(), -1)),
+  startOfMonth: startOfMonth(new Date()),
+  endOfMonth: endOfMonth(new Date()),
+  startOfLastMonth: startOfMonth(addMonths(new Date(), -1)),
+  endOfLastMonth: endOfMonth(addMonths(new Date(), -1)),
+  startOfLastYear: startOfYear(addYears(new Date(), -1)),
+  endOfLastYear: endOfYear(addYears(new Date(), -1)),
+  startOfYear: startOfYear(new Date()),
+  endOfYear: endOfYear(new Date()),
+  startOfNextYear: startOfYear(addYears(new Date(), 1)),
+  endOfNextYear: endOfYear(addYears(new Date(), 1)),
+};
