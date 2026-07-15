@@ -19,9 +19,12 @@ import { store } from "@/app/store";
 
 const state = store.getState();
 
-const { user = {} } = state.auth;
+// const { user = {} } = state.auth;
 
-const { userrights = [] } = user;
+// const { userrights = [] } = user;
+
+const user = state.auth?.user ?? {};
+const userrights = user.userrights ?? [];
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -145,9 +148,5 @@ export const dateDefineds = {
 
 export const checkRight = (code) => {
   let moduleCode = userrights.map((item) => item.moduleCode);
-<<<<<<< HEAD
-  console.log(moduleCode);
-=======
->>>>>>> origin/main
   return moduleCode.includes(code);
 };
