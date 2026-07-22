@@ -1,10 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { authenticationRoutePaths, protectedRoutePaths } from "./common/routes";
+import {
+  authenticationRoutePaths,
+  branchRoutePath,
+  protectedRoutePaths,
+} from "./common/routes";
 import AppLayout from "@/layouts/app-layout";
 import BaseLayout from "@/layouts/base-layout";
 import AuthRoute from "./authRoute";
 import ProtectedRoute from "./protectedRoute";
-import useAuthExpiration from "@/hooks/use-auth-expiration";
+import UnAuthorized from "@/pages/unAuthorized";
 
 function AppRoutes() {
   // useAuthExpiration();
@@ -25,7 +29,21 @@ function AppRoutes() {
           </Route>
         </Route>
 
-        {/* Protected Routes */}
+        {/* Branch Selection Route - requires auth but not branch selection */}
+        {branchRoutePath.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element}>
+            {route.children?.map((child, index) => (
+              <Route
+                key={child.path || index}
+                index={child.index}
+                path={child.path}
+                element={child.element}
+              />
+            ))}
+          </Route>
+        ))}
+
+        {/* Protected Routes - requires both auth AND branch selection */}
         {protectedRoutePaths.map((route) => (
           <Route
             key={route.path}
@@ -38,7 +56,7 @@ function AppRoutes() {
         ))}
 
         {/* Catch-all for undefined routes */}
-        <Route path="*" element={<>404</>} />
+        <Route path="*" element={<UnAuthorized />} />
       </Routes>
     </BrowserRouter>
   );

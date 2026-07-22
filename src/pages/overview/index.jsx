@@ -16,16 +16,17 @@ import { DispatchLabelValue } from "../shared/label-values";
 const Overview = () => {
   const { user } = useSelector((state) => state.auth);
 
-  // let rights = user["userrights"]?.map((item) => {
-  //   return {
-  //     modul: item?.modul,
-  //     moduleArea: item?.moduleArea,
-  //     moduleCode: item?.moduleCode,
-  //   };
-  // });
-  let rights = user["userrights"]?.map((item) => item?.moduleCode);
-  let moduleArea = user["userrights"]?.map((item) => item?.moduleArea);
+  let rights = user["userrights"]
+    ?.map((item) => item?.moduleCode)
+    ?.filter(
+      (right) =>
+        right === 5145 || right === 5146 || right === 5147 || right === 5148,
+    );
 
+  let moduleArea = rights.map((right) => {
+    const item = user["userrights"].find((m) => m.moduleCode === right);
+    return item.moduleArea;
+  });
   // const view = roleToView(user?.userRole);
   const pageMeta = viewMeta[moduleArea[0]?.toLowerCase() || ""];
 
@@ -74,6 +75,18 @@ const Overview = () => {
   // };
 
   const renderFilterSheet = () => {
+    const roleToComponent = {
+      store: <FilterSheet />,
+      verification: <FilterSheet />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+      if (component) return component;
+    }
+
+    if (role === "Dispatch") return null;
+
     if (rights?.includes(5145) || rights?.includes(5146))
       return <FilterSheet />;
 
@@ -81,18 +94,42 @@ const Overview = () => {
   };
 
   const renderLabelValues = () => {
-    if (rights?.includes(5147)) return <DispatchLabelValue />;
+    const roleToComponent = {
+      store: <StoreLabelValue />,
+      verification: <VerificationLabelValue />,
+      dispatch: <DispatchLabelValue />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+      if (component) return component;
+    }
+
     if (rights?.includes(5145)) return <StoreLabelValue />;
     if (rights?.includes(5146)) return <VerificationLabelValue />;
+    if (rights?.includes(5147)) return <DispatchLabelValue />;
 
     return null;
   };
 
   const renderMainContent = () => {
-    if (rights?.includes(5148)) return <DeliveryInvoice />;
-    if (rights?.includes(5147)) return <DispatchMain />;
+    const roleToComponent = {
+      store: <StorePage />,
+      verification: <VerificationPage />,
+      delivery: <DeliveryInvoice />,
+      dispatch: <DispatchMain />,
+    };
+
+    if (role) {
+      const component = roleToComponent[role.toLowerCase()];
+
+      if (component) return component;
+    }
+
     if (rights?.includes(5145)) return <StorePage />;
     if (rights?.includes(5146)) return <VerificationPage />;
+    if (rights?.includes(5147)) return <DispatchMain />;
+    if (rights?.includes(5148)) return <DeliveryInvoice />;
 
     return <InvoicesDataTable />;
   };
