@@ -10,7 +10,13 @@ import {
   setDeliveryDetails,
   setRouteName,
 } from "@/features/dispatch/dispatchSlice";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const COLLECTION_TYPES = {
   // COURIER: "3",
@@ -25,6 +31,7 @@ const COLLECTION_TYPES = {
 
 export default function DispatchDetails({
   data,
+  rowData = {},
   collectionType,
   deliveryPerson,
   driverLoading,
@@ -35,30 +42,30 @@ export default function DispatchDetails({
   courierOptions = [],
 }) {
   const [courierDetails, setCourierDetailsState] = useState({
-    customerCourierName: "",
-    customerCourierId: "",
-    customerCourierPhone: "",
+    customerCourierName: rowData?.customerName || "",
+    customerCourierId: rowData?.collectorIdNo || "",
+    customerCourierPhone: rowData?.collectorPhoneNo || "",
   });
 
-  useEffect(() => {
-    setCourierDetailsState({
-      customerCourierName: "",
-      customerCourierId: "",
-      customerCourierPhone: "",
-    });
-  }, [collectionType]); // Reset when collectionType changes
+  // useEffect(() => {
+  //   setCourierDetailsState({
+  //     customerCourierName: "",
+  //     customerCourierId: "",
+  //     customerCourierPhone: "",
+  //   });
+  // }, [collectionType]); // Reset when collectionType changes
 
   const dispatch = useDispatch();
 
   const deliveryDetails = useSelector(
-    (state) => state.dispatch.deliveryDetails
+    (state) => state.dispatch.deliveryDetails,
   );
 
   const handleChange = (field, e, stringField) => {
     const name = stringField || e.target?.name;
     const value = stringField ? e : e.target?.value;
 
-    if (!name) return; 
+    if (!name) return;
 
     const updatedState = {
       ...courierDetails,
@@ -92,7 +99,6 @@ export default function DispatchDetails({
 
   return (
     <div className="flex flex-col gap-2 text-xs font-medium">
-
       {/* Loading and error states for driver details */}
       {collectionType === COLLECTION_TYPES.OUR_DELIVERY && driverLoading && (
         <Label className="text-xs text-blue-500">
@@ -146,7 +152,6 @@ export default function DispatchDetails({
       {collectionType === COLLECTION_TYPES.OUR_DELIVERY && !deliveryPerson && (
         <>
           <section className="flex flex-col w-full h-full gap-2">
-
             <div className="flex items-center gap-2 justify-between w-full">
               <Label className="text-xs font-medium w-2/5">Car Make:</Label>
               <Input
@@ -176,7 +181,6 @@ export default function DispatchDetails({
         deliveryPerson &&
         data && (
           <section className="flex flex-col w-full h-full gap-2">
-
             <div className="flex items-center justify-between w-full">
               <Label className="text-xs font-medium w-1/3">Car Make:</Label>
               <Input
@@ -219,8 +223,13 @@ export default function DispatchDetails({
             <Select
               value={courierDetails.customerCourierName}
               onValueChange={(value) =>
-                handleChange(COLLECTION_TYPES.COURIER, value, "customerCourierName")}
-                disabled={!enabled}
+                handleChange(
+                  COLLECTION_TYPES.COURIER,
+                  value,
+                  "customerCourierName",
+                )
+              }
+              disabled={!enabled}
             >
               <SelectTrigger className="w-2/3 h-6 text-xs">
                 <SelectValue placeholder="Select courier name" />

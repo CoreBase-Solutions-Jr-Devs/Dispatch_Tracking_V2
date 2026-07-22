@@ -15,6 +15,14 @@ import {
 } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
+import { store } from "@/app/store";
+
+const state = store.getState();
+
+const { user = {} } = state.auth;
+
+const { userrights = [] } = user;
+
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
@@ -133,4 +141,9 @@ export const dateDefineds = {
   endOfYear: endOfYear(new Date()),
   startOfNextYear: startOfYear(addYears(new Date(), +1)),
   endOfNextYear: endOfYear(addYears(new Date(), +1)),
+};
+
+export const checkRight = (code) => {
+  let moduleCode = userrights.map((item) => item.moduleCode);
+  return moduleCode.includes(code);
 };

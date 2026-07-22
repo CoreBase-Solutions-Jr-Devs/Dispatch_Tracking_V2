@@ -2,8 +2,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
-export default function DispatchRemarks({ enabled, handleDispatchRemarks }) {
-  const [dispatchRemarks, setDispatchRemarks] = useState("");
+export default function DispatchRemarks({
+  enabled,
+  rowData = {},
+  handleDispatchRemarks,
+}) {
+  const [dispatchRemarks, setDispatchRemarks] = useState(
+    rowData?.dispatchRemarks || "",
+  );
 
   const handleChange = (e) => {
     setDispatchRemarks(e.target.value);

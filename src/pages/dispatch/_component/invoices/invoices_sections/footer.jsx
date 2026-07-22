@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  resetDispatchData,
+  // resetDispatchData,
   setAssignedTo,
   setDispatch,
 } from "@/features/dispatch/dispatchSlice";
@@ -88,6 +88,11 @@ export default function DispatchFooter({
       // routeName: selectValues?.dispatchRoute || null,
       driverName: driverDetails?.driverName,
       driverId: Number(driverDetails?.driverId),
+      collectedBy: clientDetails?.collectedBy,
+      collectorIdNo: clientDetails?.collectorIdNo,
+      collectorPhoneNo: clientDetails?.collectorPhoneNo,
+      dispatchRemarks,
+      assignedTo: clientDetails?.assignedTo,
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
       customerCourierName: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierName: courierDetails?.customerCourierName,
@@ -108,7 +113,7 @@ export default function DispatchFooter({
       delete formData.driverName;
       delete formData.routeName;
       delete formData.carMake;
-      delete formData.carPlate;
+      delete formData.regNo;
     }
 
     console.log(formData);
@@ -118,13 +123,13 @@ export default function DispatchFooter({
       dispatch(setDispatch(formData));
 
       toast.success("Dispatch saved successfully!");
-      console.log(data);
+      console.log("Saved Dispatch Details: ", data);
       setDeliveryDisabled(false);
-      dispatch(resetDispatchData());
+      // dispatch(resetDispatchData());
       navigate(PROTECTED_ROUTES.OVERVIEW);
     } catch (error) {
       let description = "Saving failed. Please try again.";
-
+      console.log("Error on Save: ", error);
       toast.error("Dispatching save failed!", {
         description: error?.data?.message || error?.data?.title || description,
         duration: 4000,
@@ -152,9 +157,13 @@ export default function DispatchFooter({
       driverId: Number(driverDetails?.driverId),
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
+      collectedBy: clientDetails?.collectedBy,
+      collectorIdNo: clientDetails?.collectorIdNo,
+      collectorPhoneNo: clientDetails?.collectorPhoneNo,
       customerCourierName: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierName: courierDetails?.customerCourierName,
       customerCourierId: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierId: courierDetails?.customerCourierId,
       customerCourierPhone: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierPhone : courierDetails?.customerCourierPhone,
+      assignedTo: clientDetails?.assignedTo,
       dispatchRemarks,
       isPush: true,
     };
@@ -173,7 +182,7 @@ export default function DispatchFooter({
       delete formData.driverName;
       delete formData.routeName;
       delete formData.carMake;
-      delete formData.carPlate;
+      delete formData.regNo;
     }
     console.log(clientDetails);
     try {
@@ -181,9 +190,9 @@ export default function DispatchFooter({
       dispatch(setDispatch(formData));
 
       toast.success("Dispatch pushed successfully!");
-      console.log(data);
+      console.log("Pushed Dispatch Details: ", data);
       navigate(PROTECTED_ROUTES.OVERVIEW);
-      dispatch(resetDispatchData());
+      // dispatch(resetDispatchData());
     } catch (error) {
       let description = "Saving failed. Please try again.";
 

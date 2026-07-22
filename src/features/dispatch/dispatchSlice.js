@@ -6,6 +6,9 @@ const initialState = {
   carPlate: "",
   clientName: "",
   clientId: "",
+  collectedBy: "",
+  collectorIdNo: "",
+  collectorPhoneNo: "",
   collectionType: "",
   customerCourierName: "",
   customerCourierId: 0,
@@ -53,6 +56,9 @@ const dispatchSlice = createSlice({
     setDispatch: (state, action) => {
       state.dispatchIds = action.payload.dispatchIds;
       state.collectionType = action.payload.collectionType;
+      state.collectedBy = action.payload.collectedBy;
+      state.collectorIdNo = action.payload.collectorIdNo;
+      state.collectorPhoneNo = action.payload.collectorPhoneNo;
       state.routeCode = action.payload.routeCode;
       state.routeName = action.payload.routeName;
       state.driverName = action.payload.driverName;
@@ -76,6 +82,9 @@ const dispatchSlice = createSlice({
       state.clientDetails = {};
       state.deliveryDetails = {};
       state.collectionType = "";
+      state.collectedBy = "";
+      state.collectorIdNo = "";
+      state.collectorPhoneNo = "";
       state.routeCode = 0;
       state.routeName = "";
       state.driverName = "";
@@ -100,6 +109,15 @@ const dispatchSlice = createSlice({
     },
     setCollectionType: (state, action) => {
       state.collectionType = action.payload.collectionType;
+    },
+    setCollectedBy: (state, action) => {
+      state.collectedBy = action.payload.collectedBy;
+    },
+    setCollectorIdNo: (state, action) => {
+      state.collectorIdNo = action.payload.collectorIdNo;
+    },
+    setCollectorPhoneNo: (state, action) => {
+      state.collectorPhoneNo = action.payload.collectorPhoneNo;
     },
     setCustomerCourierName: (state, action) => {
       state.customerCourierName = action.payload.customerCourierName;
@@ -190,12 +208,36 @@ const dispatchSlice = createSlice({
     },
     setCourierDetails: (state, action) => {
       state.courierDetails = action.payload;
+      state.collectionType = action.payload?.collectionType;
+      state.collectedBy = action.payload?.collectedBy;
+      state.collectorIdNo = action.payload?.collectorIdNo;
+      state.collectorPhoneNo = action.payload?.collectorPhoneNo;
+      state.customerCourierName = action.payload?.customerCourierName;
+      state.customerCourierId = action.payload?.customerCourierId;
+      state.customerCourierPhone = action.payload?.customerCourierPhone;
+      state.dispatchRemarks = action.payload?.dispatchRemarks;
+      state.assignedTo = action.payload?.assignedTo;
     },
     setClientDetails: (state, action) => {
       state.clientDetails = action.payload;
+      state.collectionType = action.payload?.collectionType;
+      state.collectedBy = action.payload?.collectedBy;
+      state.clientName = action.payload?.clientName;
+      state.phoneNo = action.payload?.phoneNo;
+      state.collectorIdNo = action.payload?.collectorIdNo;
+      state.collectorPhoneNo = action.payload?.collectorPhoneNo;
+      state.dispatchRemarks = action.payload?.dispatchRemarks;
+      state.assignedTo = action.payload?.assignedTo;
     },
     setDeliveryDetails: (state, action) => {
       state.deliveryDetails = action.payload;
+      state.collectionType = action.payload?.collectionType;
+      state.deliveryDriver = action.payload.deliveryDriver;
+      state.collectorPhoneNo = action.payload?.collectorPhoneNo;
+      state.carMake = action.payload?.carMake;
+      state.regNo = action.payload?.regNo;
+      state.dispatchRemarks = action.payload?.dispatchRemarks;
+      state.assignedTo = action.payload?.assignedTo;
     },
   },
 });
@@ -204,6 +246,7 @@ export const {
   setInvoices,
   setCarMake,
   setCarPlate,
+  setCollectedBy,
   setCollectionType,
   setCustomerCourierName,
   setCustomerCourierId,
