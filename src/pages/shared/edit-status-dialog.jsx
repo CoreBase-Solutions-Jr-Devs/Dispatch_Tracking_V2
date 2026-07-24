@@ -1,8 +1,8 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 
-import StorePopup from "../Store/popup.jsx";
-import VerificationPopup from "../Verification/popup.jsx";
+import StorePopup from "@/pages/Store/_component/Store-Dialog/popup.jsx";
+import VerificationPopup from "@/pages/Verification/_component/Verification-Dialog/popup.jsx";
 import StartPopup from "./startpopup.jsx";
 import DispatchMainPopup from "@/pages/dispatch/_component/main/main_sections/mainpopup.jsx";
 import DispatchPopup from "@/pages/dispatch/_component/Dispatch_Dialog/popup.jsx";

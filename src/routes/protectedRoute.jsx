@@ -3,9 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { AUTH_ROUTES } from "./common/routePath";
 
 const ProtectedRoute = ({ allowedRoles }) => {
-  const { accessToken, user } = useSelector((state) => state.auth);
-
-  // let rights = user["userrights"]?.map((item) => item?.moduleCode);
+  const { accessToken, user, bcode } = useSelector((state) => state.auth);
 
   const roles = user?.userrights?.map((item) => item?.moduleArea) || [];
 
@@ -19,13 +17,12 @@ const ProtectedRoute = ({ allowedRoles }) => {
     return <Navigate to={AUTH_ROUTES.SIGN_IN} replace />;
   }
 
+  // No branch selected? redirect to branch selection
+  if (!bcode || bcode === 0) {
+    return <Navigate to={AUTH_ROUTES.AUTH_BRANCH} replace />;
+  }
+
   // Role not allowed? redirect to unauthorized page
-  // if (allowedRoles && !allowedRoles.includes(user.userRole)) {
-  //   return <Navigate to="/unauthorized" replace />;
-  // }
-  // if (allowedRoles && !allowedRoles.join(" ").includes(role)) {
-  //   return <Navigate to="/unauthorized" replace />;
-  // }
   if (allowedRoles && !hasAccess) {
     return <Navigate to="/unauthorized" replace />;
   }

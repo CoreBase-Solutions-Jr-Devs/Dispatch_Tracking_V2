@@ -5,15 +5,14 @@ import InvoicesDataTable from "../shared/shared-invoice-data-table";
 import { roleToView, viewMeta } from "@/lib/utils";
 import FilterSheet from "../shared/filter-sheet/filterSheet";
 import DeliveryInvoice from "./_component/driver/_component/delivery-main-page/index.";
-import StorePage from "../Store/Store-invoicedatatable";
-import VerificationPage from "../Verification/Verif-invoices";
 import DispatchMain from "../dispatch/_component/main";
-import StoreLabelValue from "../Store/store-label-value";
-import VerificationLabelValue from "../Verification/verification-label-value";
 import { DispatchLabelValue } from "../shared/label-values";
-// import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
+import StorePage from "../Store/_component/main/Store-invoicedatatable";
+import StoreLabelValue from "../Store/_component/main/store-label-value";
+import VerificationLabelValue from "../Verification/_component/main/verification-label-value";
+import VerificationPage from "../Verification/_component/main/Verif-invoices";
 
-const Overview = () => {
+const Overview = ({ role = "" }) => {
   const { user } = useSelector((state) => state.auth);
 
   let rights = user["userrights"]
@@ -28,7 +27,9 @@ const Overview = () => {
     return item.moduleArea;
   });
   // const view = roleToView(user?.userRole);
-  const pageMeta = viewMeta[moduleArea[0]?.toLowerCase() || ""];
+  const pageMeta = role
+    ? viewMeta[role.toLowerCase()]
+    : viewMeta[moduleArea[0]?.toLowerCase()];
 
   // const renderFilterSheet = () => {
   //   switch (user?.userRole) {
