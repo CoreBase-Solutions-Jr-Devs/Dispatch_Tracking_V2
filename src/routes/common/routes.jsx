@@ -1,23 +1,26 @@
-import { AUTH_ROUTES, PROTECTED_ROUTES } from "./routePath";
+import { AUTH_ROUTES, PROTECTED_ROUTES, UNPROTECTED_ROUTES } from "./routePath";
 import SignIn from "@/pages/auth/sign-in";
 import Overview from "@/pages/overview";
 import Dashboard from "@/pages/dashboard";
+import AuthBranch from "@/pages/branches";
 import Settings from "@/pages/settings";
-import Invoices from "@/pages/invoices";
-import Reports from "@/pages/reports";
+import StatusProgressPage from "@/pages/status_tracking/landing/StatusProgressPage";
 import { ROLES } from "@/constant";
 import DispatchInvoice from "@/pages/dispatch/_component/invoices";
 import {
   Home,
-  Folder,
-  FileStackIcon,
   Settings as SettingsIcon,
   Plus,
   LayoutDashboard,
+  Store,
+  PackageCheck,
+  Split,
+  Truck,
 } from "lucide-react";
 import BranchRoute from "../branchRoute";
 import { checkRight } from "@/lib/utils";
 
+// Auth routes - only for unauthenticated users
 export const authenticationRoutePaths = [
   { path: AUTH_ROUTES.SIGN_IN, element: <SignIn /> },
 ];
@@ -124,3 +127,15 @@ export const protectedRoutePaths = [
   //NEW ROUTES
   //
 ].concat([...extraRoutes]);
+
+export const unprotectedRoutePaths = [
+  {
+    path: UNPROTECTED_ROUTES.STATUS_TRACKER,
+    element: <StatusProgressPage />,
+    roles: [
+      ROLES.Customer, ROLES.User
+    ],
+    menuLabel: "Status",
+    // icon: Truck,
+  },
+]
