@@ -15,18 +15,16 @@ import {
 } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
-import { store } from "@/app/store";
-
-const state = store.getState();
-
-const { user = {} } = state.auth;
-
-const { userrights = [] } = user;
-
+/**
+ * Tailwind class merge helper
+ */
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Role → View mapping
+ */
 export function roleToView(role) {
   if (!role) return "user";
 
@@ -55,10 +53,61 @@ export function roleToView(role) {
   }
 }
 
+/**
+ * Extract rights codes safely
+ */
+export const getUserRightCodes = (user) => {
+  if (!Array.isArray(user?.userrights)) return [];
+  return user.userrights
+    .map((item) => item?.moduleCode)
+    .filter(Boolean);
+};
+
+/**
+ * Extract module areas / roles safely
+ */
+export const getUserModuleAreas = (user) => {
+  if (!Array.isArray(user?.userrights)) return [];
+  return user.userrights
+    .map((item) => item?.moduleArea)
+    .filter(Boolean);
+};
+
+/**
+ * Check if user has a specific right code
+ */
+export const checkRight = (code, userrights = []) => {
+  if (!Array.isArray(userrights)) return false;
+
+  return userrights
+    .map((item) => item?.moduleCode)
+    .filter(Boolean)
+    .includes(code);
+};
+
+/**
+ * Check using already extracted right codes
+ */
+export const hasRightCode = (code, rightCodes = []) => {
+  if (!Array.isArray(rightCodes)) return false;
+  return rightCodes.includes(code);
+};
+
+/**
+ * Check if user has at least one allowed role
+ */
+export const hasAllowedRole = (allowedRoles = [], userAreas = []) => {
+  if (!Array.isArray(allowedRoles) || !Array.isArray(userAreas)) return false;
+  if (allowedRoles.length === 0) return true;
+  return allowedRoles.some((role) => userAreas.includes(role));
+};
+
+/**
+ * Rights → View mapping
+ */
 export function rightsToView(rights = []) {
   if (!Array.isArray(rights)) return "user";
 
-  // Rights mapping to sections
   const VIEW_RIGHTS = {
     store: [5145],
     verification: [5146],
@@ -67,8 +116,9 @@ export function rightsToView(rights = []) {
   };
 
   if (rights.some((r) => VIEW_RIGHTS.store.includes(r))) return "store";
-  if (rights.some((r) => VIEW_RIGHTS.verification.includes(r)))
+  if (rights.some((r) => VIEW_RIGHTS.verification.includes(r))) {
     return "verification";
+  }
   if (rights.some((r) => VIEW_RIGHTS.dispatch.includes(r))) return "dispatch";
   if (rights.some((r) => VIEW_RIGHTS.delivery.includes(r))) return "delivery";
 
@@ -76,7 +126,7 @@ export function rightsToView(rights = []) {
 }
 
 /**
- * View metadata (title + subtitle) per role/view
+ * View metadata (title + subtitle)
  */
 export const viewMeta = {
   "view all stages": {
@@ -104,8 +154,9 @@ export const viewMeta = {
     subtitle: "System invoices overview.",
   },
 };
+
 /**
- * Date Dropdown
+ * Date ranges
  */
 export const ranges = [
   "Today",
@@ -116,7 +167,6 @@ export const ranges = [
   "Last Month",
   "Month To Date",
   "This Year",
-  // 'Month To Year',
   "Last Year",
   "Year To Date",
   "Custom Range",
@@ -139,11 +189,6 @@ export const dateDefineds = {
   endOfLastYear: endOfYear(addYears(new Date(), -1)),
   startOfYear: startOfYear(new Date()),
   endOfYear: endOfYear(new Date()),
-  startOfNextYear: startOfYear(addYears(new Date(), +1)),
-  endOfNextYear: endOfYear(addYears(new Date(), +1)),
-};
-
-export const checkRight = (code) => {
-  let moduleCode = userrights.map((item) => item.moduleCode);
-  return moduleCode.includes(code);
+  startOfNextYear: startOfYear(addYears(new Date(), 1)),
+  endOfNextYear: endOfYear(addYears(new Date(), 1)),
 };

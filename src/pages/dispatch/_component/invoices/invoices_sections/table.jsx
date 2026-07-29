@@ -6,7 +6,7 @@ function DispatchSummaryTable({ data = [], selected, handleRowCheck }) {
     <div className="overflow-x-auto">
       <Table>
         <TableBody>
-          <TableRow className="bg-gray-100 text-xs font-medium">
+          <TableRow className="bg-gray-100 dark:bg-gray-800 text-xs font-medium border-b dark:border-gray-700">
             <TableCell className="py-1 px-2">Select</TableCell>
             <TableCell className="py-1 px-2">DocNo</TableCell>
             <TableCell className="py-1 px-2">CusCode</TableCell>
@@ -22,22 +22,22 @@ function DispatchSummaryTable({ data = [], selected, handleRowCheck }) {
               (d) => d.dispatchId === row.dispatchId
             );
             return (
-              <TableRow key={index} className={"text-xs font-medium"}>
+              <TableRow key={index} className={"text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-800 border-b dark:border-gray-700"}>
                 <TableCell className="py-1 px-2">
                   <Checkbox
-                    className="border border-gray-400"
+                    className="border border-gray-400 dark:border-gray-500"
                     checked={isChecked}
                     onCheckedChange={(value) => handleRowCheck(value, row)}
                   />
                 </TableCell>
-                <TableCell className="py-1 px-2">{row?.docNo}</TableCell>
-                <TableCell className="py-1 px-2">{row?.customerCode}</TableCell>
-                <TableCell className="py-1 px-2">{row?.customerName}</TableCell>
-                <TableCell className="py-1 px-2">{row?.route}</TableCell>
-                <TableCell className="py-1 px-2">{row?.items}</TableCell>
-                <TableCell className="py-1 px-2">{row?.docType}</TableCell>
-                <TableCell className="py-1 px-2">{row?.paymentTerms}</TableCell>
-                <TableCell className="py-1 px-2">
+                <TableCell className="py-1 px-2 text-foreground">{row?.docNo}</TableCell>
+                <TableCell className="py-1 px-2 text-foreground">{row?.customerCode}</TableCell>
+                <TableCell className="py-1 px-2 text-foreground">{row?.customerName}</TableCell>
+                <TableCell className="py-1 px-2 text-foreground">{row?.route}</TableCell>
+                <TableCell className="py-1 px-2 text-foreground">{row?.items}</TableCell>
+                <TableCell className="py-1 px-2 text-foreground">{row?.docType}</TableCell>
+                <TableCell className="py-1 px-2 text-foreground">{row?.paymentTerms}</TableCell>
+                <TableCell className="py-1 px-2 text-foreground">
                   {Number(
                     new Intl.NumberFormat("en-GB").format(row?.amount)
                   ).toFixed(2)}
