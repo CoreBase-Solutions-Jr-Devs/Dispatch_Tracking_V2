@@ -15,14 +15,13 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import { apiClient } from "./api-client";
+import { apiClient, statusTrackingClient } from "./api-client";
 
 // Persist config
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: [apiClient.reducerPath], // Do not persist RTK Query cache
-  whitelist: ["auth"],
+  blacklist: [apiClient.reducerPath, statusTrackingClient.reducerPath], // Do not persist RTK Query cache
   // Uncomment below to enable encryption
   // transforms: [
   //   encryptTransform({
@@ -35,6 +34,7 @@ const persistConfig = {
 // Root reducer
 const rootReducer = combineReducers({
   [apiClient.reducerPath]: apiClient.reducer,
+  [statusTrackingClient.reducerPath]: statusTrackingClient.reducer,
   auth: authReducer,
   invoice: invoiceReducer,
   dashboard: dashboardReducer,
@@ -56,7 +56,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: reduxPersistActions,
       },
-    }).concat(apiClient.middleware),
+    }).concat(apiClient.middleware, statusTrackingClient.middleware),
 });
 
 // Persistor

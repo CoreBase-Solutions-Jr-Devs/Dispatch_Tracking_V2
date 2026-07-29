@@ -2,20 +2,24 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   authenticationRoutePaths,
   branchRoutePath,
-  protectedRoutePaths,
+  protectedRoutePaths, 
+  unprotectedRoutePaths,
 } from "./common/routes";
+import NotFound from "@/pages/not_found/NotFound";
 import AppLayout from "@/layouts/app-layout";
 import BaseLayout from "@/layouts/base-layout";
 import AuthRoute from "./authRoute";
-import BranchRoute from "./branchRoute";
 import ProtectedRoute from "./protectedRoute";
 import UnAuthorized from "@/pages/unAuthorized";
+import UnprotectedRoute from "./unprotectedRoute";
 
 function AppRoutes() {
+  // useAuthExpiration();
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Auth Routes - for unauthenticated users */}
+        {/* Auth Routes */}
         <Route element={<AuthRoute />}>
           <Route element={<BaseLayout />}>
             {authenticationRoutePaths.map((route) => (
@@ -54,6 +58,20 @@ function AppRoutes() {
           </Route>
         ))}
 
+        {/* Unprotected Routes */}
+        <Route element={<UnprotectedRoute />}>
+          <Route element={<BaseLayout />}>
+            {unprotectedRoutePaths.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.element}
+              />
+            ))}
+          </Route>
+        </Route>
+
+        <Route path="/404" element={<NotFound />} />
         {/* Catch-all for undefined routes */}
         <Route path="*" element={<UnAuthorized />} />
       </Routes>

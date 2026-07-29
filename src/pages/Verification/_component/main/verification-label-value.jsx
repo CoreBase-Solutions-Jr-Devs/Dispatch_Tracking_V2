@@ -2,8 +2,7 @@ import React from "react";
 import { useTypedSelector } from "@/app/hook";
 import { Skeleton } from "@/components/ui/skeleton";
 import { renderDuration } from "@/components/invoice-data-table/invoice-columns";
-import LabelValue from "@/pages/shared/label-values/shared-label-value";
-// import LabelValue from "../shared/label-values/shared-label-value";
+import LabelValue from "../../../shared/label-values/shared-label-value";
 
 const STATUS_STYLES = {
   Total: "Store",
