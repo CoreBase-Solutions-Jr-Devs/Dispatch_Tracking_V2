@@ -18,7 +18,6 @@ import {
   Truck,
 } from "lucide-react";
 import BranchRoute from "../branchRoute";
-import { checkRight } from "@/lib/utils";
 
 // Auth routes - only for unauthenticated users
 export const authenticationRoutePaths = [
@@ -39,60 +38,42 @@ export const branchRoutePath = [
   },
 ];
 
-const extraRoutes = [
-  {
-    path: PROTECTED_ROUTES.STORE,
-    // element: <h1>Store, Greatness awaits </h1>,
-    element: <Overview role={"Store"} />,
-    roles: Object.values(ROLES),
-    menuLabel: "Store",
-    right: checkRight(5145),
-    icon: Store,
-  },
-  {
-    path: PROTECTED_ROUTES.VERIFICATION,
-    // element: <h1>Verification, Greatness awaits </h1>,
-    element: <Overview role={"Verification"} />,
-    roles: Object.values(ROLES),
-    menuLabel: "Verification",
-    right: checkRight(5146),
-    icon: PackageCheck,
-  },
-  {
-    path: PROTECTED_ROUTES.DISPATCH,
-    // element: <h1>Dispatch, Greatness awaits </h1>,
-    element: <Overview role={"Dispatch"} />,
-    roles: Object.values(ROLES),
-    menuLabel: "Dispatch",
-    right: checkRight(5147),
-    icon: Split,
-  },
-  {
-    path: PROTECTED_ROUTES.NEWDISPATCH,
-    element: <DispatchInvoice />,
-    roles: Object.values(ROLES),
-    menuLabel: "New Dispatch",
-    right: checkRight(5147),
-    icon: Plus,
-  },
-  {
-    path: PROTECTED_ROUTES.DELIVERY,
-    // element: <h1>Dispatch, Greatness awaits </h1>,
-    element: <Overview role={"Delivery"} />,
-    roles: Object.values(ROLES),
-    menuLabel: "Delivery",
-    right: checkRight(5148),
-    icon: Truck,
-  },
-  {
-    path: PROTECTED_ROUTES.SETTINGS,
-    element: <Settings />,
-    roles: Object.values(ROLES),
-    menuLabel: "Settings",
-    right: true,
-    icon: SettingsIcon,
-  },
-].filter((item) => item.right === true);
+// const extraRoutes = [
+//   // {
+//   //   path: PROTECTED_ROUTES.STORE,
+//   //   element: <Overview role="Store" />,
+//   //   roles: Object.values(ROLES),
+//   //   menuLabel: "Store",
+//   //   requiredRight: 5145,
+//   //   icon: Store,
+//   // },
+//   // {
+//   //   path: PROTECTED_ROUTES.VERIFICATION,
+//   //   element: <Overview role="Verification" />,
+//   //   roles: Object.values(ROLES),
+//   //   menuLabel: "Verification",
+//   //   requiredRight: 5146,
+//   //   icon: PackageCheck,
+//   // },
+//   // {
+//   //   path: PROTECTED_ROUTES.DISPATCH,
+//   //   element: <Overview role="Dispatch" />,
+//   //   roles: Object.values(ROLES),
+//   //   menuLabel: "Dispatch",
+//   //   requiredRight: 5147,
+//   //   icon: Split,
+//   // },
+
+//   // {
+//   //   path: PROTECTED_ROUTES.DELIVERY,
+//   //   element: <Overview role="Delivery" />,
+//   //   roles: Object.values(ROLES),
+//   //   menuLabel: "Delivery",
+//   //   requiredRight: 5148,
+//   //   icon: Truck,
+//   // },
+
+// ];
 
 // Protected routes - requires both authentication AND branch selection
 export const protectedRoutePaths = [
@@ -110,23 +91,22 @@ export const protectedRoutePaths = [
     menuLabel: "Overview",
     icon: Home,
   },
-  // {
-  //   path: PROTECTED_ROUTES.INVOICES,
-  //   element: <Invoices />,
-  //   roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.SALES_PERSON],
-  //   menuLabel: "Invoices",
-  //   icon: Folder,
-  // },
-  // {
-  //   path: PROTECTED_ROUTES.REPORTS,
-  //   element: <Reports />,
-  //   roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.SALES_PERSON],
-  //   menuLabel: "Reports",
-  //   icon: FileStackIcon,
-  // },
-  //NEW ROUTES
-  //
-].concat([...extraRoutes]);
+    {
+    path: PROTECTED_ROUTES.SETTINGS,
+    element: <Settings />,
+    roles: Object.values(ROLES),
+    menuLabel: "Settings",
+    icon: SettingsIcon,
+  },
+    {
+    path: PROTECTED_ROUTES.NEWDISPATCH,
+    element: <DispatchInvoice />,
+    roles: Object.values(ROLES),
+    menuLabel: "New Dispatch",
+    requiredRight: 5147,
+    icon: Plus,
+  },
+];
 
 export const unprotectedRoutePaths = [
   {
