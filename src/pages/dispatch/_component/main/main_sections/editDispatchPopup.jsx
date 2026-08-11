@@ -379,7 +379,8 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
             handleAction(true);
           }}
           disabled={isAnyLoading}
-          className="bg-orange-600 text-white hover:bg-orange-700"
+          className="text-white"
+          variant="default"
         >
           PUSH
         </Button>
