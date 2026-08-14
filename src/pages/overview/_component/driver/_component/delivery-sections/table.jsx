@@ -115,15 +115,17 @@ export default function DeliveryTable({
                 data-state={row.DocNo === selectedRow?.DocNo ? "selected" : ""}
               >
                 <TableCell className="py-1 px-2">
-                  <Checkbox
+                  { row.OTPValidated  && <Checkbox
                     className="border border-gray-400"
                     // checked={checked}
                     disabled={
-                      row.DeliveryStatus === "Delivered" &&
-                      row.IsCollected === true
+                      (row.DeliveryStatus === "Delivered" &&
+                      row.IsCollected === true)
+                    
                     }
                     onCheckedChange={(value) => handleRowCheck(value, row)}
-                  />
+                  /> }
+                  
                 </TableCell>
                 {/* <TableCell className="py-1 px-2">{row?.DISPATCHNUM}</TableCell>
               <TableCell className="py-1 px-2">{row?.SALEINV_NUM}</TableCell>
