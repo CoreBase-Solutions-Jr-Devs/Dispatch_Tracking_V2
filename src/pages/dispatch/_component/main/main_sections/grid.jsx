@@ -160,15 +160,20 @@ export default function DispatchGrid({
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 50;
 
+  const isSearchResult = isSearch === true;
+
   const { data: savedDispatches, isFetching } =
     useGetSavedDispatchedInvoicesQuery(
       { pageNumber, pageSize },
-      { skip: data?.length > 0 }
+      { skip: isSearchResult }
     );
 
-  const isSearchResult = data?.length > 0;
 
   const displayData = isSearchResult ? data : savedDispatches?.items || [];
+
+  const totalItems = savedDispatches?.totalCount ?? 0;
+  const currentPageSize = savedDispatches?.pageSize ?? pageSize;
+  const totalPages = Math.ceil(totalItems / currentPageSize);
 
   const columns = useMemo(
     () => [
@@ -245,10 +250,10 @@ export default function DispatchGrid({
         totalPages: 1,
       }
     : {
-        pageNumber: savedDispatches?.pageNumber || 1,
-        pageSize: savedDispatches?.pageSize || pageSize,
-        totalItems: savedDispatches?.totalCount || 0,
-        totalPages: savedDispatches?.totalPages || 1,
+        pageNumber,
+        pageSize: currentPageSize,
+        totalItems,
+        totalPages,
       };
 
   return (
