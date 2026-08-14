@@ -30,7 +30,7 @@ const EditDispatchPopup = ({ selectedDispatch = {}, onClose, rowData }) => {
   const { user } = useSelector((state) => state.auth);
   const { deliveryDetails, courierDetails, clientDetails, updatedDispatches } =
     useSelector((state) => state.dispatch);
-  const dispatchIDs = (rowData || []).map((item) => item.dispatchNum);
+  const dispatchIDs = rowData?.map((inv) => inv.dispatchId);
   const dispatchNum = rowData?.[0]?.dispatchNum || rowData?.dispatchNum;
 
   // const { data: details, isLoading } = useGetSavedDispatchedDetailsQuery(
