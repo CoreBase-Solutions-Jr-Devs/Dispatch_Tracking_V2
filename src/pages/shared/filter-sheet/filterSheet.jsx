@@ -30,7 +30,14 @@ import { roleToView } from "@/lib/utils";
 import RoleBasedFilters from "./role-based-filters";
 import { Loader2 } from "lucide-react";
 import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
-import { useAppDispatch } from "@/app/hook";
+import { useAppDispatch, useTypedSelector } from "@/app/hook";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // export default function FilterSheet() {
 //   const dispatch = useDispatch();
@@ -355,11 +362,15 @@ import { useAppDispatch } from "@/app/hook";
 function FilterSheet() {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const { user, bcode } = useTypedSelector((state) => state.auth);
+  let branches = user["userBranches"] || [];
+
   const [filter, setFilter] = useState({
     startDate: new Date(),
     endDate: new Date(),
     dateRange: "TODAY",
     status: "",
+    bcode: bcode || "",
   });
   const [selectedFilters, setSelectedFilters] = useState({});
 
@@ -495,7 +506,7 @@ function FilterSheet() {
         startDate: new Date(filter.startDate).toISOString(),
         endDate: new Date(filter.endDate).toISOString(),
         status: selectedFilters["status"] ?? "",
-      })
+      }),
     );
 
     setIsOpen(false);
@@ -507,6 +518,7 @@ function FilterSheet() {
       endDate: new Date(),
       dateRange: "",
       status: {},
+      bcode: bcode || 0,
     });
 
     dispatch(clearQueryFilter());
@@ -541,6 +553,37 @@ function FilterSheet() {
           <SheetTitle>Filter Options</SheetTitle>
         </SheetHeader>
 
+        {/* Branch Dropdown */}
+        <section className="mb-4">
+          <Label className="text-xs text-muted">Branch</Label>
+          <Select
+            value={filter.bcode}
+            onValueChange={(value) =>
+              setFilter((prevState) => ({
+                ...prevState,
+                bcode: value,
+              }))
+            }
+          >
+            <SelectTrigger className="w-full border-gray-500">
+              <div className="flex items-center gap-2">
+                <SelectValue placeholder="Select branch...">
+                  {
+                    branches.find((item) => item.bcode === Number(filter.bcode))
+                      ?.brancH_NAME
+                  }
+                </SelectValue>
+              </div>
+            </SelectTrigger>
+            <SelectContent className="bg-stone-50">
+              {branches.map((opt, index) => (
+                <SelectItem key={index} value={opt.bcode}>
+                  {opt.brancH_NAME}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </section>
         {/* Date Range Dropdown */}
         <section className="mb-4">
           <Label className="text-xs text-muted">Date Range</Label>

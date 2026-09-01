@@ -18,6 +18,7 @@ export const StoreApi = apiClient.injectEndpoints({
         startDate,
         endDate,
         workflowStatus,
+        bcode = 0,
         dateRange,
       } = {}) => ({
         url:
@@ -35,6 +36,7 @@ export const StoreApi = apiClient.injectEndpoints({
             ? new Date(endDate).toISOString().split("T")[0]
             : undefined,
           workflowStatus,
+          bCode: bcode,
           dateRange,
         },
       }),
