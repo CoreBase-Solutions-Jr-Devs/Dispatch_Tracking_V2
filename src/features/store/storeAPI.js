@@ -1,5 +1,7 @@
 import { apiClient } from "@/app/api-client";
 
+let bcode = Number(localStorage.getItem("bcode"));
+
 export const StoreApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getStoreInvoices: builder.query({
@@ -47,14 +49,14 @@ export const StoreApi = apiClient.injectEndpoints({
       query: ({ searchWord }) => ({
         url: "/store/search",
         method: "GET",
-        params: { searchWord },
+        params: { searchWord, bCode: bcode },
       }),
       invalidatesTags: ["store_invoices"],
     }),
 
     getStoreTracking: builder.query({
       query: (docNum) => ({
-        url: `/store/${docNum}/store-tracking`,
+        url: `/store/${docNum}/${bcode}/store-tracking`,
         method: "GET",
       }),
       providesTags: ["store_tracking"],
@@ -62,7 +64,7 @@ export const StoreApi = apiClient.injectEndpoints({
 
     startStoreProcess: builder.mutation({
       query: ({ docNum, userName }) => ({
-        url: `/store/${docNum}/${userName}/start`,
+        url: `/store/${docNum}/${userName}/${bcode}/start`,
         method: "POST",
       }),
       invalidatesTags: ["store_tracking", "store_invoices"],
@@ -70,7 +72,7 @@ export const StoreApi = apiClient.injectEndpoints({
 
     pushStoreInvoice: builder.mutation({
       query: ({ docNum, userName, totalWeightKg, storeRemarks }) => ({
-        url: `/store/${docNum}/push`,
+        url: `/store/${docNum}/${bcode}/push`,
         method: "POST",
         body: { docNum, userName, totalWeightKg, storeRemarks },
       }),
