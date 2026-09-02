@@ -1,5 +1,7 @@
 import { apiClient } from "@/app/api-client";
 
+let bcode = Number(localStorage.getItem("bcode"));
+
 export const VerificationApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getVerificationInvoices: builder.query({
@@ -42,21 +44,21 @@ export const VerificationApi = apiClient.injectEndpoints({
       query: ({ searchWord }) => ({
         url: "/verification/search",
         method: "GET",
-        params: { searchWord },
+        params: { searchWord, bCode: bcode },
       }),
       invalidatesTags: ["verification_invoices"],
     }),
 
     getVerificationTracking: builder.query({
       query: (docNum) => ({
-        url: `/verification/${docNum}/verification-tracking`,
+        url: `/verification/${docNum}/${bcode}/verification-tracking`,
         method: "GET",
       }),
       providesTags: ["verification_tracking"],
     }),
     startVerificationProcess: builder.mutation({
       query: ({ docNum, userName }) => ({
-        url: `/verification/${docNum}/${userName}/start`,
+        url: `/verification/${docNum}/${userName}/${bcode}/start`,
         method: "POST",
       }),
       invalidatesTags: [
@@ -66,7 +68,6 @@ export const VerificationApi = apiClient.injectEndpoints({
       ],
     }),
 
-   
     pushVerificationInvoice: builder.mutation({
       query: ({
         docNum,
@@ -74,7 +75,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         totalWeightKg = 0,
         verificationRemarks = "",
       }) => ({
-        url: `/verification/${docNum}/push`,
+        url: `/verification/${docNum}/${bcode}/push`,
         method: "POST",
         body: { docNum, userName, totalWeightKg, verificationRemarks },
       }),
@@ -90,17 +91,24 @@ export const VerificationApi = apiClient.injectEndpoints({
         currentStage = "Verification",
         targetStage = "Store",
         targetStatus = "Pending_Store",
-        recalledBy ,
+        recalledBy,
       }) => ({
         url: "/general/recall-doc",
         method: "POST",
-        body: { docNo, currentStage, targetStage, targetStatus, recalledBy },
+        body: {
+          docNo,
+          currentStage,
+          targetStage,
+          targetStatus,
+          recalledBy,
+          bCode: bcode,
+        },
       }),
       invalidatesTags: [
         "verification_invoices",
         "verification_tracking",
         "store_invoices",
-        "store_tracking", 
+        "store_tracking",
       ],
     }),
   }),
