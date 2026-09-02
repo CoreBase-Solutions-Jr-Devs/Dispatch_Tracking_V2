@@ -91,14 +91,7 @@ export const protectedRoutePaths = [
     menuLabel: "Overview",
     icon: Home,
   },
-    {
-    path: PROTECTED_ROUTES.SETTINGS,
-    element: <Settings />,
-    roles: Object.values(ROLES),
-    menuLabel: "Settings",
-    icon: SettingsIcon,
-  },
-    {
+  {
     path: PROTECTED_ROUTES.NEWDISPATCH,
     element: <DispatchInvoice />,
     roles: Object.values(ROLES),
@@ -106,16 +99,21 @@ export const protectedRoutePaths = [
     requiredRight: 5147,
     icon: Plus,
   },
+  {
+    path: PROTECTED_ROUTES.SETTINGS,
+    element: <Settings />,
+    roles: Object.values(ROLES),
+    menuLabel: "Settings",
+    icon: SettingsIcon,
+  },
 ];
 
 export const unprotectedRoutePaths = [
   {
     path: UNPROTECTED_ROUTES.STATUS_TRACKER,
     element: <StatusProgressPage />,
-    roles: [
-      ROLES.Customer, ROLES.User
-    ],
+    roles: [ROLES.Customer, ROLES.User],
     menuLabel: "Status",
     // icon: Truck,
   },
-]
+];
