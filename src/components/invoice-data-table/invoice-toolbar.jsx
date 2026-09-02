@@ -11,7 +11,13 @@ export default function InvoiceToolbar({
 }) {
   const [debounced, setDebounced] = useState(searchValue);
 
+  const { user } = useTypedSelector((state) => state.auth);
+  let branches = user["userBranches"] || [];
   const { queryFilter } = useTypedSelector((state) => state.invoice);
+
+  let branchName =
+    branches.find((branch) => branch.bcode === Number(queryFilter?.bcode))
+      ?.brancH_NAME ?? "";
 
   // Debounce search input
   useEffect(() => {
@@ -44,6 +50,8 @@ export default function InvoiceToolbar({
         <span>{formatDate(queryFilter?.endDate)}</span>
         <span className="text-red-600">Status:</span>
         <span>{queryFilter?.status}</span>
+        <span className="text-red-600">Branch:</span>
+        <span>{branchName}</span>
       </div>
     </div>
   );

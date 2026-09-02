@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Search as SearchIcon } from "lucide-react";
 import { useSelector } from "react-redux";
+import { useTypedSelector } from "@/app/hook";
 
 export default function DashboardToolbar({
   role = "admin",
@@ -11,9 +12,15 @@ export default function DashboardToolbar({
 }) {
   const [debounced, setDebounced] = useState(searchValue);
 
-const queryFilter = useSelector((state) => state.dashboard?.queryFilter) ?? {};
-const { startDate, endDate } = queryFilter;
+  const { user } = useTypedSelector((state) => state.auth);
+  let branches = user["userBranches"] || [];
 
+  const queryFilter =
+    useSelector((state) => state.dashboard?.queryFilter) ?? {};
+  const { startDate, endDate } = queryFilter;
+  let branchName =
+    branches.find((branch) => branch.bcode === Number(queryFilter?.bcode))
+      ?.brancH_NAME ?? "";
 
   // Debounce search input
   useEffect(() => {
@@ -44,6 +51,8 @@ const { startDate, endDate } = queryFilter;
         <span>{formatDate(startDate)}</span>
         <span className="text-red-600">To:</span>
         <span>{formatDate(endDate)}</span>
+        <span className="text-red-600">Branch:</span>
+        <span>{branchName}</span>
       </div>
     </div>
   );
