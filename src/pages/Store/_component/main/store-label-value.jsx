@@ -27,10 +27,22 @@ const StoreLabelValue = () => {
   }
 
   const storeSummary = [
-    { label: "Total", value: stats.totalCount || 0 },
-    { label: "Pending", value: stats.pendingCount || 0 },
-    { label: "In Process", value: stats.inProcessCount || 0 },
-    { label: "Processed", value: stats.processedCount || 0 },
+    {
+      label: "Total",
+      value: new Intl.NumberFormat("en-GB").format(stats.totalCount) || 0,
+    },
+    {
+      label: "Pending",
+      value: new Intl.NumberFormat("en-GB").format(stats.pendingCount) || 0,
+    },
+    {
+      label: "In Process",
+      value: new Intl.NumberFormat("en-GB").format(stats.inProcessCount) || 0,
+    },
+    {
+      label: "Processed",
+      value: new Intl.NumberFormat("en-GB").format(stats.processedCount) || 0,
+    },
     {
       label: "Avg. Processing Time",
       value: stats.averageDurationSeconds
