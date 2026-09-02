@@ -30,17 +30,18 @@ export default function DashboardTable() {
     useGetAllGeneralInvoicesQuery({
       ...filter,
       ...queryFilter,
+      bCode: queryFilter.bcode,
     });
   const { data: queriedData, isLoading: isQueryLoading } = useQueryInvoiceQuery(
     searchValue,
     {
       skip: !searchValue,
-    }
+    },
   );
 
-  let invoices = searchValue 
-  ? queriedData?.invoices ?? []
-  : data?.invoices ?? [];
+  let invoices = searchValue
+    ? (queriedData?.invoices ?? [])
+    : (data?.invoices ?? []);
   // let pagination = data?.pagination || {};
   let summary = data?.stats ?? {};
   let totalInvoices = summary?.totalCount ?? 0;

@@ -14,10 +14,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { setActiveBcode } from "@/features/auth/authSlice";
+import { logout, setActiveBcode } from "@/features/auth/authSlice";
+import { resetDispatchData } from "@/features/dispatch/dispatchSlice";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { Loader, PlusCircleIcon } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -25,7 +26,7 @@ function AuthBranch() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsloading] = useState(false);
-  const [branch, setBranch] = useState(0);
+  const [branch, setBranch] = useState("");
 
   const { user } = useTypedSelector((state) => state.auth);
 
@@ -33,7 +34,7 @@ function AuthBranch() {
 
   const handleBranchChange = (value) => {
     setBranch(value);
-    console.log(value);
+    localStorage.setItem("bcode", value);
   };
 
   const handleSubmit = (e) => {
@@ -57,6 +58,11 @@ function AuthBranch() {
 
     return () => clearTimeout(timeoutId);
   };
+
+  const handleLogout = useCallback(() => {
+    dispatch(logout());
+    dispatch(resetDispatchData());
+  }, [dispatch]);
 
   return (
     <div className="flex min-h-svh items-center justify-center bg-background px-5 py-12">
@@ -103,19 +109,29 @@ function AuthBranch() {
                   ))}
                 </SelectContent>
               </Select>
-              <Button
-                disabled={isLoading}
-                type="submit"
-                size="default"
-                className="transition-transform duration-200 hover:scale-[1.02] bg-primary text-primary-foreground"
-              >
-                {isLoading ? (
-                  <Loader className="h-5 w-5 animate-spin mr-2" />
-                ) : (
-                  <>Proceed</>
-                )}
-              </Button>
-
+              <div className="flex justify-between gap-1">
+                <Button
+                  disabled={isLoading}
+                  type="submit"
+                  size="default"
+                  className="transition-transform duration-200 hover:scale-[1.02] bg-primary text-primary-foreground w-1/2"
+                >
+                  {isLoading ? (
+                    <Loader className="h-5 w-5 animate-spin mr-2" />
+                  ) : (
+                    <>Proceed</>
+                  )}
+                </Button>
+                <Button
+                  disabled={isLoading}
+                  type="button"
+                  size="default"
+                  className="transition-transform duration-200 hover:scale-[1.02] hover:bg-red-500 hover:text-white outline-red-500 bg-white text-black w-1/2"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </div>
               {/* Footer */}
               <div className="text-center pt-4 border-t border-border/50 text-xs text-muted-foreground">
                 Secure pharmacy management system
