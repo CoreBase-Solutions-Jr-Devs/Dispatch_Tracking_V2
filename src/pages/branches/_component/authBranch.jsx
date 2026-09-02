@@ -25,7 +25,7 @@ function AuthBranch() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsloading] = useState(false);
-  const [branch, setBranch] = useState(0);
+  const [branch, setBranch] = useState("");
 
   const { user } = useTypedSelector((state) => state.auth);
 
@@ -33,7 +33,7 @@ function AuthBranch() {
 
   const handleBranchChange = (value) => {
     setBranch(value);
-    console.log(value);
+    localStorage.setItem("bcode", value);
   };
 
   const handleSubmit = (e) => {
