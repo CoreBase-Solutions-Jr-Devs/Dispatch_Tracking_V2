@@ -1,6 +1,5 @@
 import { apiClient } from "@/app/api-client";
-
-let bcode = Number(localStorage.getItem("bcode"));
+import { getBcode } from "@/constant";
 
 export const StoreApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,7 +19,7 @@ export const StoreApi = apiClient.injectEndpoints({
         startDate,
         endDate,
         workflowStatus,
-        bcode = 0,
+        bcode = getBcode(),
         dateRange,
       } = {}) => ({
         url:
@@ -49,14 +48,14 @@ export const StoreApi = apiClient.injectEndpoints({
       query: ({ searchWord }) => ({
         url: "/store/search",
         method: "GET",
-        params: { searchWord, bCode: bcode },
+        params: { searchWord, bCode: getBcode() },
       }),
       invalidatesTags: ["store_invoices"],
     }),
 
     getStoreTracking: builder.query({
       query: (docNum) => ({
-        url: `/store/${docNum}/${bcode}/store-tracking`,
+        url: `/store/${docNum}/${getBcode()}/store-tracking`,
         method: "GET",
       }),
       providesTags: ["store_tracking"],
@@ -64,7 +63,7 @@ export const StoreApi = apiClient.injectEndpoints({
 
     startStoreProcess: builder.mutation({
       query: ({ docNum, userName }) => ({
-        url: `/store/${docNum}/${userName}/${bcode}/start`,
+        url: `/store/${docNum}/${userName}/${getBcode()}/start`,
         method: "POST",
       }),
       invalidatesTags: ["store_tracking", "store_invoices"],
@@ -72,9 +71,15 @@ export const StoreApi = apiClient.injectEndpoints({
 
     pushStoreInvoice: builder.mutation({
       query: ({ docNum, userName, totalWeightKg, storeRemarks }) => ({
-        url: `/store/${docNum}/${bcode}/push`,
+        url: `/store/${docNum}/${getBcode()}/push`,
         method: "POST",
-        body: { docNum, userName, totalWeightKg, storeRemarks },
+        body: {
+          docNum,
+          userName,
+          totalWeightKg,
+          storeRemarks,
+          bCode: getBcode(),
+        },
       }),
       invalidatesTags: ["store_invoices", "store_tracking"],
     }),
