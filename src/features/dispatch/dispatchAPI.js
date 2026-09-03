@@ -1,10 +1,12 @@
 import { apiClient } from "@/app/api-client";
 
+let bcode = Number(localStorage.getItem("bcode"));
+
 export const dispatchApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     searchVerifiedOnDispatch: builder.query({
       query: (query) => {
-        let params = { searchWord: query };
+        let params = { searchWord: query, bCode: bcode };
         // const paramString = params.length ? `?${params.join('&')}` : '';
         return {
           url: `/dispatch/search-verified`,
@@ -17,7 +19,7 @@ export const dispatchApi = apiClient.injectEndpoints({
 
     dispatchSearch: builder.query({
       query: (query) => {
-        let params = { searchWord: query };
+        let params = { searchWord: query, bCode: bcode };
         // const paramString = params.length ? `?${params.join('&')}` : '';
         return {
           url: `/dispatch/search-dispatch`,
@@ -30,7 +32,7 @@ export const dispatchApi = apiClient.injectEndpoints({
 
     getVerifiedOnDispatch: builder.query({
       query: ({ pageNumber = 1, pageSize = 20 }) => ({
-        url: `/dispatch/verified?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        url: `/dispatch/verified?pageNumber=${pageNumber}&pageSize=${pageSize}&bCode=${bcode}`,
         method: "GET",
       }),
       providesTags: ["verified_invoices"],
@@ -40,7 +42,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (formData) => ({
         url: `/dispatch/save-selections`,
         method: "POST",
-        body: formData,
+        body: { ...formData, bCode: bcode },
       }),
       invalidatesTags: ["selected_invoices"],
     }),
@@ -49,7 +51,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (payload) => ({
         url: `/dispatch/start`,
         method: "POST",
-        body: payload,
+        body: { ...payload, bCode: bcode },
       }),
       // invalidatesTags: ["dispatch_invoices"],
     }),
@@ -66,7 +68,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (formData) => ({
         url: "/dispatch/save-push",
         method: "POST",
-        body: formData,
+        body: { ...formData, bCode: bcode },
       }),
       invalidatesTags: [
         // "dispatch_invoices",
@@ -84,7 +86,7 @@ export const dispatchApi = apiClient.injectEndpoints({
 
     getSavedDispatchedDetails: builder.query({
       query: (dispatchNum) => ({
-        url: `/dispatch/saved-dispatched-details/${dispatchNum}`,
+        url: `/dispatch/saved-dispatched-details/${dispatchNum}/${bcode}`,
         method: "GET",
       }),
       providesTags: ["saved_dispatched_details"],
@@ -94,12 +96,15 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: () => ({
         url: `/dispatch/aggregate`,
         method: "GET",
+        params: {
+          bCode: bcode,
+        },
       }),
       providesTags: ["saved_dispatched"],
     }),
     getSelectedInvoices: builder.query({
       query: (query) => ({
-        url: `/dispatch/get-selected-invoices?${query}`,
+        url: `/dispatch/get-selected-invoices?${query}&bCode=${bcode}`,
         method: "GET",
       }),
       providesTags: ["selected_invoices"],
