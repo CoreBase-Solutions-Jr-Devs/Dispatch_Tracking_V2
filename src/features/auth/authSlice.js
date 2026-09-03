@@ -37,7 +37,7 @@ const authSlice = createSlice({
       // state.expiresAt = action.payload.expiresAt;
       state.user = action.payload.user;
       state.userBranches = action.payload.user["userBranches"];
-      
+
       // Persist to localStorage
       try {
         localStorage.setItem("authState", JSON.stringify(state));
@@ -53,7 +53,7 @@ const authSlice = createSlice({
       if (user !== undefined) {
         state.user = state.user ? { ...state.user, ...user } : user;
       }
-      
+
       // Persist to localStorage
       try {
         localStorage.setItem("authState", JSON.stringify(state));
@@ -63,7 +63,7 @@ const authSlice = createSlice({
     },
     setActiveBcode: (state, action) => {
       state.bcode = action.payload;
-      
+
       // Persist to localStorage
       try {
         localStorage.setItem("authState", JSON.stringify(state));
@@ -77,10 +77,11 @@ const authSlice = createSlice({
       state.user = null;
       state.userBranches = [];
       state.bcode = 0;
-      
+
       // Clear from localStorage
       try {
-        localStorage.removeItem("authState");
+        // localStorage.removeItem("authState");
+        localStorage.clear();
       } catch (err) {
         console.error("Error removing auth state from localStorage:", err);
       }

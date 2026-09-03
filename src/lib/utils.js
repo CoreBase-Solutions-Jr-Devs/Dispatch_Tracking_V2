@@ -58,9 +58,7 @@ export function roleToView(role) {
  */
 export const getUserRightCodes = (user) => {
   if (!Array.isArray(user?.userrights)) return [];
-  return user.userrights
-    .map((item) => item?.moduleCode)
-    .filter(Boolean);
+  return user.userrights.map((item) => item?.moduleCode).filter(Boolean);
 };
 
 /**
@@ -68,9 +66,7 @@ export const getUserRightCodes = (user) => {
  */
 export const getUserModuleAreas = (user) => {
   if (!Array.isArray(user?.userrights)) return [];
-  return user.userrights
-    .map((item) => item?.moduleArea)
-    .filter(Boolean);
+  return user.userrights.map((item) => item?.moduleArea).filter(Boolean);
 };
 
 /**

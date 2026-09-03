@@ -28,7 +28,12 @@ import { resetDispatchData } from "@/features/dispatch/dispatchSlice";
 
 const Navbar = () => {
   const { pathname } = useLocation();
-  const { user } = useTypedSelector((state) => state.auth);
+  const { user, bcode } = useTypedSelector((state) => state.auth);
+  let branches = user["userBranches"] || [];
+  let branchName =
+    branches.find((branch) => branch.bcode === Number(bcode))?.brancH_NAME ??
+    "";
+
   const dispatch = useAppDispatch();
 
   const { theme, setTheme } = useTheme();
@@ -51,7 +56,7 @@ const Navbar = () => {
       { icon: Home, href: PROTECTED_ROUTES.OVERVIEW, label: "Overview" },
       { icon: Settings, href: PROTECTED_ROUTES.SETTINGS, label: "Settings" },
     ],
-    []
+    [],
   );
 
   const setupOptions = ["User Management", "System Settings"];
@@ -69,7 +74,7 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-x-4 px-4 lg:px-6">
+      <div className="mx-auto flex h-16 max-w-full items-center justify-between gap-x-4 px-4 lg:px-6">
         {/* Left: Logo + Mobile trigger + User chip */}
         <NavLogoAndUser
           username={user?.username}
@@ -90,7 +95,7 @@ const Navbar = () => {
                   to={href}
                   className={cn(
                     "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-                    pathname === href ? "bg-secondary" : "bg-transparent"
+                    pathname === href ? "bg-secondary" : "bg-transparent",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -103,9 +108,10 @@ const Navbar = () => {
 
         {/* Center: Company Name */}
         <div className="flex-1 text-center">
-          <h1 className="text-base font-semibold text-primary">
+          <h1 className="text-base font-bold text-primary">
             {user?.companyName || "COREBASE SOLUTIONS LTD"}
           </h1>
+          <p className="text-sm font-bold">{branchName}</p>
         </div>
 
         {/* Right: Setups dropdown + actions */}

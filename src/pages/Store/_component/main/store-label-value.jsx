@@ -15,8 +15,6 @@ const STATUS_STYLES = {
 const StoreLabelValue = () => {
   const { stats } = useTypedSelector((state) => state.invoice);
 
-  console.log(stats)
-
   if (!stats || Object.keys(stats).length === 0) {
     return (
       <div className="flex flex-wrap justify-center gap-4">
@@ -29,16 +27,28 @@ const StoreLabelValue = () => {
   }
 
   const storeSummary = [
-    { label: "Total", value: stats.totalCount || 0 },
-    { label: "Pending", value: stats.pendingCount || 0 },
-    { label: "In Process", value: stats.inProcessCount || 0 },
-    { label: "Processed", value: stats.processedCount || 0 },
+    {
+      label: "Total",
+      value: new Intl.NumberFormat("en-GB").format(stats.totalCount) || 0,
+    },
+    {
+      label: "Pending",
+      value: new Intl.NumberFormat("en-GB").format(stats.pendingCount) || 0,
+    },
+    {
+      label: "In Process",
+      value: new Intl.NumberFormat("en-GB").format(stats.inProcessCount) || 0,
+    },
+    {
+      label: "Processed",
+      value: new Intl.NumberFormat("en-GB").format(stats.processedCount) || 0,
+    },
     {
       label: "Avg. Processing Time",
       value: stats.averageDurationSeconds
         ? renderDuration(
             stats.averageDurationSeconds,
-            stats.averageDurationSeconds
+            stats.averageDurationSeconds,
           )
         : "N/A",
     },
@@ -47,8 +57,8 @@ const StoreLabelValue = () => {
   return (
     <div
       className="z
-        flex flex-col gap-2 
-        sm:flex-row sm:flex-wrap sm:justify-center 
+        flex flex-col gap-2
+        sm:flex-row sm:flex-wrap sm:justify-center
         md:gap-4
         lg:gap-6
       "

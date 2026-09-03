@@ -115,10 +115,10 @@ const formatUKDateTime = (date) => {
   const d = new Date(date);
   if (isNaN(d)) return "—";
   return `${String(d.getDate()).padStart(2, "0")}/${String(
-    d.getMonth() + 1
+    d.getMonth() + 1,
   ).padStart(2, "0")}/${d.getFullYear()} ${String(d.getHours()).padStart(
     2,
-    "0"
+    "0",
   )}:${String(d.getMinutes()).padStart(2, "0")}`;
 };
 
@@ -129,8 +129,8 @@ const renderDateTime = (value, position = 1, color) => {
     (formattedDate === "—"
       ? "text-muted-foreground"
       : position === 1
-      ? "text-foreground"
-      : "text-muted");
+        ? "text-foreground"
+        : "text-muted");
   return (
     <span className={`${baseColor} font-mono font-medium text-sm`}>
       {formattedDate}
@@ -286,7 +286,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
     },
     deliveryGuy: {
       accessorKey: "deliveryGuy",
-      header: "Delivery Guy",
+      header: "Delivered By",
       cell: ({ row }) => renderText(row.original.deliveryGuy),
     },
     address: {
@@ -377,7 +377,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       header: "StoreTime",
       cell: ({ row }) =>
         renderText(
-          row.original.storeTime?.split("T")[1]?.split(".")[0] || "00:00:00"
+          row.original.storeTime?.split("T")[1]?.split(".")[0] || "00:00:00",
         ),
     },
     VrfDate: {
@@ -390,7 +390,7 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       header: "VrfTime",
       cell: ({ row }) =>
         renderText(
-          row.original.vfTime?.split("T")[1]?.split(".")[0] || "00:00:00"
+          row.original.vfTime?.split("T")[1]?.split(".")[0] || "00:00:00",
         ),
     },
     DispDate: {

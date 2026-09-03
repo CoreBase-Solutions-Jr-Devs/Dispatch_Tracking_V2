@@ -12,21 +12,32 @@ import {
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import RoleBasedFilters from "./role-based-filters";
-import { useAppDispatch } from "@/app/hook";
+import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import {
   setQueryFilter,
   clearQueryFilter,
 } from "@/features/dashboard/dashboardSlice";
 import { useFilterOptionsQuery } from "@/features/invoices/invoicesAPI";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function FilterSheet() {
   const dispatch = useAppDispatch();
+
+  const { user, bcode } = useTypedSelector((state) => state.auth);
+  let branches = user["userBranches"] || [];
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState({
     startDate: new Date(),
     endDate: new Date(),
     dateRange: "TODAY",
     status: "",
+    bcode: bcode || "",
   });
   const [selectedFilters, setSelectedFilters] = useState({});
 
@@ -37,7 +48,7 @@ function FilterSheet() {
   } = useFilterOptionsQuery();
 
   const statusOptions = filterOptions?.find(
-    (item) => item?.key === "allStatus"
+    (item) => item?.key === "allStatus",
   );
   const dateRanges = [
     {
@@ -162,7 +173,7 @@ function FilterSheet() {
         startDate: new Date(filter.startDate).toISOString(),
         endDate: new Date(filter.endDate).toISOString(),
         status: selectedFilters["allStatus"] ?? "",
-      })
+      }),
     );
 
     setIsOpen(false);
@@ -174,6 +185,7 @@ function FilterSheet() {
       endDate: new Date(),
       dateRange: "",
       status: {},
+      bcode: bcode || "",
     });
 
     dispatch(clearQueryFilter());
@@ -193,6 +205,38 @@ function FilterSheet() {
         <SheetHeader>
           <SheetTitle>Filter Options</SheetTitle>
         </SheetHeader>
+
+        {/* Branch Dropdown */}
+        <section className="mb-4">
+          <Label className="text-xs text-muted">Branch</Label>
+          <Select
+            value={filter.bcode}
+            onValueChange={(value) =>
+              setFilter((prevState) => ({
+                ...prevState,
+                bcode: value,
+              }))
+            }
+          >
+            <SelectTrigger className="w-full border-gray-500">
+              <div className="flex items-center gap-2">
+                <SelectValue placeholder="Select branch...">
+                  {
+                    branches.find((item) => item.bcode === Number(filter.bcode))
+                      ?.brancH_NAME
+                  }
+                </SelectValue>
+              </div>
+            </SelectTrigger>
+            <SelectContent className="bg-stone-50">
+              {branches.map((opt, index) => (
+                <SelectItem key={index} value={opt.bcode}>
+                  {opt.brancH_NAME}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </section>
 
         {/* Date Range Dropdown */}
         <section className="mb-4">

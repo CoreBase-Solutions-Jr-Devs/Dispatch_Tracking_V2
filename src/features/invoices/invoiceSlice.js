@@ -26,6 +26,7 @@ const initialState = {
     endDate: new Date().toISOString(),
     dateRange: "TODAY",
     status: "",
+    bcode: localStorage.getItem("bcode"),
   },
 };
 
@@ -96,6 +97,7 @@ const invoiceSlice = createSlice({
         endDate: new Date(action.payload.endDate).toISOString(),
         dateRange: action.payload.dateRange,
         status: action.payload.status,
+        bcode: action.payload.bcode,
       };
     },
     clearQueryFilter: (state, action) => {
@@ -104,6 +106,7 @@ const invoiceSlice = createSlice({
         endDate: new Date().toISOString(),
         dateRange: "TODAY",
         status: "",
+        bcode: localStorage.getItem("bcode"),
       };
     },
     setSummary: (state, action) => {
