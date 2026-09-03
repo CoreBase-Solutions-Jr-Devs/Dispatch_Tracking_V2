@@ -16,6 +16,8 @@ export const ROLES = Object.freeze({
   CUSTOMER: "Customer",
 });
 
+export const getBcode = () => localStorage.getItem("bcode");
+
 // export const ROLES = Object.freeze({
 //   SUPER_ADMIN: "SuperAdmin",
 //   ADMIN: "Admin",

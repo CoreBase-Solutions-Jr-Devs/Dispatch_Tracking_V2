@@ -77,7 +77,13 @@ export const VerificationApi = apiClient.injectEndpoints({
       }) => ({
         url: `/verification/${docNum}/${bcode}/push`,
         method: "POST",
-        body: { docNum, userName, totalWeightKg, verificationRemarks },
+        body: {
+          docNum,
+          userName,
+          totalWeightKg,
+          verificationRemarks,
+          bCode: bcode,
+        },
       }),
       invalidatesTags: [
         "verification_tracking",

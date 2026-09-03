@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { logout, setActiveBcode } from "@/features/auth/authSlice";
 import { resetDispatchData } from "@/features/dispatch/dispatchSlice";
+import { setQueryFilter } from "@/features/invoices/invoiceSlice";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { Loader, PlusCircleIcon } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -34,7 +35,6 @@ function AuthBranch() {
 
   const handleBranchChange = (value) => {
     setBranch(value);
-    localStorage.setItem("bcode", value);
   };
 
   const handleSubmit = (e) => {
@@ -50,7 +50,17 @@ function AuthBranch() {
 
   const handleRouting = () => {
     setIsloading(true);
+    localStorage.setItem("bcode", branch);
     dispatch(setActiveBcode(branch));
+    dispatch(
+      setQueryFilter({
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+        dateRange: "TODAY",
+        status: "",
+        bcode: branch,
+      }),
+    );
     const timeoutId = setTimeout(() => {
       setIsloading(false);
       navigate(PROTECTED_ROUTES.OVERVIEW);
