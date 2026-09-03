@@ -506,6 +506,7 @@ function FilterSheet() {
         startDate: new Date(filter.startDate).toISOString(),
         endDate: new Date(filter.endDate).toISOString(),
         status: selectedFilters["status"] ?? "",
+        bcode: filter.bcode,
       }),
     );
 
