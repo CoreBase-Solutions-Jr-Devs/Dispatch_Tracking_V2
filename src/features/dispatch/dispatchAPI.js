@@ -3,6 +3,8 @@ import { getBcode } from "@/constant";
 
 let bcode = getBcode();
 
+let bcode = Number(localStorage.getItem("bcode"));
+
 export const dispatchApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     searchVerifiedOnDispatch: builder.query({
