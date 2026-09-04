@@ -1,3 +1,8 @@
+import { store } from "@/app/store";
+
+const { invoice } = store.getState();
+const { queryFilter } = invoice;
+
 export const LAYOUT_VIEW = Object.freeze({
   GRID: "GRID",
   LIST: "LIST",
@@ -16,7 +21,7 @@ export const ROLES = Object.freeze({
   CUSTOMER: "Customer",
 });
 
-export const getBcode = () => localStorage.getItem("bcode");
+export const getBcode = () => Number(queryFilter?.bcode);
 
 // export const ROLES = Object.freeze({
 //   SUPER_ADMIN: "SuperAdmin",

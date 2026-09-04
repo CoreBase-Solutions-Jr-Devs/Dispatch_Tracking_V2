@@ -1,6 +1,8 @@
 import { apiClient } from "@/app/api-client";
 import { getBcode } from "@/constant";
 
+let bcode = getBcode();
+
 export const StoreApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getStoreInvoices: builder.query({
@@ -19,7 +21,7 @@ export const StoreApi = apiClient.injectEndpoints({
         startDate,
         endDate,
         workflowStatus,
-        bcode = getBcode(),
+        bcode = bcode,
         dateRange,
       } = {}) => ({
         url:
@@ -48,14 +50,14 @@ export const StoreApi = apiClient.injectEndpoints({
       query: ({ searchWord }) => ({
         url: "/store/search",
         method: "GET",
-        params: { searchWord, bCode: getBcode() },
+        params: { searchWord, bCode: bcode },
       }),
       invalidatesTags: ["store_invoices"],
     }),
 
     getStoreTracking: builder.query({
       query: (docNum) => ({
-        url: `/store/${docNum}/${getBcode()}/store-tracking`,
+        url: `/store/${docNum}/${bcode}/store-tracking`,
         method: "GET",
       }),
       providesTags: ["store_tracking"],
@@ -63,7 +65,7 @@ export const StoreApi = apiClient.injectEndpoints({
 
     startStoreProcess: builder.mutation({
       query: ({ docNum, userName }) => ({
-        url: `/store/${docNum}/${userName}/${getBcode()}/start`,
+        url: `/store/${docNum}/${userName}/${bcode}/start`,
         method: "POST",
       }),
       invalidatesTags: ["store_tracking", "store_invoices"],
@@ -71,14 +73,14 @@ export const StoreApi = apiClient.injectEndpoints({
 
     pushStoreInvoice: builder.mutation({
       query: ({ docNum, userName, totalWeightKg, storeRemarks }) => ({
-        url: `/store/${docNum}/${getBcode()}/push`,
+        url: `/store/${docNum}/${bcode}/push`,
         method: "POST",
         body: {
           docNum,
           userName,
           totalWeightKg,
           storeRemarks,
-          bCode: getBcode(),
+          bCode: bcode,
         },
       }),
       invalidatesTags: ["store_invoices", "store_tracking"],
