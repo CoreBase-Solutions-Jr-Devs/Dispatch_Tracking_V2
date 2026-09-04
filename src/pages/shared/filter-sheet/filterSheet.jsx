@@ -372,6 +372,7 @@ function FilterSheet() {
     status: "",
     bcode: bcode || "",
   });
+
   const [selectedFilters, setSelectedFilters] = useState({});
 
   const {
@@ -500,13 +501,13 @@ function FilterSheet() {
   };
 
   const applyFilters = () => {
+    localStorage.setItem("bcode", filter.bcode);
     dispatch(
       setQueryFilter({
         ...filter,
         startDate: new Date(filter.startDate).toISOString(),
         endDate: new Date(filter.endDate).toISOString(),
         status: selectedFilters["status"] ?? "",
-        bcode: filter.bcode,
       }),
     );
 
