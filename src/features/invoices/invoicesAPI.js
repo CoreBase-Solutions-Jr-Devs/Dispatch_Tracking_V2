@@ -1,4 +1,7 @@
 import { apiClient } from "@/app/api-client";
+import { getBcode } from "@/constant";
+
+console.log(getBcode());
 
 export const invoicesApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
@@ -150,116 +153,114 @@ export const invoicesApi = apiClient.injectEndpoints({
       invalidatesTags: ["store_invoices1"],
     }),
 
-    
     filterVerificationInvoices: builder.mutation({
- 
-    filterDispatchInvoices: builder.mutation({
-      query: (formData) => ({
-        url: "/invoices/dispatch-filter",
-        method: "POST",
-        body: formData,
+      filterDispatchInvoices: builder.mutation({
+        query: (formData) => ({
+          url: "/invoices/dispatch-filter",
+          method: "POST",
+          body: formData,
+        }),
+        providesTags: ["dispatch_verification_invoices1"],
       }),
-      providesTags: ["dispatch_verification_invoices1"],
-    }),
 
-    verificationPush: builder.mutation({
-      query: (payload) => ({
-        url: `/invoices/${payload.docNum}/verification/push`,
-        method: "POST",
-        body: payload,
+      verificationPush: builder.mutation({
+        query: (payload) => ({
+          url: `/invoices/${payload.docNum}/verification/push`,
+          method: "POST",
+          body: payload,
+        }),
+        invalidatesTags: ["verification_invoices1"],
       }),
-      invalidatesTags: ["verification_invoices1"],
-    }),
-    
-    getCollectionTrackingDetails: builder.query({
-      query: ({ docNum } = {}) => ({
-        url: `/invoices/${docNum}/collection-tracking`,
-        method: "GET",
+
+      getCollectionTrackingDetails: builder.query({
+        query: ({ docNum } = {}) => ({
+          url: `/invoices/${docNum}/collection-tracking`,
+          method: "GET",
+        }),
+        providesTags: ["collection_details"],
       }),
-      providesTags: ["collection_details"],
-    }),
 
-    collectionStart: builder.mutation({
-      query: (docNum) => ({
-        url: `/invoices/${docNum}/collection/start`,
-        method: "POST",
-        body: {},
+      collectionStart: builder.mutation({
+        query: (docNum) => ({
+          url: `/invoices/${docNum}/collection/start`,
+          method: "POST",
+          body: {},
+        }),
+        invalidatesTags: ["invoices"],
       }),
-      invalidatesTags: ["invoices"],
-    }),
 
-    collectionPush: builder.mutation({
-      query: (payload) => ({
-        url: `/invoices/${payload.docNum}/collection/push`,
-        method: "POST",
-        body: payload,
+      collectionPush: builder.mutation({
+        query: (payload) => ({
+          url: `/invoices/${payload.docNum}/collection/push`,
+          method: "POST",
+          body: payload,
+        }),
+        invalidatesTags: ["invoices"],
       }),
-      invalidatesTags: ["invoices"],
-    }),
 
-    collectionRecall: builder.mutation({
-      query: (docNum) => ({
-        url: `/invoices/${docNum}/collection/recall`,
-        method: "POST",
-        body: {},
+      collectionRecall: builder.mutation({
+        query: (docNum) => ({
+          url: `/invoices/${docNum}/collection/recall`,
+          method: "POST",
+          body: {},
+        }),
+        invalidatesTags: ["invoices"],
       }),
-      invalidatesTags: ["invoices"],
+
+      // DELIVERY TRACKING
+      //     filterDeliveryInvoices: builder.mutation({
+      //       query: (formData) => ({
+      //         url: "/api/v2/delivery/delivery-search",
+      //         method: "POST",
+      //         body: formData,
+      //       }),
+      //       invalidatesTags: ["delivery_invoices"],
+      //     }),
+
+      //     getCustomerCodeSuggestions: builder.query({
+      //       query: ({ input, maxResults = 10 }) => ({
+      //         url: "/api/v2/delivery/customer-codes/suggestions",
+      //         method: "GET",
+      //         params: {
+      //           input,
+      //           maxResults,
+      //         },
+      //       }),
+      //       providesTags: ["customer_codes"],
+      //     }),
+
+      //     viewInvoicePDF: builder.query({
+      //       query: ({ docNum } = {}) => ({
+      //         url: `/invoices/${docNum}/delivery/pdf`,
+      //         method: "GET",
+      //       }),
+      //       providesTags: ["invoices"],
+      //     }),
+      //     getDeliveryTrackingDetails: builder.query({
+      //       query: ({ docNum } = {}) => ({
+      //         url: `/invoices/${docNum}/delivery-tracking`,
+      //         method: "GET",
+      //       }),
+      //       providesTags: ["delivery_details"],
+      //     }),
+      //     deliveryStart: builder.mutation({
+      //       query: (docNum) => ({
+      //         url: `/invoices/${docNum}/delivery/start`,
+      //         method: "POST",
+      //         body: {},
+      //       }),
+      //       invalidatesTags: ["invoices"],
+      //     }),
+      //     deliveryComplete: builder.mutation({
+      //       query: (docNum, payload) => ({
+      //         url: `/invoices/${docNum}/delivery/complete`,
+      //         method: "POST",
+      //         body: payload,
+      //       }),
+      //       invalidatesTags: ["invoices"],
+      //     }),
     }),
-
-    // DELIVERY TRACKING
-        //     filterDeliveryInvoices: builder.mutation({
-        //       query: (formData) => ({
-        //         url: "/api/v2/delivery/delivery-search",
-        //         method: "POST",
-        //         body: formData,
-        //       }),
-        //       invalidatesTags: ["delivery_invoices"],
-        //     }),
-
-        //     getCustomerCodeSuggestions: builder.query({
-        //       query: ({ input, maxResults = 10 }) => ({
-        //         url: "/api/v2/delivery/customer-codes/suggestions",
-        //         method: "GET",
-        //         params: {
-        //           input,
-        //           maxResults,
-        //         },
-        //       }),
-        //       providesTags: ["customer_codes"],
-        //     }),
-
-        //     viewInvoicePDF: builder.query({
-        //       query: ({ docNum } = {}) => ({
-        //         url: `/invoices/${docNum}/delivery/pdf`,
-        //         method: "GET",
-        //       }),
-        //       providesTags: ["invoices"],
-        //     }),
-        //     getDeliveryTrackingDetails: builder.query({
-        //       query: ({ docNum } = {}) => ({
-        //         url: `/invoices/${docNum}/delivery-tracking`,
-        //         method: "GET",
-        //       }),
-        //       providesTags: ["delivery_details"],
-        //     }),
-        //     deliveryStart: builder.mutation({
-        //       query: (docNum) => ({
-        //         url: `/invoices/${docNum}/delivery/start`,
-        //         method: "POST",
-        //         body: {},
-        //       }),
-        //       invalidatesTags: ["invoices"],
-        //     }),
-        //     deliveryComplete: builder.mutation({
-        //       query: (docNum, payload) => ({
-        //         url: `/invoices/${docNum}/delivery/complete`,
-        //         method: "POST",
-        //         body: payload,
-        //       }),
-        //       invalidatesTags: ["invoices"],
-        //     }),
   }),
-   }),
 });
 
 export const {
@@ -283,7 +284,4 @@ export const {
   useCollectionStartMutation,
   useCollectionRecallMutation,
   useCollectionPushMutation,
-  
-  
-
 } = invoicesApi;

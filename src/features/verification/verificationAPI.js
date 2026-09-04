@@ -1,6 +1,7 @@
 import { apiClient } from "@/app/api-client";
+import { getBcode } from "@/constant";
 
-let bcode = Number(localStorage.getItem("bcode"));
+let bcode = getBcode();
 
 export const VerificationApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({

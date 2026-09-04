@@ -1,6 +1,8 @@
 import { apiClient } from "@/app/api-client";
 import { getBcode } from "@/constant";
 
+let bcode = getBcode();
+
 export const StoreApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getStoreInvoices: builder.query({
@@ -19,7 +21,7 @@ export const StoreApi = apiClient.injectEndpoints({
         startDate,
         endDate,
         workflowStatus,
-        bcode = getBcode(),
+        bcode = bcode,
         dateRange,
       } = {}) => ({
         url:
@@ -78,7 +80,7 @@ export const StoreApi = apiClient.injectEndpoints({
           userName,
           totalWeightKg,
           storeRemarks,
-          bCode: getBcode(),
+          bCode: bcode,
         },
       }),
       invalidatesTags: ["store_invoices", "store_tracking"],
