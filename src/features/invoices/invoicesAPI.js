@@ -1,7 +1,4 @@
 import { apiClient } from "@/app/api-client";
-import { getBcode } from "@/constant";
-
-console.log(getBcode());
 
 export const invoicesApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
