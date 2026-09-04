@@ -80,7 +80,7 @@ export const StoreApi = apiClient.injectEndpoints({
           userName,
           totalWeightKg,
           storeRemarks,
-          bCode: bcode,
+          bCode: getBcode(),
         },
       }),
       invalidatesTags: ["store_invoices", "store_tracking"],
