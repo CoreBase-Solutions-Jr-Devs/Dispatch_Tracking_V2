@@ -52,7 +52,7 @@ export const VerificationApi = apiClient.injectEndpoints({
 
     getVerificationTracking: builder.query({
       query: (docNum) => ({
-        url: `/verification/${docNum}/${bcode}/verification-tracking`,
+        url: `/verification/${docNum}/${getBcode()}/verification-tracking`,
         method: "GET",
       }),
       providesTags: ["verification_tracking"],
