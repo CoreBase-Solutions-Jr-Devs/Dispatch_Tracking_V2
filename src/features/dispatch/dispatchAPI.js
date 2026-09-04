@@ -114,7 +114,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (payload) => ({
         url: `/dispatch/remove-selections`,
         method: "DELETE",
-        body: payload,
+        body: { ...payload, bCode: bcode },
       }),
       invalidatesTags: ["selected_invoices"],
     }),
