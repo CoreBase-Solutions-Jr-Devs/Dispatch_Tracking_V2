@@ -122,7 +122,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (payload) => ({
         url: `/general/recall-doc`,
         method: "POST",
-        body: payload,
+        body: { ...payload, bCode: bcode },
       }),
       invalidatesTags: ["verified_invoices"],
     }),
