@@ -134,8 +134,8 @@ export default function StatusProgressPage() {
                   </h3>
 
                   <StatusActions
-                    showDriver={!error && tracker?.driver}
-                    driver={tracker?.driver?.name}
+                    tracker={tracker}
+                    driver={tracker?.driver}
                   />
                 </section>
               </div>
