@@ -50,6 +50,10 @@ function DisputedDetails({ data, handleDispute }) {
       !payload.saleinv_num ||
       !payload.comments
     ) {
+      toast.error("Misssing Fields", {
+        description: "All fields must be populated",
+        duration: 4000,
+      });
       return;
     }
 
@@ -95,7 +99,7 @@ function DisputedDetails({ data, handleDispute }) {
         <Label className="text-xs font-medium ">Disputed Amount:</Label>
         <Input
           type={"number"}
-          // min={0}
+          min={0}
           value={disputeDetails.disputedamount}
           onChange={handleChange}
           name="disputedamount"
