@@ -3,13 +3,13 @@ import { DataTable } from "@/components/data-table";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
 import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
 import { rightsToView } from "@/lib/utils";
-import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
 import {
-  setInvoices,
-  setStatsStore,
-  setSummary,
-} from "@/features/invoices/invoiceSlice";
+  useGetFilteredStoreInvoicesQuery,
+  useSearchStoreInvoicesQuery,
+} from "@/features/store/storeAPI";
+import { setSummary } from "@/features/invoices/invoiceSlice";
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
+import useDebouncedSearch from "@/hooks/use-debounce-search";
 
 export default function StorePage() {
   const { user } = useTypedSelector((state) => state.auth);
@@ -22,7 +22,9 @@ export default function StorePage() {
 
   // const [pageNumber, setPageNumber] = React.useState(1);
   // const [pageSize, setPageSize] = React.useState(50);
-  const [searchValue, setSearchValue] = React.useState("");
+  const { debouncedTerm, searchTerm, setSearchTerm } = useDebouncedSearch("", {
+    delay: 500,
+  });
   const [filter, setFilter] = React.useState({
     pageNumber: 1,
     pageSize: 50,
@@ -48,10 +50,22 @@ export default function StorePage() {
       // pageNumber,
       // pageSize,
     });
+  const {
+    data: searchData,
+    isLoading: isSearchLoading,
+    isFetching: isSearchFetching,
+    isError: isSearchError,
+  } = useSearchStoreInvoicesQuery(
+    { searchWord: debouncedTerm.trim(), role: view },
+    { skip: !debouncedTerm.trim() },
+  );
 
-  let invoices = data?.invoices || [];
-  let summary = data?.stats ?? {};
-  let totalInvoices = summary?.totalCount || 0;
+  const isSearching = Boolean(debouncedTerm.trim());
+  const invoices = isSearching
+    ? searchData?.invoices || []
+    : data?.invoices || [];
+  const summary = isSearching ? (searchData?.stats ?? {}) : (data?.stats ?? {});
+  const totalInvoices = summary?.totalCount || invoices.length;
 
   // console.log("🧾 Store invoices API response:", data);
 
@@ -60,15 +74,6 @@ export default function StorePage() {
   //   totalCount: invoices.length,
   //   totalPages: 1,
   // };
-
-  const filteredInvoices = invoices.filter((invoice) => {
-    const search = searchValue.toLowerCase().trim();
-    return Object.values(invoice).some((value) =>
-      String(value || "")
-        .toLowerCase()
-        .includes(search)
-    );
-  });
 
   const handlePageChange = (pageNumber) => {
     setFilter((prev) => ({ ...prev, pageNumber }));
@@ -102,17 +107,21 @@ export default function StorePage() {
       <InvoiceToolbar
         role={view}
         placeholder="Invoice No, Customer Name"
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
+        searchValue={searchTerm}
+        setSearchValue={setSearchTerm}
       />
       <DataTable
-        // data={invoices}
-        data={filteredInvoices}
+        data={invoices}
+        // data={filteredInvoices}
         columns={columns}
         selection={false}
-        isLoading={isLoading || isFetching}
+        isLoading={
+          isLoading || isFetching || isSearchLoading || isSearchFetching
+        }
         emptyTitle={
-          isError ? "Failed to load store invoices" : "No store invoices found"
+          isError || isSearchError
+            ? "Failed to load store invoices"
+            : "No store invoices found"
         }
         isShowPagination
         onPageSizeChange={handlePageSizeChange}

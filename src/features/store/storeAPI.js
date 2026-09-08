@@ -47,8 +47,8 @@ export const StoreApi = apiClient.injectEndpoints({
     }),
 
     searchStoreInvoices: builder.query({
-      query: ({ searchWord }) => ({
-        url: "/store/search",
+      query: ({ searchWord, role }) => ({
+        url: role === "verification" ? "/verification/search" : "/store/search",
         method: "GET",
         params: { searchWord, bCode: getBcode() },
       }),
@@ -91,8 +91,8 @@ export const StoreApi = apiClient.injectEndpoints({
 export const {
   useGetStoreInvoicesQuery,
   useGetFilteredStoreInvoicesQuery,
-  useLazyGetFilteredStoreInvoicesQuery,
   useSearchStoreInvoicesQuery,
+  useLazyGetFilteredStoreInvoicesQuery,
   useGetStoreTrackingQuery,
   useStartStoreProcessMutation,
   usePushStoreInvoiceMutation,

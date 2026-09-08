@@ -1,12 +1,15 @@
 import * as React from "react";
 import { DataTable } from "@/components/data-table";
-import { useSelector } from "react-redux";
 import { getInvoiceColumns } from "@/components/invoice-data-table/invoice-columns";
-import { rightsToView, roleToView } from "@/lib/utils";
+import { rightsToView } from "@/lib/utils";
 import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
-import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
+import {
+  useGetFilteredVerificationInvoicesQuery,
+  useSearchVerificationInvoicesQuery,
+} from "@/features/verification/verificationAPI";
 import { setSummary } from "@/features/invoices/invoiceSlice";
+import useDebouncedSearch from "@/hooks/use-debounce-search";
 
 export default function VerificationPage() {
   const dispatch = useAppDispatch();
@@ -17,7 +20,9 @@ export default function VerificationPage() {
   const { queryFilter } = useTypedSelector((state) => state.invoice);
   // const [pageNumber, setPageNumber] = React.useState(1);
   // const [pageSize, setPageSize] = React.useState(50);
-  const [searchValue, setSearchValue] = React.useState("");
+  const { debouncedTerm, searchTerm, setSearchTerm } = useDebouncedSearch("", {
+    delay: 500,
+  });
   const [filter, setFilter] = React.useState({
     pageNumber: 1,
     pageSize: 50,
@@ -34,8 +39,7 @@ export default function VerificationPage() {
   console.log(rights);
 
   const { data, isLoading, isFetching, isError, isSuccess } =
-    useGetFilteredStoreInvoicesQuery({
-      role: view,
+    useGetFilteredVerificationInvoicesQuery({
       ...queryFilter,
       ...filter,
       workflowStatus: queryFilter?.status,
@@ -45,21 +49,24 @@ export default function VerificationPage() {
       // pageNumber,
       // pageSize,
     });
+  const {
+    data: searchData,
+    isLoading: isSearchLoading,
+    isFetching: isSearchFetching,
+    isError: isSearchError,
+  } = useSearchVerificationInvoicesQuery(
+    { searchWord: debouncedTerm.trim() },
+    { skip: !debouncedTerm.trim() },
+  );
 
-  let invoices = data?.invoices || [];
-  let summary = data?.stats ?? {};
-  let totalInvoices = summary?.totalCount || 0;
+  const isSearching = Boolean(debouncedTerm.trim());
+  const invoices = isSearching
+    ? searchData?.invoices || []
+    : data?.invoices || [];
+  const summary = isSearching ? (searchData?.stats ?? {}) : (data?.stats ?? {});
+  const totalInvoices = summary?.totalCount || invoices.length;
 
   // console.log("🧾 Verification invoices API response:", data);
-
-  const filteredInvoices = invoices.filter((invoice) => {
-    const search = searchValue.toLowerCase().trim();
-    return Object.values(invoice).some((value) =>
-      String(value || "")
-        .toLowerCase()
-        .includes(search)
-    );
-  });
 
   // const totalCount = filteredInvoices.length;
   // const totalPages = Math.ceil(totalCount / pageSize) || 1;
@@ -86,12 +93,12 @@ export default function VerificationPage() {
       <InvoiceToolbar
         role={view}
         placeholder="Invoice No, Customer Name"
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
+        searchValue={searchTerm}
+        setSearchValue={setSearchTerm}
       />
 
       {/* <DataTable
-        data={filteredInvoices}
+        data={invoices}
         columns={columns}
         selection={false}
         isLoading={false}
@@ -107,13 +114,17 @@ export default function VerificationPage() {
         }}
       /> */}
       <DataTable
-        // data={invoices}
-        data={filteredInvoices}
+        data={invoices}
+        // data={filteredInvoices}
         columns={columns}
         selection={false}
-        isLoading={isLoading || isFetching}
+        isLoading={
+          isLoading || isFetching || isSearchLoading || isSearchFetching
+        }
         emptyTitle={
-          isError ? "Failed to load store invoices" : "No store invoices found"
+          isError || isSearchError
+            ? "Failed to load verification invoices"
+            : "No verification invoices found"
         }
         isShowPagination
         onPageSizeChange={handlePageSizeChange}
@@ -125,7 +136,7 @@ export default function VerificationPage() {
           // totalPages: pagination.totalPages,
           pageNumber: filter?.pageNumber,
           pageSize: filter?.pageSize,
-          totalItems: invoices.length ?? 0,
+          totalItems: totalInvoices,
           totalPages:
             Math.ceil(totalInvoices / (filter?.pageSize || 1)) ||
             Math.ceil(invoices?.length / (filter?.pageSize || 20)),
