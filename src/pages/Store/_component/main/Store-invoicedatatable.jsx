@@ -57,7 +57,7 @@ export default function StorePage() {
     isError: isSearchError,
   } = useSearchStoreInvoicesQuery(
     { searchWord: debouncedTerm.trim(), role: view },
-    { skip: !debouncedTerm.trim() },
+    { skip: !debouncedTerm.trim() || debouncedTerm.length < 3 },
   );
 
   const isSearching = Boolean(debouncedTerm.trim());

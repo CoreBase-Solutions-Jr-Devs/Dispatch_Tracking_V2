@@ -56,7 +56,7 @@ export default function VerificationPage() {
     isError: isSearchError,
   } = useSearchVerificationInvoicesQuery(
     { searchWord: debouncedTerm.trim() },
-    { skip: !debouncedTerm.trim() },
+    { skip: !debouncedTerm.trim() || debouncedTerm.length < 3 },
   );
 
   const isSearching = Boolean(debouncedTerm.trim());
