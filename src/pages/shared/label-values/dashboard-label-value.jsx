@@ -91,32 +91,39 @@ const DashboardLabelValue = () => {
       <LabelValue
         status="Store"
         label="Total"
-        value={summary.totalCount || 0}
+        value={new Intl.NumberFormat("en-GB").format(summary.totalCount) || 0}
       />
       <LabelValue
         status="Verification"
         label="In Verification"
-        value={summary.inVerificationCount || 0}
+        value={
+          new Intl.NumberFormat("en-GB").format(summary.inVerificationCount) ||
+          0
+        }
       />
-      <LabelValue
+      {/* <LabelValue
         status="Delivered"
         label="In Process"
         value={summary.inProcessCount || 0}
-      />
+      /> */}
       <LabelValue
         status="Dispatch"
         label="In Store"
-        value={summary.inStoreCount || 0}
+        value={new Intl.NumberFormat("en-GB").format(summary.inStoreCount) || 0}
       />
       <LabelValue
         status="Verification"
         label="In Dispatch"
-        value={summary.inDispatchCount || 0}
+        value={
+          new Intl.NumberFormat("en-GB").format(summary.inDispatchCount) || 0
+        }
       />
       <LabelValue
         status="Dispatch"
         label="In Delivery"
-        value={summary.inDeliveryCount || 0}
+        value={
+          new Intl.NumberFormat("en-GB").format(summary.inDeliveryCount) || 0
+        }
       />
       <LabelValue
         status="Delivered"
@@ -125,7 +132,7 @@ const DashboardLabelValue = () => {
           summary.averageDurationSeconds !== undefined
             ? renderDuration(
                 summary.averageDurationSeconds,
-                summary.averageDurationSeconds
+                summary.averageDurationSeconds,
               )
             : "N/A"
         }

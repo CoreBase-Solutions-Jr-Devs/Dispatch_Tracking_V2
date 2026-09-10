@@ -9,6 +9,7 @@ import {
 
 const RoleBasedFilters = ({ filters = [], selectedFilters = {}, onChange }) => {
   const safeFilters = Array.isArray(filters) ? filters : [];
+  console.log(safeFilters);
   return (
     <section className="flex flex-wrap gap-2 items-center">
       {safeFilters.map((filter) => (
@@ -24,7 +25,13 @@ const RoleBasedFilters = ({ filters = [], selectedFilters = {}, onChange }) => {
             </SelectTrigger>
 
             <SelectContent className="bg-gray-100 text-[var(--dropdown-foreground)] border border-[var(--border)] rounded-md shadow-lg">
-              {filter?.options?.map((opt) => (
+              {[
+                ...filter?.options,
+                {
+                  label: "All Status",
+                  value: "",
+                },
+              ]?.map((opt) => (
                 <SelectItem
                   key={opt.value}
                   value={opt.value}

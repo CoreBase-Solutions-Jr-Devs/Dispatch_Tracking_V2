@@ -10,6 +10,7 @@ import {
 import { setSummary } from "@/features/dashboard/dashboardSlice";
 import { roleToView } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import useDebouncedSearch from "@/hooks/use-debounce-search";
 // import { Checkbox } from "@/components/ui/checkbox";
 // import { useSelectDeliveryInvoicesMutation } from "@/features/delivery/deliveryAPI";
 // import { toast } from "sonner";
@@ -19,6 +20,9 @@ export default function DashboardTable() {
 
   const { queryFilter } = useTypedSelector((state) => state.dashboard);
 
+  const { debouncedTerm, searchTerm, setSearchTerm } = useDebouncedSearch("", {
+    delay: 500,
+  });
   const [filter, setFilter] = useState({
     pageNumber: 1,
     pageSize: 50,
@@ -26,25 +30,11 @@ export default function DashboardTable() {
 
   const [searchValue, setSearchValue] = useState("");
 
-  const { data, isLoading, isSuccess, isError, error } =
+  const { data, isLoading, isFetching, isSuccess, isError, error } =
     useGetAllGeneralInvoicesQuery({
       ...filter,
       ...queryFilter,
-      bCode: queryFilter.bcode,
     });
-  const { data: queriedData, isLoading: isQueryLoading } = useQueryInvoiceQuery(
-    searchValue,
-    {
-      skip: !searchValue,
-    },
-  );
-
-  let invoices = searchValue
-    ? (queriedData?.invoices ?? [])
-    : (data?.invoices ?? []);
-  // let pagination = data?.pagination || {};
-  let summary = data?.stats ?? {};
-  let totalInvoices = summary?.totalCount ?? 0;
 
   // const view = roleToView("View All Stages");
   const view = roleToView("SuperAdmin");
@@ -62,6 +52,24 @@ export default function DashboardTable() {
     console.log(value);
     setSearchValue(value);
   };
+
+  const {
+    data: searchData,
+    isLoading: isSearchLoading,
+    isFetching: isSearchFetching,
+    isError: isSearchError,
+  } = useQueryInvoiceQuery(
+    { searchWord: debouncedTerm.trim(), role: view },
+    { skip: !debouncedTerm.trim() },
+  );
+
+  const isSearching = Boolean(debouncedTerm.trim());
+  const invoices = isSearching
+    ? searchData?.invoices || []
+    : data?.invoices || [];
+  // let pagination = data?.pagination || {};
+  let summary = data?.stats ?? {};
+  let totalInvoices = summary?.totalCount ?? 0;
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -82,16 +90,23 @@ export default function DashboardTable() {
   return (
     <div className="space-y-4">
       <DashboardToolbar
-        searchValue={searchValue}
-        setSearchValue={handleSearchValue}
+        placeholder="Invoice No, Customer Name"
+        searchValue={searchTerm}
+        setSearchValue={setSearchTerm}
       />
 
       <DataTable
         data={invoices}
         columns={columns}
         selection={false}
-        isLoading={isLoading || isQueryLoading}
-        emptyTitle="No invoices found"
+        isLoading={
+          isLoading || isFetching || isSearchLoading || isSearchFetching
+        }
+        emptyTitle={
+          isError || isSearchError
+            ? "Failed to load invoices"
+            : "No invoices found"
+        }
         isShowPagination={true}
         onPageSizeChange={handlePageSizeChange}
         onPageChange={handlePageChange}

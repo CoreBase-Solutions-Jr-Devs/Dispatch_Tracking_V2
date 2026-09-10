@@ -1,4 +1,7 @@
 import { apiClient } from "@/app/api-client";
+import { getBcode } from "@/constant";
+
+let bcode = getBcode();
 
 export const dashboardApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,11 +14,12 @@ export const dashboardApi = apiClient.injectEndpoints({
       providesTags: ["all_invoices"],
     }),
     queryInvoice: builder.query({
-      query: (payload) => ({
+      query: ({ searchWord }) => ({
         url: "/general/search",
         method: "GET",
         params: {
-          searchWord: payload,
+          searchWord: searchWord,
+          bCode: bcode,
         },
       }),
       // providesTags: ["all_invoices"],
