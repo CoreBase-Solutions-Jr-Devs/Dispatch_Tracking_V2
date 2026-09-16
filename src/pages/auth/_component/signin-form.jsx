@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/features/auth/authAPI";
 import { setCredentials } from "@/features/auth/authSlice";
 import { cn } from "@/lib/utils";
-import { PROTECTED_ROUTES } from "@/routes/common/routePath";
+import { AUTH_ROUTES } from "@/routes/common/routePath";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader, Shield, User } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -66,13 +66,17 @@ const SignInForm = () => {
     login(payload)
       .unwrap()
       .then((data) => {
+        localStorage.setItem(
+          "dispatchBackendUrl",
+          `${data?.dispatchBackendUrl}/api/v2`,
+        );
         dispatch(setCredentials(data));
         toast.success("Welcome back! Login successful", {
           description: "Redirecting to dashboard...",
           duration: 2000,
         });
         setTimeout(() => {
-          navigate(PROTECTED_ROUTES.OVERVIEW);
+          window.location.replace(AUTH_ROUTES.AUTH_BRANCH);
         }, 1000);
       })
       .catch((error) => {
@@ -129,7 +133,7 @@ const SignInForm = () => {
                             className={cn(
                               "h-12 px-4 text-base transition-all duration-200",
                               "focus:ring-2 focus:ring-primary/20 focus:border-primary",
-                              "placeholder:text-muted-foreground/60"
+                              "placeholder:text-muted-foreground/60",
                             )}
                             autoComplete="username"
                             aria-invalid={!!form.formState.errors.username}
@@ -168,7 +172,7 @@ const SignInForm = () => {
                               className={cn(
                                 "h-12 px-4 pr-12 text-base transition-all duration-200",
                                 "focus:ring-2 focus:ring-primary/20 focus:border-primary",
-                                "placeholder:text-muted-foreground/60"
+                                "placeholder:text-muted-foreground/60",
                               )}
                               autoComplete="current-password"
                               aria-invalid={!!form.formState.errors.password}

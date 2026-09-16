@@ -1,6 +1,6 @@
-import { apiClient } from "@/app/api-client";
+import { authClient } from "@/app/api-client";
 
-export const authApi = apiClient.injectEndpoints({
+export const authApi = authClient.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
