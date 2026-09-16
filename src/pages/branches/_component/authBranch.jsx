@@ -51,6 +51,7 @@ function AuthBranch() {
 
   const handleRouting = () => {
     setIsloading(true);
+    localStorage.setItem("bcode", branch);
     dispatch(setActiveBcode(branch));
     dispatch(
       setQueryFilter({
