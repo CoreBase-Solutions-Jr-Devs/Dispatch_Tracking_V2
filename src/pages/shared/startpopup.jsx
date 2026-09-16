@@ -10,6 +10,7 @@ import {
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTypedSelector } from "@/app/hook";
+import { rightsToView } from "@/lib/utils";
 
 export default function StartPopup({ onClose, onSubmit }) {
   // const [login, { isLoading }] = useLoginMutation();
@@ -20,7 +21,27 @@ export default function StartPopup({ onClose, onSubmit }) {
 
   const { user } = useTypedSelector((state) => state.auth);
 
-  let right = user["userrights"]?.map((item) => item?.moduleCode)[0];
+  const rights =
+    user["userrights"]
+      ?.filter(
+        (item) =>
+          item?.moduleCode === 5145 ||
+          item?.moduleCode === 5146 ||
+          item?.moduleCode === 5147 ||
+          item?.moduleCode === 5148,
+      )
+      ?.map((item) => item?.moduleCode) || [];
+  const view = rightsToView(rights);
+
+  const VIEW_RIGHTS = {
+    store: 5145,
+    verification: 5146,
+    dispatch: 5147,
+    delivery: 5148,
+    user: 0,
+  };
+
+  let right = VIEW_RIGHTS[view];
 
   const [errors, setErrors] = useState({ username: "", password: "" });
 
@@ -50,7 +71,7 @@ export default function StartPopup({ onClose, onSubmit }) {
       .then((data) => {
         toast.success("Authentication successful");
 
-          onSubmit?.(data);
+        onSubmit?.(data);
 
         onClose?.();
       })
