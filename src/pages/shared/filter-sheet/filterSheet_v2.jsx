@@ -37,7 +37,7 @@ function FilterSheet() {
     endDate: new Date(),
     dateRange: "TODAY",
     status: "",
-    bcode: bcode || "",
+    bCode: bcode || "",
   });
   const [selectedFilters, setSelectedFilters] = useState({});
 
@@ -185,7 +185,7 @@ function FilterSheet() {
       endDate: new Date(),
       dateRange: "",
       status: {},
-      bcode: bcode || "",
+      bCode: bcode || "",
     });
 
     dispatch(clearQueryFilter());
@@ -210,11 +210,11 @@ function FilterSheet() {
         <section className="mb-4">
           <Label className="text-xs text-muted">Branch</Label>
           <Select
-            value={filter.bcode}
+            value={filter.bCode}
             onValueChange={(value) =>
               setFilter((prevState) => ({
                 ...prevState,
-                bcode: value,
+                bCode: value,
               }))
             }
           >
@@ -222,7 +222,7 @@ function FilterSheet() {
               <div className="flex items-center gap-2">
                 <SelectValue placeholder="Select branch...">
                   {
-                    branches.find((item) => item.bcode === Number(filter.bcode))
+                    branches.find((item) => item.bcode === Number(filter.bCode))
                       ?.brancH_NAME
                   }
                 </SelectValue>

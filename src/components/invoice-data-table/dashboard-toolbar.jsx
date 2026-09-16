@@ -19,7 +19,7 @@ export default function DashboardToolbar({
     useSelector((state) => state.dashboard?.queryFilter) ?? {};
   const { startDate, endDate } = queryFilter;
   let branchName =
-    branches.find((branch) => branch.bcode === Number(queryFilter?.bcode))
+    branches.find((branch) => branch.bcode === Number(queryFilter?.bCode))
       ?.brancH_NAME ?? "";
 
   // Debounce search input

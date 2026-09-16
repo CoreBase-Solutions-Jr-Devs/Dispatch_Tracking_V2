@@ -7,7 +7,7 @@ const initialState = {
     endDate: new Date().toISOString(),
     dateRange: "TODAY",
     status: "",
-    bcode: localStorage.getItem("bcode"),
+    bCode: 0,
   },
 };
 
@@ -21,7 +21,7 @@ const dashboardSlice = createSlice({
         endDate: new Date(action.payload.endDate).toISOString(),
         dateRange: action.payload.dateRange,
         status: action.payload.status,
-        bcode: action.payload.bcode,
+        bCode: action.payload.bCode,
       };
     },
     clearQueryFilter: (state, action) => {
@@ -30,7 +30,7 @@ const dashboardSlice = createSlice({
         endDate: new Date().toISOString(),
         dateRange: "TODAY",
         status: "",
-        bcode: localStorage.getItem("bcode"),
+        bCode: 0,
       };
     },
     setSummary: (state, action) => {

@@ -125,7 +125,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     if (
       checkedInvoices.length > 0 &&
       !checkedInvoices.every(
-        (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE
+        (item) => item?.CUS_CODE === checkedInvoices[0]?.CUS_CODE,
       )
     ) {
       toast.error("Wrong invoice selected", {
@@ -205,7 +205,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
         console.log(error);
         setOTP("");
         setShow(
-          String(error?.data?.message).toLowerCase().includes("generated")
+          String(error?.data?.message).toLowerCase().includes("generated"),
         );
         toast.error("OTP Failed", {
           description:
@@ -353,7 +353,8 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
 
         {Boolean(Object.keys(selectedRow)?.length) && (
           <div className="w-32 flex-1">
-            {dispute || selectedRow?.Disputed ? (
+            {(dispute || selectedRow?.Disputed) &&
+            selectedRow?.DeliveryStatus !== "Delivered" ? (
               <Card>
                 <CardHeader>
                   <CardTitle>

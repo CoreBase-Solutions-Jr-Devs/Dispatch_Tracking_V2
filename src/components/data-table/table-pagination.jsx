@@ -1,3 +1,4 @@
+import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -75,7 +76,7 @@ export function DataTablePagination({
               <ChevronLeft /> Previous
             </Button>
 
-            <div className="flex items-center space-x-1">
+            {/* <div className="flex items-center space-x-1">
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                 let pageNum;
                 if (totalPages <= 5) {
@@ -99,6 +100,57 @@ export function DataTablePagination({
                   </Button>
                 );
               })}
+            </div> */}
+
+            <div className="flex items-center space-x-1">
+              {(() => {
+                let pages = [];
+
+                if (totalPages <= 5) {
+                  pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+                } else if (pageNumber <= 3) {
+                  pages = [1, 2, 3, 4, 5];
+                } else if (pageNumber >= totalPages - 2) {
+                  pages = [
+                    totalPages - 4,
+                    totalPages - 3,
+                    totalPages - 2,
+                    totalPages - 1,
+                    totalPages,
+                  ];
+                } else {
+                  pages = [
+                    1,
+                    pageNumber - 1,
+                    pageNumber,
+                    pageNumber + 1,
+                    totalPages,
+                  ];
+                }
+
+                // Remove duplicates and sort
+                pages = [...new Set(pages)].sort((a, b) => a - b);
+
+                return pages.map((pageNum, index) => {
+                  const previousPage = pages[index - 1];
+
+                  return (
+                    <React.Fragment key={pageNum}>
+                      {index > 0 && pageNum - previousPage > 1 && (
+                        <span className="px-1">...</span>
+                      )}
+
+                      <Button
+                        variant={pageNumber === pageNum ? "default" : "outline"}
+                        className="h-8 w-8 p-0"
+                        onClick={() => handlePageChange(pageNum)}
+                      >
+                        {pageNum}
+                      </Button>
+                    </React.Fragment>
+                  );
+                });
+              })()}
             </div>
 
             <Button
