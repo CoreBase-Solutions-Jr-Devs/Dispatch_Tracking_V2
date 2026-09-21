@@ -1,5 +1,7 @@
 import { authClient } from "@/app/api-client";
 
+let { user } = JSON.parse(localStorage.getItem("authState")) ?? {};
+
 export const authApi = authClient.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -11,7 +13,7 @@ export const authApi = authClient.injectEndpoints({
     }),
     authTransaction: builder.mutation({
       query: (formData) => ({
-        url: "/auth/AuthTransaction",
+        url: `${user?.baseUrl}/Auth/AuthTransaction`,
         method: "POST",
         body: formData,
       }),
