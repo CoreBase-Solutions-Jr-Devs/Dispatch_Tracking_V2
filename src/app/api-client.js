@@ -2,35 +2,37 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const authQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_URL,
-  credentials: "include",
+  // credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const auth = getState().auth;
     if (auth?.accessToken) {
       headers.set("Authorization", `Bearer ${auth.accessToken}`);
     }
+    headers.set("Accept", "application/json");
     return headers;
   },
 });
 
 const baseQuery = fetchBaseQuery({
   baseUrl: localStorage.getItem("dispatchBackendUrl"),
-  credentials: "include",
+  // credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const auth = getState().auth;
     if (auth?.accessToken) {
       headers.set("Authorization", `Bearer ${auth.accessToken}`);
     }
+    headers.set("Accept", "application/json");
     return headers;
   },
 });
 
 const statusTrackingBaseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_STATUS_TRACKING_URL,
-  credentials: "include",
+  // credentials: "include",
   prepareHeaders: (headers) => {
     const accessKey = import.meta.env.VITE_CLIENT_ACCESS_KEY;
     if (accessKey) headers.set("accesskey", accessKey);
-    headers.set("accept", "text/plain");
+    headers.set("Accept", "application/json");
     return headers;
   },
 });
