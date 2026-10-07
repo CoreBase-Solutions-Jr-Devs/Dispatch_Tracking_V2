@@ -18,6 +18,7 @@ export const VerificationApi = apiClient.injectEndpoints({
         startDate,
         endDate,
         workflowStatus,
+        bcode,
         dateRange,
       } = {}) => ({
         url: "/verification/filtered",
@@ -33,6 +34,7 @@ export const VerificationApi = apiClient.injectEndpoints({
             ? new Date(endDate).toISOString().split("T")[0]
             : undefined,
           workflowStatus,
+          bCode: bcode,
           dateRange,
         },
       }),

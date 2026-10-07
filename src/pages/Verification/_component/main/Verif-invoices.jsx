@@ -5,12 +5,12 @@ import { rightsToView } from "@/lib/utils";
 import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import {
-  // useGetFilteredVerificationInvoicesQuery,
+  useGetFilteredVerificationInvoicesQuery,
   useSearchVerificationInvoicesQuery,
 } from "@/features/verification/verificationAPI";
 import { setSummary } from "@/features/invoices/invoiceSlice";
 import useDebouncedSearch from "@/hooks/use-debounce-search";
-import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
+// import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
 import { getBcode } from "@/constant";
 
 export default function VerificationPage() {
@@ -40,31 +40,27 @@ export default function VerificationPage() {
 
   console.log(rights);
 
+  const { data, isLoading, isFetching, isError, isSuccess } =
+    useGetFilteredVerificationInvoicesQuery({
+      ...queryFilter,
+      ...filter,
+      workflowStatus: queryFilter?.status,
+      bcode: getBcode(),
+    });
+
   // const { data, isLoading, isFetching, isError, isSuccess } =
-  //   useGetFilteredVerificationInvoicesQuery({
+  //   useGetFilteredStoreInvoicesQuery({
+  //     role: view,
   //     ...queryFilter,
   //     ...filter,
   //     workflowStatus: queryFilter?.status,
+  //     bcode: getBcode(),
   //     // startDate: new Date(startDate).toISOString(),
   //     // endDate: new Date(endDate).toISOString(),
   //     // dateRange,
   //     // pageNumber,
   //     // pageSize,
   //   });
-
-  const { data, isLoading, isFetching, isError, isSuccess } =
-    useGetFilteredStoreInvoicesQuery({
-      role: view,
-      ...queryFilter,
-      ...filter,
-      workflowStatus: queryFilter?.status,
-      bcode: getBcode(),
-      // startDate: new Date(startDate).toISOString(),
-      // endDate: new Date(endDate).toISOString(),
-      // dateRange,
-      // pageNumber,
-      // pageSize,
-    });
 
   const {
     data: searchData,
