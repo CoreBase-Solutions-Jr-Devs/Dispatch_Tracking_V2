@@ -5,11 +5,13 @@ import { rightsToView } from "@/lib/utils";
 import InvoiceToolbar from "@/components/invoice-data-table/invoice-toolbar";
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import {
-  useGetFilteredVerificationInvoicesQuery,
+  // useGetFilteredVerificationInvoicesQuery,
   useSearchVerificationInvoicesQuery,
 } from "@/features/verification/verificationAPI";
 import { setSummary } from "@/features/invoices/invoiceSlice";
 import useDebouncedSearch from "@/hooks/use-debounce-search";
+import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
+import { getBcode } from "@/constant";
 
 export default function VerificationPage() {
   const dispatch = useAppDispatch();
@@ -38,17 +40,32 @@ export default function VerificationPage() {
 
   console.log(rights);
 
+  // const { data, isLoading, isFetching, isError, isSuccess } =
+  //   useGetFilteredVerificationInvoicesQuery({
+  //     ...queryFilter,
+  //     ...filter,
+  //     workflowStatus: queryFilter?.status,
+  //     // startDate: new Date(startDate).toISOString(),
+  //     // endDate: new Date(endDate).toISOString(),
+  //     // dateRange,
+  //     // pageNumber,
+  //     // pageSize,
+  //   });
+
   const { data, isLoading, isFetching, isError, isSuccess } =
-    useGetFilteredVerificationInvoicesQuery({
+    useGetFilteredStoreInvoicesQuery({
+      role: view,
       ...queryFilter,
       ...filter,
       workflowStatus: queryFilter?.status,
+      bcode: getBcode(),
       // startDate: new Date(startDate).toISOString(),
       // endDate: new Date(endDate).toISOString(),
       // dateRange,
       // pageNumber,
       // pageSize,
     });
+
   const {
     data: searchData,
     isLoading: isSearchLoading,
@@ -96,7 +113,6 @@ export default function VerificationPage() {
         searchValue={searchTerm}
         setSearchValue={setSearchTerm}
       />
-
       {/* <DataTable
         data={invoices}
         columns={columns}
