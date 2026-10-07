@@ -10,6 +10,7 @@ import {
 import { setSummary } from "@/features/invoices/invoiceSlice";
 import { useAppDispatch, useTypedSelector } from "@/app/hook";
 import useDebouncedSearch from "@/hooks/use-debounce-search";
+import { getBcode } from "@/constant";
 
 export default function StorePage() {
   const { user } = useTypedSelector((state) => state.auth);
@@ -44,6 +45,7 @@ export default function StorePage() {
       ...queryFilter,
       ...filter,
       workflowStatus: queryFilter?.status,
+      bcode: getBcode(),
       // startDate: new Date(startDate).toISOString(),
       // endDate: new Date(endDate).toISOString(),
       // dateRange,
