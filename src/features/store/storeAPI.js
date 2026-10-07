@@ -1,8 +1,6 @@
 import { apiClient } from "@/app/api-client";
 import { getBcode } from "@/constant";
 
-let bcode = getBcode();
-
 export const StoreApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getStoreInvoices: builder.query({
@@ -21,7 +19,7 @@ export const StoreApi = apiClient.injectEndpoints({
         startDate,
         endDate,
         workflowStatus,
-        bcode = bcode,
+        bcode,
         dateRange,
       } = {}) => ({
         url:
