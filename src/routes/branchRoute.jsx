@@ -14,7 +14,7 @@ const BranchRoute = () => {
   }
 
   // If branch already selected, redirect to overview
-  if (bcode && bcode !== 0) {
+  if (bcode && Number(bcode) !== 0) {
     return <Navigate to={PROTECTED_ROUTES.OVERVIEW} replace />;
   }
 

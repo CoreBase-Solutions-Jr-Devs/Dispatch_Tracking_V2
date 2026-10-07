@@ -18,7 +18,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
   }
 
   // No branch selected? redirect to branch selection
-  if (!bcode || bcode === 0) {
+  if (!bcode || Number(bcode) === 0) {
     return <Navigate to={AUTH_ROUTES.AUTH_BRANCH} replace />;
   }
 
