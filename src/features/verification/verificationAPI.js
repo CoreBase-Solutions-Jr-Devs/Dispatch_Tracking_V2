@@ -1,8 +1,6 @@
 import { apiClient } from "@/app/api-client";
 import { getBcode } from "@/constant";
 
-let bcode = getBcode();
-
 export const VerificationApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     getVerificationInvoices: builder.query({
@@ -45,7 +43,7 @@ export const VerificationApi = apiClient.injectEndpoints({
       query: ({ searchWord }) => ({
         url: "/verification/search",
         method: "GET",
-        params: { searchWord, bCode: bcode },
+        params: { searchWord, bCode: getBcode() },
       }),
       invalidatesTags: ["verification_invoices"],
     }),
@@ -59,7 +57,7 @@ export const VerificationApi = apiClient.injectEndpoints({
     }),
     startVerificationProcess: builder.mutation({
       query: ({ docNum, userName }) => ({
-        url: `/verification/${docNum}/${userName}/${bcode}/start`,
+        url: `/verification/${docNum}/${userName}/${getBcode()}/start`,
         method: "POST",
       }),
       invalidatesTags: [
@@ -76,14 +74,14 @@ export const VerificationApi = apiClient.injectEndpoints({
         totalWeightKg = 0,
         verificationRemarks = "",
       }) => ({
-        url: `/verification/${docNum}/${bcode}/push`,
+        url: `/verification/${docNum}/${getBcode()}/push`,
         method: "POST",
         body: {
           docNum,
           userName,
           totalWeightKg,
           verificationRemarks,
-          bCode: bcode,
+          bCode: getBcode(),
         },
       }),
       invalidatesTags: [
@@ -108,7 +106,7 @@ export const VerificationApi = apiClient.injectEndpoints({
           targetStage,
           targetStatus,
           recalledBy,
-          bCode: bcode,
+          bCode: getBcode(),
         },
       }),
       invalidatesTags: [

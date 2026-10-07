@@ -1,13 +1,11 @@
 import { apiClient } from "@/app/api-client";
 import { getBcode } from "@/constant";
 
-let bcode = getBcode();
-
 export const dispatchApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     searchVerifiedOnDispatch: builder.query({
       query: (query) => {
-        let params = { searchWord: query, bCode: bcode };
+        let params = { searchWord: query, bCode: getBcode() };
         // const paramString = params.length ? `?${params.join('&')}` : '';
         return {
           url: `/dispatch/search-verified`,
@@ -20,7 +18,7 @@ export const dispatchApi = apiClient.injectEndpoints({
 
     dispatchSearch: builder.query({
       query: (query) => {
-        let params = { searchWord: query, bCode: bcode };
+        let params = { searchWord: query, bCode: getBcode() };
         // const paramString = params.length ? `?${params.join('&')}` : '';
         return {
           url: `/dispatch/search-dispatch`,
@@ -33,7 +31,7 @@ export const dispatchApi = apiClient.injectEndpoints({
 
     getVerifiedOnDispatch: builder.query({
       query: ({ pageNumber = 1, pageSize = 20 }) => ({
-        url: `/dispatch/verified?pageNumber=${pageNumber}&pageSize=${pageSize}&bCode=${bcode}`,
+        url: `/dispatch/verified?pageNumber=${pageNumber}&pageSize=${pageSize}&bCode=${getBcode()}`,
         method: "GET",
       }),
       providesTags: ["verified_invoices"],
@@ -43,7 +41,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (formData) => ({
         url: `/dispatch/save-selections`,
         method: "POST",
-        body: { ...formData, bCode: bcode },
+        body: { ...formData, bCode: getBcode() },
       }),
       invalidatesTags: ["selected_invoices"],
     }),
@@ -52,7 +50,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (payload) => ({
         url: `/dispatch/start`,
         method: "POST",
-        body: { ...payload, bCode: bcode },
+        body: { ...payload, bCode: getBcode() },
       }),
       // invalidatesTags: ["dispatch_invoices"],
     }),
@@ -69,7 +67,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (formData) => ({
         url: "/dispatch/save-push",
         method: "POST",
-        body: { ...formData, bCode: bcode },
+        body: { ...formData, bCode: getBcode() },
       }),
       invalidatesTags: [
         // "dispatch_invoices",
@@ -87,7 +85,7 @@ export const dispatchApi = apiClient.injectEndpoints({
 
     getSavedDispatchedDetails: builder.query({
       query: (dispatchNum) => ({
-        url: `/dispatch/saved-dispatched-details/${dispatchNum}/${bcode}`,
+        url: `/dispatch/saved-dispatched-details/${dispatchNum}/${getBcode()}`,
         method: "GET",
       }),
       providesTags: ["saved_dispatched_details"],
@@ -98,14 +96,14 @@ export const dispatchApi = apiClient.injectEndpoints({
         url: `/dispatch/aggregate`,
         method: "GET",
         params: {
-          bCode: bcode,
+          bCode: getBcode(),
         },
       }),
       providesTags: ["saved_dispatched"],
     }),
     getSelectedInvoices: builder.query({
       query: (query) => ({
-        url: `/dispatch/get-selected-invoices?${query}&bCode=${bcode}`,
+        url: `/dispatch/get-selected-invoices?${query}&bCode=${getBcode()}`,
         method: "GET",
       }),
       providesTags: ["selected_invoices"],
@@ -114,7 +112,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (payload) => ({
         url: `/dispatch/remove-selections`,
         method: "DELETE",
-        body: { ...payload, bCode: bcode },
+        body: { ...payload, bCode: getBcode() },
       }),
       invalidatesTags: ["selected_invoices"],
     }),
@@ -122,7 +120,7 @@ export const dispatchApi = apiClient.injectEndpoints({
       query: (payload) => ({
         url: `/general/recall-doc`,
         method: "POST",
-        body: { ...payload, bCode: bcode },
+        body: { ...payload, bCode: getBcode() },
       }),
       invalidatesTags: ["verified_invoices"],
     }),
