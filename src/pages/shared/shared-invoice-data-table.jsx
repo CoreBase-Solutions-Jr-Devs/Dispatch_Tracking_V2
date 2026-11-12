@@ -13,11 +13,11 @@ export default function SharedInvoiceDataTable() {
   const { user } = useSelector((state) => state.auth);
   const { invoices, pagination } = useSelector((state) => state.invoice);
   const [pages, setPages] = React.useState(
-    Math.ceil(invoices.length / pagination?.pageSize) || 1
+    Math.ceil(invoices.length / pagination?.pageSize) || 1,
   );
 
   const [pageNumber, setPageNumber] = React.useState(
-    pagination?.pageNumber || 1
+    pagination?.pageNumber || 1,
   );
 
   const view = roleToView(user?.userRole || "User");

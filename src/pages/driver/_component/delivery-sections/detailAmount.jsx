@@ -7,7 +7,7 @@ function DetailAmount({ data }) {
         Total: {new Intl.NumberFormat("en-GB").format(data?.DOCAMT ?? 0)}
       </Label>
       <Label className="text-sm font-medium">
-        Paid: {new Intl.NumberFormat("en-GB").format(data?.Paid ?? 0)}
+        Paid: {new Intl.NumberFormat("en-GB").format(data?.PAID ?? 0)}
       </Label>
       <Label className="text-sm font-medium">
         Balance: {new Intl.NumberFormat("en-GB").format(data?.Balance ?? 0)}

@@ -101,9 +101,9 @@ export default function DeliveryTable({
                   row.Disputed === true && row.DeliveryStatus !== "Delivered"
                     ? "text-red-700 text-xs font-medium"
                     : row.DeliveryStatus === "Delivered" &&
-                      row.IsCollected === true
-                    ? "text-green-700 text-xs font-medium line-through"
-                    : "text-xs font-medium"
+                        row.IsCollected === true
+                      ? "text-green-700 text-xs font-medium line-through"
+                      : "text-xs font-medium"
                 }
                 onClick={() =>
                   checkedInvoices.length > 0 ||
@@ -115,17 +115,17 @@ export default function DeliveryTable({
                 data-state={row.DocNo === selectedRow?.DocNo ? "selected" : ""}
               >
                 <TableCell className="py-1 px-2">
-                  { row.OTPValidated  && <Checkbox
-                    className="border border-gray-400"
-                    // checked={checked}
-                    disabled={
-                      (row.DeliveryStatus === "Delivered" &&
-                      row.IsCollected === true)
-                    
-                    }
-                    onCheckedChange={(value) => handleRowCheck(value, row)}
-                  /> }
-                  
+                  {row.OTPValidated && (
+                    <Checkbox
+                      className="border border-gray-400"
+                      // checked={checked}
+                      disabled={
+                        row.DeliveryStatus === "Delivered" &&
+                        row.IsCollected === true
+                      }
+                      onCheckedChange={(value) => handleRowCheck(value, row)}
+                    />
+                  )}
                 </TableCell>
                 {/* <TableCell className="py-1 px-2">{row?.DISPATCHNUM}</TableCell>
               <TableCell className="py-1 px-2">{row?.SALEINV_NUM}</TableCell>
@@ -150,7 +150,7 @@ export default function DeliveryTable({
                   {new Intl.NumberFormat("en-GB").format(row?.DOCAMT)}
                 </TableCell>
                 <TableCell className="py-1 px-2">
-                  {new Intl.NumberFormat("en-GB").format(row?.Paid)}
+                  {new Intl.NumberFormat("en-GB").format(row?.PAID)}
                 </TableCell>
                 <TableCell className="py-1 px-2">
                   {new Intl.NumberFormat("en-GB").format(row?.Balance)}

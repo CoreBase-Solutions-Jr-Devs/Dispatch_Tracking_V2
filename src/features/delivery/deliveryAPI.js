@@ -1,8 +1,7 @@
 import { apiClient } from "@/app/api-client";
 import { store } from "@/app/store";
+import { getBcode } from "@/constant";
 
-let { auth } = store.getState();
-console.log();
 export const deliveryApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
     // DELIVERY TRACKING
@@ -75,7 +74,7 @@ export const deliveryApi = apiClient.injectEndpoints({
         url: "/delivery/GetDispatchesForDeliveryHD",
         method: "GET",
         params: {
-          bcode: auth.bcode || 0,
+          bcode: getBcode(),
           searchtext,
         },
       }),
@@ -150,6 +149,13 @@ export const deliveryApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["dipatch_deliveries", "dipatch_deliveries_details"],
     }),
+    GetDispatchDrivers: builder.query({
+      query: () => ({
+        url: "/admin/drivers",
+        method: "GET",
+      }),
+      providesTags: ["dispatch_drivers"],
+    }),
   }),
 });
 
@@ -171,4 +177,6 @@ export const {
   useValidateOTPForDeliveredInvoicesMutation,
   useMakeMpesaSTKPushForDeliveredInvoicesMutation,
   useDisputedAmountsInvoicesMutation,
+  //
+  useGetDispatchDriversQuery,
 } = deliveryApi;
