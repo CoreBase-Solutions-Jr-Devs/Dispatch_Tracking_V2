@@ -17,6 +17,7 @@ export const ROLES = Object.freeze({
   VERIFICATION_PERSON: "Verification",
   DISPATCH_PERSON: "Dispatch",
   DRIVER: "Delivery",
+  DRIVERS: "Drivers",
   SALES_PERSON: "SalesPerson",
   CUSTOMER: "Customer",
 });

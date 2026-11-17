@@ -15,11 +15,12 @@ export const PROTECTED_ROUTES = {
   VERIFICATION: "/verification",
   DISPATCH: "/dispatch",
   DELIVERY: "/Delivery",
+  DRIVERS: "/drivers",
 };
 
 export const UNPROTECTED_ROUTES = {
   STATUS_TRACKER: "/status-tracker",
-}
+};
 
 export const isAuthRoute = (pathname) => {
   return Object.values(AUTH_ROUTES).includes(pathname);

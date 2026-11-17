@@ -16,8 +16,10 @@ import {
   PackageCheck,
   Split,
   Truck,
+  Bike,
 } from "lucide-react";
 import BranchRoute from "../branchRoute";
+import DriverSetupOverview from "@/pages/driverSetup";
 
 // Auth routes - only for unauthenticated users
 export const authenticationRoutePaths = [
@@ -92,12 +94,51 @@ export const protectedRoutePaths = [
     icon: Home,
   },
   {
+    path: PROTECTED_ROUTES.STORE,
+    element: <Overview role="Store" />,
+    roles: Object.values(ROLES),
+    menuLabel: "Store",
+    requiredRight: 5149,
+    icon: Store,
+  },
+  {
+    path: PROTECTED_ROUTES.VERIFICATION,
+    element: <Overview role="Verification" />,
+    roles: Object.values(ROLES),
+    menuLabel: "Verification",
+    requiredRight: 5149,
+    icon: PackageCheck,
+  },
+  {
+    path: PROTECTED_ROUTES.DISPATCH,
+    element: <Overview role="Dispatch" />,
+    roles: Object.values(ROLES),
+    menuLabel: "Dispatch",
+    requiredRight: 5149,
+    icon: Split,
+  },
+  {
     path: PROTECTED_ROUTES.NEWDISPATCH,
     element: <DispatchInvoice />,
     roles: Object.values(ROLES),
     menuLabel: "New Dispatch",
-    requiredRight: 5147,
+    requiredRight: 5149,
     icon: Plus,
+  },
+  {
+    path: PROTECTED_ROUTES.DELIVERY,
+    element: <Overview role="Delivery" />,
+    roles: Object.values(ROLES),
+    menuLabel: "Delivery",
+    requiredRight: 5149,
+    icon: Truck,
+  },
+  {
+    path: PROTECTED_ROUTES.DRIVERS,
+    element: <DriverSetupOverview />,
+    roles: Object.values(ROLES),
+    menuLabel: "Drivers",
+    icon: Bike,
   },
   {
     path: PROTECTED_ROUTES.SETTINGS,

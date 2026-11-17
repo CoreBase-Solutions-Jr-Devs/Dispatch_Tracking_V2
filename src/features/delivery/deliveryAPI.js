@@ -149,12 +149,21 @@ export const deliveryApi = apiClient.injectEndpoints({
       }),
       invalidatesTags: ["dipatch_deliveries", "dipatch_deliveries_details"],
     }),
+    //
     GetDispatchDrivers: builder.query({
       query: () => ({
         url: "/admin/drivers",
         method: "GET",
       }),
       providesTags: ["dispatch_drivers"],
+    }),
+    createNewDriver: builder.mutation({
+      query: (formData) => ({
+        url: "/admin/drivers",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["dispatch_drivers"],
     }),
   }),
 });
@@ -179,4 +188,5 @@ export const {
   useDisputedAmountsInvoicesMutation,
   //
   useGetDispatchDriversQuery,
+  useCreateNewDriverMutation,
 } = deliveryApi;
