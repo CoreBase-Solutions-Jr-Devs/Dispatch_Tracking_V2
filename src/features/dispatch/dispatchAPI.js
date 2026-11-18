@@ -77,7 +77,7 @@ export const dispatchApi = apiClient.injectEndpoints({
 
     getSavedDispatchedInvoices: builder.query({
       query: ({ pageNumber = 1, pageSize = 50 }) => ({
-        url: `/dispatch/saved-dispatched?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        url: `/dispatch/saved-dispatched?pageNumber=${pageNumber}&pageSize=${pageSize}&bCode=${getBcode()}`,
         method: "GET",
       }),
       providesTags: ["saved_dispatched"],

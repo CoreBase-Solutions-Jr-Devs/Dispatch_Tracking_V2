@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   authenticationRoutePaths,
   branchRoutePath,
-  protectedRoutePaths, 
+  protectedRoutePaths,
   unprotectedRoutePaths,
 } from "./common/routes";
 import NotFound from "@/pages/not_found/NotFound";
@@ -12,6 +12,7 @@ import AuthRoute from "./authRoute";
 import ProtectedRoute from "./protectedRoute";
 import UnAuthorized from "@/pages/unAuthorized";
 import UnprotectedRoute from "./unprotectedRoute";
+import { flattenRoutes } from "@/lib/utils";
 
 function AppRoutes() {
   // useAuthExpiration();
@@ -47,7 +48,17 @@ function AppRoutes() {
         ))}
 
         {/* Protected Routes - requires both auth AND branch selection */}
-        {protectedRoutePaths.map((route) => (
+        {/* {protectedRoutePaths.map((route) => (
+          <Route
+            key={route.path}
+            element={<ProtectedRoute allowedRoles={route.roles} />}
+          >
+            <Route element={<AppLayout />}>
+              <Route path={route.path} element={route.element} />
+            </Route>
+          </Route>
+        ))} */}
+        {flattenRoutes(protectedRoutePaths).map((route) => (
           <Route
             key={route.path}
             element={<ProtectedRoute allowedRoles={route.roles} />}

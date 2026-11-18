@@ -32,11 +32,12 @@ export default function StorePage() {
   });
 
   // const rights = user?.userrights?.map((item) => item?.moduleCode) || [];
-  const rights =
-    user["userrights"]
-      ?.filter((item) => item?.moduleCode === 5145)
-      ?.map((item) => item?.moduleCode) || [];
-  const view = rightsToView(rights);
+  // const rights =
+  //   user["userrights"]
+  //     ?.filter((item) => item?.moduleCode === 5145)
+  //     ?.map((item) => item?.moduleCode) || [];
+  // const view = rightsToView(rights);
+  const view = "store";
   const columns = getInvoiceColumns(view);
 
   const { data, isLoading, isFetching, isError, isSuccess } =

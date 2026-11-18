@@ -4,6 +4,7 @@ import invoiceReducer from "../features/invoices/invoiceSlice";
 import dispatchReducer from "../features/dispatch/dispatchSlice";
 import uiReducer from "../features/ui/uiSlice";
 import dashboardReducer from "../features/dashboard/dashboardSlice";
+import adminDashboardReducer from "../features/dashboard/adminDashboardSlice";
 import storage from "redux-persist/lib/storage";
 import {
   persistReducer,
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   invoice: invoiceReducer,
   dashboard: dashboardReducer,
+  adminDashboard: adminDashboardReducer,
   dispatch: dispatchReducer,
   ui: uiReducer,
 });

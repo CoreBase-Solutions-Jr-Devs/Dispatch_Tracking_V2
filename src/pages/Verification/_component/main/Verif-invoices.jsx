@@ -31,14 +31,13 @@ export default function VerificationPage() {
   });
 
   // const rights = user["userrights"]?.map((item) => item?.moduleCode) || [];
-  const rights =
-    user["userrights"]
-      ?.filter((item) => item?.moduleCode === 5146)
-      ?.map((item) => item?.moduleCode) || [];
-  const view = rightsToView(rights);
+  // const rights =
+  //   user["userrights"]
+  //     ?.filter((item) => item?.moduleCode === 5146)
+  //     ?.map((item) => item?.moduleCode) || [];
+  // const view = rightsToView(rights);
+  const view = "verification";
   const columns = getInvoiceColumns(view);
-
-  console.log(rights);
 
   const { data, isLoading, isFetching, isError, isSuccess } =
     useGetFilteredVerificationInvoicesQuery({

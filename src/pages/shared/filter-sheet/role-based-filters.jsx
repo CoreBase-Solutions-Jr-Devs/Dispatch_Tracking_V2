@@ -7,9 +7,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const RoleBasedFilters = ({ filters = [], selectedFilters = {}, onChange }) => {
+let stage = {
+  Store: 1,
+  Verification: 2,
+  Dispatch: 3,
+  Delivered: 4,
+};
+
+const RoleBasedFilters = ({
+  filters = [],
+  selectedFilters = {},
+  onChange,
+  role = null,
+}) => {
   const safeFilters = Array.isArray(filters) ? filters : [];
-  console.log(safeFilters);
+  let options = safeFilters[0]?.options?.filter(
+    (item) => item.stageId === stage[role],
+  );
+  console.log(safeFilters, options);
   return (
     <section className="flex flex-wrap gap-2 items-center">
       {safeFilters.map((filter) => (
@@ -23,14 +38,13 @@ const RoleBasedFilters = ({ filters = [], selectedFilters = {}, onChange }) => {
             <SelectTrigger className="h-8 text-sm bg-[var(--input)] border border-[var(--border)] text-[var(--foreground)] rounded-md">
               <SelectValue placeholder={filter?.label} />
             </SelectTrigger>
-
             <SelectContent className="bg-gray-100 text-[var(--dropdown-foreground)] border border-[var(--border)] rounded-md shadow-lg">
               {[
-                ...filter?.options,
-                {
-                  label: "All Status",
-                  value: "",
-                },
+                ...options,
+                // {
+                //   label: "All Status",
+                //   value: "",
+                // },
               ]?.map((opt) => (
                 <SelectItem
                   key={opt.value}

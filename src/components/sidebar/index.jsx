@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 import { protectedRoutePaths } from "@/routes/common/routes";
@@ -6,10 +6,11 @@ import {
   cn,
   getUserRightCodes,
   getUserModuleAreas,
-  hasAllowedRole,
-  hasRightCode,
+  // hasAllowedRole,
+  // hasRightCode,
+  getAllowedRoutes,
 } from "@/lib/utils";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { toggleSidebar } from "@/features/ui/uiSlice";
 
 const SideBar = () => {
@@ -18,20 +19,27 @@ const SideBar = () => {
   const { sidebarCollapsed } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
 
+  const [openMenus, setOpenMenus] = useState({});
+
   const userRightCodes = useMemo(() => getUserRightCodes(user), [user]);
   const userAreas = useMemo(() => getUserModuleAreas(user), [user]);
 
+  // const allowedRoutes = useMemo(() => {
+  //   if (!user) return [];
+
+  //   return protectedRoutePaths.filter((route) => {
+  //     const roleAllowed = hasAllowedRole(route.roles, userAreas);
+  //     const rightAllowed = route.requiredRight
+  //       ? hasRightCode(route.requiredRight, userRightCodes)
+  //       : true;
+
+  //     return roleAllowed && rightAllowed;
+  //   });
+  // }, [user, userAreas, userRightCodes]);
+
   const allowedRoutes = useMemo(() => {
     if (!user) return [];
-
-    return protectedRoutePaths.filter((route) => {
-      const roleAllowed = hasAllowedRole(route.roles, userAreas);
-      const rightAllowed = route.requiredRight
-        ? hasRightCode(route.requiredRight, userRightCodes)
-        : true;
-
-      return roleAllowed && rightAllowed;
-    });
+    return getAllowedRoutes(protectedRoutePaths, userAreas, userRightCodes);
   }, [user, userAreas, userRightCodes]);
 
   useEffect(() => {
@@ -46,13 +54,102 @@ const SideBar = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [dispatch]);
 
+  const toggleMenu = (menuLabel) => {
+    setOpenMenus((prev) => ({
+      ...prev,
+      [menuLabel]: !prev[menuLabel],
+    }));
+  };
+
   if (!user) return null;
+
+  const renderMenuItems = (routes) =>
+    routes.map((route) => {
+      const Icon = route.icon;
+      const hasChildren = route.children?.length > 0;
+
+      const isChildActive = hasChildren
+        ? route.children.some(
+            (child) =>
+              pathname === child.path || pathname.startsWith(`${child.path}/`),
+          )
+        : false;
+
+      const isActive =
+        pathname === route.path ||
+        (route.path && pathname.startsWith(`${route.path}/`));
+
+      const isOpen = openMenus[route.menuLabel] || isChildActive;
+
+      return (
+        <li key={route.path || route.menuLabel}>
+          <div className="flex flex-col">
+            {hasChildren ? (
+              <button
+                type="button"
+                onClick={() => {
+                  if (sidebarCollapsed) {
+                    dispatch(toggleSidebar());
+                  }
+                  toggleMenu(route.menuLabel);
+                }}
+                className={cn(
+                  "flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
+                  isChildActive && "bg-secondary text-secondary-foreground",
+                )}
+                title={route.menuLabel}
+              >
+                {Icon && <Icon className="h-4 w-4 shrink-0" />}
+
+                {!sidebarCollapsed && (
+                  <>
+                    <span className="flex-1 text-left whitespace-nowrap">
+                      {route.menuLabel}
+                    </span>
+
+                    <ChevronDown
+                      className={cn(
+                        "h-4 w-4 transition-transform",
+                        isOpen && "rotate-180",
+                      )}
+                    />
+                  </>
+                )}
+              </button>
+            ) : (
+              <NavLink
+                to={route.path}
+                className={cn(
+                  "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
+                  isActive && "bg-secondary text-secondary-foreground",
+                )}
+                title={route.menuLabel}
+              >
+                {Icon && <Icon className="h-4 w-4 shrink-0" />}
+
+                {!sidebarCollapsed && (
+                  <span className="whitespace-nowrap text-sm">
+                    {route.menuLabel}
+                  </span>
+                )}
+              </NavLink>
+            )}
+
+            {hasChildren && isOpen && !sidebarCollapsed && (
+              <ul className="ml-5 mt-1 flex flex-col gap-1 border-l pl-3">
+                {renderMenuItems(route.children)}
+              </ul>
+            )}
+          </div>
+        </li>
+      );
+    });
 
   return (
     <div
       className={cn(
         "hidden lg:flex sticky top-16 flex-col h-[calc(100vh-4rem)] border-r bg-background transition-all duration-300",
-        sidebarCollapsed ? "w-16" : "w-52"
+        sidebarCollapsed ? "w-16" : "w-52",
       )}
     >
       <button
@@ -69,33 +166,60 @@ const SideBar = () => {
 
       <nav className="flex-1 overflow-y-auto">
         <ul className="flex flex-col gap-1 p-2">
-          {allowedRoutes.map((route) => {
-            const Icon = route.icon;
-            const isActive = pathname === route.path;
-
-            return (
-              <li key={route.path}>
-                <NavLink
-                  to={route.path}
-                  className={cn(
-                    "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
-                    isActive && "bg-secondary text-secondary-foreground"
-                  )}
-                >
-                  {Icon && <Icon className="h-4 w-4 shrink-0" />}
-                  {!sidebarCollapsed && (
-                    <span className="whitespace-nowrap text-sm">
-                      {route.menuLabel || route.label}
-                    </span>
-                  )}
-                </NavLink>
-              </li>
-            );
-          })}
+          {renderMenuItems(allowedRoutes)}
         </ul>
       </nav>
     </div>
   );
+
+  // return (
+  //   <div
+  //     className={cn(
+  //       "hidden lg:flex sticky top-16 flex-col h-[calc(100vh-4rem)] border-r bg-background transition-all duration-300",
+  //       sidebarCollapsed ? "w-16" : "w-52",
+  //     )}
+  //   >
+  //     <button
+  //       onClick={() => dispatch(toggleSidebar())}
+  //       className="absolute -right-3 top-3 z-10 flex h-5 w-5 items-center justify-center rounded-full border bg-background shadow hover:bg-muted"
+  //       title="Toggle sidebar (Ctrl+C)"
+  //     >
+  //       {sidebarCollapsed ? (
+  //         <ChevronRight className="h-3.5 w-3.5" />
+  //       ) : (
+  //         <ChevronLeft className="h-3.5 w-3.5" />
+  //       )}
+  //     </button>
+
+  //     <nav className="flex-1 overflow-y-auto">
+  //       <ul className="flex flex-col gap-1 p-2">
+  //         {allowedRoutes.map((route) => {
+  //           const Icon = route.icon;
+  //           const isActive = pathname === route.path;
+
+  //           return (
+  //             <li key={route.path}>
+  //               <NavLink
+  //                 to={route.path}
+  //                 className={cn(
+  //                   "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
+  //                   isActive && "bg-secondary text-secondary-foreground",
+  //                 )}
+  //               >
+  //                 {Icon && <Icon className="h-4 w-4 shrink-0" />}
+  //                 {!sidebarCollapsed && (
+  //                   <span className="whitespace-nowrap text-sm">
+  //                     {route.menuLabel || route.label}
+  //                   </span>
+  //                 )}
+  //               </NavLink>
+  //             </li>
+  //           );
+  //         })}
+  //       </ul>
+  //     </nav>
+  //   </div>
+  // );
 };
 
 export default SideBar;

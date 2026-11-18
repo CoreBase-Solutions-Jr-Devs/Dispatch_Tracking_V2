@@ -1,7 +1,7 @@
 import { apiClient } from "@/app/api-client";
 import { getBcode } from "@/constant";
 
-let bcode = getBcode();
+// let bcode = getBcode();
 
 export const dashboardApi = apiClient.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,7 +19,121 @@ export const dashboardApi = apiClient.injectEndpoints({
         method: "GET",
         params: {
           searchWord: searchWord,
-          bCode: bcode,
+          bCode: getBcode(),
+        },
+      }),
+      // providesTags: ["all_invoices"],
+    }),
+    //
+    collectionsReconcilation: builder.query({
+      query: ({ dispatchNumber, bcode }) => ({
+        url: "/admin/collections/reconciliation",
+        method: "GET",
+        params: {
+          dispatchNumber: Number(dispatchNumber),
+          bCode: getBcode(),
+        },
+      }),
+      // providesTags: ["all_invoices"],
+    }),
+    adminExecptions: builder.query({
+      query: ({ kind, pageNumber, pageSize, bcode }) => ({
+        url: "/admin/exceptions",
+        method: "GET",
+        params: {
+          bCode: getBcode(),
+          kind: kind,
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+        },
+      }),
+      // providesTags: ["all_invoices"],
+    }),
+    adminAging: builder.query({
+      query: ({ stage, minimumMinutes, pageNumber, pageSize, bcode }) => ({
+        url: "/admin/aging",
+        method: "GET",
+        params: {
+          bCode: getBcode(),
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+          stage: stage,
+          minimumMinutes: Number(minimumMinutes),
+        },
+      }),
+      // providesTags: ["all_invoices"],
+    }),
+    adminDashboard: builder.query({
+      query: ({ startDate, endDate, bcode }) => ({
+        url: "/admin/dashboard",
+        method: "GET",
+        params: {
+          from: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date(startDate)),
+          to: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date(endDate)),
+          bCode: getBcode(),
+        },
+      }),
+      // providesTags: ["all_invoices"],
+    }),
+    adminInsights: builder.query({
+      query: ({ startDate, endDate, bcode }) => ({
+        url: "/admin/insights",
+        method: "GET",
+        params: {
+          from: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date(startDate)),
+          to: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date(endDate)),
+          bCode: getBcode(),
+        },
+      }),
+      // providesTags: ["all_invoices"],
+    }),
+    adminReport: builder.query({
+      query: ({ _module, startDate, endDate, bcode }) => ({
+        url: `/admin/reports/${_module}`,
+        method: "GET",
+        params: {
+          module: _module,
+          from: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date(startDate)),
+          to: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date(endDate)),
+          bCode: getBcode(),
+        },
+      }),
+      // providesTags: ["all_invoices"],
+    }),
+    adminSearch: builder.query({
+      query: ({ adminKind, number, pageNumber, pageSize, bcode }) => ({
+        url: `/admin/search`,
+        method: "GET",
+        params: {
+          kind: adminKind,
+          number: Number(number),
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+          bCode: getBcode(),
         },
       }),
       // providesTags: ["all_invoices"],
@@ -27,5 +141,15 @@ export const dashboardApi = apiClient.injectEndpoints({
   }),
 });
 
-export const { useGetAllGeneralInvoicesQuery, useQueryInvoiceQuery } =
-  dashboardApi;
+export const {
+  useGetAllGeneralInvoicesQuery,
+  useQueryInvoiceQuery,
+  //
+  useCollectionsReconcilationQuery,
+  useAdminExecptionsQuery,
+  useAdminAgingQuery,
+  useAdminDashboardQuery,
+  useAdminInsightsQuery,
+  useAdminReportQuery,
+  useAdminSearchQuery,
+} = dashboardApi;

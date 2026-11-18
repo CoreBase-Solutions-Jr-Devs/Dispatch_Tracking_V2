@@ -77,8 +77,8 @@ const Overview = ({ role = "" }) => {
 
   const renderFilterSheet = () => {
     const roleToComponent = {
-      store: <FilterSheet />,
-      verification: <FilterSheet />,
+      store: <FilterSheet role={role} />,
+      verification: <FilterSheet role={role} />,
     };
 
     if (role) {
@@ -89,7 +89,7 @@ const Overview = ({ role = "" }) => {
     if (role === "Dispatch") return null;
 
     if (rights?.includes(5145) || rights?.includes(5146))
-      return <FilterSheet />;
+      return <FilterSheet role={moduleArea[0]} />;
 
     return null;
   };

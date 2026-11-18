@@ -188,3 +188,45 @@ export const dateDefineds = {
   startOfNextYear: startOfYear(addYears(new Date(), 1)),
   endOfNextYear: endOfYear(addYears(new Date(), 1)),
 };
+/**
+ * Handle Sidenav Grouped Nav
+ */
+export const getAllowedRoutes = (routes, userAreas, userRightCodes) => {
+  return routes.reduce((allowed, route) => {
+    const roleAllowed = hasAllowedRole(route.roles, userAreas);
+
+    const rightAllowed = route.requiredRight
+      ? hasRightCode(route.requiredRight, userRightCodes)
+      : true;
+
+    const children = route.children
+      ? getAllowedRoutes(route.children, userAreas, userRightCodes)
+      : [];
+
+    // A parent should remain visible if at least one child is accessible.
+    if (roleAllowed && rightAllowed) {
+      allowed.push({
+        ...route,
+        children,
+      });
+    } else if (children.length > 0) {
+      // Keep the parent visible if an accessible child exists.
+      allowed.push({
+        ...route,
+        children,
+      });
+    }
+
+    return allowed;
+  }, []);
+};
+
+export const flattenRoutes = (routes) => {
+  return routes.flatMap((route) => {
+    const currentRoute = route.path && route.element ? [route] : [];
+
+    const childRoutes = route.children ? flattenRoutes(route.children) : [];
+
+    return [...currentRoute, ...childRoutes];
+  });
+};

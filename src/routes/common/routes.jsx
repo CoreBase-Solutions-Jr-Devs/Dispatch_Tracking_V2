@@ -2,6 +2,13 @@ import { AUTH_ROUTES, PROTECTED_ROUTES, UNPROTECTED_ROUTES } from "./routePath";
 import SignIn from "@/pages/auth/sign-in";
 import Overview from "@/pages/overview";
 import Dashboard from "@/pages/dashboard";
+import AgeingSection from "@/pages/adminDashboard/_component/aging-section";
+import DashboardSection from "@/pages/adminDashboard/_component/dashboard-section";
+import ExceptionSection from "@/pages/adminDashboard/_component/exception-section";
+import InsightSection from "@/pages/adminDashboard/_component/insights-section";
+import ReconciliationSection from "@/pages/adminDashboard/_component/reconciliation-section";
+import ReportSection from "@/pages/adminDashboard/_component/reports-section";
+import DashboardSearch from "@/pages/adminDashboard/_component/admin-search";
 import AuthBranch from "@/pages/branches";
 import Settings from "@/pages/settings";
 import StatusProgressPage from "@/pages/status_tracking/landing/StatusProgressPage";
@@ -17,6 +24,7 @@ import {
   Split,
   Truck,
   Bike,
+  ShieldAlert,
 } from "lucide-react";
 import BranchRoute from "../branchRoute";
 import DriverSetupOverview from "@/pages/driverSetup";
@@ -79,6 +87,64 @@ export const branchRoutePath = [
 
 // Protected routes - requires both authentication AND branch selection
 export const protectedRoutePaths = [
+  {
+    // Parent menu: no page of its own
+    menuLabel: "Administration",
+    icon: ShieldAlert,
+    roles: Object.values(ROLES),
+    requiredRight: 5149,
+    children: [
+      {
+        path: PROTECTED_ROUTES.RECONCILIATION,
+        element: <ReconciliationSection />,
+        menuLabel: "Reconciliations",
+        roles: Object.values(ROLES),
+        requiredRight: 5149,
+      },
+      {
+        path: PROTECTED_ROUTES.EXECPTIONS,
+        element: <ExceptionSection />,
+        menuLabel: "Exceptions",
+        roles: Object.values(ROLES),
+        requiredRight: 5149,
+      },
+      {
+        path: PROTECTED_ROUTES.AGING,
+        element: <AgeingSection />,
+        menuLabel: "Aging",
+        roles: Object.values(ROLES),
+        requiredRight: 5149,
+      },
+      {
+        path: PROTECTED_ROUTES.DASHBOARD,
+        element: <DashboardSection />,
+        menuLabel: "Dashboard",
+        roles: Object.values(ROLES),
+        requiredRight: 5149,
+      },
+      {
+        path: PROTECTED_ROUTES.INSIGHTS,
+        element: <InsightSection />,
+        menuLabel: "Insights",
+        roles: Object.values(ROLES),
+        requiredRight: 5149,
+      },
+      {
+        path: PROTECTED_ROUTES.ADMINREPORTS,
+        element: <ReportSection />,
+        menuLabel: "Report",
+        roles: Object.values(ROLES),
+        requiredRight: 5149,
+      },
+      {
+        path: PROTECTED_ROUTES.ADMINSEARCH,
+        element: <DashboardSearch />,
+        menuLabel: "Search",
+        roles: Object.values(ROLES),
+        requiredRight: 5149,
+      },
+    ],
+  },
   {
     path: PROTECTED_ROUTES.ADMIN,
     element: <Dashboard />,

@@ -16,6 +16,14 @@ export const PROTECTED_ROUTES = {
   DISPATCH: "/dispatch",
   DELIVERY: "/Delivery",
   DRIVERS: "/drivers",
+  // ADMIN DASHBOARD
+  RECONCILIATION: "/admin/reconciliation",
+  EXECPTIONS: "/admin/exceptions",
+  AGING: "/admin/agin",
+  DASHBOARD: "/admin/dashboard",
+  INSIGHTS: "/admin/insights",
+  ADMINREPORTS: "/admin/reports",
+  ADMINSEARCH: "/admin/search",
 };
 
 export const UNPROTECTED_ROUTES = {

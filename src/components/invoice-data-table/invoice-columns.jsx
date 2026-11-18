@@ -11,6 +11,7 @@ const STATUS_STYLES = {
   Dispatch: "status-dispatch border-status-dispatch/20",
   Delivery: "status-delivered border-status-delivered/20",
   Muted: "bg-muted text-muted-foreground border-border",
+  Failed: "bg-red-300 text-white-foreground border-none",
 };
 
 const statusText = {
@@ -50,7 +51,8 @@ const renderStatus = (status) => {
       statusClass = STATUS_STYLES.Delivery;
       break;
 
-      statusClass = STATUS_STYLES.Verification;
+    case "Failed":
+      statusClass = STATUS_STYLES.Failed;
       break;
 
     default:
@@ -409,6 +411,162 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       header: "Status",
       cell: ({ row }) => renderStatus(statusText[row.original.status]),
     },
+    // Exception
+    exceptionkind: {
+      accessorKey: "kind",
+      header: "Kind",
+      cell: ({ row }) => renderText(row.original.kind),
+    },
+    exceptionreference: {
+      accessorKey: "reference",
+      header: "Reference",
+      cell: ({ row }) => renderText(row.original.reference),
+    },
+    exceptiondocNo: {
+      accessorKey: "docNo",
+      header: "DocNo",
+      cell: ({ row }) => renderText(row.original.docNo),
+    },
+    exceptiondispatchNumber: {
+      accessorKey: "dispatchNumber",
+      header: "DispatchNumber",
+      cell: ({ row }) => renderText(row.original.dispatchNumber),
+    },
+    exceptionstageId: {
+      accessorKey: "stageId",
+      header: "StageId",
+      cell: ({ row }) => renderText(statusText[row.original.stageId]),
+    },
+    exceptionopenedAtUtc: {
+      accessorKey: "openedAtUtc",
+      header: "OpenedAtUtc",
+      cell: ({ row }) => renderDateTime(row.original.openedAtUtc),
+    },
+    exceptionageMinutes: {
+      accessorKey: "ageMinutes",
+      header: "AgeMinutes",
+      cell: ({ row }) => renderText(row.original.ageMinutes),
+    },
+    exceptionstatus: {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => renderStatus(row.original.status),
+    },
+    exceptionaction: {
+      accessorKey: "action",
+      header: "Action",
+      cell: ({ row }) => renderText(row.original.action),
+    },
+    // AGEING
+    ageingdocNo: {
+      accessorKey: "docNo",
+      header: "DocNo",
+      cell: ({ row }) => renderText(row.original.docNo),
+    },
+    ageingstageId: {
+      accessorKey: "stageId",
+      header: "StageId",
+      cell: ({ row }) => renderText(statusText[row.original.stageId]),
+    },
+    ageingenteredAt: {
+      accessorKey: "enteredAt",
+      header: "EnteredAt",
+      cell: ({ row }) => renderDateTime(row.original.enteredAt),
+    },
+    ageingageMinutes: {
+      accessorKey: "ageMinutes",
+      header: "AgeMinutes",
+      cell: ({ row }) => renderText(row.original.ageMinutes),
+    },
+    //
+    adminStageId: {
+      accessorKey: "stageId",
+      header: "StageId",
+      cell: ({ row }) => renderText(row.original.stageId),
+    },
+    adminStatusId: {
+      accessorKey: "statusId",
+      header: "StatusId",
+      cell: ({ row }) => renderText(row.original.statusId),
+    },
+    adminInvoiceCount: {
+      accessorKey: "invoiceCount",
+      header: "InvoiceCount",
+      cell: ({ row }) => renderText(row.original.invoiceCount),
+    },
+    adminInvoiceAmount: {
+      accessorKey: "invoiceAmount",
+      header: "InvoiceAmount",
+      cell: ({ row }) => renderNumber(row.original.invoiceAmount),
+    },
+    // DASHBOARD ADMIN
+    dashboardNotifcationsFailed: {
+      accessorKey: "failed",
+      header: "Failed",
+      cell: ({ row }) => renderNumber(row.original.failed),
+    },
+    dashboardNotifcationsKind: {
+      accessorKey: "kind",
+      header: "Kind",
+      cell: ({ row }) => renderText(row.original.kind),
+    },
+    dashboardNotifcationsPending: {
+      accessorKey: "pending",
+      header: "Pending",
+      cell: ({ row }) => renderNumber(row.original.pending),
+    },
+    dashboardNotifcationsSent: {
+      accessorKey: "sent",
+      header: "Sent",
+      cell: ({ row }) => renderNumber(row.original.sent),
+    },
+    dashboardNotifcationsAction: {
+      accessorKey: "action",
+      header: "Action",
+      cell: ({ row }) => renderText(row.original.action),
+    },
+    dashboardNotifcationsEventCount: {
+      accessorKey: "eventCount",
+      header: "EventCount",
+      cell: ({ row }) => renderNumber(row.original.eventCount),
+    },
+    // INSIGHT
+    insightCurrentCount: {
+      accessorKey: "currentCount",
+      header: "CurrentCount",
+      cell: ({ row }) => renderNumber(row.original.currentCount),
+    },
+    insightPreviousCount: {
+      accessorKey: "previousCount",
+      header: "PreviousCount",
+      cell: ({ row }) => renderNumber(row.original.previousCount),
+    },
+    insightday: {
+      accessorKey: "day",
+      header: "Day",
+      cell: ({ row }) => renderDateTime(row.original.day),
+    },
+    insightmetric: {
+      accessorKey: "metric",
+      header: "Metric",
+      cell: ({ row }) => renderText(row.original.metric),
+    },
+    insightcount: {
+      accessorKey: "count",
+      header: "Count",
+      cell: ({ row }) => renderNumber(row.original.count),
+    },
+    // ADMIN SEARCH
+    adminSearchDispatchNo: {
+      accessorKey: "dispatchNumber",
+      header: "DispatchNumber",
+      cell: ({ row }) => renderNumber(row.original.dispatchNumber),
+    },
+    adminSearchInvNo: {
+      accessorKey: "invoiceNumber",
+      header: "InvoiceNumber",
+      cell: ({ row }) => renderNumber(row.original.invoiceNumber),
+    },
   };
 
   const views = {
@@ -476,9 +634,48 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.durationSeconds,
       base.actions,
     ],
+    kind: [
+      base.exceptionkind,
+      base.exceptionreference,
+      base.exceptiondocNo,
+      base.exceptiondispatchNumber,
+      base.exceptionstageId,
+      base.exceptionopenedAtUtc,
+      base.exceptionageMinutes,
+      base.exceptionstatus,
+      base.exceptionaction,
+    ],
+    ageing: [
+      base.ageingdocNo,
+      base.ageingstageId,
+      base.ageingenteredAt,
+      base.ageingageMinutes,
+    ],
+    dashboardnotifications: [
+      base.dashboardNotifcationsFailed,
+      base.dashboardNotifcationsKind,
+      base.dashboardNotifcationsPending,
+      base.dashboardNotifcationsSent,
+    ],
+    dashboardworkflows: [
+      base.dashboardNotifcationsAction,
+      base.dashboardNotifcationsEventCount,
+    ],
+    dailyinsights: [base.insightday, base.insightmetric, base.insightcount],
+    comparisoninsights: [
+      base.insightCurrentCount,
+      base.insightmetric,
+      base.insightPreviousCount,
+    ],
+    dailyreports: [base.insightday, base.insightmetric, base.insightcount],
+    comparisonreports: [
+      base.insightCurrentCount,
+      base.insightmetric,
+      base.insightPreviousCount,
+    ],
+    adminsearch: [base.adminSearchDispatchNo, base.adminSearchInvNo],
     default: [base.docType, base.branchName, base.account, base.status],
   };
-
   return views[view.toLowerCase()] || views.default;
 }
 export { formatDuration, renderDuration };
