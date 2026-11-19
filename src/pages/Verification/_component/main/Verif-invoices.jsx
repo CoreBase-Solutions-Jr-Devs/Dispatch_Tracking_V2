@@ -11,7 +11,6 @@ import {
 import { setSummary } from "@/features/invoices/invoiceSlice";
 import useDebouncedSearch from "@/hooks/use-debounce-search";
 // import { useGetFilteredStoreInvoicesQuery } from "@/features/store/storeAPI";
-import { getBcode } from "@/constant";
 
 export default function VerificationPage() {
   const dispatch = useAppDispatch();
@@ -44,7 +43,7 @@ export default function VerificationPage() {
       ...queryFilter,
       ...filter,
       workflowStatus: queryFilter?.status,
-      bcode: getBcode(),
+      bcode: queryFilter.bcode,
     });
 
   // const { data, isLoading, isFetching, isError, isSuccess } =

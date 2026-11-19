@@ -7,7 +7,7 @@ const initialState = {
     endDate: new Date().toISOString(),
     dateRange: "TODAY",
     status: "",
-    bCode: 0,
+    bCode: "",
   },
 };
 
@@ -30,7 +30,7 @@ const dashboardSlice = createSlice({
         endDate: new Date().toISOString(),
         dateRange: "TODAY",
         status: "",
-        bCode: 0,
+        bCode: "",
       };
     },
     setSummary: (state, action) => {

@@ -18,6 +18,7 @@ import { logout, setActiveBcode } from "@/features/auth/authSlice";
 import { resetDispatchData } from "@/features/dispatch/dispatchSlice";
 import { setQueryFilter } from "@/features/invoices/invoiceSlice";
 import { setQueryFilter as setDashboardQueryFilter } from "@/features/dashboard/dashboardSlice";
+import { setQueryFilter as setAdminDashboardQueryFilter } from "@/features/dashboard/adminDashboardSlice";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { Loader, PlusCircleIcon } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -36,6 +37,40 @@ function AuthBranch() {
 
   const handleBranchChange = (value) => {
     setBranch(value);
+    dispatch(
+      setQueryFilter({
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+        dateRange: "TODAY",
+        status: "",
+        bcode: value,
+      }),
+    );
+    dispatch(
+      setDashboardQueryFilter({
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+        dateRange: "TODAY",
+        status: "",
+        bCode: value,
+      }),
+    );
+    dispatch(
+      setAdminDashboardQueryFilter({
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+        dateRange: "TODAY",
+        status: "",
+        dispatchNumber: "",
+        adminKind: "",
+        kind: "",
+        stage: "",
+        number: "",
+        _module: "Store",
+        minimumMinutes: "",
+        bcode: value,
+      }),
+    );
   };
 
   const handleSubmit = (e) => {
@@ -53,24 +88,24 @@ function AuthBranch() {
     setIsloading(true);
     localStorage.setItem("bcode", branch);
     dispatch(setActiveBcode(branch));
-    dispatch(
-      setQueryFilter({
-        startDate: new Date().toISOString(),
-        endDate: new Date().toISOString(),
-        dateRange: "TODAY",
-        status: "",
-        bcode: branch,
-      }),
-    );
-    dispatch(
-      setDashboardQueryFilter({
-        startDate: new Date().toISOString(),
-        endDate: new Date().toISOString(),
-        dateRange: "TODAY",
-        status: "",
-        bCode: branch,
-      }),
-    );
+    // dispatch(
+    //   setQueryFilter({
+    //     startDate: new Date().toISOString(),
+    //     endDate: new Date().toISOString(),
+    //     dateRange: "TODAY",
+    //     status: "",
+    //     bcode: branch,
+    //   }),
+    // );
+    // dispatch(
+    //   setDashboardQueryFilter({
+    //     startDate: new Date().toISOString(),
+    //     endDate: new Date().toISOString(),
+    //     dateRange: "TODAY",
+    //     status: "",
+    //     bCode: branch,
+    //   }),
+    // );
     const timeoutId = setTimeout(() => {
       setIsloading(false);
       navigate(PROTECTED_ROUTES.OVERVIEW);

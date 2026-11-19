@@ -1,5 +1,5 @@
+import { getBcode } from "@/constant";
 import { createSlice } from "@reduxjs/toolkit";
-let bcode = localStorage.getItem("bcode");
 
 const initialState = {
   summary: {},
@@ -12,11 +12,12 @@ const initialState = {
     adminKind: "",
     kind: "",
     stage: "",
+    finishedStage: "",
     number: "",
-    stage: "",
     _module: "Store",
     minimumMinutes: "",
-    bCode: bcode,
+    bCode: "",
+    branches: [],
   },
 };
 
@@ -34,10 +35,12 @@ const dashboardSlice = createSlice({
         kind: action.payload.kind,
         adminKind: action.payload.adminKind,
         stage: action.payload.stage,
+        finishedStage: action.payload.finishedStage,
         number: action.payload.number,
         minimumMinutes: action.payload.minimumMinutes,
         _module: action.payload._module,
-        bCode: action.payload.bCode,
+        branches: action.payload.branches,
+        bCode: action.payload.bcode,
       };
     },
     clearQueryFilter: (state, action) => {
@@ -47,13 +50,15 @@ const dashboardSlice = createSlice({
         dateRange: "TODAY",
         status: "",
         dispatchNumber: "",
-        bCode: 0,
+        bCode: "",
         kind: "",
         adminKind: "",
         stage: "",
+        finishedStage: "",
         number: "",
         minimumMinutes: "",
         _module: "",
+        branches: [],
       };
     },
     setSummary: (state, action) => {

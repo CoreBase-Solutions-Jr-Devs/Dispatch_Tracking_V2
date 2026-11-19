@@ -24,6 +24,7 @@ export const PROTECTED_ROUTES = {
   INSIGHTS: "/admin/insights",
   ADMINREPORTS: "/admin/reports",
   ADMINSEARCH: "/admin/search",
+  FINISHEDINVOICES: "/admin/invoices",
 };
 
 export const UNPROTECTED_ROUTES = {

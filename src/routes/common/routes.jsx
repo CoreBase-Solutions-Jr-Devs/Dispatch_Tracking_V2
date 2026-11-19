@@ -9,6 +9,8 @@ import InsightSection from "@/pages/adminDashboard/_component/insights-section";
 import ReconciliationSection from "@/pages/adminDashboard/_component/reconciliation-section";
 import ReportSection from "@/pages/adminDashboard/_component/reports-section";
 import DashboardSearch from "@/pages/adminDashboard/_component/admin-search";
+import FinishedInvoices from "@/pages/adminDashboard/_component/finished-invoices-section";
+
 import AuthBranch from "@/pages/branches";
 import Settings from "@/pages/settings";
 import StatusProgressPage from "@/pages/status_tracking/landing/StatusProgressPage";
@@ -140,6 +142,13 @@ export const protectedRoutePaths = [
         path: PROTECTED_ROUTES.ADMINSEARCH,
         element: <DashboardSearch />,
         menuLabel: "Search",
+        roles: Object.values(ROLES),
+        requiredRight: 5149,
+      },
+      {
+        path: PROTECTED_ROUTES.FINISHEDINVOICES,
+        element: <FinishedInvoices />,
+        menuLabel: "Finished Invoices",
         roles: Object.values(ROLES),
         requiredRight: 5149,
       },

@@ -26,35 +26,35 @@ export const dashboardApi = apiClient.injectEndpoints({
     }),
     //
     collectionsReconcilation: builder.query({
-      query: ({ dispatchNumber, bcode }) => ({
+      query: ({ dispatchNumber, bCode }) => ({
         url: "/admin/collections/reconciliation",
         method: "GET",
         params: {
           dispatchNumber: Number(dispatchNumber),
-          bCode: getBcode(),
+          bCode: bCode,
         },
       }),
       // providesTags: ["all_invoices"],
     }),
     adminExecptions: builder.query({
-      query: ({ kind, pageNumber, pageSize, bcode }) => ({
+      query: ({ kind, pageNumber, pageSize, bCode }) => ({
         url: "/admin/exceptions",
         method: "GET",
         params: {
-          bCode: getBcode(),
           kind: kind,
           pageNumber: pageNumber,
           pageSize: pageSize,
+          bCode: bCode,
         },
       }),
       // providesTags: ["all_invoices"],
     }),
     adminAging: builder.query({
-      query: ({ stage, minimumMinutes, pageNumber, pageSize, bcode }) => ({
+      query: ({ stage, minimumMinutes, pageNumber, pageSize, bCode }) => ({
         url: "/admin/aging",
         method: "GET",
         params: {
-          bCode: getBcode(),
+          bCode: bCode,
           pageNumber: pageNumber,
           pageSize: pageSize,
           stage: stage,
@@ -64,7 +64,7 @@ export const dashboardApi = apiClient.injectEndpoints({
       // providesTags: ["all_invoices"],
     }),
     adminDashboard: builder.query({
-      query: ({ startDate, endDate, bcode }) => ({
+      query: ({ startDate, endDate, bCode }) => ({
         url: "/admin/dashboard",
         method: "GET",
         params: {
@@ -78,13 +78,13 @@ export const dashboardApi = apiClient.injectEndpoints({
             day: "2-digit",
             year: "numeric",
           }).format(new Date(endDate)),
-          bCode: getBcode(),
+          bCode: bCode,
         },
       }),
       // providesTags: ["all_invoices"],
     }),
     adminInsights: builder.query({
-      query: ({ startDate, endDate, bcode }) => ({
+      query: ({ startDate, endDate, bCode }) => ({
         url: "/admin/insights",
         method: "GET",
         params: {
@@ -98,13 +98,13 @@ export const dashboardApi = apiClient.injectEndpoints({
             day: "2-digit",
             year: "numeric",
           }).format(new Date(endDate)),
-          bCode: getBcode(),
+          bCode: bCode,
         },
       }),
       // providesTags: ["all_invoices"],
     }),
     adminReport: builder.query({
-      query: ({ _module, startDate, endDate, bcode }) => ({
+      query: ({ _module, startDate, endDate, bCode }) => ({
         url: `/admin/reports/${_module}`,
         method: "GET",
         params: {
@@ -119,13 +119,13 @@ export const dashboardApi = apiClient.injectEndpoints({
             day: "2-digit",
             year: "numeric",
           }).format(new Date(endDate)),
-          bCode: getBcode(),
+          bCode: bCode,
         },
       }),
       // providesTags: ["all_invoices"],
     }),
     adminSearch: builder.query({
-      query: ({ adminKind, number, pageNumber, pageSize, bcode }) => ({
+      query: ({ adminKind, number, pageNumber, pageSize, bCode }) => ({
         url: `/admin/search`,
         method: "GET",
         params: {
@@ -133,7 +133,19 @@ export const dashboardApi = apiClient.injectEndpoints({
           number: Number(number),
           pageNumber: pageNumber,
           pageSize: pageSize,
-          bCode: getBcode(),
+          bCode: bCode,
+        },
+      }),
+      // providesTags: ["all_invoices"],
+    }),
+    finishedInvoices: builder.query({
+      query: ({ branches, finishedStage, pageNumber, pageSize }) => ({
+        url: `/admin/search/finished-invoices?${branches}`,
+        method: "GET",
+        params: {
+          stage: finishedStage,
+          pageNumber: pageNumber,
+          pageSize: pageSize,
         },
       }),
       // providesTags: ["all_invoices"],
@@ -152,4 +164,5 @@ export const {
   useAdminInsightsQuery,
   useAdminReportQuery,
   useAdminSearchQuery,
+  useFinishedInvoicesQuery,
 } = dashboardApi;

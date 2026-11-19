@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { default as MultiSelect } from "react-select";
 
 let kinds = [
   { label: "StageSla", value: "StageSla" },
@@ -62,25 +63,55 @@ let stages = [
   { label: "Delivery", value: "4" },
 ];
 
+let Finishedstages = [
+  { label: "Processed", value: "Processed" },
+  { label: "Verified", value: "Verified" },
+  { label: "Dispatched", value: "Dispatched" },
+  { label: "Delivered", value: "Delivered" },
+];
+
 function AdminFilterSheet({ title }) {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const { user, bcode } = useTypedSelector((state) => state.auth);
   let branches = user["userBranches"] || [];
 
+  let branchOptions = branches.map((branch) => {
+    return {
+      value: branch.bcode,
+      label: branch.brancH_NAME,
+    };
+  });
+
+  const { queryFilter } = useTypedSelector((state) => state.adminDashboard);
+
   const [filter, setFilter] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    dateRange: "TODAY",
-    status: "",
-    dispatchNumber: "",
-    kind: "",
-    adminKind: "",
-    stage: "",
-    _module: "Store",
-    minimumMinutes: "",
-    number: "",
-    bcode: bcode,
+    // startDate: new Date(),
+    // endDate: new Date(),
+    // dateRange: "TODAY",
+    // status: "",
+    // dispatchNumber: "",
+    // kind: "",
+    // adminKind: "",
+    // stage: "",
+    // _module: "Store",
+    // minimumMinutes: "",
+    // number: "",
+    // bcode: "",
+    startDate: new Date(queryFilter.startDate),
+    endDate: new Date(queryFilter.endDate),
+    dateRange: queryFilter.dateRange,
+    status: queryFilter.status,
+    dispatchNumber: queryFilter.dispatchNumber,
+    kind: queryFilter.kind,
+    adminKind: queryFilter.adminKind,
+    stage: queryFilter.stage,
+    finishedStage: queryFilter.finishedStage,
+    _module: queryFilter._module,
+    minimumMinutes: queryFilter.minimumMinutes,
+    number: queryFilter.number,
+    bcode: queryFilter.bCode,
+    branches: queryFilter.branches,
   });
 
   const [selectedFilters, setSelectedFilters] = useState({});
@@ -188,6 +219,7 @@ function AdminFilterSheet({ title }) {
         kind: filter.kind,
         adminKind: filter.adminKind,
         stage: filter.stage,
+        finishedStage: filter.finishedStage,
         minimumMinutes: filter.minimumMinutes,
         number: filter.number,
         bcode: filter.bcode,
@@ -207,15 +239,27 @@ function AdminFilterSheet({ title }) {
       kind: "",
       adminKind: "",
       stage: "",
+      finishedStage: "",
       _module: "Store",
       minimumMinutes: "",
       number: "",
       bcode: bcode || 0,
+      branches: [],
     });
 
     dispatch(clearQueryFilter());
 
     setIsOpen(false);
+  };
+
+  const handleBranchSelect = (selectedList) => {
+    const data = selectedList.map((item) => item.value);
+
+    setFilter((prevState) => ({
+      ...prevState,
+      //   branches: Array.from(new Set([...(prevState.branches ?? []), ...data])),
+      branches: data,
+    }));
   };
 
   return (
@@ -230,38 +274,40 @@ function AdminFilterSheet({ title }) {
         <SheetHeader>
           <SheetTitle>Filter Options</SheetTitle>
         </SheetHeader>
-
         {/* Branch Dropdown */}
-        <section className="mb-4">
-          <Label className="text-xs text-muted">Branch</Label>
-          <Select
-            value={filter.bcode}
-            onValueChange={(value) =>
-              setFilter((prevState) => ({
-                ...prevState,
-                bcode: value,
-              }))
-            }
-          >
-            <SelectTrigger className="w-full border-gray-500">
-              <div className="flex items-center gap-2">
-                <SelectValue placeholder="Select branch...">
-                  {
-                    branches.find((item) => item.bcode === Number(filter.bcode))
-                      ?.brancH_NAME
-                  }
-                </SelectValue>
-              </div>
-            </SelectTrigger>
-            <SelectContent className="bg-stone-50">
-              {branches.map((opt, index) => (
-                <SelectItem key={index} value={opt.bcode}>
-                  {opt.brancH_NAME}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </section>
+        {title !== "finishedInvoices" && (
+          <section className="mb-4">
+            <Label className="text-xs text-muted">Branch</Label>
+            <Select
+              value={filter.bcode}
+              onValueChange={(value) =>
+                setFilter((prevState) => ({
+                  ...prevState,
+                  bcode: value,
+                }))
+              }
+            >
+              <SelectTrigger className="w-full border-gray-500">
+                <div className="flex items-center gap-2">
+                  <SelectValue placeholder="Select branch...">
+                    {
+                      branches.find(
+                        (item) => item.bcode === Number(filter.bcode),
+                      )?.brancH_NAME
+                    }
+                  </SelectValue>
+                </div>
+              </SelectTrigger>
+              <SelectContent className="bg-stone-50">
+                {branches.map((opt, index) => (
+                  <SelectItem key={index} value={opt.bcode}>
+                    {opt.brancH_NAME}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </section>
+        )}
         {/* Kind */}
         {title === "exception" && (
           <section className="mb-4">
@@ -292,7 +338,6 @@ function AdminFilterSheet({ title }) {
             </Select>
           </section>
         )}
-
         {title === "adminSearch" && (
           <>
             <section className="mb-4">
@@ -343,7 +388,6 @@ function AdminFilterSheet({ title }) {
             </section>
           </>
         )}
-
         {title === "report" && (
           <section className="mb-4">
             <Label className="text-xs text-muted">Module</Label>
@@ -376,7 +420,6 @@ function AdminFilterSheet({ title }) {
             </Select>
           </section>
         )}
-
         {/* Dispatch No */}
         {title === "reconciliation" && (
           <section className="mb-4">
@@ -395,7 +438,54 @@ function AdminFilterSheet({ title }) {
             />
           </section>
         )}
-
+        {title === "finishedInvoices" && (
+          <>
+            <section className="mb-4">
+              <Label className="text-xs text-muted">Branches</Label>
+              <MultiSelect
+                isMulti
+                name="branches"
+                options={branchOptions}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                onChange={(selectedOptions) =>
+                  handleBranchSelect(selectedOptions)
+                }
+              />
+            </section>
+            <section className="mb-4">
+              <Label className="text-xs text-muted">Stages</Label>
+              <Select
+                value={filter.stage}
+                onValueChange={(value) =>
+                  setFilter((prevState) => ({
+                    ...prevState,
+                    finishedStage: value,
+                  }))
+                }
+              >
+                <SelectTrigger className="w-full border-gray-500">
+                  <div className="flex items-center gap-2">
+                    <SelectValue placeholder="Select Stage...">
+                      {
+                        Finishedstages.find(
+                          (item) => item.value === filter.finishedStage,
+                        )?.label
+                      }
+                    </SelectValue>
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="bg-stone-50">
+                  {Finishedstages.map((opt, index) => (
+                    <SelectItem key={index} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </section>
+          </>
+        )}
         {title === "dashboardAgeing" && (
           <>
             <section className="mb-4">
@@ -445,74 +535,74 @@ function AdminFilterSheet({ title }) {
           </>
         )}
 
-        {title !== "reconciliation" && (
-          <>
-            {/* Date Range Dropdown */}
-            <section className="mb-4">
-              <Label className="text-xs text-muted">Date Range</Label>
-              <DateRangeDropdown
-                value={filter.dateRange}
-                onChange={(val) => handleDateRange(val)}
-                ranges={dateRanges}
-                isLoading={false}
-                isError={false}
-              />
-            </section>
-
-            {/* Start/End Date Pickers */}
-            <section className="flex gap-4 mb-4">
-              <div
-                className={`flex-1 flex flex-col ${
-                  filter.dateRange === "CUSTOM_RANGE"
-                    ? "border border-primary rounded-md p-1"
-                    : ""
-                }`}
-              >
-                <Label className="text-xs text-muted-foreground">
-                  Start Date
-                </Label>
-                <DatePicker
-                  className="w-full border rounded-md px-2 h-8"
-                  selected={filter.startDate}
-                  onChange={(date) =>
-                    setFilter((prevState) => ({
-                      ...prevState,
-                      startDate: date,
-                    }))
-                  }
-                  dateFormat="dd/MM/yyyy"
-                  disabled={!filter.dateRange === "CUSTOM_RANGE"}
+        {title !== "reconciliation" &&
+          title !== "dashboardAgeing" &&
+          title !== "finishedInvoices" && (
+            <>
+              {/* Date Range Dropdown */}
+              <section className="mb-4">
+                <Label className="text-xs text-muted">Date Range</Label>
+                <DateRangeDropdown
+                  value={filter.dateRange}
+                  onChange={(val) => handleDateRange(val)}
+                  ranges={dateRanges}
+                  isLoading={false}
+                  isError={false}
                 />
-              </div>
-              <div
-                className={`flex-1 flex flex-col ${
-                  filter.dateRange === "CUSTOM_RANGE"
-                    ? "border border-primary rounded-md p-1"
-                    : ""
-                }`}
-              >
-                <Label className="text-xs text-muted-foreground">
-                  End Date
-                </Label>
-                <DatePicker
-                  className="w-full border rounded-md px-2 h-8"
-                  selected={filter.endDate}
-                  onChange={(date) =>
-                    setFilter((prevState) => ({
-                      ...prevState,
-                      endDate: date,
-                    }))
-                  }
-                  dateFormat="dd/MM/yyyy"
-                  disabled={!filter.dateRange === "CUSTOM_RANGE"}
-                />
-              </div>
-            </section>
-          </>
-        )}
+              </section>
 
+              {/* Start/End Date Pickers */}
+              <section className="flex gap-4 mb-4">
+                <div
+                  className={`flex-1 flex flex-col ${
+                    filter.dateRange === "CUSTOM_RANGE"
+                      ? "border border-primary rounded-md p-1"
+                      : ""
+                  }`}
+                >
+                  <Label className="text-xs text-muted-foreground">
+                    Start Date
+                  </Label>
+                  <DatePicker
+                    className="w-full border rounded-md px-2 h-8"
+                    selected={filter.startDate}
+                    onChange={(date) =>
+                      setFilter((prevState) => ({
+                        ...prevState,
+                        startDate: date,
+                      }))
+                    }
+                    dateFormat="dd/MM/yyyy"
+                    disabled={!filter.dateRange === "CUSTOM_RANGE"}
+                  />
+                </div>
+                <div
+                  className={`flex-1 flex flex-col ${
+                    filter.dateRange === "CUSTOM_RANGE"
+                      ? "border border-primary rounded-md p-1"
+                      : ""
+                  }`}
+                >
+                  <Label className="text-xs text-muted-foreground">
+                    End Date
+                  </Label>
+                  <DatePicker
+                    className="w-full border rounded-md px-2 h-8"
+                    selected={filter.endDate}
+                    onChange={(date) =>
+                      setFilter((prevState) => ({
+                        ...prevState,
+                        endDate: date,
+                      }))
+                    }
+                    dateFormat="dd/MM/yyyy"
+                    disabled={!filter.dateRange === "CUSTOM_RANGE"}
+                  />
+                </div>
+              </section>
+            </>
+          )}
         {/* Search + Role Filters */}
-
         {/* Footer */}
         <SheetFooter className="border-t border-border flex justify-between items-center gap-x-4">
           <div className="flex gap-2">

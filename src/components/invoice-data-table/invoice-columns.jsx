@@ -26,18 +26,21 @@ const renderStatus = (status) => {
   switch (status) {
     case "Pending":
     case "In Store":
+    case "Processed":
     case 1:
       statusClass = STATUS_STYLES.Store;
       break;
 
     case "In Process":
     case "In Verification":
+    case "Verified":
     case 2:
       statusClass = STATUS_STYLES.Verification;
       break;
 
     case "In Delivery":
     case "In Dispatch":
+    case "Dispatched":
     case 3:
       statusClass = STATUS_STYLES.Dispatch;
       break;
@@ -557,15 +560,21 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       cell: ({ row }) => renderNumber(row.original.count),
     },
     // ADMIN SEARCH
-    adminSearchDispatchNo: {
-      accessorKey: "dispatchNumber",
-      header: "DispatchNumber",
-      cell: ({ row }) => renderNumber(row.original.dispatchNumber),
-    },
     adminSearchInvNo: {
       accessorKey: "invoiceNumber",
       header: "InvoiceNumber",
       cell: ({ row }) => renderNumber(row.original.invoiceNumber),
+    },
+    // FINISHED INVOICES
+    invCusName: {
+      accessorKey: "customerName",
+      header: "CustomerName",
+      cell: ({ row }) => renderNumber(row.original.customerName),
+    },
+    stage: {
+      accessorKey: "stage",
+      header: "Stage",
+      cell: ({ row }) => renderStatus(row.original.stage),
     },
   };
 
@@ -673,7 +682,14 @@ export function getInvoiceColumns(view, avgDurationSeconds = 0, handlers = {}) {
       base.insightmetric,
       base.insightPreviousCount,
     ],
-    adminsearch: [base.adminSearchDispatchNo, base.adminSearchInvNo],
+    adminsearch: [base.exceptiondispatchNumber, base.adminSearchInvNo],
+    finishedinvoices: [
+      base.customerName,
+      base.exceptiondispatchNumber,
+      base.ageingdocNo,
+      base.stage,
+      base.Amount,
+    ],
     default: [base.docType, base.branchName, base.account, base.status],
   };
   return views[view.toLowerCase()] || views.default;

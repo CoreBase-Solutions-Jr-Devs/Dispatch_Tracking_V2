@@ -28,7 +28,7 @@ export default function ExceptionSection() {
   });
 
   const [searchValue, setSearchValue] = useState("");
-
+  console.log(queryFilter);
   const { data, isLoading, isFetching, isSuccess, isError, error } =
     useAdminExecptionsQuery({
       ...filter,

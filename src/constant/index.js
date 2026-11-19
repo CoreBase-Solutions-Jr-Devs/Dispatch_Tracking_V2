@@ -1,7 +1,7 @@
-import { store } from "@/app/store";
+// import { store } from "@/app/store";
 
-const { invoice } = store.getState();
-const { queryFilter } = invoice;
+// const { invoice } = store.getState();
+// const { queryFilter } = invoice;
 
 export const LAYOUT_VIEW = Object.freeze({
   GRID: "GRID",
