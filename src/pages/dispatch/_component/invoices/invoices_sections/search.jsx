@@ -26,7 +26,8 @@ export default function DispatchSearch({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const backToMainPage = () => {
-    navigate(PROTECTED_ROUTES.OVERVIEW);
+    // navigate(PROTECTED_ROUTES.OVERVIEW);
+    navigate(PROTECTED_ROUTES.ADMIN);
   };
 
   const { user } = useTypedSelector((state) => state.auth);
