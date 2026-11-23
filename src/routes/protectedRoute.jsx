@@ -2,12 +2,42 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { AUTH_ROUTES } from "./common/routePath";
 
+// const ProtectedRoute = ({ allowedRoles }) => {
+//   const { accessToken, user, bcode } = useSelector((state) => state.auth);
+
+//   const roles = user["userrights"]?.map((item) => item?.moduleArea) || [];
+
+//   const hasAccess = roles.some((role) => allowedRoles.includes(role));
+//   console.log(roles, user["userrights"], allowedRoles);
+//   // Wait until user state is loaded
+//   if (accessToken === undefined || user === undefined) return null;
+
+//   // Not logged in? redirect to sign-in
+//   if (!accessToken || !user) {
+//     return <Navigate to={AUTH_ROUTES.SIGN_IN} replace />;
+//   }
+
+//   // No branch selected? redirect to branch selection
+//   if (!bcode || Number(bcode) === 0) {
+//     return <Navigate to={AUTH_ROUTES.AUTH_BRANCH} replace />;
+//   }
+
+//   // Role not allowed? redirect to unauthorized page
+//   if (allowedRoles && !hasAccess) {
+//     return <Navigate to="/unauthorized" replace />;
+//   }
+
+//   return <Outlet />;
+// };
+
 const ProtectedRoute = ({ allowedRoles }) => {
   const { accessToken, user, bcode } = useSelector((state) => state.auth);
+  if (!user) return;
+  const roles = user["userrights"]?.map((item) => item?.moduleCode) || [];
 
-  const roles = user?.userrights?.map((item) => item?.moduleArea) || [];
-
-  const hasAccess = roles.some((role) => allowedRoles.includes(role));
+  const hasAccess = Array.isArray(allowedRoles)
+    ? roles.some((role) => allowedRoles.includes(role))
+    : allowedRoles;
 
   // Wait until user state is loaded
   if (accessToken === undefined || user === undefined) return null;
@@ -22,7 +52,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
     return <Navigate to={AUTH_ROUTES.AUTH_BRANCH} replace />;
   }
 
-  // Role not allowed? redirect to unauthorized page
+  // // Role not allowed? redirect to unauthorized page
   if (allowedRoles && !hasAccess) {
     return <Navigate to="/unauthorized" replace />;
   }

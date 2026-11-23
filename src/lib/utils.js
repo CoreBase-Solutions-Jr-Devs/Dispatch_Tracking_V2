@@ -84,9 +84,13 @@ export const checkRight = (code, userrights = []) => {
 /**
  * Check using already extracted right codes
  */
-export const hasRightCode = (code, rightCodes = []) => {
+// export const hasRightCode = (code, rightCodes = []) => {
+//   if (!Array.isArray(rightCodes)) return false;
+//   return rightCodes.includes(code);
+// };
+export const hasRightCode = (codes, rightCodes = []) => {
   if (!Array.isArray(rightCodes)) return false;
-  return rightCodes.includes(code);
+  return codes.some((role) => rightCodes.includes(role));
 };
 
 /**
@@ -195,9 +199,12 @@ export const getAllowedRoutes = (routes, userAreas, userRightCodes) => {
   return routes.reduce((allowed, route) => {
     const roleAllowed = hasAllowedRole(route.roles, userAreas);
 
-    const rightAllowed = route.requiredRight
+    // const rightAllowed = route.requiredRight
+    //   ? hasRightCode(route.requiredRight, userRightCodes)
+    //   : true;
+    const rightAllowed = Array.isArray(route.requiredRight)
       ? hasRightCode(route.requiredRight, userRightCodes)
-      : true;
+      : route.requiredRight;
 
     const children = route.children
       ? getAllowedRoutes(route.children, userAreas, userRightCodes)

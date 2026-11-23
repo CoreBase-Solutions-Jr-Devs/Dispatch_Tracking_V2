@@ -10,6 +10,7 @@ import ReconciliationSection from "@/pages/adminDashboard/_component/reconciliat
 import ReportSection from "@/pages/adminDashboard/_component/reports-section";
 import DashboardSearch from "@/pages/adminDashboard/_component/admin-search";
 import FinishedInvoices from "@/pages/adminDashboard/_component/finished-invoices-section";
+import StaffRoster from "@/pages/adminDashboard/_component/staff-roster";
 
 import AuthBranch from "@/pages/branches";
 import Settings from "@/pages/settings";
@@ -94,63 +95,70 @@ export const protectedRoutePaths = [
     menuLabel: "Administration",
     icon: ShieldAlert,
     roles: Object.values(ROLES),
-    requiredRight: 5149,
+    requiredRight: [5149],
     children: [
       {
         path: PROTECTED_ROUTES.RECONCILIATION,
         element: <ReconciliationSection />,
         menuLabel: "Reconciliations",
         roles: Object.values(ROLES),
-        requiredRight: 5149,
+        requiredRight: [5149],
       },
       {
         path: PROTECTED_ROUTES.EXECPTIONS,
         element: <ExceptionSection />,
         menuLabel: "Exceptions",
         roles: Object.values(ROLES),
-        requiredRight: 5149,
+        requiredRight: [5149],
       },
       {
         path: PROTECTED_ROUTES.AGING,
         element: <AgeingSection />,
         menuLabel: "Aging",
         roles: Object.values(ROLES),
-        requiredRight: 5149,
+        requiredRight: [5149],
       },
       {
         path: PROTECTED_ROUTES.DASHBOARD,
         element: <DashboardSection />,
         menuLabel: "Dashboard",
         roles: Object.values(ROLES),
-        requiredRight: 5149,
+        requiredRight: [5149],
       },
       {
         path: PROTECTED_ROUTES.INSIGHTS,
         element: <InsightSection />,
         menuLabel: "Insights",
         roles: Object.values(ROLES),
-        requiredRight: 5149,
+        requiredRight: [5149],
       },
       {
         path: PROTECTED_ROUTES.ADMINREPORTS,
         element: <ReportSection />,
         menuLabel: "Report",
         roles: Object.values(ROLES),
-        requiredRight: 5149,
+        requiredRight: [5149],
       },
       {
         path: PROTECTED_ROUTES.ADMINSEARCH,
         element: <DashboardSearch />,
         menuLabel: "Search",
         roles: Object.values(ROLES),
-        requiredRight: 5149,
+        requiredRight: [5149],
       },
       {
         path: PROTECTED_ROUTES.FINISHEDINVOICES,
         element: <FinishedInvoices />,
         menuLabel: "Finished Invoices",
         roles: Object.values(ROLES),
-        requiredRight: 5149,
+        requiredRight: [5149],
+      },
+      {
+        path: PROTECTED_ROUTES.STAFFROSTER,
+        element: <StaffRoster />,
+        menuLabel: "Staff Roster",
+        roles: Object.values(ROLES),
+        requiredRight: [5149],
       },
     ],
   },
@@ -160,20 +168,21 @@ export const protectedRoutePaths = [
     roles: Object.values(ROLES),
     menuLabel: "Dashboard",
     icon: LayoutDashboard,
+    requiredRight: true,
   },
-  {
-    path: PROTECTED_ROUTES.OVERVIEW,
-    element: <Overview />,
-    roles: Object.values(ROLES),
-    menuLabel: "Overview",
-    icon: Home,
-  },
+  // {
+  //   path: PROTECTED_ROUTES.OVERVIEW,
+  //   element: <Overview />,
+  //   roles: Object.values(ROLES),
+  //   menuLabel: "Overview",
+  //   icon: Home,
+  // },
   {
     path: PROTECTED_ROUTES.STORE,
     element: <Overview role="Store" />,
     roles: Object.values(ROLES),
     menuLabel: "Store",
-    requiredRight: 5149,
+    requiredRight: [5149, 5145],
     icon: Store,
   },
   {
@@ -181,7 +190,7 @@ export const protectedRoutePaths = [
     element: <Overview role="Verification" />,
     roles: Object.values(ROLES),
     menuLabel: "Verification",
-    requiredRight: 5149,
+    requiredRight: [5149, 5146],
     icon: PackageCheck,
   },
   {
@@ -189,7 +198,7 @@ export const protectedRoutePaths = [
     element: <Overview role="Dispatch" />,
     roles: Object.values(ROLES),
     menuLabel: "Dispatch",
-    requiredRight: 5149,
+    requiredRight: [5149, 5147],
     icon: Split,
   },
   {
@@ -197,7 +206,7 @@ export const protectedRoutePaths = [
     element: <DispatchInvoice />,
     roles: Object.values(ROLES),
     menuLabel: "New Dispatch",
-    requiredRight: 5149,
+    requiredRight: [5149, 5147],
     icon: Plus,
   },
   {
@@ -205,7 +214,7 @@ export const protectedRoutePaths = [
     element: <Overview role="Delivery" />,
     roles: Object.values(ROLES),
     menuLabel: "Delivery",
-    requiredRight: 5149,
+    requiredRight: [5149 || 5148],
     icon: Truck,
   },
   {
@@ -213,6 +222,7 @@ export const protectedRoutePaths = [
     element: <DriverSetupOverview />,
     roles: Object.values(ROLES),
     menuLabel: "Drivers",
+    requiredRight: [5149],
     icon: Bike,
   },
   {
@@ -221,6 +231,7 @@ export const protectedRoutePaths = [
     roles: Object.values(ROLES),
     menuLabel: "Settings",
     icon: SettingsIcon,
+    requiredRight: true,
   },
 ];
 

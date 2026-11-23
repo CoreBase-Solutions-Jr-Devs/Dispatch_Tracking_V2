@@ -61,7 +61,8 @@ function AppRoutes() {
         {flattenRoutes(protectedRoutePaths).map((route) => (
           <Route
             key={route.path}
-            element={<ProtectedRoute allowedRoles={route.roles} />}
+            // element={<ProtectedRoute allowedRoles={route.roles} />}
+            element={<ProtectedRoute allowedRoles={route.requiredRight} />}
           >
             <Route element={<AppLayout />}>
               <Route path={route.path} element={route.element} />
