@@ -1,5 +1,43 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const rawBaseQuery = fetchBaseQuery({
+  baseUrl: "",
+  prepareHeaders: (headers, { getState }) => {
+    const auth = getState().auth;
+
+    if (auth?.accessToken) {
+      headers.set("Authorization", `Bearer ${auth.accessToken}`);
+    }
+
+    headers.set("Accept", "application/json");
+
+    return headers;
+  },
+});
+
+const dynamicBaseQuery = async (args, api, extraOptions) => {
+  const backendUrl = localStorage.getItem("dispatchBackendUrl");
+
+  if (!backendUrl) {
+    return {
+      error: {
+        status: "CUSTOM_ERROR",
+        error: "Backend URL not configured",
+      },
+    };
+  }
+
+  const adjustedArgs =
+    typeof args === "string"
+      ? `${backendUrl}${args}`
+      : {
+          ...args,
+          url: `${backendUrl}${args.url}`,
+        };
+
+  return rawBaseQuery(adjustedArgs, api, extraOptions);
+};
+
 const authQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_URL,
   // credentials: "include",
@@ -47,7 +85,7 @@ export const authClient = createApi({
 
 export const apiClient = createApi({
   reducerPath: "api", // Add API client reducer to root reducer
-  baseQuery: baseQuery,
+  baseQuery: dynamicBaseQuery,
   refetchOnMountOrArgChange: true, // Refetch on mount or arg change
   tagTypes: ["invoices", "analytics", "report"], // Tag types for RTK Query
   endpoints: () => ({}), // Endpoints for RTK Query
