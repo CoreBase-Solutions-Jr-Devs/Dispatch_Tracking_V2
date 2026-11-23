@@ -24,6 +24,7 @@ import { Loader, PlusCircleIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import Logo from "@/components/logo/logo";
 
 function AuthBranch() {
   const dispatch = useAppDispatch();
@@ -65,10 +66,14 @@ function AuthBranch() {
         adminKind: "",
         kind: "",
         stage: "",
+        finishedStage: "",
         number: "",
         _module: "Store",
         minimumMinutes: "",
         bcode: value,
+        branches: [],
+        adminRole: "",
+        staffDate: new Date().toISOString(),
       }),
     );
   };
@@ -108,15 +113,18 @@ function AuthBranch() {
     // );
     const timeoutId = setTimeout(() => {
       setIsloading(false);
-      navigate(PROTECTED_ROUTES.OVERVIEW);
+      // navigate(PROTECTED_ROUTES.OVERVIEW);
+      navigate(PROTECTED_ROUTES.ADMIN);
     }, 2000);
 
     return () => clearTimeout(timeoutId);
   };
 
   const handleLogout = useCallback(() => {
+    navigate("/", { replace: true });
     dispatch(logout());
     dispatch(resetDispatchData());
+    window.location.reload(true); // Force reload to clear cache
   }, [dispatch]);
 
   return (
@@ -130,6 +138,9 @@ function AuthBranch() {
             >
               <Logo />
             </Link> */}
+            <div className="flex justify-center gap-2">
+              <Logo url="/" />
+            </div>
             <CardTitle className="text-xl">Welcome back</CardTitle>
             <CardDescription>
               Branch selection to Dispatch Tracking System

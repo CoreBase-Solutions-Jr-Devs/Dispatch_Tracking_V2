@@ -9,7 +9,7 @@ const SignIn = () => {
           <Logo url="/" />
         </div>
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-xs">
+          <div className="w-full max-w-md">
             <SignInForm />
           </div>
         </div>

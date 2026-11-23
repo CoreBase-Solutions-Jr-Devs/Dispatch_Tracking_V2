@@ -76,7 +76,8 @@ const SignInForm = () => {
           duration: 2000,
         });
         setTimeout(() => {
-          window.location.replace(AUTH_ROUTES.AUTH_BRANCH);
+          navigate(AUTH_ROUTES.AUTH_BRANCH, { replace: true });
+          // window.location.replace(AUTH_ROUTES.AUTH_BRANCH);
         }, 1000);
       })
       .catch((error) => {
