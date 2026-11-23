@@ -94,6 +94,7 @@ export default function Drivers({ rowData, onSubmit }) {
           variant="default"
           className="mt-1 text-xs font-medium"
           onClick={handleNewDriverModal}
+          size={"sm"}
         >
           New Driver
         </Button>

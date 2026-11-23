@@ -16,7 +16,6 @@ import EditStatusDialog from "@/pages/shared/edit-status-dialog";
 import { useNavigate } from "react-router-dom";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 
-
 export default function DispatchFooter({
   dispatchIDs = [],
   rowData,
@@ -33,7 +32,7 @@ export default function DispatchFooter({
   const navigate = useNavigate();
 
   const { courierDetails, driverDetails, clientDetails } = useSelector(
-    (state) => state.dispatch
+    (state) => state.dispatch,
   );
 
   const { user } = useSelector((state) => state.auth);
@@ -95,9 +94,18 @@ export default function DispatchFooter({
       assignedTo: clientDetails?.assignedTo,
       carMake: driverDetails?.carMake,
       carPlate: driverDetails?.regNo,
-      customerCourierName: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierName: courierDetails?.customerCourierName,
-      customerCourierId: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierId: courierDetails?.customerCourierId,
-      customerCourierPhone: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierPhone : courierDetails?.customerCourierPhone,
+      customerCourierName:
+        selectValues.collectionType === "CUSTOMER"
+          ? clientDetails?.customerCourierName
+          : courierDetails?.customerCourierName,
+      customerCourierId:
+        selectValues.collectionType === "CUSTOMER"
+          ? clientDetails?.customerCourierId
+          : courierDetails?.customerCourierId,
+      customerCourierPhone:
+        selectValues.collectionType === "CUSTOMER"
+          ? clientDetails?.customerCourierPhone
+          : courierDetails?.customerCourierPhone,
       isPush: false,
       userName: user?.username || "",
     };
@@ -108,7 +116,10 @@ export default function DispatchFooter({
       delete formData.customerCourierPhone;
     }
 
-    if (selectValues.collectionType === "CUSTOMER" || selectValues.collectionType === "COURIER") {
+    if (
+      selectValues.collectionType === "CUSTOMER" ||
+      selectValues.collectionType === "COURIER"
+    ) {
       delete formData.driverId;
       delete formData.driverName;
       delete formData.routeName;
@@ -126,7 +137,8 @@ export default function DispatchFooter({
       console.log("Saved Dispatch Details: ", data);
       setDeliveryDisabled(false);
       // dispatch(resetDispatchData());
-      navigate(PROTECTED_ROUTES.OVERVIEW);
+      // navigate(PROTECTED_ROUTES.OVERVIEW);
+      navigate(PROTECTED_ROUTES.ADMIN);
     } catch (error) {
       let description = "Saving failed. Please try again.";
       console.log("Error on Save: ", error);
@@ -160,9 +172,18 @@ export default function DispatchFooter({
       collectedBy: clientDetails?.collectedBy,
       collectorIdNo: clientDetails?.collectorIdNo,
       collectorPhoneNo: clientDetails?.collectorPhoneNo,
-      customerCourierName: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierName: courierDetails?.customerCourierName,
-      customerCourierId: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierId: courierDetails?.customerCourierId,
-      customerCourierPhone: selectValues.collectionType === "CUSTOMER" ? clientDetails?.customerCourierPhone : courierDetails?.customerCourierPhone,
+      customerCourierName:
+        selectValues.collectionType === "CUSTOMER"
+          ? clientDetails?.customerCourierName
+          : courierDetails?.customerCourierName,
+      customerCourierId:
+        selectValues.collectionType === "CUSTOMER"
+          ? clientDetails?.customerCourierId
+          : courierDetails?.customerCourierId,
+      customerCourierPhone:
+        selectValues.collectionType === "CUSTOMER"
+          ? clientDetails?.customerCourierPhone
+          : courierDetails?.customerCourierPhone,
       assignedTo: clientDetails?.assignedTo,
       dispatchRemarks,
       isPush: true,
@@ -177,7 +198,10 @@ export default function DispatchFooter({
       delete formData.customerCourierPhone;
     }
 
-    if (selectValues.collectionType === "CUSTOMER" || selectValues.collectionType === "COURIER") {
+    if (
+      selectValues.collectionType === "CUSTOMER" ||
+      selectValues.collectionType === "COURIER"
+    ) {
       delete formData.driverId;
       delete formData.driverName;
       delete formData.routeName;
@@ -191,7 +215,8 @@ export default function DispatchFooter({
 
       toast.success("Dispatch pushed successfully!");
       console.log("Pushed Dispatch Details: ", data);
-      navigate(PROTECTED_ROUTES.OVERVIEW);
+      // navigate(PROTECTED_ROUTES.OVERVIEW);
+      navigate(PROTECTED_ROUTES.Admin);
       // dispatch(resetDispatchData());
     } catch (error) {
       let description = "Saving failed. Please try again.";

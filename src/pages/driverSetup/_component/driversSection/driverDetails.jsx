@@ -253,8 +253,8 @@ export function DriverDetails({ show, handleNewDriverModal }) {
                 Cancel
               </Button>
               <Button
+                type={"button"}
                 variant="default"
-                type="submit"
                 className="text-xs font-medium"
                 disabled={isLoading}
                 // onClick={handleNewDriverModal}
