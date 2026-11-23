@@ -11,11 +11,18 @@ import {
   Moon,
   Settings,
   Sun,
+  ChevronDown,
 } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
-import { cn, roleToView } from "@/lib/utils";
+import {
+  cn,
+  getAllowedRoutes,
+  getUserModuleAreas,
+  getUserRightCodes,
+  roleToView,
+} from "@/lib/utils";
 import Logo from "../logo/logo";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetHeader } from "../ui/sheet";
@@ -25,14 +32,19 @@ import { logout } from "@/features/auth/authSlice";
 import { useTheme } from "@/context/theme-provider";
 import { SetupsDropdown } from "./setups-dropdown";
 import { resetDispatchData } from "@/features/dispatch/dispatchSlice";
+import { protectedRoutePaths } from "@/routes/common/routes";
 
 const Navbar = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { user, bcode } = useTypedSelector((state) => state.auth);
   let branches = user["userBranches"] || [];
   let branchName =
     branches.find((branch) => branch.bcode === Number(bcode))?.brancH_NAME ??
     "";
+
+  const userRightCodes = useMemo(() => getUserRightCodes(user), [user]);
+  const userAreas = useMemo(() => getUserModuleAreas(user), [user]);
 
   const dispatch = useAppDispatch();
 
@@ -40,30 +52,42 @@ const Navbar = () => {
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [openMenus, setOpenMenus] = useState({});
 
   const role =
     user["userrights"]?.map((item) => item?.moduleArea)[0]?.toLowerCase() || "";
   // const view = roleToView(user?.userRole);
   const view = roleToView(role);
 
-  const routes = useMemo(
-    () => [
-      {
-        icon: LayoutDashboard,
-        href: PROTECTED_ROUTES.ADMIN,
-        label: "Dashboard",
-      },
-      { icon: Home, href: PROTECTED_ROUTES.OVERVIEW, label: "Overview" },
-      { icon: Settings, href: PROTECTED_ROUTES.SETTINGS, label: "Settings" },
-    ],
-    [],
-  );
+  const allowedRoutes = useMemo(() => {
+    if (!user) return [];
+    return getAllowedRoutes(protectedRoutePaths, userAreas, userRightCodes);
+  }, [user, userAreas, userRightCodes]);
+
+  // const routes = useMemo(
+  //   () => [
+  //     {
+  //       icon: LayoutDashboard,
+  //       path: PROTECTED_ROUTES.ADMIN,
+  //       menuLabel: "Dashboard",
+  //     },
+  //     { icon: Home, path: PROTECTED_ROUTES.OVERVIEW, menuLabel: "Overview" },
+  //     {
+  //       icon: Settings,
+  //       path: PROTECTED_ROUTES.SETTINGS,
+  //       menuLabel: "Settings",
+  //     },
+  //   ],
+  //   [],
+  // );
 
   const setupOptions = ["User Management", "System Settings"];
 
   const handleLogout = useCallback(() => {
+    navigate("/", { replace: true });
     dispatch(logout());
     dispatch(resetDispatchData());
+    window.location.reload(true); // Force reload to clear cache
   }, [dispatch]);
 
   const ThemeIcon = useMemo(() => {
@@ -71,6 +95,81 @@ const Navbar = () => {
     if (theme === "system") return Monitor;
     return Sun;
   }, [theme]);
+
+  const renderMobileRoutes = (routes) =>
+    routes.map((route) => {
+      const Icon = route.icon;
+      const hasChildren = route.children?.length > 0;
+
+      const menuKey = route.id || route.path || route.menuLabel;
+
+      const isChildActive = hasChildren
+        ? route.children.some(
+            (child) =>
+              pathname === child.path || pathname.startsWith(`${child.path}/`),
+          )
+        : false;
+
+      const isOpen = openMenus[menuKey] ?? isChildActive;
+
+      // Parent menu with children
+      if (hasChildren) {
+        return (
+          <div key={menuKey} className="flex flex-col">
+            <button
+              type="button"
+              onClick={() =>
+                setOpenMenus((prev) => ({
+                  ...prev,
+                  [menuKey]: !isOpen,
+                }))
+              }
+              className={cn(
+                "flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground",
+                isChildActive && "bg-secondary",
+              )}
+            >
+              {Icon && <Icon className="h-4 w-4 shrink-0" />}
+
+              <span className="flex-1 text-left">{route.menuLabel}</span>
+
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 transition-transform",
+                  isOpen && "rotate-180",
+                )}
+              />
+            </button>
+
+            {/* Child routes */}
+            {isOpen && (
+              <div className="ml-5 mt-1 flex flex-col gap-y-1 border-l pl-3">
+                {renderMobileRoutes(route.children)}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // Normal route without children
+      return (
+        <NavLink
+          key={route.path}
+          to={route.path}
+          onClick={() => setIsSheetOpen(false)}
+          className={cn(
+            "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+            pathname === route.path
+              ? "bg-secondary text-secondary-foreground"
+              : "bg-transparent",
+          )}
+        >
+          {Icon && <Icon className="h-4 w-4 shrink-0" />}
+
+          <span className="line-clamp-2">{route.menuLabel}</span>
+        </NavLink>
+      );
+    });
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
@@ -89,19 +188,20 @@ const Navbar = () => {
             </SheetHeader>
 
             <nav className="flex flex-col gap-y-1 px-3">
-              {routes.map(({ icon: Icon, href, label }) => (
+              {/* {allowedRoutes.map(({ icon: Icon, path, menuLabel }) => (
                 <NavLink
-                  key={href}
-                  to={href}
+                  key={path}
+                  to={path}
                   className={cn(
                     "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-                    pathname === href ? "bg-secondary" : "bg-transparent",
+                    pathname === path ? "bg-secondary" : "bg-transparent",
                   )}
                 >
                   <Icon className="h-4 w-4" />
-                  <span className="line-clamp-2">{label}</span>
+                  <span className="line-clamp-2">{menuLabel}</span>
                 </NavLink>
-              ))}
+              ))} */}
+              {renderMobileRoutes(allowedRoutes)}
             </nav>
           </SheetContent>
         </Sheet>
@@ -175,7 +275,9 @@ const NavLogoAndUser = ({ username = "", onOpenMobile }) => {
       </Button>
 
       {/* Brand */}
-      <Logo />
+      <div className="hidden md:block">
+        <Logo />
+      </div>
 
       {/* Divider + user chip (desktop) */}
       <span className="hidden text-lg font-thin text-muted-foreground md:inline lg:text-2xl">
