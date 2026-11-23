@@ -33,9 +33,9 @@ export default function FinishedInvoicesExceptions() {
     useFinishedInvoicesQuery({
       ...filter,
       ...queryFilter,
-      branches: queryFilter.branches
-        .map((item) => `branches=${item}`)
-        .join("&"),
+      branches: Array.isArray(queryFilter.branches)
+        ? queryFilter.branches.map((item) => `branches=${item}`).join("&")
+        : [],
     });
 
   // const view = roleToView("View All Stages");
