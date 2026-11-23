@@ -1,20 +1,22 @@
 import React from "react";
 import { PROTECTED_ROUTES } from "@/routes/common/routePath";
 import { Link } from "react-router-dom";
+import CompanyLogo from "../../assets/images/phamacore.png";
 
 const Logo = (props) => {
   return (
     <Link
-      to={props.url || PROTECTED_ROUTES.OVERVIEW}
+      // to={props.url || PROTECTED_ROUTES.ADMIN}
       className="flex items-center gap-2"
     >
       <div>
-        <h1 className="relative flex select-none flex-row items-baseline font-bold text-2xl lg:text-3xl">
+        <img src={CompanyLogo} alt="company logo" width={150} />
+        {/* <h1 className="relative flex select-none flex-row items-baseline font-bold text-2xl lg:text-3xl">
           <span className="sr-only">phAMAcore Cloud</span>
           <span className="tracking-tight cursor-pointer">
             phAMAcore<span className="text-primary">Cloud</span>
           </span>
-        </h1>
+        </h1> */}
       </div>
     </Link>
   );
