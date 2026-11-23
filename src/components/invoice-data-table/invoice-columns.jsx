@@ -46,9 +46,6 @@ const renderStatus = (status) => {
       break;
 
     case "Return":
-    case "Dispatched":
-    case "Verified":
-    case "Processed":
     case "Delivered":
     case 4:
       statusClass = STATUS_STYLES.Delivery;

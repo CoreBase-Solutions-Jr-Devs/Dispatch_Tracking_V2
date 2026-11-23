@@ -46,6 +46,12 @@ let adminKinds = [
   { label: "DispatchBatch", value: "DispatchBatch" },
 ];
 
+let adminRoles = [
+  { label: "StoreKeeper", value: "StoreKeeper" },
+  { label: "Verifier", value: "Verifier" },
+  { label: "Dispatcher", value: "Dispatcher" },
+];
+
 let modules = [
   { label: "Store", value: "Store" },
   { label: "Invoices", value: "Invoices" },
@@ -86,18 +92,6 @@ function AdminFilterSheet({ title }) {
   const { queryFilter } = useTypedSelector((state) => state.adminDashboard);
 
   const [filter, setFilter] = useState({
-    // startDate: new Date(),
-    // endDate: new Date(),
-    // dateRange: "TODAY",
-    // status: "",
-    // dispatchNumber: "",
-    // kind: "",
-    // adminKind: "",
-    // stage: "",
-    // _module: "Store",
-    // minimumMinutes: "",
-    // number: "",
-    // bcode: "",
     startDate: new Date(queryFilter.startDate),
     endDate: new Date(queryFilter.endDate),
     dateRange: queryFilter.dateRange,
@@ -112,6 +106,8 @@ function AdminFilterSheet({ title }) {
     number: queryFilter.number,
     bcode: queryFilter.bCode,
     branches: queryFilter.branches,
+    adminRole: queryFilter.adminRole,
+    staffDate: new Date(queryFilter.staffDate),
   });
 
   const [selectedFilters, setSelectedFilters] = useState({});
@@ -230,24 +226,24 @@ function AdminFilterSheet({ title }) {
   };
 
   const clearFilters = () => {
-    setFilter({
-      startDate: new Date(),
-      endDate: new Date(),
-      dateRange: "TODAY",
-      status: "",
-      dispatchNumber: "",
-      kind: "",
-      adminKind: "",
-      stage: "",
-      finishedStage: "",
-      _module: "Store",
-      minimumMinutes: "",
-      number: "",
-      bcode: bcode || 0,
-      branches: [],
-    });
+    // setFilter({
+    //   startDate: new Date(),
+    //   endDate: new Date(),
+    //   dateRange: "TODAY",
+    //   status: "",
+    //   dispatchNumber: "",
+    //   kind: "",
+    //   adminKind: "",
+    //   stage: "",
+    //   finishedStage: "",
+    //   _module: "Store",
+    //   minimumMinutes: "",
+    //   number: "",
+    //   bcode: bcode || 0,
+    //   branches: [],
+    // });
 
-    dispatch(clearQueryFilter());
+    // dispatch(clearQueryFilter());
 
     setIsOpen(false);
   };
@@ -309,6 +305,55 @@ function AdminFilterSheet({ title }) {
           </section>
         )}
         {/* Kind */}
+        {title === "staffRoster" && (
+          <>
+            <section className="mb-4">
+              <Label className="text-xs text-muted">Role</Label>
+              <Select
+                value={filter.adminRole}
+                onValueChange={(value) =>
+                  setFilter((prevState) => ({
+                    ...prevState,
+                    adminRole: value,
+                  }))
+                }
+              >
+                <SelectTrigger className="w-full border-gray-500">
+                  <div className="flex items-center gap-2">
+                    <SelectValue placeholder="Select Kind...">
+                      {
+                        adminRoles.find(
+                          (item) => item.value === filter.adminRole,
+                        )?.label
+                      }
+                    </SelectValue>
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="bg-stone-50">
+                  {adminRoles.map((opt, index) => (
+                    <SelectItem key={index} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </section>
+            <section className="mb-4">
+              <Label className="text-xs text-muted">Date</Label>
+              <DatePicker
+                className="w-full border rounded-md px-2 h-8"
+                selected={filter.staffDate}
+                onChange={(date) =>
+                  setFilter((prevState) => ({
+                    ...prevState,
+                    staffDate: date,
+                  }))
+                }
+                dateFormat="dd/MM/yyyy"
+              />
+            </section>
+          </>
+        )}
         {title === "exception" && (
           <section className="mb-4">
             <Label className="text-xs text-muted">Kind</Label>
@@ -537,6 +582,7 @@ function AdminFilterSheet({ title }) {
 
         {title !== "reconciliation" &&
           title !== "dashboardAgeing" &&
+          title !== "staffRoster" &&
           title !== "finishedInvoices" && (
             <>
               {/* Date Range Dropdown */}
@@ -604,14 +650,14 @@ function AdminFilterSheet({ title }) {
           )}
         {/* Search + Role Filters */}
         {/* Footer */}
-        <SheetFooter className="border-t border-border flex justify-between items-center gap-x-4">
+        <SheetFooter className="border-t border-border flex justify-between items-end gap-x-4">
           <div className="flex gap-2">
             <Button variant="apply" size="sm" onClick={applyFilters}>
               Apply
             </Button>
 
             <Button variant="destructive" size="sm" onClick={clearFilters}>
-              Clear
+              Close
             </Button>
           </div>
         </SheetFooter>

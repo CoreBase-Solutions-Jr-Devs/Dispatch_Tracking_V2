@@ -150,6 +150,45 @@ export const dashboardApi = apiClient.injectEndpoints({
       }),
       // providesTags: ["all_invoices"],
     }),
+    staffRoster: builder.query({
+      query: ({ bCode, adminRole, staffDate }) => ({
+        url: `/admin/branches/${bCode}/staff-roster/${adminRole}`,
+        method: "GET",
+        params: {
+          role: adminRole,
+          bcode: bCode,
+          date: new Intl.DateTimeFormat("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          }).format(new Date(staffDate)),
+        },
+      }),
+      providesTags: ["staff_roles"],
+    }),
+    updateStaffRoster: builder.mutation({
+      query: ({ bCode, adminRole, staffs, weekday, date, reason }) => ({
+        url: `/admin/branches/${bCode}/staff-roster/${adminRole}`,
+        method: "PUT",
+        params: {
+          role: adminRole,
+          bcode: bCode,
+        },
+        body: {
+          usernames: staffs,
+          weekday: weekday,
+          date: !date
+            ? ""
+            : new Intl.DateTimeFormat("en-CA", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              }).format(new Date(date)),
+          reason: reason,
+        },
+      }),
+      invalidatesTags: ["staff_roles"],
+    }),
   }),
 });
 
@@ -165,4 +204,6 @@ export const {
   useAdminReportQuery,
   useAdminSearchQuery,
   useFinishedInvoicesQuery,
+  useStaffRosterQuery,
+  useUpdateStaffRosterMutation,
 } = dashboardApi;

@@ -18,6 +18,8 @@ const initialState = {
     minimumMinutes: "",
     bCode: "",
     branches: [],
+    adminRole: "",
+    staffDate: new Date().toISOString(),
   },
 };
 
@@ -41,6 +43,8 @@ const dashboardSlice = createSlice({
         _module: action.payload._module,
         branches: action.payload.branches,
         bCode: action.payload.bcode,
+        adminRole: action.payload.adminRole,
+        staffDate: new Date(action.payload.staffDate).toISOString(),
       };
     },
     clearQueryFilter: (state, action) => {
@@ -59,6 +63,8 @@ const dashboardSlice = createSlice({
         minimumMinutes: "",
         _module: "",
         branches: [],
+        adminRole: "",
+        staffDate: new Date().toISOString(),
       };
     },
     setSummary: (state, action) => {

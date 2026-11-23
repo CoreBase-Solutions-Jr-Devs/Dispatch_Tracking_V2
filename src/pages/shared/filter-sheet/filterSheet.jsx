@@ -195,15 +195,15 @@ function FilterSheet({ role }) {
   };
 
   const clearFilters = () => {
-    setFilter({
-      startDate: new Date(),
-      endDate: new Date(),
-      dateRange: "",
-      status: {},
-      bcode: bcode || 0,
-    });
+    // setFilter({
+    //   startDate: new Date(),
+    //   endDate: new Date(),
+    //   dateRange: "",
+    //   status: {},
+    //   bcode: bcode || 0,
+    // });
 
-    dispatch(clearQueryFilter());
+    // dispatch(clearQueryFilter());
 
     setIsOpen(false);
   };
@@ -342,7 +342,7 @@ function FilterSheet({ role }) {
         </section>
 
         {/* Footer */}
-        <SheetFooter className="border-t border-border flex justify-between items-center gap-x-4">
+        <SheetFooter className="border-t border-border flex justify-between items-end gap-x-4">
           <div className="flex gap-2">
             <Button variant="apply" size="sm" onClick={applyFilters}>
               {filtersLoading ? (
@@ -361,7 +361,7 @@ function FilterSheet({ role }) {
                   <Loader2 className="h-4 w-4 animate-spin" /> Clear
                 </span>
               ) : (
-                "Clear"
+                "Close"
               )}
               {/* Clear */}
             </Button>
