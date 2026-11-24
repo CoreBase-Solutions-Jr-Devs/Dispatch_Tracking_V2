@@ -164,7 +164,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     e.preventDefault();
     const payload = {
       dispatchnum: selectedRow?.DispatchNo,
-      bcode: selectedRow?.BCode,
+      bcode: selectedRow?.BCODE,
       saleinv_num: selectedRow?.DocNo,
       otp,
     };
@@ -190,9 +190,10 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
   const handleOTPGenerate = () => {
     const payload = {
       dispatchnum: selectedRow?.DispatchNo,
-      bcode: selectedRow?.BCode,
+      bcode: selectedRow?.BCODE,
       saleinv_num: selectedRow?.DocNo,
     };
+
     GenerateOTPForDeliveredInvoices(payload)
       .unwrap()
       .then((data) => {
@@ -219,7 +220,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
     const payload = {
       remarks,
       dispatchnum: selectedRow?.DispatchNo,
-      bcode: selectedRow?.BCode,
+      bcode: selectedRow?.BCODE,
       invoices: [
         {
           cus_code: selectedRow?.CustomerID,
@@ -267,7 +268,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
           : selectedRow?.OTPPhoneNumber || "",
       amount: Math.ceil(selectedRow?.Balance) || 0,
       DISPATCHNUM: selectedRow?.DispatchNo || "",
-      BCODE: selectedRow?.BCode || "",
+      BCODE: selectedRow?.BCODE || "",
       CUS_CODE: selectedRow?.CustomerID || "",
       SALEINV_NUM: selectedRow?.DocNo || "",
     });
@@ -289,7 +290,7 @@ export default function DeliveryInvoice({ rowData, onSubmit }) {
           : checkedInvoices[0]?.OTPPhoneNumber || "",
       amount: checkedInvoices?.reduce((acc, curr) => acc + curr?.Balance, 0),
       DISPATCHNUM: checkedInvoices[0]?.DispatchNo,
-      BCODE: checkedInvoices[0]?.BCode,
+      BCODE: checkedInvoices[0]?.BCODE,
       CUS_CODE: checkedInvoices[0]?.CustomerID,
       SALEINV_NUM: checkedInvoices[0]?.DocNo,
     });

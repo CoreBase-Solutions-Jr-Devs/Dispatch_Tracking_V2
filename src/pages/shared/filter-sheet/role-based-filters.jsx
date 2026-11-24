@@ -24,7 +24,7 @@ const RoleBasedFilters = ({
   let options = !role
     ? safeFilters[0]?.options
     : safeFilters[0]?.options?.filter((item) => item.stageId === stage[role]);
-  console.log(safeFilters, options);
+
   return (
     <section className="flex flex-wrap gap-2 items-center">
       {safeFilters.map((filter) => (

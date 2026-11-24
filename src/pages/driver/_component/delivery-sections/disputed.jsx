@@ -34,10 +34,9 @@ function DisputedDetails({ data, handleDispute }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const payload = {
       dispatchnum: data?.DispatchNo || 0,
-      bcode: data?.BCode || 0,
+      bcode: data?.BCODE || 0,
       disputedamount: disputeDetails?.disputedamount || 0,
       saleinv_num: data?.DocNo || 0,
       comments: disputeDetails?.comments || "",
