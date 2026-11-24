@@ -214,7 +214,7 @@ export const protectedRoutePaths = [
     element: <Overview role="Delivery" />,
     roles: Object.values(ROLES),
     menuLabel: "Delivery",
-    requiredRight: [5149 || 5148],
+    requiredRight: [5149, 5148],
     icon: Truck,
   },
   {
